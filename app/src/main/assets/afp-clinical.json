@@ -1,0 +1,215 @@
+{
+  "linkId": "afp-clinical-info-and-vaccination",
+  "type": "group",
+  "text": "AFP Clinical Information and Vaccination History",
+  "item": [
+    {
+      "linkId": "fever-at-onset",
+      "type": "choice",
+      "text": "Fever at onset of paralysis",
+      "answerOption": [
+        { "valueCoding": { "code": "1", "display": "Yes" } },
+        { "valueCoding": { "code": "2", "display": "No" } }
+      ]
+    },
+    {
+      "linkId": "date-of-onset",
+      "type": "date",
+      "text": "Date of onset of paralysis"
+    },
+    {
+      "linkId": "progressive-paralysis-under-3days",
+      "type": "boolean",
+      "text": "Progressive Paralysis < 3 days?"
+    },
+    {
+      "linkId": "is-flaccid-acute",
+      "type": "boolean",
+      "text": "Is paralysis flaccid and acute?"
+    },
+    {
+      "linkId": "asymetric",
+      "type": "boolean",
+      "text": "Asymmetric?"
+    },
+    {
+      "linkId": "site-of-paralysis",
+      "type": "group",
+      "text": "Site of Paralysis",
+      "item": [
+        {
+          "linkId": "left-arm",
+          "type": "choice",
+          "text": "Left Arm (LA)",
+          "answerOption": [
+            { "valueCoding": { "code": "1", "display": "Yes" } },
+            { "valueCoding": { "code": "2", "display": "No" } }
+          ]
+        },
+        {
+          "linkId": "left-leg",
+          "type": "choice",
+          "text": "Left Leg (LL)",
+          "answerOption": [
+            { "valueCoding": { "code": "1", "display": "Yes" } },
+            { "valueCoding": { "code": "2", "display": "No" } }
+          ]
+        },
+        {
+          "linkId": "right-arm",
+          "type": "choice",
+          "text": "Right Arm (RA)",
+          "answerOption": [
+            { "valueCoding": { "code": "1", "display": "Yes" } },
+            { "valueCoding": { "code": "2", "display": "No" } }
+          ]
+        },
+        {
+          "linkId": "right-leg",
+          "type": "choice",
+          "text": "Right Leg (RL)",
+          "answerOption": [
+            { "valueCoding": { "code": "1", "display": "Yes" } },
+            { "valueCoding": { "code": "2", "display": "No" } }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "limb-sensitive-to-pain",
+      "type": "boolean",
+      "text": "Paralysed limb(s) sensitive to pain?"
+    },
+    {
+      "linkId": "injection-before-onset",
+      "type": "boolean",
+      "text": "Was there any injection just before onset of paralysis?"
+    },
+    {
+      "linkId": "site-of-injection",
+      "type": "group",
+      "text": "Site of Injection (if yes)",
+      "item": [
+        {
+          "linkId": "injection-right-site",
+          "type": "choice",
+          "text": "Injection given right site",
+          "answerOption": [
+            { "valueCoding": { "code": "1", "display": "Arm" } },
+            { "valueCoding": { "code": "2", "display": "Fore Arm" } },
+            { "valueCoding": { "code": "3", "display": "Buttock" } },
+            { "valueCoding": { "code": "4", "display": "Thigh" } },
+            { "valueCoding": { "code": "5", "display": "Leg" } }
+          ]
+        },
+        {
+          "linkId": "injection-left-site",
+          "type": "choice",
+          "text": "Injection given left site",
+          "answerOption": [
+            { "valueCoding": { "code": "1", "display": "Arm" } },
+            { "valueCoding": { "code": "2", "display": "Fore Arm" } },
+            { "valueCoding": { "code": "3", "display": "Buttock" } },
+            { "valueCoding": { "code": "4", "display": "Thigh" } },
+            { "valueCoding": { "code": "5", "display": "Leg" } }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "provisional-diagnosis",
+      "type": "string",
+      "text": "Provisional diagnosis"
+    },
+    {
+      "linkId": "confirmed-afp",
+      "type": "choice",
+      "text": "After investigation, was this a true AFP?",
+      "answerOption": [
+        { "valueCoding": { "code": "yes", "display": "Yes" } },
+        { "valueCoding": { "code": "no", "display": "No" } }
+      ]
+    },
+    {
+      "linkId": "vaccination-history",
+      "type": "group",
+      "text": "Vaccination History",
+      "item": [
+        {
+          "linkId": "total-doses",
+          "type": "integer",
+          "text": "Total Number of doses"
+        },
+        {
+          "linkId": "dose-at-birth",
+          "type": "boolean",
+          "text": "Dose at birth"
+        },
+        {
+          "linkId": "first-dose",
+          "type": "boolean",
+          "text": "1st Dose"
+        },
+        {
+          "linkId": "second-dose",
+          "type": "boolean",
+          "text": "2nd Dose"
+        },
+        {
+          "linkId": "third-dose",
+          "type": "boolean",
+          "text": "3rd Dose"
+        },
+        {
+          "linkId": "fourth-dose",
+          "type": "boolean",
+          "text": "4th Dose"
+        },
+        {
+          "linkId": "last-dose",
+          "type": "string",
+          "text": "If > 4, Last dose"
+        },
+        {
+          "linkId": "opv-ri-total",
+          "type": "integer",
+          "text": "Total OPV doses received through RI"
+        },
+        {
+          "linkId": "opv-sia-total",
+          "type": "integer",
+          "text": "Total OPV doses received through SIA"
+        },
+        {
+          "linkId": "last-opv-sia-date",
+          "type": "date",
+          "text": "Date of last OPV dose received through SIA"
+        },
+        {
+          "linkId": "ipv-ri-total",
+          "type": "integer",
+          "text": "Total IPV doses received through RI"
+        },
+        {
+          "linkId": "ipv-sia-total",
+          "type": "integer",
+          "text": "Total IPV doses received through SIA"
+        },
+        {
+          "linkId": "last-ipv-sia-date",
+          "type": "date",
+          "text": "Date of last IPV dose received through SIA"
+        },
+        {
+          "linkId": "ri-source",
+          "type": "choice",
+          "text": "Source of RI vaccination information",
+          "answerOption": [
+            { "valueCoding": { "code": "card", "display": "Card" } },
+            { "valueCoding": { "code": "recall", "display": "Recall" } }
+          ]
+        }
+      ]
+    }
+  ]
+}

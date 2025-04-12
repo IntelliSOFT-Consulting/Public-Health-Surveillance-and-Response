@@ -1,0 +1,675 @@
+{
+  "linkId": "itd-lab-info",
+  "type": "group",
+  "text": "ITD Lab Information",
+  "item": [
+    {
+      "linkId": "date-l-arm-isolate-received",
+      "type": "date",
+      "text": "Date L_Arm Isolate Received"
+    },
+    {
+      "linkId": "date-rl-arm-isolate-received",
+      "type": "date",
+      "text": "Date RL_Arm Isolate Received"
+    },
+    {
+      "linkId": "source-of-isolate",
+      "type": "choice",
+      "text": "Source of Isolate",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "1",
+            "display": "L_Arm"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "2",
+            "display": "R_Arm"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "fta-card",
+      "type": "choice",
+      "text": "FTA Card",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "1",
+            "display": "Yes"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "2",
+            "display": "No"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "itd-lab-id",
+      "type": "string",
+      "text": "ITD Lab ID Number"
+    },
+    {
+      "linkId": "itd-lab-name",
+      "type": "string",
+      "text": "Name of ITD Lab"
+    },
+    {
+      "linkId": "referring-lab-id",
+      "type": "string",
+      "text": "Referring Lab ID"
+    },
+    {
+      "linkId": "referring-lab-name",
+      "type": "string",
+      "text": "Laboratory Name Referring Isolate"
+    },
+    {
+      "linkId": "condition-of-isolate-on-receipt",
+      "type": "choice",
+      "text": "Condition of Isolate on Receipt",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "1",
+            "display": "Good"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "2",
+            "display": "Bad"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "date-isolate-received-itd-lab",
+      "type": "date",
+      "text": "Date Isolate Received in ITD Lab"
+    },
+    {
+      "linkId": "rrt-pcr-itd",
+      "type": "choice",
+      "text": "rRT-PCR ITD",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "1",
+            "display": "PVI NSL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "2",
+            "display": "PV2 NSL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "3",
+            "display": "PV3 NSL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "4",
+            "display": "PV1 SL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "5",
+            "display": "PV2 SL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "6",
+            "display": "PV3 SL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "7",
+            "display": "NPEV"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "8",
+            "display": "NEV"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "9",
+            "display": "Invalid"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "10",
+            "display": "Mixture"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "11",
+            "display": "Not required"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "12",
+            "display": "PV2"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "13",
+            "display": "nOPV2"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "rrt-pcr-vdpv",
+      "type": "choice",
+      "text": "rRT-PCR VDPV",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "1",
+            "display": "PVI NSL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "2",
+            "display": "PV2 NSL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "3",
+            "display": "PV3 NSL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "4",
+            "display": "PV1 SL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "5",
+            "display": "PV2 SL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "6",
+            "display": "PV3 SL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "7",
+            "display": "NPEV"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "8",
+            "display": "NEV"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "9",
+            "display": "Invalid"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "10",
+            "display": "Mixture"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "11",
+            "display": "Not required"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "rrt-pcr-itd-results",
+      "type": "string",
+      "text": "rRT-PCR ITD Results"
+    },
+    {
+      "linkId": "nsl1",
+      "type": "choice",
+      "text": "NSL1",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "1",
+            "display": "Yes"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "2",
+            "display": "No"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "nsl2",
+      "type": "choice",
+      "text": "NSL2",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "1",
+            "display": "Yes"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "2",
+            "display": "No"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "nsl3",
+      "type": "choice",
+      "text": "NSL3",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "1",
+            "display": "Yes"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "2",
+            "display": "No"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "sl1",
+      "type": "choice",
+      "text": "SL1",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "1",
+            "display": "Yes"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "2",
+            "display": "No"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "sl2",
+      "type": "choice",
+      "text": "SL2",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "1",
+            "display": "Yes"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "2",
+            "display": "No"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "3",
+            "display": "PV2"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "4",
+            "display": "nOPV2"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "sl3",
+      "type": "choice",
+      "text": "SL3",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "1",
+            "display": "Yes"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "2",
+            "display": "No"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "rrt-pcr-vdpv-results",
+      "type": "string",
+      "text": "rRT-PCR VDPV Results"
+    },
+    {
+      "linkId": "rrt-pcr-vdpv1",
+      "type": "choice",
+      "text": "rRT-PCR VDPV1",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "1",
+            "display": "PV1 NSL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "2",
+            "display": "PV1 SL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "11",
+            "display": "Not required"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "rrt-pcr-vdpv2",
+      "type": "choice",
+      "text": "rRT-PCR VDPV2",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "1",
+            "display": "PV2 NSL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "2",
+            "display": "PV2 SL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "11",
+            "display": "Not required"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "rrt-pcr-vdpv3",
+      "type": "choice",
+      "text": "rRT-PCR VDPV3",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "1",
+            "display": "PV3 NSL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "2",
+            "display": "PV3 SL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "11",
+            "display": "Not required"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "enterovirus-results",
+      "type": "group",
+      "text": "Enterovirus Results",
+      "item": [
+        {
+          "linkId": "itd-npent",
+          "type": "choice",
+          "text": "ITD NPENT",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "nev",
+          "type": "choice",
+          "text": "NEV",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "No"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "final-combined-itd-result",
+      "type": "choice",
+      "text": "Final Combined ITD Result",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "1",
+            "display": "PVI NSL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "2",
+            "display": "PV2 NSL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "3",
+            "display": "PV3 NSL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "4",
+            "display": "PV1 SL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "5",
+            "display": "PV2 SL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "6",
+            "display": "PV3 SL"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "7",
+            "display": "NPEV"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "8",
+            "display": "NEV"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "9",
+            "display": "Invalid"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "10",
+            "display": "Mixture"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "11",
+            "display": "Not required"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "12",
+            "display": "PV1 Discordant"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "13",
+            "display": "PV2 Discordant"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "14",
+            "display": "PV3 Discordant"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "15",
+            "display": "PV2"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "16",
+            "display": "nOPV2"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "itd-mixture",
+      "type": "string",
+      "text": "ITD Mixture"
+    },
+    {
+      "linkId": "date-final-combined-itd-result",
+      "type": "date",
+      "text": "Date Final Combined ITD Result"
+    },
+    {
+      "linkId": "date-itd-results-sent",
+      "type": "date",
+      "text": "Date Final ITD Results Sent to Referring Lab/EPI"
+    },
+    {
+      "linkId": "isolate-sequencing",
+      "type": "choice",
+      "text": "Isolate Sent for Sequencing",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "1",
+            "display": "Yes"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "2",
+            "display": "No"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "date-isolate-sent-for-sequencing",
+      "type": "date",
+      "text": "Date Isolate Sent for Sequencing"
+    },
+    {
+      "linkId": "referred-to-cdc-sequencing",
+      "type": "string",
+      "text": "Referred to CDC for Sequencing"
+    },
+    {
+      "linkId": "cdc-confirmation-note",
+      "type": "string",
+      "text": "Referred for Further Confirmation to CDC for Sequencing"
+    },
+    {
+      "linkId": "sequencing-results",
+      "type": "string",
+      "text": "Sequencing Results"
+    },
+    {
+      "linkId": "date-sequencing-results",
+      "type": "date",
+      "text": "Date Sequencing Results"
+    }
+  ]
+}

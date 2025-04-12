@@ -1,20 +1,5 @@
 {
   "resourceType": "Questionnaire",
-  "meta": {
-    "profile": [
-      "http://hl7.org/fhir/4.0/StructureDefinition/Questionnaire"
-    ],
-    "tag": [
-      {
-        "code": "lhc-qnvconv-R4-to-R5",
-        "display": "Converted from R4 to R5 by the LHC Questionnaire Version Converter"
-      },
-      {
-        "code": "lhc-qnvconv-R5-to-R4",
-        "display": "Converted from R5 to R4 by the LHC Questionnaire Version Converter"
-      }
-    ]
-  },
   "title": "Case Notification Questionnaire",
   "status": "active",
   "item": [
@@ -98,8 +83,7 @@
     {
       "linkId": "province-of-residence",
       "type": "choice",
-      "text": "Province of Residence",
-      "answerValueSet": "http://example.org/fhir/ValueSet/counties"
+      "text": "Province of Residence"
     },
     {
       "type": "string",

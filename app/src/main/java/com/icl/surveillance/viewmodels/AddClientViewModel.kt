@@ -1,6 +1,7 @@
 package com.icl.surveillance.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -15,7 +16,10 @@ import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FI
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.utils.readFileFromAssets
 import java.util.UUID
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.hl7.fhir.r4.model.Bundle
 import org.hl7.fhir.r4.model.Patient
 import org.hl7.fhir.r4.model.Questionnaire
 import org.hl7.fhir.r4.model.QuestionnaireResponse
@@ -54,7 +58,11 @@ class AddClientViewModel(application: Application, private val state: SavedState
         isPatientSaved.value = false
         return@launch
       }
-
+      val resources =
+          ResourceMapper.extract(
+              questionnaire,
+              questionnaireResponse,
+          )
       val entry =
           ResourceMapper.extract(
                   questionnaire,
@@ -64,10 +72,34 @@ class AddClientViewModel(application: Application, private val state: SavedState
       if (entry.resource !is Patient) {
         return@launch
       }
-      val patient = entry.resource as Patient
-      patient.id = generateUuid()
-      fhirEngine.create(patient)
-      isPatientSaved.value = true
+      withContext(Dispatchers.IO) {
+        try {
+          val patientID = generateUuid()
+          val patient = entry.resource as Patient
+          patient.id = patientID
+          fhirEngine.create(patient)
+          withContext(Dispatchers.Main) { isPatientSaved.value = true }
+          proceedToExtractInBackground(patientID, resources)
+        } catch (e: Exception) {
+          Log.e("SavePatient", "Error saving patient", e)
+          withContext(Dispatchers.Main) { isPatientSaved.value = false }
+        }
+      }
+    }
+  }
+
+  private suspend fun proceedToExtractInBackground(patientID: String, bundle: Bundle) {
+    withContext(Dispatchers.IO) {
+      // Example: Save Observations linked to the Patient
+      bundle.entry.forEach { entry ->
+        val resource = entry.resource
+        //        if (resource !is Patient) {
+        //          resource.subject = Reference("Patient/$patientID")
+        //          fhirEngine.create(resource)
+        //        }
+
+        Log.d("BackgroundOps", "All resources saved successfully. $entry")
+      }
     }
   }
 

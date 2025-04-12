@@ -1,0 +1,241 @@
+{
+  "linkId": "kemri-afp-lab",
+  "type": "group",
+  "text": "KEMRI AFP Lab Variables",
+  "item": [
+    {
+      "linkId": "specimen-info",
+      "type": "group",
+      "text": "Specimen Info",
+      "item": [
+        {
+          "linkId": "specimen-number",
+          "type": "choice",
+          "text": "Specimen Number",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "1"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "2"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "date-stool-received-lab",
+          "type": "date",
+          "text": "Date Stool Received in Lab"
+        },
+        {
+          "linkId": "specimen-condition",
+          "type": "choice",
+          "text": "Specimen Condition",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Good"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Bad"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "lr-arm-results",
+      "type": "group",
+      "text": "Cell Culture - LR Arm",
+      "item": [
+        {
+          "linkId": "lr-arm-result",
+          "type": "choice",
+          "text": "Cell Culture Results LR_Arm",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "L20B Positive"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Negative"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "date-lr-arm-results",
+          "type": "date",
+          "text": "Date LR_Arm Results"
+        }
+      ]
+    },
+    {
+      "linkId": "rlr-arm-results",
+      "type": "group",
+      "text": "Cell Culture - RLR Arm",
+      "item": [
+        {
+          "linkId": "rlr-arm-result",
+          "type": "choice",
+          "text": "Cell Culture Results RLR_Arm",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "L20B Positive"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Negative"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "3",
+                "display": "NPENT"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "date-rlr-arm-results",
+          "type": "date",
+          "text": "Date RLR_Arm Results"
+        }
+      ]
+    },
+    {
+      "linkId": "final-culture-results",
+      "type": "group",
+      "text": "Final Cell Culture Results",
+      "item": [
+        {
+          "linkId": "final-cell-culture-result",
+          "type": "choice",
+          "text": "Final Cell Culture Result",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Suspected poliovirus"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Negative"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "3",
+                "display": "NPENT"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "date-final-cell-culture-results",
+          "type": "date",
+          "text": "Date of Final Cell Culture Results"
+        },
+        {
+          "linkId": "date-final-cell-culture-sent-epi",
+          "type": "date",
+          "text": "Date Final Cell Culture Results Sent to EPI"
+        }
+      ]
+    },
+    {
+      "linkId": "itd-isolate-info",
+      "type": "group",
+      "text": "ITD Isolate Info",
+      "item": [
+        {
+          "linkId": "l-arm-isolate-itd",
+          "type": "choice",
+          "text": "L_Arm Isolate Sent for ITD",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "date-l-arm-isolate-itd",
+          "type": "date",
+          "text": "Date L_Arm Isolate Sent for ITD"
+        },
+        {
+          "linkId": "r-arm-isolate-itd",
+          "type": "choice",
+          "text": "R_Arm Isolate Sent for ITD",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "date-r-arm-isolate-itd",
+          "type": "date",
+          "text": "Date R_Arm Isolate Sent for ITD"
+        }
+      ]
+    },
+    {
+      "linkId": "fta-card-sent",
+      "type": "choice",
+      "text": "FTA Card Sent",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "1",
+            "display": "Yes"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "2",
+            "display": "No"
+          }
+        }
+      ]
+    }
+  ]
+}
