@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.icl.surveillance.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_navigation_home_to_add_client"
+            app:destination="@id/addClientFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_client_list"
+            app:destination="@id/navigation_dashboard" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="com.icl.surveillance.ui.patients.PatientsFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_patient_list" />
+
+    <fragment
+        android:id="@+id/navigation_notifications"
+        android:name="com.icl.surveillance.ui.notifications.NotificationsFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/addClientFragment"
+        android:name="com.icl.surveillance.clients.AddClientFragment"
+        android:label="fragment_add_client"
+        tools:layout="@layout/fragment_add_client" />
+</navigation>
