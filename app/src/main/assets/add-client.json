@@ -141,6 +141,24 @@
                 "expression": "%client.birthDate",
                 "name": "patientBirthDate"
               }
+            },
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
             }
           ],
           "linkId": "patient-0-birth-date",
@@ -357,6 +375,50 @@
                   }
                 ]
               }
+            }
+          ]
+        },
+        {
+          "linkId": "location-widget",
+          "type": "group",
+          "text": "Location",
+          "extension": [
+            {
+              "url": "https://github.com/google/android-fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "https://github.com/google/android-fhir/questionnaire-item-control",
+                    "code": "location-widget"
+                  }
+                ]
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "latitude",
+              "type": "decimal",
+              "required": true,
+              "text": "Latitude",
+              "extension": [
+                {
+                  "url": "gps-coordinate",
+                  "valueString": "latitude"
+                }
+              ]
+            },
+            {
+              "linkId": "longitude",
+              "type": "decimal",
+              "required": true,
+              "text": "Longitude",
+              "extension": [
+                {
+                  "url": "gps-coordinate",
+                  "valueString": "longitude"
+                }
+              ]
             }
           ]
         },

@@ -32,6 +32,6 @@
     <fragment
         android:id="@+id/addClientFragment"
         android:name="com.icl.surveillance.clients.AddClientFragment"
-        android:label="fragment_add_client"
+        android:label="Add Client"
         tools:layout="@layout/fragment_add_client" />
 </navigation>
