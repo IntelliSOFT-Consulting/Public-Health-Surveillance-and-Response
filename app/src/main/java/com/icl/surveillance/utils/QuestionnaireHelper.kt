@@ -3,6 +3,7 @@ package com.icl.surveillance.utils
 import org.hl7.fhir.r4.model.Encounter
 import org.hl7.fhir.r4.model.Observation
 import org.hl7.fhir.r4.model.Quantity
+import org.hl7.fhir.r4.model.Reference
 
 class QuestionnaireHelper {
 
@@ -23,8 +24,13 @@ class QuestionnaireHelper {
     return observation
   }
 
-  fun generalEncounter(): Encounter {
+  fun generalEncounter(basedOn: String?): Encounter {
     val enc = Encounter()
+
+    if (basedOn != null) {
+      val reference = Reference("Encounter/$basedOn")
+      enc.partOf = reference
+    }
     return enc
   }
 

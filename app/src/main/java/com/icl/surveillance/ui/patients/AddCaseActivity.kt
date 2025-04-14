@@ -69,7 +69,14 @@ class AddCaseActivity : AppCompatActivity() {
 
   private fun saveCase(questionnaireResponse: QuestionnaireResponse) {
     val patientId = FormatterClass().getSharedPref("resourceId", this@AddCaseActivity)
-    viewModel.completeAssessment(questionnaireResponse, "$patientId")
+    val questionnaire = FormatterClass().getSharedPref("questionnaire", this@AddCaseActivity)
+    val encounter = FormatterClass().getSharedPref("encounterId", this@AddCaseActivity)
+    when (questionnaire) {
+      "measles.json" -> viewModel.completeAssessment(questionnaireResponse, "$patientId")
+      "measles-lab.json" ->
+          viewModel.completeLabAssessment(questionnaireResponse, "$patientId", "$encounter")
+      "covid.json" -> viewModel.completeAssessment(questionnaireResponse, "$patientId")
+    }
   }
 
   private fun addQuestionnaireFragment() {
@@ -100,7 +107,8 @@ class AddCaseActivity : AppCompatActivity() {
   }
 
   private fun updateArguments() {
-    intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "measles-case.json")
+    val json = FormatterClass().getSharedPref("questionnaire", this@AddCaseActivity)
+    intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, json)
   }
 
   override fun onSupportNavigateUp(): Boolean {

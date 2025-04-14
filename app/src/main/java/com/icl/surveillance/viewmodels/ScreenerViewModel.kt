@@ -67,11 +67,10 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
           /** Extract Observations, Patient Data */
           val qh = QuestionnaireHelper()
+          bundle.addEntry().setResource(qh.generalEncounter(null)).request.url = "Encounter"
 
           val json = JSONObject(questionnaire)
           val items = json.getJSONArray("item")
-
-          bundle.addEntry().setResource(qh.generalEncounter()).request.url = "Encounter"
 
           for (i in 0 until items.length()) {
             val item = items.getJSONObject(i)
@@ -155,6 +154,148 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
           val encounterId = generateUuid()
           val subjectReference = Reference("Patient/$patientId")
           val title = "Measles Case"
+          saveResources(bundle, subjectReference, encounterId, title)
+          CoroutineScope(Dispatchers.Main).launch { isResourcesSaved.value = true }
+        } catch (e: Exception) {
+          println("Error Experienced ${e.message}")
+          CoroutineScope(Dispatchers.Main).launch { isResourcesSaved.value = false }
+          return@launch
+        }
+      }
+    }
+  }
+
+  fun completeLabAssessment(
+      questionnaireResponse: QuestionnaireResponse,
+      patientId: String,
+      encounter: String
+  ) {
+    viewModelScope.launch {
+      val bundle = ResourceMapper.extract(questionnaireResource, questionnaireResponse)
+      val context = FhirContext.forR4()
+      val questionnaire = context.newJsonParser().encodeResourceToString(questionnaireResponse)
+
+      CoroutineScope(Dispatchers.IO).launch {
+        try {
+          //          if (isRequiredFieldMissing(bundle)) {
+          //            customMessage.postValue(
+          //              MessageItem(
+          //                success = false,
+          //                message = "Check required fields"
+          //              )
+          //            )
+          //            return@launch
+          //          }
+
+          /** Extract Observations, Patient Data */
+          val qh = QuestionnaireHelper()
+          bundle.addEntry().setResource(qh.generalEncounter(encounter)).request.url = "Encounter"
+
+          val json = JSONObject(questionnaire)
+          val items = json.getJSONArray("item")
+
+          for (i in 0 until items.length()) {
+            val item = items.getJSONObject(i)
+            val linkId = item.getString("linkId")
+
+            when (linkId) {
+              "date-sent-to-district" -> {
+                val code = extractResponse(item, "valueDate")
+                bundle
+                    .addEntry()
+                    .setResource(
+                        qh.codingTimeAutoQuestionnaire(linkId, "Date sent form to District", code))
+                    .request
+                    .url = "Observation"
+              }
+
+              "date-received-at-district" -> {
+                val code = extractResponse(item, "valueDate")
+                bundle
+                    .addEntry()
+                    .setResource(
+                        qh.codingTimeAutoQuestionnaire(
+                            linkId, "Date received form at District Level", code))
+                    .request
+                    .url = "Observation"
+              }
+
+              "lab-id" -> {
+                val code = extractResponse(item, "valueString")
+                bundle
+                    .addEntry()
+                    .setResource(qh.codingQuestionnaire(linkId, "Lab ID", code))
+                    .request
+                    .url = "Observation"
+              }
+
+              "date-specimen-collected" -> {
+                val code = extractResponse(item, "valueDate")
+                bundle
+                    .addEntry()
+                    .setResource(
+                        qh.codingTimeAutoQuestionnaire(linkId, "Date Specimen collected", code))
+                    .request
+                    .url = "Observation"
+              }
+
+              "date-sent-to-lab" -> {
+                val code = extractResponse(item, "valueDate")
+                bundle
+                    .addEntry()
+                    .setResource(qh.codingTimeAutoQuestionnaire(linkId, "Date sent to lab", code))
+                    .request
+                    .url = "Observation"
+              }
+
+              "date-lab-received-specimen" -> {
+                val code = extractResponse(item, "valueDate")
+                bundle
+                    .addEntry()
+                    .setResource(
+                        qh.codingTimeAutoQuestionnaire(linkId, "Date Lab received specimen", code))
+                    .request
+                    .url = "Observation"
+              }
+
+              "specimen-condition" -> {
+                val code = extractResponseCode(item, "valueCoding")
+                if (code.isNotEmpty()) {
+                  bundle
+                      .addEntry()
+                      .setResource(qh.codingQuestionnaire(linkId, "Specimen Condition", code))
+                      .request
+                      .url = "Observation"
+                }
+              }
+
+              "measles-igm-result" -> {
+                val code = extractResponseCode(item, "valueCoding")
+                if (code.isNotEmpty()) {
+                  bundle
+                      .addEntry()
+                      .setResource(qh.codingQuestionnaire(linkId, "Measles IgM Result", code))
+                      .request
+                      .url = "Observation"
+                }
+              }
+
+              "rubella-igm-result" -> {
+                val code = extractResponseCode(item, "valueCoding")
+                if (code.isNotEmpty()) {
+                  bundle
+                      .addEntry()
+                      .setResource(qh.codingQuestionnaire(linkId, "Rubella IgM Result", code))
+                      .request
+                      .url = "Observation"
+                }
+              }
+            }
+          }
+
+          val encounterId = generateUuid()
+          val subjectReference = Reference("Patient/$patientId")
+          val title = "Measles Lab Information"
           saveResources(bundle, subjectReference, encounterId, title)
           CoroutineScope(Dispatchers.Main).launch { isResourcesSaved.value = true }
         } catch (e: Exception) {

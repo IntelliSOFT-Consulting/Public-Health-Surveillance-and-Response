@@ -28,6 +28,7 @@ class ClientDetailsActivity : AppCompatActivity() {
 
     // Access and set click listener on the FAB
     binding.fab.setOnClickListener {
+      FormatterClass().saveSharedPref("questionnaire", "measles.json", this)
       val intent = Intent(this@ClientDetailsActivity, AddCaseActivity::class.java)
       intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "measles.json")
       startActivity(intent)

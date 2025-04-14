@@ -1,11 +1,15 @@
 package com.icl.surveillance.ui.patients.data
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.icl.surveillance.R
+import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
+import com.icl.surveillance.databinding.FragmentLabInformationBinding
+import com.icl.surveillance.ui.patients.AddCaseActivity
+import com.icl.surveillance.utils.FormatterClass
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,13 +33,36 @@ class LabInformationFragment : Fragment() {
     }
   }
 
+  private var _binding: FragmentLabInformationBinding? = null
+
+  // This property is only valid between onCreateView and
+  // onDestroyView.
+  private val binding
+    get() = _binding!!
+
   override fun onCreateView(
       inflater: LayoutInflater,
       container: ViewGroup?,
       savedInstanceState: Bundle?
   ): View? {
-    // Inflate the layout for this fragment
-    return inflater.inflate(R.layout.fragment_lab_information, container, false)
+
+    _binding = FragmentLabInformationBinding.inflate(inflater, container, false)
+    val root: View = binding.root
+
+    return root
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+
+    binding.apply {
+      fab.setOnClickListener {
+        FormatterClass().saveSharedPref("questionnaire", "measles-lab.json", requireContext())
+        val intent = Intent(requireContext(), AddCaseActivity::class.java)
+        intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "measles-lab.json")
+        startActivity(intent)
+      }
+    }
   }
 
   companion object {

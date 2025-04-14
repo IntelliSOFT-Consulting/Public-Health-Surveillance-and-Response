@@ -1,0 +1,142 @@
+{
+  "resourceType": "Questionnaire",
+  "status": "active",
+  "title": "Lab Information",
+  "item": [
+    {
+      "linkId": "date-sent-to-district",
+      "text": "Date sent form to District",
+      "type": "date"
+    },
+    {
+      "linkId": "date-received-at-district",
+      "text": "Date received form at District Level",
+      "type": "date"
+    },
+    {
+      "linkId": "lab-id",
+      "text": "Lab ID",
+      "type": "string"
+    },
+    {
+      "linkId": "date-specimen-collected",
+      "text": "Date Specimen collected",
+      "type": "date"
+    },
+    {
+      "linkId": "date-sent-to-lab",
+      "text": "Date sent to lab",
+      "type": "date"
+    },
+    {
+      "linkId": "date-lab-received-specimen",
+      "text": "Date Lab received specimen",
+      "type": "date"
+    },
+    {
+      "linkId": "specimen-condition",
+      "text": "Specimen Condition",
+      "type": "choice",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "1",
+            "display": "Adequate"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "2",
+            "display": "Not Adequate"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "measles-igm-result",
+      "text": "Measles IgM Result",
+      "type": "choice",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "1",
+            "display": "Positive"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "2",
+            "display": "Negative"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "3",
+            "display": "Indeterminate"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "4",
+            "display": "Not Done"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "5",
+            "display": "Pending"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "9",
+            "display": "Unknown"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "rubella-igm-result",
+      "text": "Rubella IgM Result",
+      "type": "choice",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "1",
+            "display": "Positive"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "2",
+            "display": "Negative"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "3",
+            "display": "Indeterminate"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "4",
+            "display": "Not Done"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "5",
+            "display": "Pending"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "9",
+            "display": "Unknown"
+          }
+        }
+      ]
+    }
+  ]
+}
