@@ -63,7 +63,7 @@ class AddClientFragment : Fragment(R.layout.fragment_add_client) {
   }
 
   private fun updateArguments() {
-    requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "measles.json")
+    requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-client.json")
   }
 
   private fun addQuestionnaireFragment() {
