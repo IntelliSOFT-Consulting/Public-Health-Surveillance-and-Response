@@ -1,0 +1,186 @@
+{
+  "resourceType": "Questionnaire",
+  "id": "measles-case-investigation",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/4.0/StructureDefinition/Questionnaire"
+    ],
+    "tag": [
+      {
+        "code": "lhc-qnvconv-R4-to-R5",
+        "display": "Converted from R4 to R5 by the LHC Questionnaire Version Converter"
+      },
+      {
+        "code": "lhc-qnvconv-R5-to-R4",
+        "display": "Converted from R5 to R4 by the LHC Questionnaire Version Converter"
+      }
+    ]
+  },
+  "title": "Measles Case Investigation",
+  "status": "active",
+  "item": [
+    {
+      "type": "choice",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "drop-down",
+                "display": "Drop down"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "F1",
+      "text": "Presence of fever",
+      "required": true,
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "yes",
+            "display": "Yes"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "no",
+            "display": "No"
+          }
+        }
+      ]
+    },
+    {
+      "type": "date",
+      "linkId": "F2",
+      "text": "Date of onset of rash",
+      "required": true
+    },
+    {
+      "type": "choice",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "drop-down",
+                "display": "Drop down"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "F3",
+      "text": "Type of rash",
+      "required": true,
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "maculopapular",
+            "display": "Maculopapular"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "other",
+            "display": "Other"
+          }
+        }
+      ]
+    },
+    {
+      "type": "choice",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "drop-down",
+                "display": "Drop down"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "F4.1",
+      "text": "Was home of patient visited for contact investigation?",
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "yes",
+            "display": "Yes"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "no",
+            "display": "No"
+          }
+        }
+      ]
+    },
+    {
+      "type": "date",
+      "linkId": "F4.2",
+      "text": "If Yes, Date of visit",
+      "enableWhen": [
+        {
+          "question": "F4.1",
+          "operator": "=",
+          "answerCoding": {
+            "code": "yes"
+          }
+        }
+      ],
+      "required": true
+    },
+
+    {
+      "type": "choice",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "drop-down",
+                "display": "Drop down"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "F5",
+      "text": "Is the case epidemiologically linked to a lab-confirmed case?",
+      "required": true,
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "yes",
+            "display": "Yes"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "no",
+            "display": "No"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "unknown",
+            "display": "Unknown"
+          }
+        }
+      ]
+    }
+  ]
+}

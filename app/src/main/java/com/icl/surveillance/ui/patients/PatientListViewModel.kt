@@ -123,6 +123,14 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
     override fun toString(): String = code
   }
 
+  data class EncounterItem(
+      val id: String,
+      val reasonCode: String,
+      val status: String,
+  ) {
+    override fun toString(): String = reasonCode
+  }
+
   data class ConditionItem(
       val id: String,
       val code: String,

@@ -13,12 +13,15 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.fhir.FhirEngine
+import com.icl.surveillance.R
 import com.icl.surveillance.adapters.PatientItemRecyclerViewAdapter
 import com.icl.surveillance.databinding.FragmentPatientListBinding
 import com.icl.surveillance.fhir.FhirApplication
+import com.icl.surveillance.utils.FormatterClass
 
 class PatientsFragment : Fragment() {
   private lateinit var fhirEngine: FhirEngine
@@ -119,5 +122,9 @@ class PatientsFragment : Fragment() {
     _binding = null
   }
 
-  private fun onPatientItemClicked(patientItem: PatientListViewModel.PatientItem) {}
+  private fun onPatientItemClicked(patientItem: PatientListViewModel.PatientItem) {
+    println("Going to client details activity with the id as ${patientItem.resourceId}")
+    FormatterClass().saveSharedPref("resourceId", patientItem.resourceId, requireContext())
+    findNavController().navigate(R.id.action_navigation_dashboard_to_client_details_activity)
+  }
 }

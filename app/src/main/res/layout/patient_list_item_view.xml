@@ -12,7 +12,8 @@
         android:layout_marginStart="@dimen/text_margin"
         android:layout_marginTop="@dimen/status_margin"
         android:gravity="center_vertical"
-        android:src="@drawable/baseline_person_24" />
+        android:src="@drawable/baseline_person_24"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/name"
@@ -40,6 +41,7 @@
         android:layout_marginBottom="@dimen/small_text_margin"
         android:singleLine="true"
         android:textAppearance="?attr/textAppearanceBody2"
+        android:visibility="gone"
         tools:text="50 years old" />
 
     <TextView
@@ -53,5 +55,6 @@
         android:layout_marginEnd="@dimen/small_text_margin"
         android:layout_toEndOf="@id/status"
         android:textAppearance="?attr/textAppearanceBody2"
+        android:visibility="gone"
         tools:text="Id: #...456" />
 </RelativeLayout>

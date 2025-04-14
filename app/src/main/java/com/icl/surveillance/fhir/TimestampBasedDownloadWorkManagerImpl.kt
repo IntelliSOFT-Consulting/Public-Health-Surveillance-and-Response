@@ -22,7 +22,8 @@ class TimestampBasedDownloadWorkManagerImpl(private val dataStore: DemoDataStore
   private val urls =
       LinkedList(
           listOf(
-              "Patient?address-city=Imeja&_sort=_lastUpdated",
+              //              "Patient?address-city=Imeja&_sort=_lastUpdated",
+              "Patient?_sort=_lastUpdated",
           ))
 
   override suspend fun getNextRequest(): DownloadRequest? {

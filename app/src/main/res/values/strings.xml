@@ -9,4 +9,6 @@
     <string name="search_patient_by">Filter Patient By:</string>
     <string name="given_name">Given Name</string>
     <string name="family_name">Family Name</string>
+    <string name="new_case_description">New Case</string>
+    <string name="message_no_datetime">N/A</string>
 </resources>

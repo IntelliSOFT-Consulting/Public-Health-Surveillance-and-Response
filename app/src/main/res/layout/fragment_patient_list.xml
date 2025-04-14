@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".ui.patients.PatientsFragment">
 
 
@@ -19,7 +20,8 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:text="@string/search_patient_by"
-            android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
+            android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+            android:visibility="gone" />
 
         <!-- Horizontal layout for Given Name and Family Name -->
         <LinearLayout
@@ -27,7 +29,8 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginVertical="10dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="0dp"
@@ -60,6 +63,9 @@
         <!-- Patient List -->
         <include
             android:id="@+id/patient_list_container"
-            layout="@layout/patient_list_view" />
+            layout="@layout/patient_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" />
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

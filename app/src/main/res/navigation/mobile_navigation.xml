@@ -22,7 +22,11 @@
         android:id="@+id/navigation_dashboard"
         android:name="com.icl.surveillance.ui.patients.PatientsFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_patient_list" />
+        tools:layout="@layout/fragment_patient_list">
+        <action
+            android:id="@+id/action_navigation_dashboard_to_client_details_activity"
+            app:destination="@id/clientDetailsActivity" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_notifications"
@@ -34,4 +38,9 @@
         android:name="com.icl.surveillance.clients.AddClientFragment"
         android:label="Add Client"
         tools:layout="@layout/fragment_add_client" />
+    <activity
+        android:id="@+id/clientDetailsActivity"
+        android:name="com.icl.surveillance.ui.patients.ClientDetailsActivity"
+        android:label="activity_client_details"
+        tools:layout="@layout/activity_client_details" />
 </navigation>
