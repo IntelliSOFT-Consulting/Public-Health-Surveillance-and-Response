@@ -77,6 +77,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
           val patientID = generateUuid()
           val patient = entry.resource as Patient
           patient.id = patientID
+          patient.addressFirstRep.city="Imeja"
           fhirEngine.create(patient)
           withContext(Dispatchers.Main) { isPatientSaved.value = true }
           proceedToExtractInBackground(patientID, resources)
@@ -98,7 +99,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
         //          fhirEngine.create(resource)
         //        }
 
-        Log.d("BackgroundOps", "All resources saved successfully. $entry")
+        Log.d("BackgroundOps", "All resources saved successfully. ${entry.resource.resourceType}")
       }
     }
   }

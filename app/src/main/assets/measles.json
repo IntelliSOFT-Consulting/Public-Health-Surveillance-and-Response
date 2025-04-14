@@ -1,0 +1,1029 @@
+{
+  "resourceType": "Questionnaire",
+  "id": "measles-case-investigation",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/4.0/StructureDefinition/Questionnaire"
+    ],
+    "tag": [
+      {
+        "code": "lhc-qnvconv-R4-to-R5",
+        "display": "Converted from R4 to R5 by the LHC Questionnaire Version Converter"
+      },
+      {
+        "code": "lhc-qnvconv-R5-to-R4",
+        "display": "Converted from R5 to R4 by the LHC Questionnaire Version Converter"
+      }
+    ]
+  },
+  "title": "Measles Case Investigation Form",
+  "status": "active",
+  "subjectType": [
+    "Patient"
+  ],
+  "date": "2025-04-12",
+  "publisher": "National Disease Surveillance",
+  "approvalDate": "2025-04-14",
+  "lastReviewDate": "2025-04-14",
+  "item": [
+    {
+      "item": [
+        {
+          "type": "date",
+          "linkId": "onsetDate",
+          "text": "Date of onset",
+          "required": true
+        },
+        {
+          "type": "date",
+          "linkId": "dateSeen",
+          "text": "Date seen at Health Facility",
+          "required": true
+        },
+        {
+          "type": "date",
+          "linkId": "notifiedDistrict",
+          "text": "Date health facility notified District",
+          "required": true
+        },
+        {
+          "type": "integer",
+          "linkId": "dosesReceived",
+          "text": "Number of vaccine doses received",
+          "required": true
+        },
+        {
+          "type": "date",
+          "linkId": "lastVaccinationDate",
+          "text": "Date of last vaccination",
+          "required": true
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "inOrOutPatient",
+          "text": "Inpatient/Outpatient",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Inpatient"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Outpatient"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "outcome",
+          "text": "Outcome",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Alive"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Dead"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "3",
+                "display": "Unknown"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "finalClassification",
+          "text": "Final Classification",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Confirmed by lab"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Confirmed by epi linkage"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "3",
+                "display": "Compatible/Clinical no spec."
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "4",
+                "display": "Discarded - IgM Negative"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "5",
+                "display": "Pending Lab results"
+              }
+            }
+          ]
+        }
+      ],
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "clinical-history",
+      "text": "Clinical History"
+    },
+    {
+      "item": [
+        {
+          "type": "date",
+          "linkId": "dateSentToDistrict",
+          "text": "Date sent form to District",
+          "required": true
+        },
+        {
+          "type": "date",
+          "linkId": "dateReceivedAtDistrict",
+          "text": "Date received form at District Level",
+          "required": true
+        },
+        {
+          "type": "string",
+          "linkId": "labId",
+          "text": "Lab ID",
+          "required": true
+        },
+        {
+          "type": "date",
+          "linkId": "specimenCollectedDate",
+          "text": "Date Specimen collected",
+          "required": true
+        },
+        {
+          "type": "date",
+          "linkId": "specimenSentDate",
+          "text": "Date sent to lab",
+          "required": true
+        },
+        {
+          "type": "date",
+          "linkId": "specimenReceivedDate",
+          "text": "Date Lab received specimen",
+          "required": true
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "specimenCondition",
+          "text": "Specimen Condition",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Adequate"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Not Adequate"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "measlesIgM",
+          "text": "Measles IgM",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Positive"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Negative"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "3",
+                "display": "Indeterminate"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "4",
+                "display": "Not Done"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "5",
+                "display": "Pending"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "9",
+                "display": "Unknown"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "rubellaIgM",
+          "text": "Rubella IgM",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Positive"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Negative"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "3",
+                "display": "Indeterminate"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "4",
+                "display": "Not Done"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "5",
+                "display": "Pending"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "9",
+                "display": "Unknown"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "otherLabResults",
+          "text": "Other Lab Results",
+          "type": "string"
+        }
+      ],
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "lab-info",
+      "text": "Lab Information"
+    },
+    {
+      "item": [
+        {
+          "type": "string",
+          "linkId": "countryCode",
+          "text": "Country Code",
+          "required": true
+        },
+        {
+          "type": "string",
+          "linkId": "labName",
+          "text": "Lab Name",
+          "required": true
+        },
+        {
+          "type": "string",
+          "linkId": "kemriId",
+          "text": "ID Number",
+          "required": true
+        },
+        {
+          "type": "string",
+          "linkId": "kemriLabId",
+          "text": "Lab ID Number",
+          "required": true
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "disease",
+          "text": "Disease",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "measles",
+                "display": "Measles"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "rubella",
+                "display": "Rubella"
+              }
+            }
+          ]
+        },
+        {
+          "type": "date",
+          "linkId": "kemriOnset",
+          "text": "Date of onset",
+          "required": true
+        },
+        {
+          "type": "string",
+          "linkId": "vaccinationHistory",
+          "text": "Vaccination history",
+          "required": true
+        },
+        {
+          "type": "date",
+          "linkId": "lastVaccinationDateKemri",
+          "text": "Date of last vaccination",
+          "required": true
+        },
+        {
+          "linkId": "specimenTypes",
+          "text": "Specimen Collection",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "bloodCollected",
+              "text": "Blood",
+              "type": "choice",
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "1",
+                    "display": "Yes"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "2",
+                    "display": "No"
+                  }
+                }
+              ]
+            },
+            {
+              "linkId": "bloodDate",
+              "text": "Date Specimen Collected",
+              "type": "date"
+            },
+            {
+              "linkId": "urineCollected",
+              "text": "Urine",
+              "type": "choice",
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "1",
+                    "display": "Yes"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "2",
+                    "display": "No"
+                  }
+                }
+              ]
+            },
+            {
+              "linkId": "urineDate",
+              "text": "Urine Date",
+              "type": "date"
+            },
+            {
+              "linkId": "respiratoryCollected",
+              "text": "Respiratory",
+              "type": "choice",
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "1",
+                    "display": "Yes"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "2",
+                    "display": "No"
+                  }
+                }
+              ]
+            },
+            {
+              "linkId": "respiratoryDate",
+              "text": "Respiratory Date",
+              "type": "date"
+            },
+            {
+              "linkId": "othersCollected",
+              "text": "Others",
+              "type": "choice",
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "1",
+                    "display": "Yes"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "2",
+                    "display": "No"
+                  }
+                }
+              ]
+            },
+            {
+              "linkId": "otherSpecify",
+              "text": "If yes, specify",
+              "type": "string"
+            },
+            {
+              "linkId": "otherDate",
+              "text": "Other date",
+              "type": "date"
+            }
+          ]
+        },
+        {
+          "type": "date",
+          "linkId": "specimenSent",
+          "text": "Date specimen sent to lab",
+          "required": true
+        },
+        {
+          "type": "date",
+          "linkId": "specimenReceived",
+          "text": "Date specimen received in lab",
+          "required": true
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "kemriSpecimenCondition",
+          "text": "Specimen Condition",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Adequate"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Inadequate"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "kemriMeaslesIgM",
+          "text": "Measles IgM results",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Positive"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Negative"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "3",
+                "display": "Indeterminate"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "4",
+                "display": "Not done"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "5",
+                "display": "Pending"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "9",
+                "display": "Unknown"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "kemriRubellaIgM",
+          "text": "Rubella IgM results",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Positive"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Negative"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "3",
+                "display": "Indeterminate"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "4",
+                "display": "Not done"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "5",
+                "display": "Pending"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "9",
+                "display": "Unknown"
+              }
+            }
+          ]
+        },
+        {
+          "type": "date",
+          "linkId": "resultsToEPI",
+          "text": "Date Results sent out to EPI/Surv Unit",
+          "required": true
+        },
+        {
+          "type": "date",
+          "linkId": "sentToRegional",
+          "text": "Date Serum specimen sent to regional lab for IgM confirmation",
+          "required": true
+        }
+      ],
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "kemri",
+      "text": "KEMRI Measles Lab"
+    },
+    {
+      "item": [
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "regionalMeaslesIgM",
+          "text": "Measles IgM results sent by regional Lab",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Positive"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Negative"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "3",
+                "display": "Indeterminate"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "4",
+                "display": "Not done"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "5",
+                "display": "Pending"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "9",
+                "display": "Unknown"
+              }
+            }
+          ]
+        },
+        {
+          "type": "date",
+          "linkId": "dateRegionalMeaslesIgM",
+          "text": "Date measles IgM results sent by Regional lab",
+          "required": true
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "regionalRubellaIgM",
+          "text": "Rubella IgM results sent by Regional Lab",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Positive"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Negative"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "3",
+                "display": "Indeterminate"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "4",
+                "display": "Not done"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "5",
+                "display": "Pending"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "9",
+                "display": "Unknown"
+              }
+            }
+          ]
+        },
+        {
+          "type": "date",
+          "linkId": "dateRegionalRubellaIgM",
+          "text": "Date Rubella IgM results sent by Regional lab",
+          "required": true
+        },
+        {
+          "type": "date",
+          "linkId": "specimenForIsolation",
+          "text": "Date specimen sent to regional for virus isolation",
+          "required": true
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "virusIsolationResult",
+          "text": "Virus Isolation",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Positive"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Negative"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "3",
+                "display": "Indeterminate"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "4",
+                "display": "Not done"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "5",
+                "display": "Pending"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "9",
+                "display": "Unknown"
+              }
+            }
+          ]
+        },
+        {
+          "type": "date",
+          "linkId": "dateIsolationResult",
+          "text": "Date Isolation results sent by regional lab",
+          "required": true
+        },
+        {
+          "type": "date",
+          "linkId": "dateIsolationToEPI",
+          "text": "Date Isolation sent to EPI/Surveillance Unit",
+          "required": true
+        },
+        {
+          "type": "date",
+          "linkId": "dateIgMReceivedAtNational",
+          "text": "Date IgM Results received at National Lab",
+          "required": true
+        }
+      ],
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "regionalLab",
+      "text": "Regional Lab Information"
+    }
+  ]
+}

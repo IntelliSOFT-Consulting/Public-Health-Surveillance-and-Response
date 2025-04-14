@@ -39,142 +39,6 @@
   ],
   "item": [
     {
-      "type": "integer",
-      "linkId": "epid-number",
-      "text": "Epid Number",
-      "required": true
-    },
-    {
-      "type": "string",
-      "linkId": "country-code",
-      "text": "Country Code",
-      "required": true
-    },
-    {
-      "type": "string",
-      "linkId": "province-code",
-      "text": "Province Code",
-      "required": true
-    },
-    {
-      "type": "string",
-      "linkId": "district-code",
-      "text": "District Code",
-      "required": true
-    },
-    {
-      "type": "date",
-      "linkId": "date-specimen-received",
-      "text": "Date specimen received at National level",
-      "required": true,
-      "extension": [
-        {
-          "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-          "valueString": "Cannot be a date in the future"
-        },
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-          "valueDate": {
-            "extension": [
-              {
-                "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-                "valueExpression": {
-                  "language": "text/fhirpath",
-                  "expression": "today()"
-                }
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "type": "choice",
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-          "valueCodeableConcept": {
-            "coding": [
-              {
-                "system": "http://hl7.org/fhir/questionnaire-item-control",
-                "code": "drop-down",
-                "display": "Drop down"
-              }
-            ]
-          }
-        }
-      ],
-      "linkId": "reporting-district-name",
-      "text": "Reporting District Name"
-    },
-    {
-      "type": "choice",
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-          "valueCodeableConcept": {
-            "coding": [
-              {
-                "system": "http://hl7.org/fhir/questionnaire-item-control",
-                "code": "drop-down",
-                "display": "Drop down"
-              }
-            ]
-          }
-        }
-      ],
-      "linkId": "district-of-residence",
-      "text": "District of Residence"
-    },
-    {
-      "linkId": "reporting-province-name",
-      "type": "string",
-      "text": "Reporting Province Name"
-    },
-    {
-      "linkId": "province-of-residence",
-      "type": "choice",
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-          "valueCodeableConcept": {
-            "coding": [
-              {
-                "system": "http://hl7.org/fhir/questionnaire-item-control",
-                "code": "drop-down",
-                "display": "Drop down"
-              }
-            ]
-          }
-        }
-      ],
-      "text": "Province of Residence"
-    },
-    {
-      "type": "string",
-      "linkId": "nearest-health-facility",
-      "text": "Nearest health facility to village",
-      "required": true
-    },
-    {
-      "type": "string",
-      "linkId": "patient-address",
-      "text": "Address for patient",
-      "required": true
-    },
-    {
-      "type": "string",
-      "linkId": "village",
-      "text": "Village / Neighbourhood",
-      "required": true
-    },
-    {
-      "type": "string",
-      "linkId": "town-city",
-      "text": "Town / City",
-      "required": true
-    },
-    {
       "type": "group",
       "linkId": "patient-names",
       "text": "Name(s) of patient",
@@ -215,22 +79,6 @@
           "text": "Family Name"
         }
       ]
-    },
-    {
-      "type": "decimal",
-      "linkId": "longitude",
-      "text": "Longitude"
-    },
-    {
-      "type": "decimal",
-      "linkId": "latitude",
-      "text": "Latitude"
-    },
-    {
-      "type": "string",
-      "linkId": "parent-name",
-      "text": "Father / Mother",
-      "required": true
     },
     {
       "type": "date",
@@ -280,6 +128,7 @@
       "readOnly": true
     },
     {
+      "linkId": "sex",
       "type": "choice",
       "extension": [
         {
@@ -308,7 +157,6 @@
           "valueCode": "horizontal"
         }
       ],
-      "linkId": "sex",
       "text": "Sex",
       "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.gender",
       "answerOption": [
@@ -329,14 +177,202 @@
       ]
     },
     {
+      "linkId": "epid-number",
+      "type": "integer",
+      "text": "Epid Number",
+      "required": true
+    },
+    {
+      "linkId": "country-code",
       "type": "string",
+      "text": "Country Code",
+      "required": true
+    },
+    {
+      "linkId": "province-code",
+      "type": "string",
+      "text": "Province Code",
+      "required": true
+    },
+    {
+      "linkId": "district-code",
+      "type": "string",
+      "text": "District Code",
+      "required": true
+    },
+    {
+      "linkId": "date-specimen-received",
+      "type": "date",
+      "text": "Date specimen received at National level",
+      "required": true,
+      "extension": [
+        {
+          "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+          "valueString": "Cannot be a date in the future"
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+          "valueDate": {
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                "valueExpression": {
+                  "language": "text/fhirpath",
+                  "expression": "today()"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "reporting-district-name",
+      "type": "choice",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "drop-down",
+                "display": "Drop down"
+              }
+            ]
+          }
+        }
+      ],
+      "text": "Reporting District Name"
+    },
+    {
+      "linkId": "district-of-residence",
+      "type": "choice",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "drop-down",
+                "display": "Drop down"
+              }
+            ]
+          }
+        }
+      ],
+      "text": "District of Residence"
+    },
+    {
+      "linkId": "reporting-province-name",
+      "type": "string",
+      "text": "Reporting Province Name"
+    },
+    {
+      "linkId": "province-of-residence",
+      "type": "choice",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "drop-down",
+                "display": "Drop down"
+              }
+            ]
+          }
+        }
+      ],
+      "text": "Province of Residence"
+    },
+    {
+      "linkId": "nearest-health-facility",
+      "type": "string",
+      "text": "Nearest health facility to village",
+      "required": true
+    },
+    {
+      "linkId": "patient-address",
+      "type": "string",
+      "text": "Address for patient",
+      "required": true
+    },
+    {
+      "linkId": "village",
+      "type": "string",
+      "text": "Village / Neighbourhood",
+      "required": true
+    },
+    {
+      "linkId": "town-city",
+      "type": "string",
+      "text": "Town / City",
+      "required": true
+    },
+    {
+      "linkId": "longitude",
+      "type": "decimal",
+      "text": "Longitude"
+    },
+    {
+      "linkId": "latitude",
+      "type": "decimal",
+      "text": "Latitude"
+    },
+    {
+      "linkId": "parent-names",
+      "type": "group",
+      "text": "Father / Mother",
+      "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.name",
+      "item": [
+        {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "%client.contact.name.given",
+                "name": "patientParentName"
+              }
+            }
+          ],
+          "linkId": "PR-parent-name-text",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.name.given",
+          "type": "string",
+          "required": true,
+          "text": "First Name"
+        },
+        {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "%client.contact.name.family",
+                "name": "patientParentFamily"
+              }
+            }
+          ],
+          "linkId": "PR-parent-name-family",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.name.family",
+          "type": "string",
+          "required": true,
+          "text": "Family Name"
+        }
+      ]
+    },
+    {
       "linkId": "notified-by",
+      "type": "string",
       "text": "Notified By",
       "required": true
     },
     {
-      "type": "date",
       "linkId": "date-notified",
+      "type": "date",
       "text": "Date Notified",
       "required": true,
       "extension": [
@@ -361,8 +397,8 @@
       ]
     },
     {
-      "type": "date",
       "linkId": "date-case-investigated",
+      "type": "date",
       "text": "Date case investigated",
       "required": true,
       "extension": [
