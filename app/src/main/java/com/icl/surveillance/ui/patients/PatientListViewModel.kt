@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.android.fhir.FhirEngine
+import com.google.android.fhir.datacapture.extensions.asStringValue
+import com.google.android.fhir.datacapture.extensions.logicalId
 import com.google.android.fhir.search.Order
 import com.google.android.fhir.search.StringFilterModifier
 import com.google.android.fhir.search.count
@@ -14,8 +16,9 @@ import com.google.android.fhir.search.search
 import java.time.LocalDate
 import java.time.ZoneId
 import kotlinx.coroutines.launch
+import org.hl7.fhir.r4.model.Encounter
+import org.hl7.fhir.r4.model.Observation
 import org.hl7.fhir.r4.model.Patient
-import org.hl7.fhir.r4.model.RiskAssessment
 
 class PatientListViewModel(application: Application, private val fhirEngine: FhirEngine) :
     AndroidViewModel(application) {
@@ -80,22 +83,57 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
           count = 100
           from = 0
         }
-        .mapIndexed { index, fhirPatient -> fhirPatient.resource.toPatientItem(index + 1) }
+        .mapIndexed { index, fhirPatient ->
+          var item = fhirPatient.resource.toPatientItem(index + 1)
+          try {
+
+            val encounter = loadEncounter(item.resourceId)
+            val caseInfoEncounter =
+                encounter.firstOrNull {
+                  it.reasonCodeFirstRep.codingFirstRep.code == "Case Information"
+                }
+
+            caseInfoEncounter?.let {
+              println("Found Encounter: ${it.id}")
+              // pull all Obs for this Encounter
+              val obs =
+                  fhirEngine.search<Observation> {
+                    filter(Observation.ENCOUNTER, { value = "Encounter/${it.logicalId}" })
+                  }
+              val epid =
+                  obs.firstOrNull { it.resource.code.codingFirstRep.code == "EPID" }
+                      ?.resource
+                      ?.value
+                      ?.asStringValue() ?: ""
+              val county =
+                  obs.firstOrNull { it.resource.code.codingFirstRep.code == "a4-county" }
+                      ?.resource
+                      ?.value
+                      ?.asStringValue() ?: ""
+              val subCounty =
+                  obs.firstOrNull { it.resource.code.codingFirstRep.code == "a3-sub-county" }
+                      ?.resource
+                      ?.value
+                      ?.asStringValue() ?: ""
+              val onset =
+                  obs.firstOrNull { it.resource.code.codingFirstRep.code == "c1-date-onset" }
+                      ?.resource
+                      ?.value
+                      ?.asStringValue() ?: ""
+
+              item =
+                  item.copy(
+                      epid = epid, subCounty = subCounty, county = county, caseOnsetDate = onset)
+            } ?: println("No Encounter found with reasonCode 'Case Information'")
+          } catch (e: Exception) {
+            e.printStackTrace()
+          }
+          //              item.copy()
+          item
+        }
         .let { patients.addAll(it) }
 
     return patients
-  }
-
-  private suspend fun getRiskAssessments(): Map<String, RiskAssessment?> {
-    return fhirEngine
-        .search<RiskAssessment> {}
-        .groupBy { it.resource.subject.reference }
-        .mapValues { entry ->
-          entry.value
-              .filter { it.resource.hasOccurrence() }
-              .maxByOrNull { it.resource.occurrenceDateTimeType.value }
-              ?.resource
-        }
   }
 
   /** The Patient's details for display purposes. */
@@ -109,6 +147,10 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
       val city: String,
       val country: String,
       val isActive: Boolean,
+      val epid: String,
+      val county: String,
+      val subCounty: String,
+      val caseOnsetDate: String,
   ) {
     override fun toString(): String = name
   }
@@ -132,7 +174,29 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
       val logicalId: String,
       val name: String,
       val sex: String,
-      val dob: String
+      val dob: String,
+      val epid: String,
+      val county: String,
+      val subCounty: String,
+      val onset: String,
+      val residence: String,
+      val facility: String,
+      val type: String,
+      val disease: String,
+      val dateFirstSeen: String,
+      val dateSubCountyNotified: String,
+      val hospitalized: String,
+      val admissionDate: String,
+      val ipNo: String,
+      val diagnosis: String,
+      val diagnosisMeans: String,
+      val diagnosisMeansOther: String,
+      val targetDisease: String,
+      val wasPatientVaccinated: String,
+      val noOfDoses: String,
+      val twoMonthsVaccination: String,
+      val patientStatus: String,
+      val vaccineDate: String
   )
 
   data class PatientDetailOverview(
@@ -213,10 +277,30 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
               count = 100
               from = 0
             }
-            .mapIndexed { index, fhirPatient -> fhirPatient.resource.toPatientItem(index + 1) }
+            .mapIndexed { index, fhirPatient ->
+              val item = fhirPatient.resource.toPatientItem(index + 1)
+              try {
+
+                val encounter = loadEncounter(item.resourceId)
+                encounter.forEach {
+                  println(
+                      "Printing Encounter Details: it.resource.reasonCode: ${it.reasonCodeFirstRep.codingFirstRep.code}")
+                }
+              } catch (e: Exception) {
+                e.printStackTrace()
+              }
+              //              item.copy()
+              item
+            }
             .toMutableList()
 
     return patients
+  }
+
+  private suspend fun loadEncounter(patientId: String): List<Encounter> {
+    return fhirEngine
+        .search<Encounter> { filter(Encounter.SUBJECT, { value = "Patient/$patientId" }) }
+        .map { it.resource }
   }
 
   private suspend fun searchedPatientCount(): Long {
@@ -254,6 +338,10 @@ internal fun Patient.toPatientItem(position: Int): PatientListViewModel.PatientI
   val city = if (hasAddress()) address[0].city else ""
   val country = if (hasAddress()) address[0].country else ""
   val isActive = active
+  var epid = ""
+  var county = ""
+  var subCounty = ""
+  var caseOnsetDate = ""
 
   return PatientListViewModel.PatientItem(
       id = position.toString(),
@@ -265,5 +353,9 @@ internal fun Patient.toPatientItem(position: Int): PatientListViewModel.PatientI
       city = city ?: "",
       country = country ?: "",
       isActive = isActive,
+      epid = epid,
+      county = county,
+      subCounty = subCounty,
+      caseOnsetDate = caseOnsetDate,
   )
 }

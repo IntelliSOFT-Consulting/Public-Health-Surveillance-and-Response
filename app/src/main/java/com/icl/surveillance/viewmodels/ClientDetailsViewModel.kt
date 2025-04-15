@@ -7,6 +7,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.android.fhir.FhirEngine
+import com.google.android.fhir.SearchResult
+import com.google.android.fhir.datacapture.extensions.asStringValue
+import com.google.android.fhir.datacapture.extensions.logicalId
 import com.google.android.fhir.search.revInclude
 import com.google.android.fhir.search.search
 import com.icl.surveillance.R
@@ -101,6 +104,12 @@ class ClientDetailsViewModel(
 
   private fun getString(resId: Int) = getApplication<Application>().resources.getString(resId)
 
+  private suspend fun loadEncounter(patientId: String): List<Encounter> {
+    return fhirEngine
+        .search<Encounter> { filter(Encounter.SUBJECT, { value = "Patient/$patientId" }) }
+        .map { it.resource }
+  }
+
   private suspend fun getPatientInfoCard(): PatientListViewModel.CaseDetailData {
     val searchResult =
         fhirEngine.search<Patient> { filter(Resource.RES_ID, { value = of(patientId) }) }
@@ -108,6 +117,26 @@ class ClientDetailsViewModel(
     var name = ""
     var sex = ""
     var dob = ""
+    var epid = ""
+    var county = ""
+    var subCounty = ""
+    var onset = ""
+    var facility = ""
+    var type = ""
+    var disease = ""
+    var dateFirstSeen = ""
+    var dateSubCountyNotified = ""
+    var hospitalized = ""
+    var ipNo = ""
+    var diagnosis = ""
+    var diagnosisMeans = ""
+    var diagnosisMeansOther = ""
+    var wasPatientVaccinated = ""
+    var noOfDoses = ""
+    var twoMonthsVaccination = ""
+    var patientStatus = ""
+    var admissionDate = ""
+    var vaccineDate = ""
     searchResult.first().let {
       logicalId = it.resource.logicalId
       name =
@@ -122,10 +151,78 @@ class ClientDetailsViewModel(
                   it.resource.birthDateElement.valueAsString
               else ""
           else ""
+
+      val encounter = loadEncounter(logicalId)
+      val caseInfoEncounter =
+          encounter.firstOrNull { it.reasonCodeFirstRep.codingFirstRep.code == "Case Information" }
+
+      caseInfoEncounter?.let {
+        val obs =
+            fhirEngine.search<Observation> {
+              filter(Observation.ENCOUNTER, { value = "Encounter/${it.logicalId}" })
+            }
+        epid = generateResponse(obs, "EPID")
+        county = generateResponse(obs, "a4-county")
+        subCounty = generateResponse(obs, "a3-sub-county")
+        onset = generateResponse(obs, "c1-date-onset")
+        facility = generateResponse(obs, "a1-health-facility")
+        type = generateResponse(obs, "a2-type")
+        disease = generateResponse(obs, "a5-disease-reported")
+
+        /** Section C* */
+        dateFirstSeen = generateResponse(obs, "c2-date-first-seen")
+        dateSubCountyNotified = generateResponse(obs, "c3-date-notified")
+        hospitalized = generateResponse(obs, "c4-hospitalized")
+        admissionDate = generateResponse(obs, "c4-date-admission")
+        ipNo = generateResponse(obs, "c5-ip-op-no")
+        diagnosis = generateResponse(obs, "c6-diagnosis")
+        diagnosisMeans = generateResponse(obs, "c7-means-of-diagnosis")
+        diagnosisMeansOther = generateResponse(obs, "c7-other-specify")
+        wasPatientVaccinated = generateResponse(obs, "c8a-vaccinated")
+        noOfDoses = generateResponse(obs, "c8a-no-of-doses")
+        twoMonthsVaccination = generateResponse(obs, "c8b-recent-vaccine")
+        vaccineDate = generateResponse(obs, "c8b-date-of-vaccine")
+        patientStatus = generateResponse(obs, "c9-patient-status")
+      }
     }
 
     return PatientListViewModel.CaseDetailData(
-        logicalId = logicalId, sex = sex, dob = dob, name = name)
+        epid = epid,
+        county = county,
+        subCounty = subCounty,
+        onset = onset,
+        logicalId = logicalId,
+        sex = sex,
+        dob = dob,
+        name = name,
+        residence = "",
+        facility = facility,
+        disease = disease,
+        type = type,
+
+        //      SECTION C
+        dateFirstSeen = dateFirstSeen,
+        dateSubCountyNotified = dateSubCountyNotified,
+        hospitalized = hospitalized,
+        admissionDate = admissionDate,
+        ipNo = ipNo,
+        diagnosis = diagnosis,
+        diagnosisMeans = diagnosisMeans,
+        diagnosisMeansOther = diagnosisMeansOther,
+        targetDisease = disease,
+        wasPatientVaccinated = wasPatientVaccinated,
+        noOfDoses = noOfDoses,
+        twoMonthsVaccination = twoMonthsVaccination,
+        vaccineDate = vaccineDate,
+        patientStatus = patientStatus)
+  }
+
+  private fun generateResponse(obs: List<SearchResult<Observation>>, s: String): String {
+
+    return obs.firstOrNull { it.resource.code.codingFirstRep.code == s }
+        ?.resource
+        ?.value
+        ?.asStringValue() ?: ""
   }
 
   fun getPatientInfo() {

@@ -42,10 +42,27 @@ class FullCaseDetailsActivity : AppCompatActivity() {
     patientDetailsViewModel.livecaseData.observe(this) {
       println("Patient Detail Information ${it.name}")
       binding.apply {
+        epidNo.text = it.epid
         tvName.text = it.name
         tvSex.text = it.sex
         tvDob.text = it.dob
-        tvResidence.text = ""
+        tvFacility.text = it.facility
+        tvType.text = it.type
+        tvCounty.text = it.county
+        tvSubCounty.text = it.subCounty
+        tvDisease.text = it.disease
+        tvOnset.text = it.onset
+        tvResidence.text = it.residence
+        tvFirstSeen.text = it.dateFirstSeen
+        tvSubCounty.text = it.dateSubCountyNotified
+        tvHospitalized.text = it.hospitalized
+        tvIpOp.text = it.ipNo
+        tvDiagnosis.text = it.diagnosis
+        tvMeans.text = it.diagnosisMeans
+        tvOtherSpecify.text = it.diagnosisMeansOther
+        tvVaccinated.text = it.wasPatientVaccinated
+        tvTwoMonths.text = it.twoMonthsVaccination
+        tvStatus.text = it.patientStatus
       }
     }
   }

@@ -72,7 +72,7 @@
         },
         {
           "linkId": "a5-disease-reported",
-          "text": "A5. Disease reported (Tick One)",
+          "text": "A5. Disease reported",
           "type": "choice",
           "answerOption": [
             {

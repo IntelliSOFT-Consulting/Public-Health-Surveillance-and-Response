@@ -14,6 +14,24 @@
         android:orientation="vertical"
         android:padding="15dp">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="EPID No" />
+
+            <TextView
+                android:id="@+id/epid_no"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
         <!-- Header -->
         <TextView
             android:layout_width="wrap_content"
@@ -37,10 +55,10 @@
                 android:text="A1. Health Facility" />
 
             <TextView
+                android:id="@+id/tv_facility"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="....................." />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
@@ -56,10 +74,10 @@
                 android:text="A2. Type" />
 
             <TextView
+                android:id="@+id/tv_type"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="....................." />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <!-- A3 & A4 -->
@@ -76,10 +94,10 @@
                 android:text="A3. Sub County" />
 
             <TextView
+                android:id="@+id/tv_sub_county"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="....................." />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
@@ -95,41 +113,33 @@
                 android:text="A4. County" />
 
             <TextView
+                android:id="@+id/tv_county"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="....................." />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <!-- A5 -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
-            android:text="A5. Disease reported (Tick One)"
-            android:textStyle="bold" />
 
         <!-- Checkboxes in 3 rows -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-        </LinearLayout>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="A5. Disease reported" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
+            <TextView
+                android:id="@+id/tv_disease"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
         </LinearLayout>
         <!-- B. Identification -->
         <TextView
@@ -415,10 +425,10 @@
                 android:text="C1. Date of onset of illness" />
 
             <TextView
+                android:id="@+id/tv_onset"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="______/______/______" />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <!-- C2. Date first seen -->
@@ -434,10 +444,10 @@
                 android:text="C2. Date first seen at health facility:" />
 
             <TextView
+                android:id="@+id/tv_first_seen"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="_____/_____/_____" />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <!-- C3. Date facility notified -->
@@ -453,10 +463,10 @@
                 android:text="C3. Date Health facility notified sub County level:" />
 
             <TextView
+                android:id="@+id/tv_facility_notified"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="........." />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <!-- C4. Hospitalized -->
@@ -472,10 +482,10 @@
                 android:text="C4. Hospitalized:" />
 
             <TextView
+                android:id="@+id/tv_hospitalized"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="..........." />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <!-- C5. IP/OP No -->
@@ -491,10 +501,10 @@
                 android:text="C5. IP/OP No." />
 
             <TextView
+                android:id="@+id/tv_ip_op"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text=".........................................................." />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <!-- C6. Diagnosis -->
@@ -510,10 +520,10 @@
                 android:text="C6. Diagnosis:" />
 
             <TextView
+                android:id="@+id/tv_diagnosis"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="....................................................................." />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <!-- C7. Means of diagnosis -->
@@ -529,10 +539,10 @@
                 android:text="C7. Means of diagnosis:" />
 
             <TextView
+                android:id="@+id/tv_means"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="........." />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <!-- C7. Other (specify) -->
@@ -548,25 +558,30 @@
                 android:text="Other (specify):" />
 
             <TextView
+                android:id="@+id/tv_other_specify"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <!-- C8. Vaccination History label -->
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="......................................................." />
+                android:text="C8. Vaccination History for disease under investigation" />
+
+            <TextView
+                android:id="@+id/tv_target"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="1" />
         </LinearLayout>
-
-        <!-- C8. Vaccination History label -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="C8. Vaccination History for disease under investigation"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="............." />
 
         <!-- C8a. Was patient vaccinated -->
         <LinearLayout
@@ -581,10 +596,10 @@
                 android:text="a. Was patient vaccinated?" />
 
             <TextView
+                android:id="@+id/tv_vaccinated"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text=".........." />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <!-- C8b. Vaccination in last 2 months -->
@@ -597,13 +612,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="b. Any vaccination in last 2 months? 1=Yes 2=No 9=Unknown" />
+                android:text="b. Any vaccination in last 2 months?" />
 
             <TextView
+                android:id="@+id/tv_two_months"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="........" />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <!-- C9. Status of the patient -->
@@ -620,10 +635,10 @@
                 android:text="C9. Status of the patient:" />
 
             <TextView
+                android:id="@+id/tv_status"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="........." />
+                android:layout_weight="1" />
         </LinearLayout>
         <!-- F. For Measles Case Only -->
         <TextView

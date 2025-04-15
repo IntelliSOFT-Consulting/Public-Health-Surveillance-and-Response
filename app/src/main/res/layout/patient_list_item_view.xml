@@ -19,7 +19,7 @@
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
             android:text="Full Name"
-            android:textAppearance="?attr/textAppearanceSubtitle1"
+
             android:textStyle="bold" />
 
         <TextView
@@ -30,7 +30,7 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
-            android:textAppearance="?attr/textAppearanceSubtitle1"
+
             android:textStyle="normal"
             tools:text="Navya Patel" />
     </LinearLayout>
@@ -48,7 +48,7 @@
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
             android:text="EPID No:"
-            android:textAppearance="?attr/textAppearanceSubtitle1"
+
             android:textStyle="bold" />
 
         <TextView
@@ -59,7 +59,6 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
-            android:textAppearance="?attr/textAppearanceSubtitle1"
             android:textStyle="normal"
             tools:text="Navya Patel" />
     </LinearLayout>
@@ -77,7 +76,7 @@
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
             android:text="County:"
-            android:textAppearance="?attr/textAppearanceSubtitle1"
+
             android:textStyle="bold" />
 
         <TextView
@@ -88,7 +87,7 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
-            android:textAppearance="?attr/textAppearanceSubtitle1"
+
             android:textStyle="normal"
             tools:text="Navya Patel" />
     </LinearLayout>
@@ -106,7 +105,7 @@
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
             android:text="Sub County:"
-            android:textAppearance="?attr/textAppearanceSubtitle1"
+
             android:textStyle="bold" />
 
         <TextView
@@ -117,7 +116,7 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
-            android:textAppearance="?attr/textAppearanceSubtitle1"
+
             android:textStyle="normal"
             tools:text="Navya Patel" />
     </LinearLayout>
@@ -134,8 +133,8 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
-            android:text="Date Reported:"
-            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:text="Date of onset of illness:"
+
             android:textStyle="bold" />
 
         <TextView
@@ -146,7 +145,7 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
-            android:textAppearance="?attr/textAppearanceSubtitle1"
+
             android:textStyle="normal"
             tools:text="Navya Patel" />
     </LinearLayout>
@@ -164,7 +163,6 @@
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
             android:text="Status:"
-            android:textAppearance="?attr/textAppearanceSubtitle1"
             android:textStyle="bold" />
 
         <TextView
@@ -175,9 +173,8 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
-            android:textAppearance="?attr/textAppearanceSubtitle1"
-            android:textStyle="normal"
-            tools:text="Navya Patel" />
+            android:text="Pending Results"
+            android:textStyle="normal" />
     </LinearLayout>
 
 

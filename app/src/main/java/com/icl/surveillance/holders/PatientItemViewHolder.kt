@@ -18,6 +18,10 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
       onItemClicked: (PatientListViewModel.PatientItem) -> Unit,
   ) {
     this.nameView.text = patientItem.name
+    this.epid.text = patientItem.epid
+    this.county.text = patientItem.county
+    this.subCounty.text = patientItem.subCounty
+    this.dateReported.text = patientItem.caseOnsetDate
     this.itemView.setOnClickListener { onItemClicked(patientItem) }
   }
 
