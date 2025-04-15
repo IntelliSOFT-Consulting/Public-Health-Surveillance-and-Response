@@ -37,11 +37,9 @@ class HomeFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
     binding.apply {
       val bundle = Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-client.json") }
-      btnAdd.setOnClickListener {
-        findNavController().navigate(R.id.action_navigation_home_to_add_client, bundle)
-      }
+      
       btnList.setOnClickListener {
-        findNavController().navigate(R.id.action_navigation_home_to_client_list, bundle)
+        findNavController().navigate(R.id.action_navigation_home_to_single_case_fragment, bundle)
       }
     }
   }

@@ -6,10 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.google.android.fhir.FhirEngine
+import com.icl.surveillance.adapters.PatientDetailsRecyclerViewAdapter
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.databinding.FragmentLabInformationBinding
+import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.ui.patients.AddCaseActivity
+import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
+import com.icl.surveillance.viewmodels.ClientDetailsViewModel
+import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,6 +40,8 @@ class LabInformationFragment : Fragment() {
     }
   }
 
+  private lateinit var fhirEngine: FhirEngine
+  private lateinit var patientDetailsViewModel: ClientDetailsViewModel
   private var _binding: FragmentLabInformationBinding? = null
 
   // This property is only valid between onCreateView and
@@ -55,6 +64,27 @@ class LabInformationFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
+    val patientId = FormatterClass().getSharedPref("resourceId", requireContext())
+    val encounterId = FormatterClass().getSharedPref("encounterId", requireContext())
+
+    fhirEngine = FhirApplication.fhirEngine(requireContext())
+    patientDetailsViewModel =
+        ViewModelProvider(
+                this,
+                PatientDetailsViewModelFactory(
+                    requireActivity().application, fhirEngine, "$patientId"),
+            )
+            .get(ClientDetailsViewModel::class.java)
+
+    val adapter = PatientDetailsRecyclerViewAdapter(this::onItemClicked)
+    binding.patientList.adapter = adapter
+
+    patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) {
+      println("Loading **** ${it.count()} Records")
+      adapter.submitList(it)
+    }
+    patientDetailsViewModel.getPatientDetailData("Lab Information","encounterId")
+
     binding.apply {
       fab.setOnClickListener {
         FormatterClass().saveSharedPref("questionnaire", "measles-lab.json", requireContext())
@@ -64,6 +94,8 @@ class LabInformationFragment : Fragment() {
       }
     }
   }
+
+  private fun onItemClicked(encounterItem: PatientListViewModel.EncounterItem) {}
 
   companion object {
     /**

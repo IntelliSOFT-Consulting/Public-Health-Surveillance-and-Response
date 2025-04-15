@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">Surveillance</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Client List</string>
+    <string name="title_dashboard">Cases List</string>
     <string name="title_notifications">Notifications</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="add_client">Add Client</string>
+    <string name="add_client">Add Case</string>
     <string name="search_patient_by">Filter Patient By:</string>
     <string name="given_name">Given Name</string>
     <string name="family_name">Family Name</string>

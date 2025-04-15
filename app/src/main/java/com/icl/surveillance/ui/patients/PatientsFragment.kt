@@ -125,6 +125,6 @@ class PatientsFragment : Fragment() {
   private fun onPatientItemClicked(patientItem: PatientListViewModel.PatientItem) {
     println("Going to client details activity with the id as ${patientItem.resourceId}")
     FormatterClass().saveSharedPref("resourceId", patientItem.resourceId, requireContext())
-    findNavController().navigate(R.id.action_navigation_dashboard_to_client_details_activity)
+    findNavController().navigate(R.id.action_navigation_dashboard_to_fullCaseDetailsActivity)
   }
 }

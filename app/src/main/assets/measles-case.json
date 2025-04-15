@@ -21,6 +21,9 @@
   "item": [
     {
       "type": "choice",
+      "linkId": "F1",
+      "text": "Presence of fever",
+      "required": true,
       "extension": [
         {
           "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -28,16 +31,17 @@
             "coding": [
               {
                 "system": "http://hl7.org/fhir/questionnaire-item-control",
-                "code": "drop-down",
-                "display": "Drop down"
+                "code": "radio-button",
+                "display": "Radio Button"
               }
             ]
           }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+          "valueCode": "horizontal"
         }
       ],
-      "linkId": "F1",
-      "text": "Presence of fever",
-      "required": true,
       "answerOption": [
         {
           "valueCoding": {
@@ -57,7 +61,27 @@
       "type": "date",
       "linkId": "F2",
       "text": "Date of onset of rash",
-      "required": true
+      "required": true,
+      "extension": [
+        {
+          "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+          "valueString": "Cannot be a date in the future"
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+          "valueDate": {
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                "valueExpression": {
+                  "language": "text/fhirpath",
+                  "expression": "today()"
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "type": "choice",
@@ -68,11 +92,15 @@
             "coding": [
               {
                 "system": "http://hl7.org/fhir/questionnaire-item-control",
-                "code": "drop-down",
-                "display": "Drop down"
+                "code": "radio-button",
+                "display": "Radio Button"
               }
             ]
           }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+          "valueCode": "horizontal"
         }
       ],
       "linkId": "F3",
@@ -102,11 +130,15 @@
             "coding": [
               {
                 "system": "http://hl7.org/fhir/questionnaire-item-control",
-                "code": "drop-down",
-                "display": "Drop down"
+                "code": "radio-button",
+                "display": "Radio Button"
               }
             ]
           }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+          "valueCode": "horizontal"
         }
       ],
       "linkId": "F4.1",
@@ -130,6 +162,26 @@
       "type": "date",
       "linkId": "F4.2",
       "text": "If Yes, Date of visit",
+      "extension": [
+        {
+          "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+          "valueString": "Cannot be a date in the future"
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+          "valueDate": {
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                "valueExpression": {
+                  "language": "text/fhirpath",
+                  "expression": "today()"
+                }
+              }
+            ]
+          }
+        }
+      ],
       "enableWhen": [
         {
           "question": "F4.1",
@@ -141,7 +193,6 @@
       ],
       "required": true
     },
-
     {
       "type": "choice",
       "extension": [

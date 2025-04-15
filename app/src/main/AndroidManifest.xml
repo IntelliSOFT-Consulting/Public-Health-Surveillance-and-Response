@@ -16,6 +16,10 @@
         android:theme="@style/Theme.Surveillance"
         tools:targetApi="31">
         <activity
+            android:name=".ui.patients.FullCaseDetailsActivity"
+            android:exported="false"
+            android:label="Complete Case Details" />
+        <activity
             android:name=".ui.patients.CaseDetailsActivity"
             android:exported="false"
             android:label="Case Details" />
@@ -26,7 +30,7 @@
         <activity
             android:name=".ui.patients.ClientDetailsActivity"
             android:exported="false"
-            android:label="Client Details" />
+            android:label="Case Details" />
         <activity
             android:name=".auth.LoginActivity"
             android:exported="false" />

@@ -5,22 +5,17 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="20dp"
-    android:paddingTop="25dp"
+    android:fitsSystemWindows="true"
     tools:context=".ui.patients.AddCaseActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="30dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/add_patient_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="70dp"
-            android:paddingTop="15dp" />
+            android:layout_height="match_parent" />
     </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

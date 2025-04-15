@@ -28,9 +28,9 @@ class ClientDetailsActivity : AppCompatActivity() {
 
     // Access and set click listener on the FAB
     binding.fab.setOnClickListener {
-      FormatterClass().saveSharedPref("questionnaire", "measles.json", this)
+      FormatterClass().saveSharedPref("questionnaire", "measles-case.json", this)
       val intent = Intent(this@ClientDetailsActivity, AddCaseActivity::class.java)
-      intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "measles.json")
+      intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "measles-case.json")
       startActivity(intent)
     }
 
@@ -49,7 +49,7 @@ class ClientDetailsActivity : AppCompatActivity() {
     binding.patientList.adapter = adapter
 
     patientDetailsViewModel.livePatientData.observe(this) { adapter.submitList(it) }
-    patientDetailsViewModel.getPatientDetailData()
+    patientDetailsViewModel.getPatientDetailData("Measles Case",null)
   }
 
   private fun onItemClicked(encounterItem: PatientListViewModel.EncounterItem) {

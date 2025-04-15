@@ -31,153 +31,147 @@
   ],
   "item": [
     {
+      "linkId": "section-a",
+      "text": "A. Name of Site Reporting & Disease being reported",
       "type": "group",
-      "linkId": "patient-names",
-      "text": "Name(s) of patient",
-      "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.name",
-      "item": [
-        {
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
-              "valueExpression": {
-                "language": "text/fhirpath",
-                "expression": "Patient.name.given",
-                "name": "patientName"
-              }
-            }
-          ],
-          "linkId": "PR-name-text",
-          "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.name.given",
-          "type": "string",
-          "required": true,
-          "text": "First Name"
-        },
-        {
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
-              "valueExpression": {
-                "language": "text/fhirpath",
-                "expression": "Patient.name.family",
-                "name": "patientFamily"
-              }
-            }
-          ],
-          "linkId": "PR-name-family",
-          "definition": "http://hl7.org/fhir/StructureDefinition/datatypes#HumanName.family",
-          "type": "string",
-          "required": true,
-          "text": "Family Name"
-        }
-      ]
-    },
-    {
-      "type": "date",
-      "linkId": "date-of-birth",
-      "text": "Date of birth",
-      "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.birthDate",
-      "required": true,
       "extension": [
-        {
-          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
-          "valueExpression": {
-            "language": "text/fhirpath",
-            "expression": "Patient.birthDate",
-            "name": "patientBirthDate"
-          }
-        },
-        {
-          "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-          "valueString": "Cannot be a date in the future"
-        },
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-          "valueDate": {
-            "extension": [
-              {
-                "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-                "valueExpression": {
-                  "language": "text/fhirpath",
-                  "expression": "today()"
-                }
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "type": "integer",
-      "linkId": "age-years",
-      "text": "Age (years)",
-      "readOnly": true
-    },
-    {
-      "type": "integer",
-      "linkId": "age-months",
-      "text": "Age (months)",
-      "readOnly": true
-    },
-    {
-      "linkId": "sex",
-      "type": "choice",
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
-          "valueExpression": {
-            "system": "http://hl7.org/fhir/administrative-gender",
-            "language": "text/fhirpath",
-            "expression": "Patient.gender",
-            "name": "patientGender"
-          }
-        },
         {
           "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
           "valueCodeableConcept": {
             "coding": [
               {
                 "system": "http://hl7.org/fhir/questionnaire-item-control",
-                "code": "radio-button",
-                "display": "Radio Button"
+                "code": "page",
+                "display": "Page"
               }
-            ]
+            ],
+            "text": "Page"
           }
-        },
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-          "valueCode": "horizontal"
         }
       ],
-      "text": "Sex",
-      "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.gender",
-      "answerOption": [
+      "item": [
         {
-          "valueCoding": {
-            "system": "http://hl7.org/fhir/administrative-gender",
-            "code": "male",
-            "display": "Male"
-          }
+          "linkId": "a1-health-facility",
+          "text": "A1. Health Facility",
+          "type": "string"
         },
         {
-          "valueCoding": {
-            "system": "http://hl7.org/fhir/administrative-gender",
-            "code": "female",
-            "display": "Female"
-          }
+          "linkId": "a2-type",
+          "text": "A2. Type",
+          "type": "string"
+        },
+        {
+          "linkId": "a3-sub-county",
+          "text": "A3. Sub County",
+          "type": "string"
+        },
+        {
+          "linkId": "a4-county",
+          "text": "A4. County",
+          "type": "string"
+        },
+        {
+          "linkId": "a5-disease-reported",
+          "text": "A5. Disease reported (Tick One)",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "AFP",
+                "display": "AFP"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "NNT",
+                "display": "NNT"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "MEASLES",
+                "display": "Measles"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "MENINGITIS",
+                "display": "Meningitis"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "PLAGUE",
+                "display": "Plague"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "VHFs",
+                "display": "VHFs"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "YELLOW_FEVER",
+                "display": "Yellow Fever"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "SARI",
+                "display": "SARI / AI"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "OTHER",
+                "display": "Other"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "a5-disease-other-specify",
+          "text": "If Other, specify",
+          "type": "string",
+          "enableWhen": [
+            {
+              "question": "a5-disease-reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "OTHER"
+              }
+            }
+          ]
         }
       ]
     },
     {
-      "linkId": "parent-group",
+      "linkId": "section-b",
+      "text": "B. Identification",
       "type": "group",
-      "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ],
+            "text": "Page"
+          }
+        }
+      ],
       "item": [
         {
-          "linkId": "parent-names",
           "type": "group",
-          "text": "Father / Mother",
-          "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.name",
+          "linkId": "patient-names",
+          "text": "",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.name",
           "item": [
             {
               "extension": [
@@ -185,13 +179,13 @@
                   "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
                   "valueExpression": {
                     "language": "text/fhirpath",
-                    "expression": "Patient.contact.name.given",
-                    "name": "patientParentName"
+                    "expression": "Patient.name.given",
+                    "name": "patientName"
                   }
                 }
               ],
-              "linkId": "PR-parent-name-text",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.name.given",
+              "linkId": "PR-name-text",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.name.given",
               "type": "string",
               "required": true,
               "text": "First Name"
@@ -202,13 +196,13 @@
                   "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
                   "valueExpression": {
                     "language": "text/fhirpath",
-                    "expression": "Patient.contact.name.family",
-                    "name": "patientParentFamily"
+                    "expression": "Patient.name.family",
+                    "name": "patientFamily"
                   }
                 }
               ],
-              "linkId": "PR-parent-name-family",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.name.family",
+              "linkId": "PR-name-family",
+              "definition": "http://hl7.org/fhir/StructureDefinition/datatypes#HumanName.family",
               "type": "string",
               "required": true,
               "text": "Family Name"
@@ -216,111 +210,533 @@
           ]
         },
         {
-          "linkId": "PR-address",
+          "type": "date",
+          "linkId": "date-of-birth",
+          "text": "Date of birth",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.birthDate",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Patient.birthDate",
+                "name": "patientBirthDate"
+              }
+            },
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "age-years",
+          "text": "Age (years)",
+          "readOnly": true
+        },
+        {
+          "type": "integer",
+          "linkId": "age-months",
+          "text": "Age (months)",
+          "readOnly": true
+        },
+        {
+          "linkId": "sex",
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "system": "http://hl7.org/fhir/administrative-gender",
+                "language": "text/fhirpath",
+                "expression": "Patient.gender",
+                "name": "patientGender"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "text": "Sex",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.gender",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "http://hl7.org/fhir/administrative-gender",
+                "code": "male",
+                "display": "Male"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "http://hl7.org/fhir/administrative-gender",
+                "code": "female",
+                "display": "Female"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "parent-group",
           "type": "group",
-          "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.address",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact",
           "item": [
             {
-              "extension": [
+              "linkId": "parent-names",
+              "type": "group",
+              "text": "Father / Mother",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.name",
+              "item": [
                 {
-                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
-                  "valueExpression": {
-                    "language": "text/fhirpath",
-                    "expression": "Patient.contact.address.line",
-                    "name": "patientCity"
-                  }
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                      "valueExpression": {
+                        "language": "text/fhirpath",
+                        "expression": "Patient.contact.name.given",
+                        "name": "patientParentName"
+                      }
+                    }
+                  ],
+                  "linkId": "PR-parent-name-text",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.name.given",
+                  "type": "string",
+                  "required": true,
+                  "text": "First Name"
+                },
+                {
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                      "valueExpression": {
+                        "language": "text/fhirpath",
+                        "expression": "Patient.contact.name.family",
+                        "name": "patientParentFamily"
+                      }
+                    }
+                  ],
+                  "linkId": "PR-parent-name-family",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.name.family",
+                  "type": "string",
+                  "required": true,
+                  "text": "Family Name"
                 }
-              ],
-              "linkId": "PR-address-residence",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.address.line",
-              "type": "string",
-              "required": true,
-              "text": "Residence (Village/Hse No"
+              ]
             },
             {
-              "extension": [
+              "linkId": "PR-address",
+              "type": "group",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.address",
+              "item": [
                 {
-                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
-                  "valueExpression": {
-                    "language": "text/fhirpath",
-                    "expression": "Patient.contact.address.line",
-                    "name": "patientCity"
-                  }
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                      "valueExpression": {
+                        "language": "text/fhirpath",
+                        "expression": "Patient.contact.address.line",
+                        "name": "patientCity"
+                      }
+                    }
+                  ],
+                  "linkId": "PR-address-residence",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.address.line",
+                  "type": "string",
+                  "required": true,
+                  "text": "Residence (Village/Hse No"
+                },
+                {
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                      "valueExpression": {
+                        "language": "text/fhirpath",
+                        "expression": "Patient.contact.address.line",
+                        "name": "patientCity"
+                      }
+                    }
+                  ],
+                  "linkId": "PR-address-landmark",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.address.line",
+                  "type": "string",
+                  "required": true,
+                  "text": "Neighborhood major landmark"
+                },
+                {
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                      "valueExpression": {
+                        "language": "text/fhirpath",
+                        "expression": "Patient.contact.address.line",
+                        "name": "patientCity"
+                      }
+                    }
+                  ],
+                  "linkId": "PR-address-street",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.address.line",
+                  "type": "string",
+                  "required": true,
+                  "text": "Street/Plot/Estate/S. location"
+                },
+                {
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                      "valueExpression": {
+                        "language": "text/fhirpath",
+                        "expression": "Patient.contact.address.line",
+                        "name": "patientCity"
+                      }
+                    }
+                  ],
+                  "linkId": "PR-address-town",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.address.line",
+                  "type": "string",
+                  "required": true,
+                  "text": "Town/City/Location"
+                },
+                {
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                      "valueExpression": {
+                        "language": "text/fhirpath",
+                        "expression": "Patient.contact.address.line",
+                        "name": "patientCity"
+                      }
+                    }
+                  ],
+                  "linkId": "PR-address-sub-county",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.address.line",
+                  "type": "string",
+                  "required": true,
+                  "text": "Sub County"
+                },
+                {
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                      "valueExpression": {
+                        "language": "text/fhirpath",
+                        "expression": "Patient.contact.address.line",
+                        "name": "patientCity"
+                      }
+                    }
+                  ],
+                  "linkId": "PR-address-county",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.address.line",
+                  "type": "string",
+                  "required": true,
+                  "text": "County"
                 }
-              ],
-              "linkId": "PR-address-landmark",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.address.line",
-              "type": "string",
-              "required": true,
-              "text": "Neighborhood major landmark"
+              ]
             },
             {
-              "extension": [
+              "linkId": "PR-telecom",
+              "type": "group",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.telecom",
+              "item": [
                 {
-                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
-                  "valueExpression": {
-                    "language": "text/fhirpath",
-                    "expression": "Patient.contact.address.line",
-                    "name": "patientCity"
-                  }
+                  "linkId": "PR-telecom-system",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.telecom.system",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                      "valueBoolean": true
+                    }
+                  ],
+                  "type": "string",
+                  "text": "system",
+                  "initial": [
+                    {
+                      "valueString": "phone"
+                    }
+                  ]
+                },
+                {
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                      "valueExpression": {
+                        "language": "text/fhirpath",
+                        "expression": "Patient.contact.telecom.value",
+                        "name": "patientParentTelecom"
+                      }
+                    }
+                  ],
+                  "linkId": "PR-telecom-value",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.telecom.value",
+                  "type": "string",
+                  "required": true,
+                  "text": "Telephone No of parent/guardian:"
                 }
-              ],
-              "linkId": "PR-address-street",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.address.line",
-              "type": "string",
-              "required": true,
-              "text": "Street/Plot/Estate/S. location"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "section-c",
+      "text": "C. Clinical Information",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ],
+            "text": "Page"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "c1-date-onset",
+          "text": "C1. Date of onset of illness",
+          "type": "date"
+        },
+        {
+          "linkId": "c2-date-first-seen",
+          "text": "C2. Date first seen at health facility",
+          "type": "date"
+        },
+        {
+          "linkId": "c3-date-notified",
+          "text": "C3. Date Health facility notified sub County level",
+          "type": "date"
+        },
+        {
+          "linkId": "c4-hospitalized",
+          "text": "C4. Hospitalized",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Yes"
+              }
             },
             {
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
-                  "valueExpression": {
-                    "language": "text/fhirpath",
-                    "expression": "Patient.contact.address.line",
-                    "name": "patientCity"
-                  }
-                }
-              ],
-              "linkId": "PR-address-town",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.address.line",
-              "type": "string",
-              "required": true,
-              "text": "Town/City/Location"
+              "valueCoding": {
+                "code": "2",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "c4-date-admission",
+          "text": "Date of Admission",
+          "type": "date",
+          "enableWhen": [
+            {
+              "question": "c4-hospitalized",
+              "operator": "=",
+              "answerCoding": {
+                "code": "1"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "c5-ip-op-no",
+          "text": "C5. IP/OP No.",
+          "type": "string"
+        },
+        {
+          "linkId": "c6-diagnosis",
+          "text": "C6. Diagnosis",
+          "type": "string"
+        },
+        {
+          "linkId": "c7-means-of-diagnosis",
+          "text": "C7. Means of diagnosis",
+          "type": "choice",
+          "repeats": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "CLINICAL",
+                "display": "Clinical"
+              }
             },
             {
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
-                  "valueExpression": {
-                    "language": "text/fhirpath",
-                    "expression": "Patient.contact.address.line",
-                    "name": "patientCity"
-                  }
-                }
-              ],
-              "linkId": "PR-address-sub-county",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.address.line",
-              "type": "string",
-              "required": true,
-              "text": "Sub County"
+              "valueCoding": {
+                "code": "LAB",
+                "display": "Lab"
+              }
             },
             {
-              "extension": [
+              "valueCoding": {
+                "code": "EPI",
+                "display": "Epi linkage"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "OTHER",
+                "display": "Other (specify)"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "c7-other-specify",
+          "text": "Other (specify)",
+          "type": "string",
+          "enableWhen": [
+            {
+              "question": "c7-means-of-diagnosis",
+              "operator": "=",
+              "answerCoding": {
+                "code": "OTHER"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "c8-vaccination-history",
+          "text": "C8. Vaccination History",
+          "type": "group",
+          "item": [
+            {
+              "linkId": "c8a-vaccinated",
+              "text": "a. Was the patient vaccinated against illness (including campaign)?",
+              "type": "choice",
+              "answerOption": [
                 {
-                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
-                  "valueExpression": {
-                    "language": "text/fhirpath",
-                    "expression": "Patient.contact.address.line",
-                    "name": "patientCity"
+                  "valueCoding": {
+                    "code": "1",
+                    "display": "Yes"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "2",
+                    "display": "No"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "9",
+                    "display": "Unknown"
                   }
                 }
-              ],
-              "linkId": "PR-address-county",
-              "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.address.line",
-              "type": "string",
-              "required": true,
-              "text": "County"
+              ]
+            },
+            {
+              "linkId": "c8a-no-of-doses",
+              "text": "If yes, number of doses",
+              "type": "integer",
+              "enableWhen": [
+                {
+                  "question": "c8a-vaccinated",
+                  "operator": "=",
+                  "answerCoding": {
+                    "code": "1"
+                  }
+                }
+              ]
+            },
+            {
+              "linkId": "c8b-recent-vaccine",
+              "text": "b. Any vaccination given in the last two months?",
+              "type": "choice",
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "1",
+                    "display": "Yes"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "2",
+                    "display": "No"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "9",
+                    "display": "Unknown"
+                  }
+                }
+              ]
+            },
+            {
+              "linkId": "c8b-date-of-vaccine",
+              "text": "Date of vaccination",
+              "type": "date",
+              "enableWhen": [
+                {
+                  "question": "c8b-recent-vaccine",
+                  "operator": "=",
+                  "answerCoding": {
+                    "code": "1"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "c9-patient-status",
+          "text": "C9. Status of the patient",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "HOSPITALIZED",
+                "display": "Still hospitalized"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "DISCHARGED",
+                "display": "Discharged"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "DEAD",
+                "display": "Dead"
+              }
             }
           ]
         }

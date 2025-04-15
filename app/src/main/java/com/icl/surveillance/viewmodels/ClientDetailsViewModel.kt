@@ -32,11 +32,14 @@ class ClientDetailsViewModel(
   val livePatientData = MutableLiveData<List<PatientListViewModel.EncounterItem>>()
 
   /** Emits list of [PatientDetailData]. */
-  fun getPatientDetailData() {
-    viewModelScope.launch { livePatientData.value = getPatientDetailDataModel() }
+  fun getPatientDetailData(category: String, parent: String?) {
+    viewModelScope.launch { livePatientData.value = getPatientDetailDataModel(category, parent) }
   }
 
-  private suspend fun getPatientDetailDataModel(): List<PatientListViewModel.EncounterItem> {
+  private suspend fun getPatientDetailDataModel(
+      category: String,
+      parent: String?
+  ): List<PatientListViewModel.EncounterItem> {
     val searchResult =
         fhirEngine.search<Patient> {
           filter(Resource.RES_ID, { value = of(patientId) })
@@ -48,7 +51,7 @@ class ClientDetailsViewModel(
 
     searchResult.first().let {
       it.revIncluded?.get(ResourceType.Encounter to Encounter.SUBJECT.paramName)?.let {
-        data.addEncounterData(it as List<Encounter>)
+        data.addEncounterData(it as List<Encounter>, category, parent)
       }
     }
 
@@ -56,11 +59,19 @@ class ClientDetailsViewModel(
   }
 
   private fun MutableList<PatientListViewModel.EncounterItem>.addEncounterData(
-      datas: List<Encounter>
+      datas: List<Encounter>,
+      category: String,
+      parent: String?
   ) {
     if (datas.isNotEmpty()) {
 
       datas
+          .filter { encounter ->
+            if (parent != null) {
+              encounter.partOf.display == parent
+            }
+            encounter.reasonCode.any { reason -> reason.coding.any { it.code == category } }
+          }
           .take(100)
           .map { createEncounterItem(it, getApplication<Application>().resources) }
           .mapIndexed { index, data ->

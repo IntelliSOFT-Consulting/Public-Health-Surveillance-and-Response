@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.icl.surveillance.R
+import com.icl.surveillance.utils.ProgressDialogManager
 import com.icl.surveillance.viewmodels.AddClientViewModel
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.QuestionnaireResponse
@@ -90,11 +91,14 @@ class AddClientFragment : Fragment(R.layout.fragment_add_client) {
   }
 
   private fun savePatient(questionnaireResponse: QuestionnaireResponse) {
+    ProgressDialogManager.show(requireContext(), "Submitting data...")
     viewModel.savePatient(questionnaireResponse)
   }
 
   private fun observePatientSaveAction() {
     viewModel.isPatientSaved.observe(viewLifecycleOwner) {
+      ProgressDialogManager.dismiss()
+
       if (!it) {
         Toast.makeText(requireContext(), "Please Enter all Required Fields.", Toast.LENGTH_SHORT)
             .show()
