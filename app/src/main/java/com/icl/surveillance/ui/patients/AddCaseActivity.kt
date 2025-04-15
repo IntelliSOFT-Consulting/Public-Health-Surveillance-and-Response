@@ -16,6 +16,7 @@ import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FI
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FRAGMENT_TAG
 import com.icl.surveillance.databinding.ActivityAddCaseBinding
 import com.icl.surveillance.utils.FormatterClass
+import com.icl.surveillance.utils.ProgressDialogManager
 import com.icl.surveillance.viewmodels.ScreenerViewModel
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.QuestionnaireResponse
@@ -32,6 +33,8 @@ class AddCaseActivity : AppCompatActivity() {
     binding = ActivityAddCaseBinding.inflate(layoutInflater)
     setContentView(binding.root)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    val titleName = FormatterClass().getSharedPref("title", this@AddCaseActivity)
+    supportActionBar.apply { title = titleName }
     updateArguments()
     if (savedInstanceState == null) {
       addQuestionnaireFragment()
@@ -52,6 +55,7 @@ class AddCaseActivity : AppCompatActivity() {
   }
 
   private fun onSubmitAction() {
+    ProgressDialogManager.show(this, "Please Wait.....")
     lifecycleScope.launch {
       val questionnaireFragment =
           supportFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG)
@@ -68,14 +72,14 @@ class AddCaseActivity : AppCompatActivity() {
   }
 
   private fun saveCase(questionnaireResponse: QuestionnaireResponse) {
+
     val patientId = FormatterClass().getSharedPref("resourceId", this@AddCaseActivity)
     val questionnaire = FormatterClass().getSharedPref("questionnaire", this@AddCaseActivity)
     val encounter = FormatterClass().getSharedPref("encounterId", this@AddCaseActivity)
     when (questionnaire) {
       "measles-case.json" -> viewModel.completeAssessment(questionnaireResponse, "$patientId")
-      "measles-lab.json" ->
+      "measles-lab-results.json" ->
           viewModel.completeLabAssessment(questionnaireResponse, "$patientId", "$encounter")
-      "covid.json" -> viewModel.completeAssessment(questionnaireResponse, "$patientId")
     }
   }
 
@@ -95,6 +99,7 @@ class AddCaseActivity : AppCompatActivity() {
 
   private fun observePatientSaveAction() {
     viewModel.isResourcesSaved.observe(this@AddCaseActivity) {
+      ProgressDialogManager.dismiss()
       if (!it) {
         Toast.makeText(
                 this@AddCaseActivity, "Please Enter all Required Fields.", Toast.LENGTH_SHORT)

@@ -1,0 +1,252 @@
+{
+  "resourceType": "Questionnaire",
+  "status": "active",
+  "item": [
+    {
+      "linkId": "date-specimen-received",
+      "text": "Date specimen received in lab",
+      "type": "date",
+      "extension": [
+        {
+          "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+          "valueString": "Cannot be a date in the future"
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+          "valueDate": {
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                "valueExpression": {
+                  "language": "text/fhirpath",
+                  "expression": "today()"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "specimen-condition",
+      "text": "Specimen Condition",
+      "type": "choice",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "radio-button",
+                "display": "Radio Button"
+              }
+            ]
+          }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+          "valueCode": "horizontal"
+        }
+      ],
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "Adequate",
+            "display": "Adequate"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "Inadequate",
+            "display": "Inadequate"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "measles-igm",
+      "text": "Measles IgM",
+      "type": "choice",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "drop-down",
+                "display": "Drop down"
+              }
+            ]
+          }
+        }
+      ],
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "Positive",
+            "display": "Positive"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "Negative",
+            "display": "Negative"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "Indeterminate",
+            "display": "Indeterminate"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "Not Done",
+            "display": "Not Done"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "Pending",
+            "display": "Pending"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "Unknown",
+            "display": "Unknown"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "rubella-igm",
+      "text": "Rubella IgM",
+      "type": "choice",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "drop-down",
+                "display": "Drop down"
+              }
+            ]
+          }
+        }
+      ],
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "Positive",
+            "display": "Positive"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "Negative",
+            "display": "Negative"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "Indeterminate",
+            "display": "Indeterminate"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "Not Done",
+            "display": "Not Done"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "Pending",
+            "display": "Pending"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "Unknown",
+            "display": "Unknown"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "date-lab-sent-results",
+      "text": "Date lab sent results to district",
+      "type": "date",
+      "extension": [
+        {
+          "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+          "valueString": "Cannot be a date in the future"
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+          "valueDate": {
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                "valueExpression": {
+                  "language": "text/fhirpath",
+                  "expression": "today()"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "sub-county-contact-person",
+      "text": "H. Sub County Contact Person",
+      "type": "display"
+    },
+    {
+      "linkId": "form-completed-by",
+      "text": "H1. Form completed by",
+      "type": "display"
+    },
+    {
+      "linkId": "H1.1",
+      "text": "Name of person completing form",
+      "type": "string"
+    },
+    {
+      "linkId": "H1.2",
+      "text": "Designation",
+      "type": "string"
+    },
+    {
+      "linkId": "H1.3",
+      "text": "Signature",
+      "type": "string"
+    },
+    {
+      "linkId": "H2. Sub County contact person details\nH2.1",
+      "text": "Name",
+      "type": "string"
+    },
+    {
+      "linkId": "H2.2",
+      "text": "Designation",
+      "type": "string"
+    },
+    {
+      "linkId": "H2.3",
+      "text": "Phone No",
+      "type": "string"
+    },
+    {
+      "linkId": "H2.4",
+      "text": "Email",
+      "type": "string"
+    }
+  ]
+}

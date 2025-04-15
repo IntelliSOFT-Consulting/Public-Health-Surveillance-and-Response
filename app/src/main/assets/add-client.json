@@ -529,22 +529,100 @@
         {
           "linkId": "c1-date-onset",
           "text": "C1. Date of onset of illness",
-          "type": "date"
+          "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
           "linkId": "c2-date-first-seen",
           "text": "C2. Date first seen at health facility",
-          "type": "date"
+          "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
           "linkId": "c3-date-notified",
           "text": "C3. Date Health facility notified sub County level",
-          "type": "date"
+          "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
           "linkId": "c4-hospitalized",
           "text": "C4. Hospitalized",
           "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "answerOption": [
             {
               "valueCoding": {
@@ -564,6 +642,26 @@
           "linkId": "c4-date-admission",
           "text": "Date of Admission",
           "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
           "enableWhen": [
             {
               "question": "c4-hospitalized",
@@ -588,7 +686,24 @@
           "linkId": "c7-means-of-diagnosis",
           "text": "C7. Means of diagnosis",
           "type": "choice",
-          "repeats": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "answerOption": [
             {
               "valueCoding": {
@@ -633,85 +748,139 @@
         {
           "linkId": "c8-vaccination-history",
           "text": "C8. Vaccination History",
-          "type": "group",
-          "item": [
+          "type": "display"
+        },
+        {
+          "linkId": "c8a-vaccinated",
+          "text": "a. Was the patient vaccinated against illness (including campaign)?",
+          "type": "choice",
+          "extension": [
             {
-              "linkId": "c8a-vaccinated",
-              "text": "a. Was the patient vaccinated against illness (including campaign)?",
-              "type": "choice",
-              "answerOption": [
-                {
-                  "valueCoding": {
-                    "code": "1",
-                    "display": "Yes"
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
                   }
-                },
-                {
-                  "valueCoding": {
-                    "code": "2",
-                    "display": "No"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "9",
-                    "display": "Unknown"
-                  }
-                }
-              ]
+                ]
+              }
             },
             {
-              "linkId": "c8a-no-of-doses",
-              "text": "If yes, number of doses",
-              "type": "integer",
-              "enableWhen": [
-                {
-                  "question": "c8a-vaccinated",
-                  "operator": "=",
-                  "answerCoding": {
-                    "code": "1"
-                  }
-                }
-              ]
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Yes"
+              }
             },
             {
-              "linkId": "c8b-recent-vaccine",
-              "text": "b. Any vaccination given in the last two months?",
-              "type": "choice",
-              "answerOption": [
-                {
-                  "valueCoding": {
-                    "code": "1",
-                    "display": "Yes"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "2",
-                    "display": "No"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "9",
-                    "display": "Unknown"
-                  }
-                }
-              ]
+              "valueCoding": {
+                "code": "2",
+                "display": "No"
+              }
             },
             {
-              "linkId": "c8b-date-of-vaccine",
-              "text": "Date of vaccination",
-              "type": "date",
-              "enableWhen": [
-                {
-                  "question": "c8b-recent-vaccine",
-                  "operator": "=",
-                  "answerCoding": {
-                    "code": "1"
+              "valueCoding": {
+                "code": "9",
+                "display": "Unknown"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "c8a-no-of-doses",
+          "text": "If yes, number of doses",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "c8a-vaccinated",
+              "operator": "=",
+              "answerCoding": {
+                "code": "1"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "c8b-recent-vaccine",
+          "text": "b. Any vaccination given in the last two months?",
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
                   }
-                }
-              ]
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "9",
+                "display": "Unknown"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "c8b-date-of-vaccine",
+          "text": "Date of vaccination",
+          "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "c8b-recent-vaccine",
+              "operator": "=",
+              "answerCoding": {
+                "code": "1"
+              }
             }
           ]
         },
@@ -719,6 +888,24 @@
           "linkId": "c9-patient-status",
           "text": "C9. Status of the patient",
           "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "answerOption": [
             {
               "valueCoding": {

@@ -18,7 +18,7 @@
         <activity
             android:name=".ui.patients.FullCaseDetailsActivity"
             android:exported="false"
-            android:label="Complete Case Details" />
+            android:label="Case Summary " />
         <activity
             android:name=".ui.patients.CaseDetailsActivity"
             android:exported="false"

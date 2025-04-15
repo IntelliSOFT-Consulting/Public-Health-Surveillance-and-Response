@@ -18,9 +18,9 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
+            android:text="Full Name"
             android:textAppearance="?attr/textAppearanceSubtitle1"
-            android:textStyle="bold"
-            android:text="Name" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/name"
@@ -47,9 +47,9 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
+            android:text="EPID No:"
             android:textAppearance="?attr/textAppearanceSubtitle1"
-            android:textStyle="bold"
-            android:text="EPID No:" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/epid"
@@ -76,9 +76,9 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
+            android:text="County:"
             android:textAppearance="?attr/textAppearanceSubtitle1"
-            android:textStyle="bold"
-            android:text="County:" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/county"
@@ -105,9 +105,9 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
+            android:text="Sub County:"
             android:textAppearance="?attr/textAppearanceSubtitle1"
-            android:textStyle="bold"
-            android:text="Sub County:" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/sub_county"
@@ -140,6 +140,35 @@
 
         <TextView
             android:id="@+id/date_reported"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textStyle="normal"
+            tools:text="Navya Patel" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:text="Status:"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/date_status"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/text_margin"

@@ -48,7 +48,7 @@ class ClientDetailsActivity : AppCompatActivity() {
     val adapter = PatientDetailsRecyclerViewAdapter(this::onItemClicked)
     binding.patientList.adapter = adapter
 
-    patientDetailsViewModel.livePatientData.observe(this) { adapter.submitList(it) }
+//    patientDetailsViewModel.livePatientData.observe(this) { adapter.submitList(it) }
     patientDetailsViewModel.getPatientDetailData("Measles Case",null)
   }
 

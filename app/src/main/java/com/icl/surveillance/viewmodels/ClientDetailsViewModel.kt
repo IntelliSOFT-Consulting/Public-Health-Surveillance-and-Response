@@ -16,7 +16,10 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
 import java.util.Locale
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.hl7.fhir.r4.model.Condition
 import org.hl7.fhir.r4.model.Encounter
 import org.hl7.fhir.r4.model.Observation
@@ -29,7 +32,8 @@ class ClientDetailsViewModel(
     private val fhirEngine: FhirEngine,
     private val patientId: String,
 ) : AndroidViewModel(application) {
-  val livePatientData = MutableLiveData<List<PatientListViewModel.EncounterItem>>()
+  val livePatientData = MutableLiveData<List<PatientListViewModel.PatientDetailData>>()
+  val livecaseData = MutableLiveData<PatientListViewModel.CaseDetailData>()
 
   /** Emits list of [PatientDetailData]. */
   fun getPatientDetailData(category: String, parent: String?) {
@@ -39,7 +43,7 @@ class ClientDetailsViewModel(
   private suspend fun getPatientDetailDataModel(
       category: String,
       parent: String?
-  ): List<PatientListViewModel.EncounterItem> {
+  ): List<PatientListViewModel.PatientDetailData> {
     val searchResult =
         fhirEngine.search<Patient> {
           filter(Resource.RES_ID, { value = of(patientId) })
@@ -47,11 +51,11 @@ class ClientDetailsViewModel(
           revInclude<Condition>(Condition.SUBJECT)
           revInclude<Encounter>(Encounter.SUBJECT)
         }
-    val data = mutableListOf<PatientListViewModel.EncounterItem>()
+    val data = mutableListOf<PatientListViewModel.PatientDetailData>()
 
     searchResult.first().let {
       it.revIncluded?.get(ResourceType.Encounter to Encounter.SUBJECT.paramName)?.let {
-        data.addEncounterData(it as List<Encounter>, category, parent)
+        //        data.addEncounterData(it as List<Encounter>, category, parent)
       }
     }
 
@@ -96,6 +100,40 @@ class ClientDetailsViewModel(
   private fun isAndroidIcuSupported() = true
 
   private fun getString(resId: Int) = getApplication<Application>().resources.getString(resId)
+
+  private suspend fun getPatientInfoCard(): PatientListViewModel.CaseDetailData {
+    val searchResult =
+        fhirEngine.search<Patient> { filter(Resource.RES_ID, { value = of(patientId) }) }
+    var logicalId = ""
+    var name = ""
+    var sex = ""
+    var dob = ""
+    searchResult.first().let {
+      logicalId = it.resource.logicalId
+      name =
+          if (it.resource.hasName()) {
+            // display name in order as fname, then others
+            "${it.resource.name[0].givenAsSingleString} ${it.resource.name[0].family} "
+          } else ""
+      sex = if (it.resource.hasGenderElement()) it.resource.gender.display else ""
+      dob =
+          if (it.resource.hasBirthDateElement())
+              if (it.resource.birthDateElement.hasValue())
+                  it.resource.birthDateElement.valueAsString
+              else ""
+          else ""
+    }
+
+    return PatientListViewModel.CaseDetailData(
+        logicalId = logicalId, sex = sex, dob = dob, name = name)
+  }
+
+  fun getPatientInfo() {
+    CoroutineScope(Dispatchers.IO).launch {
+      val patientData = getPatientInfoCard()
+      withContext(Dispatchers.Main) { livecaseData.value = patientData }
+    }
+  }
 
   companion object {
 
@@ -200,7 +238,7 @@ data class PatientDetailProperty(
 ) : PatientDetailData
 
 data class PatientDetailOverview(
-    val patient: PatientListViewModel.PatientItem,
+    val patient: PatientProperty,
     override val firstInGroup: Boolean = false,
     override val lastInGroup: Boolean = false,
 ) : PatientDetailData

@@ -123,6 +123,24 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
     override fun toString(): String = code
   }
 
+  interface PatientDetailData {
+    val firstInGroup: Boolean
+    val lastInGroup: Boolean
+  }
+
+  data class CaseDetailData(
+      val logicalId: String,
+      val name: String,
+      val sex: String,
+      val dob: String
+  )
+
+  data class PatientDetailOverview(
+      val patient: PatientListViewModel.PatientItem,
+      override val firstInGroup: Boolean = false,
+      override val lastInGroup: Boolean = false,
+  ) : PatientDetailData
+
   data class EncounterItem(
       val id: String,
       val reasonCode: String,

@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.icl.surveillance.R
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.databinding.FragmentSingleCaseBinding
+import com.icl.surveillance.utils.FormatterClass
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -56,6 +57,7 @@ class SingleCaseFragment : Fragment() {
     binding.apply {
       val bundle = Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-client.json") }
       btnAdd.setOnClickListener {
+        FormatterClass().saveSharedPref("title", "Add Case", requireContext())
         findNavController().navigate(R.id.action_singleCaseFragment_to_addClientFragment, bundle)
       }
       btnList.setOnClickListener {

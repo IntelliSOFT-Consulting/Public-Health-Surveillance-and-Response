@@ -43,7 +43,7 @@
     <fragment
         android:id="@+id/singleCaseFragment"
         android:name="com.icl.surveillance.ui.home.SingleCaseFragment"
-        android:label="502"
+        android:label="MOH 502 - Case Based Reporting Form"
         tools:layout="@layout/fragment_single_case">
         <action
             android:id="@+id/action_singleCaseFragment_to_addClientFragment"

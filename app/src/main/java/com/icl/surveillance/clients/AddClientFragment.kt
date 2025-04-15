@@ -10,6 +10,7 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
+import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.icl.surveillance.R
 import com.icl.surveillance.utils.ProgressDialogManager
@@ -82,6 +83,8 @@ class AddClientFragment : Fragment(R.layout.fragment_add_client) {
   }
 
   private fun onSubmitAction() {
+
+    ProgressDialogManager.show(requireContext(), "Submitting data...")
     lifecycleScope.launch {
       val questionnaireFragment =
           childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG)
@@ -91,8 +94,11 @@ class AddClientFragment : Fragment(R.layout.fragment_add_client) {
   }
 
   private fun savePatient(questionnaireResponse: QuestionnaireResponse) {
-    ProgressDialogManager.show(requireContext(), "Submitting data...")
-    viewModel.savePatient(questionnaireResponse)
+    val context = FhirContext.forR4()
+    val questionnaireResponseString =
+        context.newJsonParser().encodeResourceToString(questionnaireResponse)
+    println("Questionnaire Response: $questionnaireResponseString")
+    viewModel.savePatient(questionnaireResponse, questionnaireResponseString)
   }
 
   private fun observePatientSaveAction() {
@@ -104,7 +110,7 @@ class AddClientFragment : Fragment(R.layout.fragment_add_client) {
             .show()
         return@observe
       }
-      Toast.makeText(requireContext(), "Patient is saved.", Toast.LENGTH_SHORT).show()
+      Toast.makeText(requireContext(), "Case is saved.", Toast.LENGTH_SHORT).show()
       NavHostFragment.findNavController(this).navigateUp()
     }
   }

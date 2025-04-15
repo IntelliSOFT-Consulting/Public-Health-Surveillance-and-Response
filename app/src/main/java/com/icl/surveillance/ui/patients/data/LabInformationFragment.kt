@@ -79,17 +79,17 @@ class LabInformationFragment : Fragment() {
     val adapter = PatientDetailsRecyclerViewAdapter(this::onItemClicked)
     binding.patientList.adapter = adapter
 
-    patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) {
-      println("Loading **** ${it.count()} Records")
-      adapter.submitList(it)
-    }
+//    patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) {
+//      println("Loading **** ${it.count()} Records")
+//      adapter.submitList(it)
+//    }
     patientDetailsViewModel.getPatientDetailData("Lab Information","encounterId")
 
     binding.apply {
       fab.setOnClickListener {
-        FormatterClass().saveSharedPref("questionnaire", "measles-lab.json", requireContext())
+        FormatterClass().saveSharedPref("questionnaire", "measles-lab-results.json", requireContext())
         val intent = Intent(requireContext(), AddCaseActivity::class.java)
-        intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "measles-lab.json")
+        intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "measles-lab-results.json")
         startActivity(intent)
       }
     }

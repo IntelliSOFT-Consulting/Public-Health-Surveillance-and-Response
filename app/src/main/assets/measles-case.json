@@ -1,29 +1,13 @@
 {
   "resourceType": "Questionnaire",
-  "id": "measles-case-investigation",
-  "meta": {
-    "profile": [
-      "http://hl7.org/fhir/4.0/StructureDefinition/Questionnaire"
-    ],
-    "tag": [
-      {
-        "code": "lhc-qnvconv-R4-to-R5",
-        "display": "Converted from R4 to R5 by the LHC Questionnaire Version Converter"
-      },
-      {
-        "code": "lhc-qnvconv-R5-to-R4",
-        "display": "Converted from R5 to R4 by the LHC Questionnaire Version Converter"
-      }
-    ]
-  },
-  "title": "Measles Case Investigation",
+  "id": "fever-rash-investigation",
   "status": "active",
+  "title": "Fever, Rash and Laboratory Investigation",
   "item": [
     {
-      "type": "choice",
-      "linkId": "F1",
+      "linkId": "f1",
       "text": "Presence of fever",
-      "required": true,
+      "type": "choice",
       "extension": [
         {
           "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -45,23 +29,22 @@
       "answerOption": [
         {
           "valueCoding": {
-            "code": "yes",
+            "code": "1",
             "display": "Yes"
           }
         },
         {
           "valueCoding": {
-            "code": "no",
+            "code": "2",
             "display": "No"
           }
         }
       ]
     },
     {
-      "type": "date",
-      "linkId": "F2",
+      "linkId": "f2",
       "text": "Date of onset of rash",
-      "required": true,
+      "type": "date",
       "extension": [
         {
           "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
@@ -84,6 +67,8 @@
       ]
     },
     {
+      "linkId": "f3",
+      "text": "Type of rash",
       "type": "choice",
       "extension": [
         {
@@ -103,9 +88,6 @@
           "valueCode": "horizontal"
         }
       ],
-      "linkId": "F3",
-      "text": "Type of rash",
-      "required": true,
       "answerOption": [
         {
           "valueCoding": {
@@ -122,6 +104,8 @@
       ]
     },
     {
+      "linkId": "f4a",
+      "text": "Was home of patient visited for contact investigation?",
       "type": "choice",
       "extension": [
         {
@@ -141,8 +125,6 @@
           "valueCode": "horizontal"
         }
       ],
-      "linkId": "F4.1",
-      "text": "Was home of patient visited for contact investigation?",
       "answerOption": [
         {
           "valueCoding": {
@@ -159,9 +141,9 @@
       ]
     },
     {
-      "type": "date",
-      "linkId": "F4.2",
+      "linkId": "f4b",
       "text": "If Yes, Date of visit",
+      "type": "date",
       "extension": [
         {
           "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
@@ -184,16 +166,17 @@
       ],
       "enableWhen": [
         {
-          "question": "F4.1",
+          "question": "f4a",
           "operator": "=",
           "answerCoding": {
             "code": "yes"
           }
         }
-      ],
-      "required": true
+      ]
     },
     {
+      "linkId": "f5",
+      "text": "Is the case epidemiologically linked to a lab-confirmed case?",
       "type": "choice",
       "extension": [
         {
@@ -202,16 +185,17 @@
             "coding": [
               {
                 "system": "http://hl7.org/fhir/questionnaire-item-control",
-                "code": "drop-down",
-                "display": "Drop down"
+                "code": "radio-button",
+                "display": "Radio Button"
               }
             ]
           }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+          "valueCode": "horizontal"
         }
       ],
-      "linkId": "F5",
-      "text": "Is the case epidemiologically linked to a lab-confirmed case?",
-      "required": true,
       "answerOption": [
         {
           "valueCoding": {
@@ -232,6 +216,208 @@
           }
         }
       ]
+    },
+    {
+      "linkId": "g1a",
+      "text": "Specimen Collection (To be completed by the health facility)",
+      "type": "choice",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "radio-button",
+                "display": "Radio Button"
+              }
+            ]
+          }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+          "valueCode": "horizontal"
+        }
+      ],
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "yes",
+            "display": "Yes"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "no",
+            "display": "No"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "g1a1",
+      "text": "If no, why?",
+      "type": "string",
+      "enableWhen": [
+        {
+          "question": "g1a",
+          "operator": "=",
+          "answerCoding": {
+            "code": "no"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "g1b",
+      "text": "Date(s) of specimen collection",
+      "type": "group",
+      "item": [
+        {
+          "linkId": "g1b1",
+          "text": "First date",
+          "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "g1b2",
+          "text": "Second date",
+          "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "g1c",
+      "text": "Specimen type",
+      "type": "choice",
+      "repeats": true,
+      "answerOption": [
+        {
+          "valueCoding": {
+            "code": "stool",
+            "display": "Stool"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "blood",
+            "display": "Blood"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "csf",
+            "display": "CSF"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "ops",
+            "display": "OPS"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "ns",
+            "display": "NS"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "animal_tissue",
+            "display": "Animal tissue"
+          }
+        },
+        {
+          "valueCoding": {
+            "code": "other",
+            "display": "Other"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "g1c1",
+      "text": "If Other, specify specimen type",
+      "type": "string",
+      "enableWhen": [
+        {
+          "question": "g1c",
+          "operator": "=",
+          "answerCoding": {
+            "code": "other"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "g1d",
+      "text": "Date specimen sent to the lab",
+      "type": "date",
+      "extension": [
+        {
+          "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+          "valueString": "Cannot be a date in the future"
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+          "valueDate": {
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                "valueExpression": {
+                  "language": "text/fhirpath",
+                  "expression": "today()"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "g1e",
+      "text": "Name of the lab",
+      "type": "string"
     }
   ]
 }
