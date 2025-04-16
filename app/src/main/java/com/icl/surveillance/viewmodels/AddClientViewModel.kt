@@ -127,8 +127,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
             for (j in 0 until facilityItems.length()) {
               val item = facilityItems.getJSONObject(j)
 
-              println("Manipulating Observations Data **** ${item.getString("linkId")}")
-              when (val linkId = item.getString("linkId")) {
+               when (val linkId = item.getString("linkId")) {
                 "c1-date-onset" -> {
                   val code = extractResponse(item, "valueDate")
                   val obs = qh.codingQuestionnaire(linkId, "Date of onset of illness", code)
