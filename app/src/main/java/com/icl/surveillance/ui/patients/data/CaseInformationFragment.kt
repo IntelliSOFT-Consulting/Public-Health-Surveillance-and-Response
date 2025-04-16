@@ -1,14 +1,17 @@
 package com.icl.surveillance.ui.patients.data
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.android.fhir.FhirEngine
-import com.icl.surveillance.adapters.PatientDetailsRecyclerViewAdapter
+import com.icl.surveillance.adapters.PatientDiseaseRecyclerViewAdapter
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.databinding.FragmentCaseInformationBinding
 import com.icl.surveillance.fhir.FhirApplication
@@ -76,14 +79,23 @@ class CaseInformationFragment : Fragment() {
             )
             .get(ClientDetailsViewModel::class.java)
 
-    val adapter = PatientDetailsRecyclerViewAdapter(this::onItemClicked)
-    //    binding.patientList.adapter = adapter
+    val adapter = PatientDiseaseRecyclerViewAdapter(this::onItemClicked)
+    binding.patientList.adapter = adapter
+    binding.patientList.addItemDecoration(
+        DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
+          setDrawable(ColorDrawable(Color.LTGRAY))
+        },
+    )
+    patientDetailsViewModel.liveDiseaseData.observe(viewLifecycleOwner) {
+      println("Displaying Measles case")
+      if (it.isEmpty()) {
+        binding.tvNoCase.visibility = View.VISIBLE
+      }
 
-    //    patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) {
-    //      println("Loading **** ${it.count()} Records")
-    //      adapter.submitList(it)
-    //    }
-    patientDetailsViewModel.getPatientDetailData("Lab Information", "$encounterId")
+      adapter.submitList(it)
+    }
+
+    patientDetailsViewModel.getPatientDiseaseData("Measles Case", "$encounterId", true)
 
     binding.apply {
       fab.setOnClickListener {
@@ -96,7 +108,7 @@ class CaseInformationFragment : Fragment() {
     }
   }
 
-  private fun onItemClicked(encounterItem: PatientListViewModel.EncounterItem) {}
+  private fun onItemClicked(encounterItem: PatientListViewModel.CaseDiseaseData) {}
 
   companion object {
     /**

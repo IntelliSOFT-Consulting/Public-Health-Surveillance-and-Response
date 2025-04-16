@@ -37,6 +37,8 @@ class ClientDetailsViewModel(
 ) : AndroidViewModel(application) {
   val livePatientData = MutableLiveData<List<PatientListViewModel.PatientDetailData>>()
   val livecaseData = MutableLiveData<PatientListViewModel.CaseDetailData>()
+  val liveDiseaseData = MutableLiveData<List<PatientListViewModel.CaseDiseaseData>>()
+  val liveLabData = MutableLiveData<List<PatientListViewModel.CaseLabResultsData>>()
 
   /** Emits list of [PatientDetailData]. */
   fun getPatientDetailData(category: String, parent: String?) {
@@ -232,7 +234,111 @@ class ClientDetailsViewModel(
     }
   }
 
+  fun getPatientDiseaseData(reason: String, parent: String, isCase: Boolean) {
+    CoroutineScope(Dispatchers.IO).launch {
+      if (isCase) {
+        val patientData = getPatientDiseaseDataInformation(reason, parent)
+        withContext(Dispatchers.Main) { liveDiseaseData.value = patientData }
+      } else {
+        val patientData = getPatientLabDataInformation(reason, parent)
+        withContext(Dispatchers.Main) { liveLabData.value = patientData }
+      }
+    }
+  }
+
+  private suspend fun getPatientLabDataInformation(
+      reason: String,
+      parent: String
+  ): List<PatientListViewModel.CaseLabResultsData> {
+    val patients: MutableList<PatientListViewModel.CaseLabResultsData> = mutableListOf()
+    fhirEngine
+        .search<Encounter> {
+          filter(Encounter.SUBJECT, { value = "Patient/$patientId" })
+          filter(Encounter.PART_OF, { value = "Encounter/$parent" })
+        }
+        .mapIndexedNotNull() { index, data ->
+          val code = data.resource.reasonCodeFirstRep.codingFirstRep.code
+          if (code == reason) {
+            var loop = createEncounterItemLabData(data.resource)
+
+            val obs =
+                fhirEngine.search<Observation> {
+                  filter(Observation.ENCOUNTER, { value = "Encounter/${loop.logicalId}" })
+                }
+
+            val fever = generateResponse(obs, "f1")
+            val rash = generateResponse(obs, "f2")
+
+//            loop = loop.copy(fever = fever, rash = rash)
+
+            loop
+          } else {
+            null
+          }
+        }
+        .let { patients.addAll(it) }
+
+    return patients
+  }
+
+  private suspend fun getPatientDiseaseDataInformation(
+      reason: String,
+      parent: String
+  ): List<PatientListViewModel.CaseDiseaseData> {
+    val patients: MutableList<PatientListViewModel.CaseDiseaseData> = mutableListOf()
+    fhirEngine
+        .search<Encounter> {
+          filter(Encounter.SUBJECT, { value = "Patient/$patientId" })
+          filter(Encounter.PART_OF, { value = "Encounter/$parent" })
+        }
+        .mapIndexedNotNull() { index, data ->
+          val code = data.resource.reasonCodeFirstRep.codingFirstRep.code
+          if (code == reason) {
+            var loop = createEncounterItemLab(data.resource)
+
+            val obs =
+                fhirEngine.search<Observation> {
+                  filter(Observation.ENCOUNTER, { value = "Encounter/${loop.logicalId}" })
+                }
+
+            val fever = generateResponse(obs, "f1")
+            val rash = generateResponse(obs, "f2")
+
+            loop = loop.copy(fever = fever, rash = rash)
+
+            loop
+          } else {
+            null
+          }
+        }
+        .let { patients.addAll(it) }
+
+    return patients
+  }
+
   companion object {
+
+    private fun createEncounterItemLabData(
+        encounter: Encounter,
+    ): PatientListViewModel.CaseLabResultsData {
+      val reasonCode = encounter.reasonCodeFirstRep.codingFirstRep.code
+
+      return PatientListViewModel.CaseLabResultsData(
+          logicalId = encounter.logicalId,
+          name = reasonCode,
+      )
+    }
+
+    private fun createEncounterItemLab(
+        encounter: Encounter,
+    ): PatientListViewModel.CaseDiseaseData {
+      val reasonCode = encounter.reasonCodeFirstRep.codingFirstRep.code
+
+      return PatientListViewModel.CaseDiseaseData(
+          logicalId = encounter.logicalId,
+          name = reasonCode,
+      )
+    }
 
     private fun createEncounterItem(
         encounter: Encounter,

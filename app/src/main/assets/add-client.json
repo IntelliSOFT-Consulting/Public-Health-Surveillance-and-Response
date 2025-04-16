@@ -885,8 +885,8 @@
           ]
         },
         {
-          "linkId": "c9-patient-status",
-          "text": "C9. Status of the patient",
+          "linkId": "inpatient-outpatient",
+          "text": "Inpatient/Outpatient",
           "type": "choice",
           "extension": [
             {
@@ -909,20 +909,57 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "HOSPITALIZED",
-                "display": "Still hospitalized"
+                "code": "Inpatient",
+                "display": "Inpatient"
               }
             },
             {
               "valueCoding": {
-                "code": "DISCHARGED",
-                "display": "Discharged"
+                "code": "Outpatient",
+                "display": "Outpatient"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "c9-patient-outcome",
+          "text": "Outcome",
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Alive",
+                "display": "Alive"
               }
             },
             {
               "valueCoding": {
-                "code": "DEAD",
+                "code": "Dead",
                 "display": "Dead"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Unknown",
+                "display": "Unknown"
               }
             }
           ]

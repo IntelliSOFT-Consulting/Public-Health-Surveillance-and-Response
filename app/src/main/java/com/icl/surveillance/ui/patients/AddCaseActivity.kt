@@ -76,8 +76,11 @@ class AddCaseActivity : AppCompatActivity() {
     val patientId = FormatterClass().getSharedPref("resourceId", this@AddCaseActivity)
     val questionnaire = FormatterClass().getSharedPref("questionnaire", this@AddCaseActivity)
     val encounter = FormatterClass().getSharedPref("encounterId", this@AddCaseActivity)
+
+    println("Parent Encounter $encounter")
     when (questionnaire) {
-      "measles-case.json" -> viewModel.completeAssessment(questionnaireResponse, "$patientId","$encounter")
+      "measles-case.json" ->
+          viewModel.completeAssessment(questionnaireResponse, "$patientId", "$encounter")
       "measles-lab-results.json" ->
           viewModel.completeLabAssessment(questionnaireResponse, "$patientId", "$encounter")
     }

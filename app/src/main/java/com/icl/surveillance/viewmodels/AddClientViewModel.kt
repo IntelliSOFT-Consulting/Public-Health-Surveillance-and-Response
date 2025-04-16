@@ -236,6 +236,24 @@ class AddClientViewModel(application: Application, private val state: SavedState
                   obs.code.text = code
                   createResource(obs, subjectReference, encounterReference)
                 }
+
+                "inpatient-outpatient" -> {
+                  val code = extractResponseCode(item, "valueCoding")
+                  val obs = qh.codingQuestionnaire(linkId, "Inpatient/Outpatient", code)
+                  obs.code.addCoding().setSystem("http://snomed.info/sct").setCode(linkId).display =
+                      "Inpatient/Outpatient"
+                  obs.code.text = code
+                  createResource(obs, subjectReference, encounterReference)
+                }
+
+                "c9-patient-outcome" -> {
+                  val code = extractResponseCode(item, "valueCoding")
+                  val obs = qh.codingQuestionnaire(linkId, "Patient Outcome", code)
+                  obs.code.addCoding().setSystem("http://snomed.info/sct").setCode(linkId).display =
+                      "Patient Outcome"
+                  obs.code.text = code
+                  createResource(obs, subjectReference, encounterReference)
+                }
               }
             }
           }

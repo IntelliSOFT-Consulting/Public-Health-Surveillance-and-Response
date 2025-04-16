@@ -7,7 +7,7 @@
     tools:context=".ui.patients.data.LabInformationFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -20,7 +20,16 @@
             app:layoutManager="LinearLayoutManager"
             tools:context=".PatientListActivity"
             tools:listitem="@layout/patient_list_item_view" />
-    </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_no_case"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Lab Results not Captured"
+            android:textAlignment="center"
+            android:visibility="visible" />
+    </RelativeLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

@@ -204,6 +204,37 @@
       ]
     },
     {
+      "linkId": "final-classification",
+      "text": "Final Classification. Case classification after investigation (e.g., confirmed, compatible, discarded)",
+      "type": "choice",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "drop-down",
+                "display": "Drop down"
+              }
+            ]
+          }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+          "valueBoolean": true
+        }
+      ],
+      "initial": [
+        {
+          "valueCoding": {
+            "code": "lab-results-pending",
+            "display": "Lab results pending"
+          }
+        }
+      ]
+    },
+    {
       "linkId": "sub-county-contact-person",
       "text": "H. Sub County Contact Person",
       "type": "display"
@@ -225,11 +256,16 @@
     },
     {
       "linkId": "H1.3",
-      "text": "Signature",
+      "text": "Sign",
       "type": "string"
     },
     {
-      "linkId": "H2. Sub County contact person details\nH2.1",
+      "linkId": "sub-county-contact-person-details",
+      "text": "H.2 Sub County contact person details",
+      "type": "display"
+    },
+    {
+      "linkId": "H2.H2.1",
       "text": "Name",
       "type": "string"
     },

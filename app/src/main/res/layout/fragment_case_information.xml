@@ -6,6 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".ui.patients.data.CaseInformationFragment">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/patient_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            app:layoutManager="LinearLayoutManager"
+            tools:context=".PatientListActivity"
+            tools:listitem="@layout/patient_list_item_view" />
+
+        <TextView
+            android:id="@+id/tv_no_case"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Measles Information no Captured"
+            android:textAlignment="center"
+            android:visibility="gone" />
+    </RelativeLayout>
     <!-- TODO: Update blank fragment layout -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

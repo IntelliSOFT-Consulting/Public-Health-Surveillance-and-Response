@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.fhir.FhirEngine
-import com.icl.surveillance.adapters.PatientDetailsRecyclerViewAdapter
+import com.icl.surveillance.adapters.LabRecyclerViewAdapter
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.databinding.FragmentLabInformationBinding
 import com.icl.surveillance.fhir.FhirApplication
@@ -76,14 +76,17 @@ class LabInformationFragment : Fragment() {
             )
             .get(ClientDetailsViewModel::class.java)
 
-    val adapter = PatientDetailsRecyclerViewAdapter(this::onItemClicked)
+    val adapter = LabRecyclerViewAdapter(this::onItemClicked)
     binding.patientList.adapter = adapter
 
-    //    patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) {
-    //      println("Loading **** ${it.count()} Records")
-    //      adapter.submitList(it)
-    //    }
-    patientDetailsViewModel.getPatientDetailData("Lab Information", "$encounterId")
+    patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) {
+      println("Loading **** ${it.count()} Records")
+      if (it.isEmpty()) {
+        binding.tvNoCase.visibility = View.VISIBLE
+      }
+      //              adapter.submitList(it)
+    }
+    patientDetailsViewModel.getPatientDiseaseData("Measles Lab Information", "$encounterId", false)
 
     binding.apply {
       fab.setOnClickListener {
@@ -97,7 +100,7 @@ class LabInformationFragment : Fragment() {
     }
   }
 
-  private fun onItemClicked(encounterItem: PatientListViewModel.EncounterItem) {}
+  private fun onItemClicked(encounterItem: PatientListViewModel.CaseLabResultsData) {}
 
   companion object {
     /**

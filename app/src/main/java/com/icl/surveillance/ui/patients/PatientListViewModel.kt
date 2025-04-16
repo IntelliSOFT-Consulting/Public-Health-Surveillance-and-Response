@@ -170,6 +170,15 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
     override fun toString(): String = code
   }
 
+  data class CaseDiseaseData(
+      val logicalId: String,
+      val name: String,
+      val fever: String = "",
+      val rash: String = ""
+  )
+
+  data class CaseLabResultsData(val logicalId: String, val name: String)
+
   interface PatientDetailData {
     val firstInGroup: Boolean
     val lastInGroup: Boolean

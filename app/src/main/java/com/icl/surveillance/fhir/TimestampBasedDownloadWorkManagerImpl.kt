@@ -61,9 +61,16 @@ class TimestampBasedDownloadWorkManagerImpl(private val dataStore: DemoDataStore
     // If the resource returned is a List containing Patients, extract Patient references and fetch
     // all resources related to the patient using the $everything operation.
     if (response is ListResource) {
+
       for (entry in response.entry) {
+
         val reference = Reference(entry.item.reference)
         if (reference.referenceElement.resourceType.equals("Patient")) {
+          val patientUrl = "${entry.item.reference}/\$everything"
+          urls.add(patientUrl)
+        }
+
+        if (reference.referenceElement.resourceType.equals("Encounter")) {
           val patientUrl = "${entry.item.reference}/\$everything"
           urls.add(patientUrl)
         }
