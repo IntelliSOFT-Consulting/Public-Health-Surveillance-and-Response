@@ -1,0 +1,982 @@
+{
+  "resourceType": "Questionnaire",
+  "version": "1.0.2",
+  "name": "Identification",
+  "title": "Case Notification Questionnaire",
+  "status": "active",
+  "date": "2025-04-12T08:01:15.064Z",
+  "approvalDate": "2025-04-12",
+  "lastReviewDate": "2025-04-12",
+  "subjectType": [
+    "Patient"
+  ],
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-launchContext",
+      "extension": [
+        {
+          "url": "type",
+          "valueCode": "Patient"
+        }
+      ]
+    },
+    {
+      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
+      "valueExpression": {
+        "language": "application/x-fhir-query",
+        "expression": "Patient",
+        "name": "patient"
+      }
+    }
+  ],
+  "item": [
+    {
+      "linkId": "section-a",
+      "text": "A. Name of Site Reporting & Disease being reported",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ],
+            "text": "Page"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "a1-health-facility",
+          "text": "A1. Health Facility",
+          "type": "string"
+        },
+        {
+          "linkId": "a2-type",
+          "text": "A2. Type",
+          "type": "string"
+        },
+        {
+          "linkId": "a3-sub-county",
+          "text": "A3. Sub County",
+          "type": "string"
+        },
+        {
+          "linkId": "a4-county",
+          "text": "A4. County",
+          "type": "string"
+        },
+        {
+          "linkId": "a5-disease-reported",
+          "text": "A5. Disease reported",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "AFP",
+                "display": "AFP"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "NNT",
+                "display": "NNT"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "MEASLES",
+                "display": "Measles"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "MENINGITIS",
+                "display": "Meningitis"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "PLAGUE",
+                "display": "Plague"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "VHFs",
+                "display": "VHFs"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "YELLOW_FEVER",
+                "display": "Yellow Fever"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "SARI",
+                "display": "SARI / AI"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "OTHER",
+                "display": "Other"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "a5-disease-other-specify",
+          "text": "If Other, specify",
+          "type": "string",
+          "enableWhen": [
+            {
+              "question": "a5-disease-reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "OTHER"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "section-b",
+      "text": "B. Identification",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ],
+            "text": "Page"
+          }
+        }
+      ],
+      "item": [
+        {
+          "type": "group",
+          "linkId": "patient-names",
+          "text": "",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.name",
+          "item": [
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                  "valueExpression": {
+                    "language": "text/fhirpath",
+                    "expression": "Patient.name.given",
+                    "name": "patientName"
+                  }
+                }
+              ],
+              "linkId": "PR-name-text",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.name.given",
+              "type": "string",
+              "required": true,
+              "text": "First Name"
+            },
+            {
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                  "valueExpression": {
+                    "language": "text/fhirpath",
+                    "expression": "Patient.name.family",
+                    "name": "patientFamily"
+                  }
+                }
+              ],
+              "linkId": "PR-name-family",
+              "definition": "http://hl7.org/fhir/StructureDefinition/datatypes#HumanName.family",
+              "type": "string",
+              "required": true,
+              "text": "Family Name"
+            }
+          ]
+        },
+        {
+          "type": "date",
+          "linkId": "date-of-birth",
+          "text": "Date of birth",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.birthDate",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Patient.birthDate",
+                "name": "patientBirthDate"
+              }
+            },
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "age-years",
+          "text": "Age (years)",
+          "readOnly": true
+        },
+        {
+          "type": "integer",
+          "linkId": "age-months",
+          "text": "Age (months)",
+          "readOnly": true
+        },
+        {
+          "linkId": "sex",
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "system": "http://hl7.org/fhir/administrative-gender",
+                "language": "text/fhirpath",
+                "expression": "Patient.gender",
+                "name": "patientGender"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "text": "Sex",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.gender",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "http://hl7.org/fhir/administrative-gender",
+                "code": "male",
+                "display": "Male"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "http://hl7.org/fhir/administrative-gender",
+                "code": "female",
+                "display": "Female"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "parent-group",
+          "type": "group",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact",
+          "item": [
+            {
+              "linkId": "parent-names",
+              "type": "group",
+              "text": "Parent/Guardian",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.name",
+              "item": [
+                {
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                      "valueExpression": {
+                        "language": "text/fhirpath",
+                        "expression": "Patient.contact.name.given",
+                        "name": "patientParentName"
+                      }
+                    }
+                  ],
+                  "linkId": "PR-parent-name-text",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.name.given",
+                  "type": "string",
+                  "required": true,
+                  "text": "First Name"
+                },
+                {
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                      "valueExpression": {
+                        "language": "text/fhirpath",
+                        "expression": "Patient.contact.name.family",
+                        "name": "patientParentFamily"
+                      }
+                    }
+                  ],
+                  "linkId": "PR-parent-name-family",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.name.family",
+                  "type": "string",
+                  "required": true,
+                  "text": "Family Name"
+                }
+              ]
+            },
+            {
+              "linkId": "PR-address",
+              "type": "group",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.address",
+              "item": [
+                {
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                      "valueExpression": {
+                        "language": "text/fhirpath",
+                        "expression": "Patient.contact.address.line",
+                        "name": "patientCity"
+                      }
+                    }
+                  ],
+                  "linkId": "PR-address-residence",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.address.line",
+                  "type": "string",
+                  "required": true,
+                  "text": "Residence (Village/Hse No"
+                },
+                {
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                      "valueExpression": {
+                        "language": "text/fhirpath",
+                        "expression": "Patient.contact.address.line",
+                        "name": "patientCity"
+                      }
+                    }
+                  ],
+                  "linkId": "PR-address-landmark",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.address.line",
+                  "type": "string",
+                  "required": true,
+                  "text": "Neighborhood major landmark"
+                },
+                {
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                      "valueExpression": {
+                        "language": "text/fhirpath",
+                        "expression": "Patient.contact.address.line",
+                        "name": "patientCity"
+                      }
+                    }
+                  ],
+                  "linkId": "PR-address-street",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.address.line",
+                  "type": "string",
+                  "required": true,
+                  "text": "Street/Plot/Estate/S. location"
+                },
+                {
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                      "valueExpression": {
+                        "language": "text/fhirpath",
+                        "expression": "Patient.contact.address.line",
+                        "name": "patientCity"
+                      }
+                    }
+                  ],
+                  "linkId": "PR-address-town",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.address.line",
+                  "type": "string",
+                  "required": true,
+                  "text": "Town/City/Location"
+                },
+                {
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                      "valueExpression": {
+                        "language": "text/fhirpath",
+                        "expression": "Patient.contact.address.line",
+                        "name": "patientCity"
+                      }
+                    }
+                  ],
+                  "linkId": "PR-address-sub-county",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.address.line",
+                  "type": "string",
+                  "required": true,
+                  "text": "Sub County"
+                },
+                {
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                      "valueExpression": {
+                        "language": "text/fhirpath",
+                        "expression": "Patient.contact.address.line",
+                        "name": "patientCity"
+                      }
+                    }
+                  ],
+                  "linkId": "PR-address-county",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.address.line",
+                  "type": "string",
+                  "required": true,
+                  "text": "County"
+                }
+              ]
+            },
+            {
+              "linkId": "PR-telecom",
+              "type": "group",
+              "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.telecom",
+              "item": [
+                {
+                  "linkId": "PR-telecom-system",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.telecom.system",
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+                      "valueBoolean": true
+                    }
+                  ],
+                  "type": "string",
+                  "text": "system",
+                  "initial": [
+                    {
+                      "valueString": "phone"
+                    }
+                  ]
+                },
+                {
+                  "extension": [
+                    {
+                      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+                      "valueExpression": {
+                        "language": "text/fhirpath",
+                        "expression": "Patient.contact.telecom.value",
+                        "name": "patientParentTelecom"
+                      }
+                    },
+                    {
+                      "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                      "valueCodeableConcept": {
+                        "coding": [
+                          {
+                            "system": "http://hl7.org/fhir/questionnaire-item-control",
+                            "code": "phone-number",
+                            "display": "Phone Number"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "linkId": "PR-telecom-value",
+                  "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.contact.telecom.value",
+                  "type": "string",
+                  "required": true,
+                  "text": "Telephone No of parent/guardian:"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "section-c",
+      "text": "C. Clinical Information",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ],
+            "text": "Page"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "c1-date-onset",
+          "text": "C1. Date of onset of illness",
+          "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "c2-date-first-seen",
+          "text": "C2. Date first seen at health facility",
+          "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "c3-date-notified",
+          "text": "C3. Date Health facility notified sub County level",
+          "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "c4-hospitalized",
+          "text": "C4. Hospitalized",
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "c4-date-admission",
+          "text": "Date of Admission",
+          "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "c4-hospitalized",
+              "operator": "=",
+              "answerCoding": {
+                "code": "1"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "c5-ip-op-no",
+          "text": "C5. IP/OP No.",
+          "type": "string"
+        },
+        {
+          "linkId": "c6-diagnosis",
+          "text": "C6. Diagnosis",
+          "type": "string"
+        },
+        {
+          "linkId": "c7-means-of-diagnosis",
+          "text": "C7. Means of diagnosis",
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "CLINICAL",
+                "display": "Clinical"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "LAB",
+                "display": "Lab"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "EPI",
+                "display": "Epi linkage"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "OTHER",
+                "display": "Other (specify)"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "c7-other-specify",
+          "text": "Other (specify)",
+          "type": "string",
+          "enableWhen": [
+            {
+              "question": "c7-means-of-diagnosis",
+              "operator": "=",
+              "answerCoding": {
+                "code": "OTHER"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "c8-vaccination-history",
+          "text": "C8. Vaccination History",
+          "type": "display"
+        },
+        {
+          "linkId": "c8a-vaccinated",
+          "text": "a. Was the patient vaccinated against illness (including campaign)?",
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "9",
+                "display": "Unknown"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "c8a-no-of-doses",
+          "text": "If yes, number of doses",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "c8a-vaccinated",
+              "operator": "=",
+              "answerCoding": {
+                "code": "1"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "c8b-recent-vaccine",
+          "text": "b. Any vaccination given in the last two months?",
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "9",
+                "display": "Unknown"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "c8b-date-of-vaccine",
+          "text": "Date of vaccination",
+          "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "c8b-recent-vaccine",
+              "operator": "=",
+              "answerCoding": {
+                "code": "1"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "inpatient-outpatient",
+          "text": "Inpatient/Outpatient",
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Inpatient",
+                "display": "Inpatient"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Outpatient",
+                "display": "Outpatient"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "c9-patient-outcome",
+          "text": "Outcome",
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Alive",
+                "display": "Alive"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Dead",
+                "display": "Dead"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Unknown",
+                "display": "Unknown"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

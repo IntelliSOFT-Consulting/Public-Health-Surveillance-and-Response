@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.icl.surveillance.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_navigation_home_to_single_case_fragment"
+            app:destination="@id/singleCaseFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="com.icl.surveillance.ui.patients.PatientsFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_patient_list">
+        <action
+            android:id="@+id/action_navigation_dashboard_to_fullCaseDetailsActivity"
+            app:destination="@id/fullCaseDetailsActivity" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_notifications"
+        android:name="com.icl.surveillance.ui.notifications.NotificationsFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/addClientFragment"
+        android:name="com.icl.surveillance.clients.AddClientFragment"
+        android:label="Add Client"
+        tools:layout="@layout/fragment_add_client" />
+    <activity
+        android:id="@+id/clientDetailsActivity"
+        android:name="com.icl.surveillance.ui.patients.ClientDetailsActivity"
+        android:label="activity_client_details"
+        tools:layout="@layout/activity_client_details" />
+    <fragment
+        android:id="@+id/singleCaseFragment"
+        android:name="com.icl.surveillance.ui.home.SingleCaseFragment"
+        android:label="MOH 502 - Case Based Reporting Form"
+        tools:layout="@layout/fragment_single_case">
+        <action
+            android:id="@+id/action_singleCaseFragment_to_addClientFragment"
+            app:destination="@id/addClientFragment" />
+        <action
+            android:id="@+id/action_singleCaseFragment_to_navigation_dashboard"
+            app:destination="@id/navigation_dashboard" />
+    </fragment>
+    <activity
+        android:id="@+id/fullCaseDetailsActivity"
+        android:name="com.icl.surveillance.ui.patients.FullCaseDetailsActivity"
+        android:label="activity_full_case_details"
+        tools:layout="@layout/activity_full_case_details" />
+</navigation>

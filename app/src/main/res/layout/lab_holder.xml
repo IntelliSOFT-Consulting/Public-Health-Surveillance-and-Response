@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:text="Date specimen received in lab"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_specimen_received_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:textStyle="normal"
+            tools:text="12/04/2025" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="8dp"
+        android:background="#CCCCCC" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:text="Specimen Condition"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_specimen_condition"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:textStyle="normal"
+            tools:text="Good" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="8dp"
+        android:background="#CCCCCC" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:text="Measles IgM"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_measles_igm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:textStyle="normal"
+            tools:text="Positive" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="8dp"
+        android:background="#CCCCCC" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:text="Rubella IgM"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_rubella_igm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:textStyle="normal"
+            tools:text="Negative" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="8dp"
+        android:background="#CCCCCC" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:text="Date lab sent results to district"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_results_sent_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:textStyle="normal"
+            tools:text="14/04/2025" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="8dp"
+        android:background="#CCCCCC" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:text="Final Classification"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_final_classification"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:textStyle="normal"
+            tools:text="Confirmed" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="8dp"
+        android:background="#CCCCCC" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:text="H. Sub County Contact Person"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_subcounty_contact"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:textStyle="normal"
+            tools:text="Dr. Jane Doe" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="8dp"
+        android:background="#CCCCCC" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:text="H1. Form completed by"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_form_completed_by"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:textStyle="normal"
+            tools:text="Mr. John Smith" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="8dp"
+        android:background="#CCCCCC" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:text="Name of person completing form"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_form_completer_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:textStyle="normal"
+            tools:text="Alice Wanjiku" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="8dp"
+        android:background="#CCCCCC" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:text="Designation"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_designation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:textStyle="normal"
+            tools:text="Surveillance Officer" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="8dp"
+        android:background="#CCCCCC" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:text="Sign"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_signature"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:textStyle="normal"
+            tools:text="_________________" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="8dp"
+        android:background="#CCCCCC" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:text="Name"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_subcounty_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:textStyle="normal"
+            tools:text="John Doe" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="8dp"
+        android:background="#CCCCCC" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:text="Designation"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_subcounty_designation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:textStyle="normal"
+            tools:text="Health Officer" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="8dp"
+        android:background="#CCCCCC" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:text="Phone No"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_subcounty_phone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:textStyle="normal"
+            tools:text="0701234567" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="8dp"
+        android:background="#CCCCCC" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:text="Email"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_subcounty_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginEnd="@dimen/small_text_margin"
+            android:layout_marginBottom="@dimen/small_text_margin"
+            android:layout_weight="1"
+            android:textStyle="normal"
+            tools:text="johndoe@example.com" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="8dp"
+        android:background="#CCCCCC" />
+
+</LinearLayout>
