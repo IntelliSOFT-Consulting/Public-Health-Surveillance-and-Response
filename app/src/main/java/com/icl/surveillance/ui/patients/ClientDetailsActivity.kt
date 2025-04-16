@@ -53,7 +53,7 @@ class ClientDetailsActivity : AppCompatActivity() {
   }
 
   private fun onItemClicked(encounterItem: PatientListViewModel.EncounterItem) {
-    FormatterClass().saveSharedPref("encounterId", encounterItem.id, this@ClientDetailsActivity)
+//    FormatterClass().saveSharedPref("encounterId", encounterItem.id, this@ClientDetailsActivity)
     val intent = Intent(this@ClientDetailsActivity, CaseDetailsActivity::class.java)
     startActivity(intent)
   }

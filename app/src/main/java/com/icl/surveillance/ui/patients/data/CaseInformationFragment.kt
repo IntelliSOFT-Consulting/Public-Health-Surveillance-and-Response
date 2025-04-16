@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.fhir.FhirEngine
 import com.icl.surveillance.adapters.PatientDetailsRecyclerViewAdapter
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
-import com.icl.surveillance.databinding.FragmentLabInformationBinding
+import com.icl.surveillance.databinding.FragmentCaseInformationBinding
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.ui.patients.AddCaseActivity
 import com.icl.surveillance.ui.patients.PatientListViewModel
@@ -24,10 +24,10 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 /**
- * A simple [Fragment] subclass. Use the [LabInformationFragment.newInstance] factory method to
+ * A simple [Fragment] subclass. Use the [CaseInformationFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class LabInformationFragment : Fragment() {
+class CaseInformationFragment : Fragment() {
   // TODO: Rename and change types of parameters
   private var param1: String? = null
   private var param2: String? = null
@@ -42,7 +42,7 @@ class LabInformationFragment : Fragment() {
 
   private lateinit var fhirEngine: FhirEngine
   private lateinit var patientDetailsViewModel: ClientDetailsViewModel
-  private var _binding: FragmentLabInformationBinding? = null
+  private var _binding: FragmentCaseInformationBinding? = null
 
   // This property is only valid between onCreateView and
   // onDestroyView.
@@ -55,7 +55,7 @@ class LabInformationFragment : Fragment() {
       savedInstanceState: Bundle?
   ): View? {
 
-    _binding = FragmentLabInformationBinding.inflate(inflater, container, false)
+    _binding = FragmentCaseInformationBinding.inflate(inflater, container, false)
     val root: View = binding.root
 
     return root
@@ -77,7 +77,7 @@ class LabInformationFragment : Fragment() {
             .get(ClientDetailsViewModel::class.java)
 
     val adapter = PatientDetailsRecyclerViewAdapter(this::onItemClicked)
-    binding.patientList.adapter = adapter
+    //    binding.patientList.adapter = adapter
 
     //    patientDetailsViewModel.livePatientData.observe(viewLifecycleOwner) {
     //      println("Loading **** ${it.count()} Records")
@@ -87,11 +87,10 @@ class LabInformationFragment : Fragment() {
 
     binding.apply {
       fab.setOnClickListener {
-        FormatterClass()
-            .saveSharedPref("questionnaire", "measles-lab-results.json", requireContext())
-        FormatterClass().saveSharedPref("title", "Lab Results", requireContext())
+        FormatterClass().saveSharedPref("questionnaire", "measles-case.json", requireContext())
+        FormatterClass().saveSharedPref("title", "Measles Case", requireContext())
         val intent = Intent(requireContext(), AddCaseActivity::class.java)
-        intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "measles-lab-results.json")
+        intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "measles-case.json")
         startActivity(intent)
       }
     }
@@ -106,12 +105,12 @@ class LabInformationFragment : Fragment() {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment LabInformationFragment.
+     * @return A new instance of fragment CaseInformationFragment.
      */
     // TODO: Rename and change types and number of parameters
     @JvmStatic
     fun newInstance(param1: String, param2: String) =
-        LabInformationFragment().apply {
+        CaseInformationFragment().apply {
           arguments =
               Bundle().apply {
                 putString(ARG_PARAM1, param1)

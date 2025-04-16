@@ -6,15 +6,16 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 
 class ViewPagerAdapter(fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {
-  override fun getItemCount(): Int = 4
+  override fun getItemCount(): Int = 5
 
   override fun createFragment(position: Int): Fragment {
     return when (position) {
-      0 -> LabInformationFragment()
-      1 -> KEMRLabFragment()
-      2 -> SpecimenFragment()
-      3 -> RegionalFragment()
-      else -> LabInformationFragment()
+      0 -> ReportingSiteFragment()
+      1 -> IdentificationFragment()
+      2 -> ClinicalInformationFragment()
+      3 -> CaseInformationFragment()
+      4 -> LabInformationFragment()
+      else -> ReportingSiteFragment()
     }
   }
 }

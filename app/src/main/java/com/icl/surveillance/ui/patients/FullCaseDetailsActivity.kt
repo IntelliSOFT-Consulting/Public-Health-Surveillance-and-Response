@@ -8,10 +8,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.fhir.FhirEngine
+import com.google.android.material.tabs.TabLayoutMediator
 import com.icl.surveillance.R
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.databinding.ActivityFullCaseDetailsBinding
 import com.icl.surveillance.fhir.FhirApplication
+import com.icl.surveillance.ui.patients.data.ViewPagerAdapter
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
@@ -42,6 +44,22 @@ class FullCaseDetailsActivity : AppCompatActivity() {
     patientDetailsViewModel.livecaseData.observe(this) {
       println("Patient Detail Information ${it.name}")
       binding.apply {
+        val adapter = ViewPagerAdapter(this@FullCaseDetailsActivity)
+        viewPager.adapter = adapter
+
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+              tab.text =
+                  when (position) {
+                    0 -> "Reporting Site "
+                    1 -> "Identification "
+                    2 -> "Clinical Information "
+                    3 -> "Measles Case "
+                    4 -> "Lab Results "
+                    else -> "Reporting Site"
+                  }
+            }
+            .attach()
+
         epidNo.text = it.epid
         tvName.text = it.name
         tvSex.text = it.sex
@@ -72,10 +90,10 @@ class FullCaseDetailsActivity : AppCompatActivity() {
     return true
   }
 
-  override fun onCreateOptionsMenu(menu: Menu): Boolean {
-    menuInflater.inflate(R.menu.menu_main, menu)
-    return true
-  }
+//  override fun onCreateOptionsMenu(menu: Menu): Boolean {
+//    menuInflater.inflate(R.menu.menu_main, menu)
+//    return true
+//  }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     return when (item.itemId) {

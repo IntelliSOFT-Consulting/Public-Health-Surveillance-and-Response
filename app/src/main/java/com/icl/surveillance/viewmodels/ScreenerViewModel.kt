@@ -47,7 +47,11 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
    *
    * @param questionnaireResponse screener encounter questionnaire response
    */
-  fun completeAssessment(questionnaireResponse: QuestionnaireResponse, patientId: String) {
+  fun completeAssessment(
+      questionnaireResponse: QuestionnaireResponse,
+      patientId: String,
+      encounter: String
+  ) {
     viewModelScope.launch {
       val bundle = ResourceMapper.extract(questionnaireResource, questionnaireResponse)
       val context = FhirContext.forR4()
@@ -67,9 +71,9 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
           /** Extract Observations, Patient Data */
           val qh = QuestionnaireHelper()
-          val encounterId=generateUuid()
-          val enc=qh.generalEncounter(null)
-          enc.id=encounterId
+          val encounterId = generateUuid()
+          val enc = qh.generalEncounter(encounter)
+          enc.id = encounterId
           bundle.addEntry().setResource(enc).request.url = "Encounter"
 
           val json = JSONObject(questionnaire)
@@ -175,7 +179,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
               }
             }
           }
- 
+
           val subjectReference = Reference("Patient/$patientId")
           val title = "Measles Case"
           saveResources(bundle, subjectReference, encounterId, title)

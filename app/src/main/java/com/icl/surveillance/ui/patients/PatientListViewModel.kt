@@ -123,7 +123,11 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
 
               item =
                   item.copy(
-                      epid = epid, subCounty = subCounty, county = county, caseOnsetDate = onset)
+                      encounterId = it.logicalId,
+                      epid = epid,
+                      subCounty = subCounty,
+                      county = county,
+                      caseOnsetDate = onset)
             } ?: println("No Encounter found with reasonCode 'Case Information'")
           } catch (e: Exception) {
             e.printStackTrace()
@@ -140,6 +144,7 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
   data class PatientItem(
       val id: String,
       val resourceId: String,
+      val encounterId: String,
       val name: String,
       val gender: String,
       val dob: LocalDate? = null,
@@ -323,7 +328,9 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
   }
 }
 
-internal fun Patient.toPatientItem(position: Int): PatientListViewModel.PatientItem {
+internal fun Patient.toPatientItem(
+    position: Int,
+): PatientListViewModel.PatientItem {
   // Show nothing if no values available for gender and date of birth.
   val patientId = if (hasIdElement()) idElement.idPart else ""
   val name = if (hasName()) name[0].nameAsSingleString else ""
@@ -345,6 +352,7 @@ internal fun Patient.toPatientItem(position: Int): PatientListViewModel.PatientI
 
   return PatientListViewModel.PatientItem(
       id = position.toString(),
+      encounterId = "encounterId",
       resourceId = patientId,
       name = " $name",
       gender = gender ?: "",
