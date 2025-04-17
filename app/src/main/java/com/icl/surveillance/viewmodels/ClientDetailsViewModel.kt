@@ -173,6 +173,8 @@ class ClientDetailsViewModel(
             fhirEngine.search<Observation> {
               filter(Observation.ENCOUNTER, { value = "Encounter/${it.logicalId}" })
             }
+        obs.forEach { println("Observation Details :::: ${it.resource.value}") }
+
         residence = generateResponse(obs, "residence-setup")
         epid = generateResponse(obs, "EPID")
         county = generateResponse(obs, "a4-county")
@@ -298,6 +300,7 @@ class ClientDetailsViewModel(
         parentPhone = parentPhone,
 
         //      SECTION C
+
         dateFirstSeen = dateFirstSeen,
         dateSubCountyNotified = dateSubCountyNotified,
         hospitalized = hospitalized,

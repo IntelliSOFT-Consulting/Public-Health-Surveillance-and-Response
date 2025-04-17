@@ -32,6 +32,8 @@ class AddCaseActivity : AppCompatActivity() {
     enableEdgeToEdge()
     binding = ActivityAddCaseBinding.inflate(layoutInflater)
     setContentView(binding.root)
+    setSupportActionBar(binding.toolbar)
+    
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     val titleName = FormatterClass().getSharedPref("title", this@AddCaseActivity)
     supportActionBar.apply { title = titleName }

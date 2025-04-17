@@ -1,21 +1,14 @@
 package com.icl.surveillance.ui.patients.data
 
-import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.android.fhir.FhirEngine
-import com.icl.surveillance.adapters.PatientDiseaseRecyclerViewAdapter
-import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.databinding.FragmentCaseInformationBinding
 import com.icl.surveillance.fhir.FhirApplication
-import com.icl.surveillance.ui.patients.AddCaseActivity
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
@@ -89,33 +82,28 @@ class CaseInformationFragment : Fragment() {
             )
             .get(ClientDetailsViewModel::class.java)
 
-    val adapter = PatientDiseaseRecyclerViewAdapter(this::onItemClicked)
-    binding.patientList.adapter = adapter
-    binding.patientList.addItemDecoration(
-        DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
-          setDrawable(ColorDrawable(Color.LTGRAY))
-        },
-    )
-    patientDetailsViewModel.liveDiseaseData.observe(viewLifecycleOwner) {
-      if (it.isEmpty()) {
-        binding.tvNoCase.visibility = View.VISIBLE
-      } else {
-        binding.tvNoCase.visibility = View.GONE
-        binding.fab.visibility = View.GONE
-        adapter.submitList(it)
-      }
-    }
+    //    val adapter = PatientDiseaseRecyclerViewAdapter(this::onItemClicked)
+    //    binding.patientList.adapter = adapter
+    //    binding.patientList.addItemDecoration(
+    //        DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
+    //          setDrawable(ColorDrawable(Color.LTGRAY))
+    //        },
+    //    )
+    //    patientDetailsViewModel.liveDiseaseData.observe(viewLifecycleOwner) {
+    //      if (it.isEmpty()) {
+    //        binding.tvNoCase.visibility = View.VISIBLE
+    //      } else {
+    //        binding.tvNoCase.visibility = View.GONE
+    ////        binding.fab.visibility = View.GONE
+    //        adapter.submitList(it)
+    //      }
+    //    }
+    patientDetailsViewModel.getPatientInfo()
+    patientDetailsViewModel.livecaseData.observe(viewLifecycleOwner) {
+      binding.apply { tvOnset.text = it.onset }
 
-    patientDetailsViewModel.getPatientDiseaseData("Measles Case", "$encounterId", true)
+      //    patientDetailsViewModel.getPatientDiseaseData("Measles Case", "$encounterId", true)
 
-    binding.apply {
-      fab.setOnClickListener {
-        FormatterClass().saveSharedPref("questionnaire", "measles-case.json", requireContext())
-        FormatterClass().saveSharedPref("title", "Measles Case", requireContext())
-        val intent = Intent(requireContext(), AddCaseActivity::class.java)
-        intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "measles-case.json")
-        startActivity(intent)
-      }
     }
   }
 

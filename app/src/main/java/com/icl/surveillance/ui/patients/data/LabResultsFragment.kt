@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.fhir.FhirEngine
-import com.icl.surveillance.adapters.PatientDetailsRecyclerViewAdapter
+import com.icl.surveillance.R
+import com.icl.surveillance.adapters.LabRecyclerViewAdapter
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
-import com.icl.surveillance.databinding.FragmentClinicalInformationBinding
+import com.icl.surveillance.databinding.FragmentLabInformationBinding
+import com.icl.surveillance.databinding.FragmentLabResultsBinding
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.ui.patients.AddCaseActivity
 import com.icl.surveillance.ui.patients.PatientListViewModel
@@ -24,10 +26,10 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 /**
- * A simple [Fragment] subclass. Use the [ClinicalInformationFragment.newInstance] factory method to
- * create an instance of this fragment.
+ * A simple [Fragment] subclass. Use the [LabResultsFragment.newInstance] factory method to create
+ * an instance of this fragment.
  */
-class ClinicalInformationFragment : Fragment() {
+class LabResultsFragment : Fragment() {
   // TODO: Rename and change types of parameters
   private var param1: String? = null
   private var param2: String? = null
@@ -39,72 +41,82 @@ class ClinicalInformationFragment : Fragment() {
       param2 = it.getString(ARG_PARAM2)
     }
   }
-
+  
+  
   private lateinit var fhirEngine: FhirEngine
   private lateinit var patientDetailsViewModel: ClientDetailsViewModel
-  private var _binding: FragmentClinicalInformationBinding? = null
-
+  private var _binding: FragmentLabResultsBinding? = null
+  
   // This property is only valid between onCreateView and
   // onDestroyView.
   private val binding
     get() = _binding!!
-
+  
   override fun onCreateView(
-      inflater: LayoutInflater,
-      container: ViewGroup?,
-      savedInstanceState: Bundle?
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
   ): View? {
-
-    _binding = FragmentClinicalInformationBinding.inflate(inflater, container, false)
+    
+    _binding = FragmentLabResultsBinding.inflate(inflater, container, false)
     val root: View = binding.root
-
+    
     return root
   }
-
+  
+  override fun onResume() {
+    super.onResume()
+    try {
+      val encounterId = FormatterClass().getSharedPref("encounterId", requireContext())
+      patientDetailsViewModel.getPatientDiseaseData(
+        "Measles Lab Information", "$encounterId", false)
+    } catch (e: Exception) {
+      println(e.message)
+    }
+  }
+  
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-
+    
     val patientId = FormatterClass().getSharedPref("resourceId", requireContext())
     val encounterId = FormatterClass().getSharedPref("encounterId", requireContext())
-
+    
     fhirEngine = FhirApplication.fhirEngine(requireContext())
     patientDetailsViewModel =
-        ViewModelProvider(
-                this,
-                PatientDetailsViewModelFactory(
-                    requireActivity().application, fhirEngine, "$patientId"),
-            )
-            .get(ClientDetailsViewModel::class.java)
-
-    val adapter = PatientDetailsRecyclerViewAdapter(this::onItemClicked)
-    patientDetailsViewModel.getPatientInfo()
-    // getPatientDetailData("Measles Case", null)
-    patientDetailsViewModel.livecaseData.observe(viewLifecycleOwner) {
-      binding.apply {
-      
-        tvFirstSeen.text = it.dateFirstSeen
-        tvHospitalized.text = it.hospitalized
-        tvIpOp.text = it.ipNo
-        tvDiagnosis.text = it.diagnosis
-        tvMeans.text = it.diagnosisMeans
-        tvOtherSpecify.text = it.diagnosisMeansOther
-        tvVaccinated.text = it.wasPatientVaccinated
-        tvTwoMonths.text = it.twoMonthsVaccination
-        tvStatus.text = it.patientStatus
+      ViewModelProvider(
+        this,
+        PatientDetailsViewModelFactory(
+          requireActivity().application, fhirEngine, "$patientId"),
+      )
+        .get(ClientDetailsViewModel::class.java)
+    
+    val adapter = LabRecyclerViewAdapter(this::onItemClicked)
+    binding.patientList.adapter = adapter
+    
+    patientDetailsViewModel.liveLabData.observe(viewLifecycleOwner) {
+      if (it.isEmpty()) {
+        binding.tvNoCase.visibility = View.VISIBLE
+      } else {
+        binding.tvNoCase.visibility = View.GONE
+        binding.fab.visibility = View.GONE
+        adapter.submitList(it)
       }
     }
+    patientDetailsViewModel.getPatientDiseaseData("Measles Lab Information", "$encounterId", false)
+    
     binding.apply {
       fab.setOnClickListener {
-        FormatterClass().saveSharedPref("questionnaire", "measles-case.json", requireContext())
-        FormatterClass().saveSharedPref("title", "Measles Case", requireContext())
+        FormatterClass()
+          .saveSharedPref("questionnaire", "measles-lab-results.json", requireContext())
+        FormatterClass().saveSharedPref("title", "Lab Results", requireContext())
         val intent = Intent(requireContext(), AddCaseActivity::class.java)
-        intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "measles-case.json")
+        intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "measles-lab-results.json")
         startActivity(intent)
       }
     }
   }
-
-  private fun onItemClicked(encounterItem: PatientListViewModel.EncounterItem) {}
+  
+  private fun onItemClicked(encounterItem: PatientListViewModel.CaseLabResultsData) {}
 
   companion object {
     /**
@@ -113,12 +125,12 @@ class ClinicalInformationFragment : Fragment() {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ClinicalInformationFragment.
+     * @return A new instance of fragment LabResultsFragment.
      */
     // TODO: Rename and change types and number of parameters
     @JvmStatic
     fun newInstance(param1: String, param2: String) =
-        ClinicalInformationFragment().apply {
+        LabResultsFragment().apply {
           arguments =
               Bundle().apply {
                 putString(ARG_PARAM1, param1)

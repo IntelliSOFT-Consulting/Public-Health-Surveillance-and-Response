@@ -2,7 +2,6 @@ package com.icl.surveillance.ui.patients
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +27,8 @@ class FullCaseDetailsActivity : AppCompatActivity() {
     enableEdgeToEdge()
     binding = ActivityFullCaseDetailsBinding.inflate(layoutInflater)
     setContentView(binding.root)
+    
+    setSupportActionBar(binding.toolbar)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
     val patientId = FormatterClass().getSharedPref("resourceId", this@FullCaseDetailsActivity)
 
@@ -52,9 +53,10 @@ class FullCaseDetailsActivity : AppCompatActivity() {
                   when (position) {
                     0 -> "Reporting Site "
                     1 -> "Identification "
-                    2 -> "Clinical Information "
-                    3 -> "Measles Case "
-                    4 -> "Lab Results "
+                    2 -> "Measles Case "
+                    3 -> "Clinical Information "
+                    4 -> "Lab Information "
+                    5 -> "Lab Results "
                     else -> "Reporting Site"
                   }
             }
@@ -90,10 +92,10 @@ class FullCaseDetailsActivity : AppCompatActivity() {
     return true
   }
 
-//  override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//    menuInflater.inflate(R.menu.menu_main, menu)
-//    return true
-//  }
+  //  override fun onCreateOptionsMenu(menu: Menu): Boolean {
+  //    menuInflater.inflate(R.menu.menu_main, menu)
+  //    return true
+  //  }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     return when (item.itemId) {

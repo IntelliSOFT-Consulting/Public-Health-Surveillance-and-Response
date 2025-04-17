@@ -2,9 +2,12 @@ package com.icl.surveillance.ui.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.icl.surveillance.R
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
@@ -54,6 +57,8 @@ class SingleCaseFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    setUpActionBar()
+    setHasOptionsMenu(true)
     binding.apply {
       val bundle = Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-client.json") }
       btnAdd.setOnClickListener {
@@ -63,6 +68,23 @@ class SingleCaseFragment : Fragment() {
       btnList.setOnClickListener {
         findNavController().navigate(R.id.action_singleCaseFragment_to_navigation_dashboard, bundle)
       }
+    }
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    return when (item.itemId) {
+      android.R.id.home -> {
+        NavHostFragment.findNavController(this).navigateUp()
+        true
+      }
+      else -> false
+    }
+  }
+
+  private fun setUpActionBar() {
+    (requireActivity() as AppCompatActivity).supportActionBar?.apply {
+      title = requireContext().getString(R.string.moh)
+      setDisplayHomeAsUpEnabled(true)
     }
   }
 

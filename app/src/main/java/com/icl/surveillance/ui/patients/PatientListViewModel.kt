@@ -160,7 +160,11 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
           //              item.copy()
           item
         }
-        .let { patients.addAll(it) }
+        .let {
+          val sortedCases = it.sortedByDescending { q -> q.lastUpdated }
+
+          patients.addAll(sortedCases)
+        }
 
     return patients
   }
@@ -182,7 +186,8 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
       val subCounty: String,
       val caseOnsetDate: String,
       val status: String = "Pending Results",
-      val labResults: String = "Pending"
+      val labResults: String = "Pending",
+      val lastUpdated: String
   ) {
     override fun toString(): String = name
   }
@@ -420,6 +425,16 @@ internal fun Patient.toPatientItem(
   var subCounty = ""
   var caseOnsetDate = ""
 
+  var lastUpdated = ""
+  if (hasIdentifier()) {
+    val id = identifier.find { it.system == "system-creation" }
+    if (id != null) {
+      lastUpdated = id.value
+    }
+  } else {
+    lastUpdated = ""
+  }
+
   return PatientListViewModel.PatientItem(
       id = position.toString(),
       encounterId = "encounterId",
@@ -435,5 +450,5 @@ internal fun Patient.toPatientItem(
       county = county,
       subCounty = subCounty,
       caseOnsetDate = caseOnsetDate,
-  )
+      lastUpdated = lastUpdated)
 }

@@ -33,6 +33,9 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
     } else {
       this.status.text = patientItem.status
     }
+    if (patientItem.labResults == "Positive") {
+      this.labResults.setTextColor(this.labResults.context.getColor(R.color.red))
+    }
 
     this.itemView.setOnClickListener { onItemClicked(patientItem) }
   }

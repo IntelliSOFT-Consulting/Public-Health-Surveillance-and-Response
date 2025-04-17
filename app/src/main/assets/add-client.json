@@ -32,7 +32,7 @@
   "item": [
     {
       "linkId": "section-a",
-      "text": "A. Name of Site Reporting & Disease being reported",
+      "text": "Name of Site Reporting & Disease being reported",
       "type": "group",
       "extension": [
         {
@@ -52,28 +52,33 @@
       "item": [
         {
           "linkId": "a1-health-facility",
-          "text": "A1. Health Facility",
+          "text": "Health Facility",
+          "required": true,
           "type": "string"
         },
         {
           "linkId": "a2-type",
-          "text": "A2. Type",
+          "text": "Type",
+          "required": true,
           "type": "string"
         },
         {
           "linkId": "a3-sub-county",
-          "text": "A3. Sub County",
+          "text": "Sub County",
+          "required": true,
           "type": "string"
         },
         {
           "linkId": "a4-county",
-          "text": "A4. County",
+          "text": "County",
+          "required": true,
           "type": "string"
         },
         {
           "linkId": "a5-disease-reported",
-          "text": "A5. Disease reported",
+          "text": "Disease reported",
           "type": "choice",
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -135,6 +140,7 @@
           "linkId": "a5-disease-other-specify",
           "text": "If Other, specify",
           "type": "string",
+          "required": true,
           "enableWhen": [
             {
               "question": "a5-disease-reported",
@@ -149,7 +155,7 @@
     },
     {
       "linkId": "section-b",
-      "text": "B. Identification",
+      "text": "Identification",
       "type": "group",
       "extension": [
         {
@@ -558,8 +564,8 @@
       ]
     },
     {
-      "linkId": "section-c",
-      "text": "C. Clinical Information",
+      "linkId": "section-d",
+      "text": "Measles Case Information",
       "type": "group",
       "extension": [
         {
@@ -579,7 +585,7 @@
       "item": [
         {
           "linkId": "c1-date-onset",
-          "text": "C1. Date of onset of illness",
+          "text": "Date of onset of illness",
           "type": "date",
           "extension": [
             {
@@ -603,59 +609,132 @@
           ]
         },
         {
-          "linkId": "c2-date-first-seen",
-          "text": "C2. Date first seen at health facility",
-          "type": "date",
           "extension": [
             {
-              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-              "valueString": "Cannot be a date in the future"
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "check-box",
+                    "display": "Check Box"
+                  }
+                ],
+                "text": "Check box"
+              }
             },
             {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueDate": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-                    "valueExpression": {
-                      "language": "text/fhirpath",
-                      "expression": "today()"
-                    }
-                  }
-                ]
-              }
+              "url": "https://github.com/google/android-fhir/StructureDefinition/dialog"
             }
-          ]
-        },
-        {
-          "linkId": "c3-date-notified",
-          "text": "C3. Date Health facility notified sub County level",
-          "type": "date",
-          "extension": [
-            {
-              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-              "valueString": "Cannot be a date in the future"
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueDate": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-                    "valueExpression": {
-                      "language": "text/fhirpath",
-                      "expression": "today()"
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "linkId": "c4-hospitalized",
-          "text": "C4. Hospitalized",
+          ],
+          "linkId": "f1",
           "type": "choice",
+          "repeats": true,
+          "text": "Clinical symptoms",
+          "item": [
+            {
+              "linkId": "f12",
+              "text": "Clinical symptoms",
+              "type": "display",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "flyover"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "fever",
+                "display": "Fever"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "rash",
+                "display": "Rash"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "cough",
+                "display": "Cough"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "coryza",
+                "display": "Coryza"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "conjunctivitis",
+                "display": "Conjunctivitis (red eyes)"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "f2",
+          "text": "Date of onset of rash",
+          "type": "date",
+          "enableWhen": [
+            {
+              "question": "f1",
+              "operator": "=",
+              "answerCoding": {
+                "code": "rash",
+                "display": "Rash"
+              }
+            }
+          ],
+          "required": true,
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "f3",
+          "text": "Type of rash",
+          "type": "choice",
+          "enableWhen": [
+            {
+              "question": "f1",
+              "operator": "=",
+              "answerCoding": {
+                "code": "rash",
+                "display": "Rash"
+              }
+            }
+          ],
+          "required": true,
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -677,133 +756,21 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "1",
-                "display": "Yes"
+                "code": "maculopapular",
+                "display": "Maculopapular"
               }
             },
             {
               "valueCoding": {
-                "code": "2",
-                "display": "No"
+                "code": "other",
+                "display": "Other"
               }
             }
           ]
-        },
-        {
-          "linkId": "c4-date-admission",
-          "text": "Date of Admission",
-          "type": "date",
-          "extension": [
-            {
-              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-              "valueString": "Cannot be a date in the future"
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueDate": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-                    "valueExpression": {
-                      "language": "text/fhirpath",
-                      "expression": "today()"
-                    }
-                  }
-                ]
-              }
-            }
-          ],
-          "enableWhen": [
-            {
-              "question": "c4-hospitalized",
-              "operator": "=",
-              "answerCoding": {
-                "code": "1"
-              }
-            }
-          ]
-        },
-        {
-          "linkId": "c5-ip-op-no",
-          "text": "C5. IP/OP No.",
-          "type": "string"
-        },
-        {
-          "linkId": "c6-diagnosis",
-          "text": "C6. Diagnosis",
-          "type": "string"
-        },
-        {
-          "linkId": "c7-means-of-diagnosis",
-          "text": "C7. Means of diagnosis",
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "radio-button",
-                    "display": "Radio Button"
-                  }
-                ]
-              }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-              "valueCode": "horizontal"
-            }
-          ],
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "CLINICAL",
-                "display": "Clinical"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "LAB",
-                "display": "Lab"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "EPI",
-                "display": "Epi linkage"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "OTHER",
-                "display": "Other (specify)"
-              }
-            }
-          ]
-        },
-        {
-          "linkId": "c7-other-specify",
-          "text": "Other (specify)",
-          "type": "string",
-          "enableWhen": [
-            {
-              "question": "c7-means-of-diagnosis",
-              "operator": "=",
-              "answerCoding": {
-                "code": "OTHER"
-              }
-            }
-          ]
-        },
-        {
-          "linkId": "c8-vaccination-history",
-          "text": "C8. Vaccination History",
-          "type": "display"
         },
         {
           "linkId": "c8a-vaccinated",
-          "text": "a. Was the patient vaccinated against illness (including campaign)?",
+          "text": "Was the patient vaccinated against illness (including campaign)?",
           "type": "choice",
           "extension": [
             {
@@ -860,7 +827,7 @@
         },
         {
           "linkId": "c8b-recent-vaccine",
-          "text": "b. Any vaccination given in the last 30 days?",
+          "text": "Any vaccination given in the last 30 days?",
           "type": "choice",
           "extension": [
             {
@@ -903,7 +870,7 @@
         },
         {
           "linkId": "c8b-date-of-vaccine",
-          "text": "Date of vaccination",
+          "text": "Date of last vaccination",
           "type": "date",
           "extension": [
             {
@@ -936,8 +903,197 @@
           ]
         },
         {
+          "linkId": "f4a",
+          "text": "Was home of patient visited for contact investigation?",
+          "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "f4b",
+          "text": "If Yes, Date of visit",
+          "type": "date",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "f4a",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "f5",
+          "text": "Is the case epidemiologically linked to a lab-confirmed case?",
+          "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "unknown",
+                "display": "Unknown"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "section-c",
+      "text": "Clinical Information",
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ],
+            "text": "Page"
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "c2-date-first-seen",
+          "text": "Date first seen at health facility",
+          "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "c3-date-notified",
+          "text": "Date Health facility notified sub County level",
+          "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
           "linkId": "inpatient-outpatient",
-          "text": "Inpatient/Outpatient",
+          "text": "Status of Patient",
           "type": "choice",
           "extension": [
             {
@@ -960,17 +1116,57 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "Inpatient",
+                "code": "inpatient",
                 "display": "Inpatient"
               }
             },
             {
               "valueCoding": {
-                "code": "Outpatient",
+                "code": "outpatient",
                 "display": "Outpatient"
               }
             }
           ]
+        },
+        {
+          "linkId": "c4-date-admission",
+          "text": "Date of Admission",
+          "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "inpatient-outpatient",
+              "operator": "=",
+              "answerCoding": {
+                "code": "inpatient",
+                "display": "Inpatient"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "c5-ip-op-no",
+          "text": "IP/OP No.",
+          "type": "string"
         },
         {
           "linkId": "c9-patient-outcome",

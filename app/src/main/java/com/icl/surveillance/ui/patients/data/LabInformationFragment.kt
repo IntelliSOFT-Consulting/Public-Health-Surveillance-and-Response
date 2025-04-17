@@ -105,7 +105,7 @@ class LabInformationFragment : Fragment() {
       fab.setOnClickListener {
         FormatterClass()
             .saveSharedPref("questionnaire", "measles-lab-results.json", requireContext())
-        FormatterClass().saveSharedPref("title", "Lab Results", requireContext())
+        FormatterClass().saveSharedPref("title", "Lab Information", requireContext())
         val intent = Intent(requireContext(), AddCaseActivity::class.java)
         intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "measles-lab-results.json")
         startActivity(intent)
