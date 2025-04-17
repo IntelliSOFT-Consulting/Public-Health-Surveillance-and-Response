@@ -1,15 +1,10 @@
 {
   "resourceType": "Questionnaire",
-  "version": "1.0.2",
-  "name": "Identification",
-  "title": "Case Notification Questionnaire",
-  "status": "active",
-  "date": "2025-04-12T08:01:15.064Z",
-  "approvalDate": "2025-04-12",
-  "lastReviewDate": "2025-04-12",
-  "subjectType": [
-    "Patient"
-  ],
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/4.0/StructureDefinition/Questionnaire"
+    ]
+  },
   "extension": [
     {
       "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-launchContext",
@@ -23,32 +18,24 @@
     {
       "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-itemExtractionContext",
       "valueExpression": {
+        "name": "patient",
         "language": "application/x-fhir-query",
-        "expression": "Patient",
-        "name": "patient"
+        "expression": "Patient"
       }
     }
   ],
+  "version": "1.0.2",
+  "name": "Identification",
+  "title": "Case Notification Questionnaire",
+  "status": "active",
+  "subjectType": [
+    "Patient"
+  ],
+  "date": "2025-04-12T08:01:15.064Z",
+  "approvalDate": "2025-04-12",
+  "lastReviewDate": "2025-04-12",
   "item": [
     {
-      "linkId": "section-a",
-      "text": "Name of Site Reporting & Disease being reported",
-      "type": "group",
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-          "valueCodeableConcept": {
-            "coding": [
-              {
-                "system": "http://hl7.org/fhir/questionnaire-item-control",
-                "code": "page",
-                "display": "Page"
-              }
-            ],
-            "text": "Page"
-          }
-        }
-      ],
       "item": [
         {
           "linkId": "a1-health-facility",
@@ -151,7 +138,24 @@
             }
           ]
         }
-      ]
+      ],
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "section-a",
+      "text": "Name of Site Reporting & Disease being reported"
     },
     {
       "linkId": "section-b",
@@ -176,7 +180,6 @@
         {
           "type": "group",
           "linkId": "patient-names",
-          "text": "",
           "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.name",
           "item": [
             {
@@ -1022,24 +1025,6 @@
       ]
     },
     {
-      "linkId": "section-c",
-      "text": "Clinical Information",
-      "type": "group",
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-          "valueCodeableConcept": {
-            "coding": [
-              {
-                "system": "http://hl7.org/fhir/questionnaire-item-control",
-                "code": "page",
-                "display": "Page"
-              }
-            ],
-            "text": "Page"
-          }
-        }
-      ],
       "item": [
         {
           "linkId": "c2-date-first-seen",
@@ -1210,6 +1195,257 @@
               }
             }
           ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "lab-information",
+          "text": "Complete Lab Information?",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        }
+      ],
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "section-c",
+      "text": "Clinical Information"
+    },
+    {
+      "item": [
+        {
+          "linkId": "g1a",
+          "text": "Specimen Collection (To be completed by the health facility)",
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "g1a1",
+          "text": "If no, why?",
+          "type": "string",
+          "enableWhen": [
+            {
+              "question": "g1a",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "g1b1",
+          "text": "Date(s) of specimen collection",
+          "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "g1c",
+          "text": "Specimen type",
+          "type": "choice",
+          "repeats": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "stool",
+                "display": "Stool"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "blood",
+                "display": "Blood"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "csf",
+                "display": "CSF"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "ops",
+                "display": "OPS"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "ns",
+                "display": "NS"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "animal_tissue",
+                "display": "Animal tissue"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "other",
+                "display": "Other"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "g1c1",
+          "text": "If Other, specify specimen type",
+          "type": "string",
+          "enableWhen": [
+            {
+              "question": "g1c",
+              "operator": "=",
+              "answerCoding": {
+                "code": "other"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "g1d",
+          "text": "Date specimen sent to the lab",
+          "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "g1e",
+          "text": "Name of the lab",
+          "type": "string"
+        }
+      ],
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "section-lab",
+      "text": "Lab Information",
+      "enableWhen": [
+        {
+          "question": "lab-information",
+          "operator": "=",
+          "answerCoding": {
+            "code": "no",
+            "display": "No"
+          }
         }
       ]
     }

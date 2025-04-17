@@ -18,18 +18,18 @@ class LoginActivity : AppCompatActivity() {
   override fun onStart() {
     super.onStart()
 //
-//    try {
-//
-//      val loggedIn = FormatterClass().getSharedPref("login", this@LoginActivity)
-//      if (loggedIn != null) {
-//        val intent = Intent(this@LoginActivity, MainActivity::class.java)
-//        startActivity(intent)
-//        this@LoginActivity.finish()
-//      }
-//    } catch (e: Exception) {
-//
-//      e.printStackTrace()
-//    }
+    try {
+
+      val loggedIn = FormatterClass().getSharedPref("login", this@LoginActivity)
+      if (loggedIn != null) {
+        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        startActivity(intent)
+        this@LoginActivity.finish()
+      }
+    } catch (e: Exception) {
+
+      e.printStackTrace()
+    }
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {

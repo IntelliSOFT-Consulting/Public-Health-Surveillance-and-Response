@@ -149,6 +149,17 @@ class ClientDetailsViewModel(
     var street = ""
     var town = ""
 
+    var clinicalSymptoms = ""
+    var rashDate = ""
+    var rashType = ""
+    var patientVaccinated = ""
+    var patientDoses = ""
+    var vaccineDateThirtyDays = ""
+    var lastDoseDate = ""
+    var homeVisited = ""
+    var homeVisitedDate = ""
+    var epiLinked = ""
+
     searchResult.first().let {
       logicalId = it.resource.logicalId
       name =
@@ -175,11 +186,25 @@ class ClientDetailsViewModel(
             }
         obs.forEach { println("Observation Details :::: ${it.resource.value}") }
 
+        // Case Details
+
+        onset = generateResponse(obs, "c1-date-onset")
+        clinicalSymptoms = generateResponse(obs, "f1")
+        rashDate = generateResponse(obs, "f2")
+        rashType = generateResponse(obs, "f3")
+        patientVaccinated = generateResponse(obs, "c8a-vaccinated")
+        patientDoses = generateResponse(obs, "c8a-no-of-doses")
+        vaccineDateThirtyDays = generateResponse(obs, "c8b-recent-vaccine")
+        lastDoseDate = generateResponse(obs, "c8b-date-of-vaccine")
+        homeVisited = generateResponse(obs, "f4a")
+        homeVisitedDate = generateResponse(obs, "f4b")
+        epiLinked = generateResponse(obs, "f5")
+
+        //        End of Case details
         residence = generateResponse(obs, "residence-setup")
         epid = generateResponse(obs, "EPID")
         county = generateResponse(obs, "a4-county")
         subCounty = generateResponse(obs, "a3-sub-county")
-        onset = generateResponse(obs, "c1-date-onset")
         facility = generateResponse(obs, "a1-health-facility")
         type = generateResponse(obs, "a2-type")
         disease = generateResponse(obs, "a5-disease-reported")
@@ -279,6 +304,21 @@ class ClientDetailsViewModel(
         subCounty = subCounty,
         onset = onset,
         logicalId = logicalId,
+
+        //      Case Information
+
+        clinicalSymptoms = clinicalSymptoms,
+        rashDate = rashDate,
+        rashType = rashType,
+        patientVaccinated = patientVaccinated,
+        patientDoses = patientDoses,
+        vaccineDateThirtyDays = vaccineDateThirtyDays,
+        lastDoseDate = lastDoseDate,
+        homeVisited = homeVisited,
+        homeVisitedDate = homeVisitedDate,
+        epiLinked = epiLinked,
+
+        //      End of Case
 
         //      SECTION A
         facility = facility,

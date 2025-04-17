@@ -267,7 +267,18 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
       val noOfDoses: String,
       val twoMonthsVaccination: String,
       val patientStatus: String,
-      val vaccineDate: String
+      val vaccineDate: String,
+      // Case Details
+      val clinicalSymptoms: String,
+      val rashDate: String,
+      val rashType: String,
+      val patientVaccinated: String,
+      val patientDoses: String,
+      val vaccineDateThirtyDays: String,
+      val lastDoseDate: String,
+      val homeVisited: String,
+      val homeVisitedDate: String,
+      val epiLinked: String
   )
 
   data class PatientDetailOverview(

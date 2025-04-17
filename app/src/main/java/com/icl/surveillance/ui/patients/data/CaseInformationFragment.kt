@@ -82,25 +82,21 @@ class CaseInformationFragment : Fragment() {
             )
             .get(ClientDetailsViewModel::class.java)
 
-    //    val adapter = PatientDiseaseRecyclerViewAdapter(this::onItemClicked)
-    //    binding.patientList.adapter = adapter
-    //    binding.patientList.addItemDecoration(
-    //        DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
-    //          setDrawable(ColorDrawable(Color.LTGRAY))
-    //        },
-    //    )
-    //    patientDetailsViewModel.liveDiseaseData.observe(viewLifecycleOwner) {
-    //      if (it.isEmpty()) {
-    //        binding.tvNoCase.visibility = View.VISIBLE
-    //      } else {
-    //        binding.tvNoCase.visibility = View.GONE
-    ////        binding.fab.visibility = View.GONE
-    //        adapter.submitList(it)
-    //      }
-    //    }
     patientDetailsViewModel.getPatientInfo()
     patientDetailsViewModel.livecaseData.observe(viewLifecycleOwner) {
-      binding.apply { tvOnset.text = it.onset }
+      binding.apply {
+        tvOnset.text = it.onset
+        tvClinicalSymptoms.text = it.clinicalSymptoms
+        tvOnsetRashDate.text = it.rashDate
+        tvRashType.text = it.rashType
+        tvVaccinated.text = it.patientVaccinated
+        tvDoses.text = it.patientDoses
+        tvVaccination30Days.text = it.vaccineDateThirtyDays
+        tvLastVaccinationDate.text = it.lastDoseDate
+        tvHomeVisit.text = it.homeVisited
+        tvVisitDate.text = it.homeVisitedDate
+        tvEpiLink.text = it.epiLinked
+      }
 
       //    patientDetailsViewModel.getPatientDiseaseData("Measles Case", "$encounterId", true)
 

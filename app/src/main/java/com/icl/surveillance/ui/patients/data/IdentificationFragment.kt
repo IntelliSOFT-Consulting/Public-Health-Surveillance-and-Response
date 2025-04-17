@@ -82,7 +82,7 @@ class IdentificationFragment : Fragment() {
         tvResidence.text = it.residence
         tvParent.text = it.parent
         tvHouseNo.text = it.houseNo
-        tvNeigbor.text = it.neighbour
+        tvNeighbor.text = it.neighbour
         tvStreet.text = it.street
         tvTown.text = it.town
         tvSubCounty.text = it.subCountyName

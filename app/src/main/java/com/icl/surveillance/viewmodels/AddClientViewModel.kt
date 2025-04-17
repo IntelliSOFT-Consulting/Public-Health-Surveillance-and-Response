@@ -345,6 +345,105 @@ class AddClientViewModel(application: Application, private val state: SavedState
               }
             }
           }
+          if (sectionLinkId == "section-lab" && section.has("item")) {
+            val facilityItems = section.getJSONArray("item")
+
+            for (j in 0 until facilityItems.length()) {
+              val item = facilityItems.getJSONObject(j)
+
+              when (val linkId = item.getString("linkId")) {
+                "g1a" -> {
+                  val code = extractResponseCode(item, "valueCoding")
+                  if (code.isNotEmpty()) {
+
+                    val label = "Specimen Collection (To be completed by the health facility)"
+                    createObs(
+                        qh = qh,
+                        linkId = linkId,
+                        code = code,
+                        label = label,
+                        subjectReference = subjectReference,
+                        encounterReference = encounterReference)
+                  }
+                }
+                "g1a1" -> {
+                  val code = extractResponse(item, "valueString")
+                  val label = "If no, why?"
+
+                  createObs(
+                      qh = qh,
+                      linkId = linkId,
+                      code = code,
+                      label = label,
+                      subjectReference = subjectReference,
+                      encounterReference = encounterReference)
+                }
+                "g1b1" -> {
+
+                  val code = extractResponse(item, "valueSDate")
+                  val label = "Date(s) of specimen collection"
+
+                  createObs(
+                      qh = qh,
+                      linkId = linkId,
+                      code = code,
+                      label = label,
+                      subjectReference = subjectReference,
+                      encounterReference = encounterReference)
+                }
+                "g1c" -> {
+
+                  val code = extractResponseCode(item, "valueCoding")
+                  val label = "Specimen type"
+
+                  createObs(
+                      qh = qh,
+                      linkId = linkId,
+                      code = code,
+                      label = label,
+                      subjectReference = subjectReference,
+                      encounterReference = encounterReference)
+                }
+                "g1c1" -> {
+
+                  val code = extractResponse(item, "valueString")
+                  val label = "If Other, specify specimen type"
+
+                  createObs(
+                      qh = qh,
+                      linkId = linkId,
+                      code = code,
+                      label = label,
+                      subjectReference = subjectReference,
+                      encounterReference = encounterReference)
+                }
+                "g1d" -> {
+
+                  val code = extractResponse(item, "valueSDate")
+                  val label = "Date specimen sent to the lab"
+                  createObs(
+                      qh = qh,
+                      linkId = linkId,
+                      code = code,
+                      label = label,
+                      subjectReference = subjectReference,
+                      encounterReference = encounterReference)
+                }
+                "g1e" -> {
+                  val code = extractResponse(item, "valueString")
+                  val label = "Name of the lab"
+
+                  createObs(
+                      qh = qh,
+                      linkId = linkId,
+                      code = code,
+                      label = label,
+                      subjectReference = subjectReference,
+                      encounterReference = encounterReference)
+                }
+              }
+            }
+          }
           if (sectionLinkId == "section-d" && section.has("item")) {
             val facilityItems = section.getJSONArray("item")
 
@@ -352,11 +451,28 @@ class AddClientViewModel(application: Application, private val state: SavedState
               val item = facilityItems.getJSONObject(j)
 
               when (val linkId = item.getString("linkId")) {
-                "f2" -> {
+                "f1" -> {
                   val code = extractResponseCode(item, "valueCoding")
+
+                  val obs = qh.codingQuestionnaire(linkId, "Clinical symptoms", code)
+                  obs.code.addCoding().setSystem("http://snomed.info/sct").setCode(linkId).display =
+                      "Clinical symptoms"
+                  obs.code.text = code
+                  createResource(obs, subjectReference, encounterReference)
+                }
+                "f2" -> {
+                  val code = extractResponse(item, "valueDate")
                   val obs = qh.codingQuestionnaire(linkId, "Date of onset of rash", code)
                   obs.code.addCoding().setSystem("http://snomed.info/sct").setCode(linkId).display =
                       "Date of onset of rash"
+                  obs.code.text = code
+                  createResource(obs, subjectReference, encounterReference)
+                }
+                "f3" -> {
+                  val code = extractResponseCode(item, "valueCoding")
+                  val obs = qh.codingQuestionnaire(linkId, "Type of rash", code)
+                  obs.code.addCoding().setSystem("http://snomed.info/sct").setCode(linkId).display =
+                      "Type of rash"
                   obs.code.text = code
                   createResource(obs, subjectReference, encounterReference)
                 }
@@ -365,6 +481,14 @@ class AddClientViewModel(application: Application, private val state: SavedState
                   val obs = qh.codingQuestionnaire(linkId, "Date of onset of illness", code)
                   obs.code.addCoding().setSystem("http://snomed.info/sct").setCode(linkId).display =
                       "Date of onset of illness"
+                  obs.code.text = code
+                  createResource(obs, subjectReference, encounterReference)
+                }
+                "c8b-date-of-vaccine" -> {
+                  val code = extractResponse(item, "valueDate")
+                  val obs = qh.codingQuestionnaire(linkId, "Date of last vaccination", code)
+                  obs.code.addCoding().setSystem("http://snomed.info/sct").setCode(linkId).display =
+                      "Date of last vaccination"
                   obs.code.text = code
                   createResource(obs, subjectReference, encounterReference)
                 }
@@ -385,7 +509,38 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     createResource(obs, subjectReference, encounterReference)
                   }
                 }
+                "c8a-vaccinated" -> {
+                  val code = extractResponseCode(item, "valueCoding")
+                  val obs =
+                      qh.codingQuestionnaire(
+                          linkId,
+                          "Was the patient vaccinated against illness (including campaign)?",
+                          code)
+                  obs.code.addCoding().setSystem("http://snomed.info/sct").setCode(linkId).display =
+                      "Was the patient vaccinated against illness (including campaign)?"
+                  obs.code.text = code
+                  createResource(obs, subjectReference, encounterReference)
+                }
+                "c8a-no-of-doses" -> {
+                  val code = extractResponse(item, "valueInteger")
+                  val obs = qh.codingQuestionnaire(linkId, "If yes, number of doses", code)
+                  obs.code.addCoding().setSystem("http://snomed.info/sct").setCode(linkId).display =
+                      "If yes, number of doses"
+                  obs.code.text = code
+                  createResource(obs, subjectReference, encounterReference)
+                }
 
+                "c8b-recent-vaccine" -> {
+                  val code = extractResponseCode(item, "valueCoding")
+                  val obs =
+                      qh.codingQuestionnaire(
+                          linkId, "Any vaccination given in the last 30 days?", code)
+                  obs.code.addCoding().setSystem("http://snomed.info/sct").setCode(linkId).display =
+                      "Any vaccination given in the last 30 days?"
+
+                  obs.code.text = code
+                  createResource(obs, subjectReference, encounterReference)
+                }
                 "f4b" -> {
                   val code = extractResponse(item, "valueDate")
 
@@ -435,6 +590,20 @@ class AddClientViewModel(application: Application, private val state: SavedState
         Log.e("SavePatient", "Error extracting observations", e)
       }
     }
+  }
+
+  private suspend fun createObs(
+      linkId: String,
+      code: String,
+      label: String,
+      qh: QuestionnaireHelper,
+      subjectReference: Reference,
+      encounterReference: Reference
+  ) {
+    val obs = qh.codingQuestionnaire(linkId, label, code)
+    obs.code.addCoding().setSystem("http://snomed.info/sct").setCode(linkId).display = label
+    obs.code.text = code
+    createResource(obs, subjectReference, encounterReference)
   }
 
   private suspend fun createResource(
