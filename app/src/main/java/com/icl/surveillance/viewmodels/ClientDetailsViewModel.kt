@@ -139,6 +139,16 @@ class ClientDetailsViewModel(
     var patientStatus = ""
     var admissionDate = ""
     var vaccineDate = ""
+    var residence = ""
+    var parent = ""
+    var houseno = ""
+    var parentPhone = ""
+    var countyName = ""
+    var subCountyName = ""
+    var neighbour = ""
+    var street = ""
+    var town = ""
+
     searchResult.first().let {
       logicalId = it.resource.logicalId
       name =
@@ -163,6 +173,7 @@ class ClientDetailsViewModel(
             fhirEngine.search<Observation> {
               filter(Observation.ENCOUNTER, { value = "Encounter/${it.logicalId}" })
             }
+        residence = generateResponse(obs, "residence-setup")
         epid = generateResponse(obs, "EPID")
         county = generateResponse(obs, "a4-county")
         subCounty = generateResponse(obs, "a3-sub-county")
@@ -186,6 +197,78 @@ class ClientDetailsViewModel(
         vaccineDate = generateResponse(obs, "c8b-date-of-vaccine")
         patientStatus = generateResponse(obs, "c9-patient-status")
       }
+
+      parent =
+          if (it.resource.hasContact())
+              if (it.resource.contactFirstRep.hasName())
+                  it.resource.contactFirstRep.name.givenAsSingleString
+              else ""
+          else ""
+
+      houseno =
+          if (it.resource.hasContact())
+              if (it.resource.contactFirstRep.hasAddress())
+                  it.resource.contactFirstRep.address.line[0].value.toString()
+              else ""
+          else ""
+      neighbour =
+          if (it.resource.hasContact())
+              if (it.resource.contactFirstRep.hasAddress())
+                  if (it.resource.contactFirstRep.address.line.size > 4) {
+                    it.resource.contactFirstRep.address.line[1].value.toString()
+                  } else {
+                    ""
+                  }
+              else ""
+          else ""
+      street =
+          if (it.resource.hasContact())
+              if (it.resource.contactFirstRep.hasAddress())
+                  if (it.resource.contactFirstRep.address.line.size > 2) {
+                    it.resource.contactFirstRep.address.line[2].value.toString()
+                  } else {
+                    ""
+                  }
+              else ""
+          else ""
+
+      town =
+          if (it.resource.hasContact())
+              if (it.resource.contactFirstRep.hasAddress())
+                  if (it.resource.contactFirstRep.address.line.size > 3) {
+                    it.resource.contactFirstRep.address.line[3].value.toString()
+                  } else {
+                    ""
+                  }
+              else ""
+          else ""
+      subCountyName =
+          if (it.resource.hasContact())
+              if (it.resource.contactFirstRep.hasAddress())
+                  if (it.resource.contactFirstRep.address.line.size > 4) {
+                    it.resource.contactFirstRep.address.line[4].value.toString()
+                  } else {
+                    ""
+                  }
+              else ""
+          else ""
+      countyName =
+          if (it.resource.hasContact())
+              if (it.resource.contactFirstRep.hasAddress())
+                  if (it.resource.contactFirstRep.address.line.size > 5) {
+                    it.resource.contactFirstRep.address.line[5].value.toString()
+                  } else {
+                    ""
+                  }
+              else ""
+          else ""
+
+      parentPhone =
+          if (it.resource.hasContact())
+              if (it.resource.contactFirstRep.hasTelecom())
+                  it.resource.contactFirstRep.telecomFirstRep.value.toString()
+              else ""
+          else ""
     }
 
     return PatientListViewModel.CaseDetailData(
@@ -194,13 +277,25 @@ class ClientDetailsViewModel(
         subCounty = subCounty,
         onset = onset,
         logicalId = logicalId,
-        sex = sex,
-        dob = dob,
-        name = name,
-        residence = "",
+
+        //      SECTION A
         facility = facility,
         disease = disease,
         type = type,
+        // SECTION B
+
+        name = name,
+        sex = sex,
+        dob = dob,
+        residence = residence,
+        parent = parent,
+        houseNo = houseno,
+        neighbour = neighbour,
+        street = street,
+        town = town,
+        subCountyName = subCountyName,
+        countyName = countyName,
+        parentPhone = parentPhone,
 
         //      SECTION C
         dateFirstSeen = dateFirstSeen,

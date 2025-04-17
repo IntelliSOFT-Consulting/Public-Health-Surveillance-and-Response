@@ -137,10 +137,10 @@
                 android:text="a. Parent/Guardian:" />
 
             <TextView
+                android:id="@+id/tv_parent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="......................................................." />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <View
@@ -162,10 +162,10 @@
                 android:text="b. Residence (Village/Hse No):" />
 
             <TextView
+                android:id="@+id/tv_house_no"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="..........................................." />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <View
@@ -187,10 +187,10 @@
                 android:text="c. Neighborhood major landmark:" />
 
             <TextView
+                android:id="@+id/tv_neigbor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="....................................." />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <View
@@ -215,7 +215,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="........................................." />
+                android:id="@+id/tv_street"/>
         </LinearLayout>
 
         <View
@@ -240,7 +240,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="..................................................." />
+                android:id="@+id/tv_town"/>
         </LinearLayout>
 
         <View
@@ -265,7 +265,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="..................................................." />
+                android:id="@+id/tv_sub_county"/>
         </LinearLayout>
 
         <View
@@ -290,7 +290,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="..................................................." />
+                android:id="@+id/tv_county"/>
 
         </LinearLayout>
 
@@ -316,7 +316,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="................................." />
+                android:id="@+id/tv_phone"/>
         </LinearLayout>
 
         <View

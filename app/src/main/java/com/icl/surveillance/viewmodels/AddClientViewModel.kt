@@ -127,7 +127,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
             for (j in 0 until facilityItems.length()) {
               val item = facilityItems.getJSONObject(j)
 
-               when (val linkId = item.getString("linkId")) {
+              when (val linkId = item.getString("linkId")) {
                 "c1-date-onset" -> {
                   val code = extractResponse(item, "valueDate")
                   val obs = qh.codingQuestionnaire(linkId, "Date of onset of illness", code)
@@ -196,6 +196,14 @@ class AddClientViewModel(application: Application, private val state: SavedState
                   val obs = qh.codingQuestionnaire(linkId, "Vaccinated against illness", code)
                   obs.code.addCoding().setSystem("http://snomed.info/sct").setCode(linkId).display =
                       "Vaccinated against illness"
+                  obs.code.text = code
+                  createResource(obs, subjectReference, encounterReference)
+                }
+                "residence-setup" -> {
+                  val code = extractResponseCode(item, "valueCoding")
+                  val obs = qh.codingQuestionnaire(linkId, "Residence", code)
+                  obs.code.addCoding().setSystem("http://snomed.info/sct").setCode(linkId).display =
+                      "Residence"
                   obs.code.text = code
                   createResource(obs, subjectReference, encounterReference)
                 }

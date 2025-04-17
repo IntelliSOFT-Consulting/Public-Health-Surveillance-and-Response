@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Measles Information no Captured"
+            android:text="Measles Information not Captured"
             android:textAlignment="center"
             android:visibility="gone" />
     </RelativeLayout>

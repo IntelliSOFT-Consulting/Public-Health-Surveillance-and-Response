@@ -6,9 +6,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add_client">Add Case</string>
-    <string name="search_patient_by">Filter Patient By:</string>
+    <string name="search_patient_by">Filter Cases By:</string>
     <string name="given_name">Given Name</string>
     <string name="family_name">Family Name</string>
     <string name="new_case_description">New Case</string>
     <string name="message_no_datetime">N/A</string>
+    <string name="epid">EPID No</string>
+    <string name="patient_name">Patient Name</string>
 </resources>

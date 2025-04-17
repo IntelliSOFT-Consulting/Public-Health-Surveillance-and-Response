@@ -94,7 +94,32 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
                 }
 
             caseInfoEncounter?.let {
-              println("Found Encounter: ${it.id}")
+
+              // Load Child Encounter Here
+
+              val childEncounter = loadChildEncounter(item.resourceId, it.logicalId)
+              val childCaseInfoEncounter =
+                  childEncounter.firstOrNull {
+                    it.reasonCodeFirstRep.codingFirstRep.code == "Measles Lab Information"
+                  }
+
+              childCaseInfoEncounter?.let {
+                val obs =
+                    fhirEngine.search<Observation> {
+                      filter(Observation.ENCOUNTER, { value = "Encounter/${it.logicalId}" })
+                    }
+
+                val measlesIgm =
+                    obs.firstOrNull { it.resource.code.codingFirstRep.code == "measles-igm" }
+                        ?.resource
+                        ?.value
+                        ?.asStringValue() ?: ""
+
+                println("Found Child Encounter: ${it.id}")
+
+                item = item.copy(labResults = measlesIgm)
+              }
+
               // pull all Obs for this Encounter
               val obs =
                   fhirEngine.search<Observation> {
@@ -156,6 +181,8 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
       val county: String,
       val subCounty: String,
       val caseOnsetDate: String,
+      val status: String = "Pending Results",
+      val labResults: String = "Pending"
   ) {
     override fun toString(): String = name
   }
@@ -214,6 +241,14 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
       val facility: String,
       val type: String,
       val disease: String,
+      val parent: String,
+      val houseNo: String,
+      val neighbour: String,
+      val street: String,
+      val town: String,
+      val subCountyName: String,
+      val countyName: String,
+      val parentPhone: String,
       val dateFirstSeen: String,
       val dateSubCountyNotified: String,
       val hospitalized: String,
@@ -331,6 +366,15 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
   private suspend fun loadEncounter(patientId: String): List<Encounter> {
     return fhirEngine
         .search<Encounter> { filter(Encounter.SUBJECT, { value = "Patient/$patientId" }) }
+        .map { it.resource }
+  }
+
+  private suspend fun loadChildEncounter(patientId: String, encounterId: String): List<Encounter> {
+    return fhirEngine
+        .search<Encounter> {
+          filter(Encounter.SUBJECT, { value = "Patient/$patientId" })
+          filter(Encounter.PART_OF, { value = "Encounter/$encounterId" })
+        }
         .map { it.resource }
   }
 

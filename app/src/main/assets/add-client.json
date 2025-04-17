@@ -210,6 +210,55 @@
           ]
         },
         {
+          "linkId": "sex",
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "system": "http://hl7.org/fhir/administrative-gender",
+                "language": "text/fhirpath",
+                "expression": "Patient.gender",
+                "name": "patientGender"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "text": "Sex",
+          "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.gender",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "http://hl7.org/fhir/administrative-gender",
+                "code": "male",
+                "display": "Male"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "http://hl7.org/fhir/administrative-gender",
+                "code": "female",
+                "display": "Female"
+              }
+            }
+          ]
+        },
+        {
           "type": "date",
           "linkId": "date-of-birth",
           "text": "Date of birth",
@@ -257,18 +306,9 @@
           "readOnly": true
         },
         {
-          "linkId": "sex",
+          "linkId": "residence-setup",
           "type": "choice",
           "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
-              "valueExpression": {
-                "system": "http://hl7.org/fhir/administrative-gender",
-                "language": "text/fhirpath",
-                "expression": "Patient.gender",
-                "name": "patientGender"
-              }
-            },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
               "valueCodeableConcept": {
@@ -286,21 +326,20 @@
               "valueCode": "horizontal"
             }
           ],
-          "text": "Sex",
-          "definition": "http://hl7.org/fhir/StructureDefinition/Patient#Patient.gender",
+          "text": "Residence",
           "answerOption": [
             {
               "valueCoding": {
-                "system": "http://hl7.org/fhir/administrative-gender",
-                "code": "male",
-                "display": "Male"
+                "system": "http://hl7.org/fhir/residence",
+                "code": "urban",
+                "display": "Urban"
               }
             },
             {
               "valueCoding": {
-                "system": "http://hl7.org/fhir/administrative-gender",
-                "code": "female",
-                "display": "Female"
+                "system": "http://hl7.org/fhir/residence",
+                "code": "rural",
+                "display": "Rural"
               }
             }
           ]
@@ -821,7 +860,7 @@
         },
         {
           "linkId": "c8b-recent-vaccine",
-          "text": "b. Any vaccination given in the last two months?",
+          "text": "b. Any vaccination given in the last 30 days?",
           "type": "choice",
           "extension": [
             {

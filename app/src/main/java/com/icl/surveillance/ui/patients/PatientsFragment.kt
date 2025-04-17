@@ -45,7 +45,7 @@ class PatientsFragment : Fragment() {
     val root: View = binding.root
     val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
-    binding.givenNameEditText.apply {
+    binding.tvEpidNo.apply {
       addTextChangedListener(
           onTextChanged = { text, _, _, _ ->
             patientListViewModel.setPatientGivenName(text.toString())
@@ -95,10 +95,19 @@ class PatientsFragment : Fragment() {
         },
     )
 
-    patientListViewModel.liveSearchedPatients.observe(viewLifecycleOwner) { adapter.submitList(it) }
+    patientListViewModel.liveSearchedPatients.observe(viewLifecycleOwner) {
+      if (it.isEmpty()) {
+        binding.apply { patientListContainer.caseCount.visibility = View.VISIBLE }
+      } else {
+        binding.apply { patientListContainer.caseCount.visibility = View.GONE }
+      }
 
-    patientListViewModel.patientCount.observe(viewLifecycleOwner) {}
+      adapter.submitList(it)
+    }
 
+    patientListViewModel.patientCount.observe(viewLifecycleOwner) {
+      binding.patientListContainer.caseCount.text = "$it Case(s) Found"
+    }
     requireActivity()
         .onBackPressedDispatcher
         .addCallback(
