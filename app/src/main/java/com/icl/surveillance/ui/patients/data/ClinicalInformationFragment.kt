@@ -81,16 +81,16 @@ class ClinicalInformationFragment : Fragment() {
     // getPatientDetailData("Measles Case", null)
     patientDetailsViewModel.livecaseData.observe(viewLifecycleOwner) {
       binding.apply {
-      
         tvFirstSeen.text = it.dateFirstSeen
-        tvHospitalized.text = it.hospitalized
-        tvIpOp.text = it.ipNo
-        tvDiagnosis.text = it.diagnosis
-        tvMeans.text = it.diagnosisMeans
-        tvOtherSpecify.text = it.diagnosisMeansOther
-        tvVaccinated.text = it.wasPatientVaccinated
-        tvTwoMonths.text = it.twoMonthsVaccination
-        tvStatus.text = it.patientStatus
+        tvStatus.text = it.inPatientOutPatient
+        tvAdmissionDate.text = it.admissionDate
+        tvIpOpNo.text = it.ipNo
+        tvOutcome.text = it.patientOutcome
+        tvSampleCollected.text = it.sampleCollected
+        
+        //        tvVaccinated.text = it.wasPatientVaccinated
+        //        tvTwoMonths.text = it.twoMonthsVaccination
+        //        tvStatus.text = it.patientStatus
       }
     }
     binding.apply {

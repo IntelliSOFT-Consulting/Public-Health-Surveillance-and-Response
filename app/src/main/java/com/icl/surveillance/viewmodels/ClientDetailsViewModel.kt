@@ -159,6 +159,16 @@ class ClientDetailsViewModel(
     var homeVisited = ""
     var homeVisitedDate = ""
     var epiLinked = ""
+    var specimen = ""
+    var noWhy = ""
+    var collectionDate = ""
+    var specimenType = ""
+    var specimenTypeOther = ""
+    var dateSent = ""
+    var labName = ""
+    var patientOutcome = ""
+    var sampleCollected = ""
+    var inPatientOutPatient=""
 
     searchResult.first().let {
       logicalId = it.resource.logicalId
@@ -185,6 +195,15 @@ class ClientDetailsViewModel(
               filter(Observation.ENCOUNTER, { value = "Encounter/${it.logicalId}" })
             }
         obs.forEach { println("Observation Details :::: ${it.resource.value}") }
+
+        // Lab Information
+        specimen = generateResponse(obs, "g1a")
+        noWhy = generateResponse(obs, "g1a1")
+        collectionDate = generateResponse(obs, "g1b1")
+        specimenType = generateResponse(obs, "g1c")
+        specimenTypeOther = generateResponse(obs, "g1c1")
+        dateSent = generateResponse(obs, "g1d")
+        labName = generateResponse(obs, "g1e")
 
         // Case Details
 
@@ -223,6 +242,9 @@ class ClientDetailsViewModel(
         twoMonthsVaccination = generateResponse(obs, "c8b-recent-vaccine")
         vaccineDate = generateResponse(obs, "c8b-date-of-vaccine")
         patientStatus = generateResponse(obs, "c9-patient-status")
+        patientOutcome = generateResponse(obs, "c9-patient-outcome")
+        sampleCollected = generateResponse(obs, "lab-information")
+        inPatientOutPatient = generateResponse(obs, "inpatient-outpatient")
       }
 
       parent =
@@ -354,7 +376,19 @@ class ClientDetailsViewModel(
         noOfDoses = noOfDoses,
         twoMonthsVaccination = twoMonthsVaccination,
         vaccineDate = vaccineDate,
-        patientStatus = patientStatus)
+        patientStatus = patientStatus,
+        patientOutcome = patientOutcome,
+        sampleCollected = sampleCollected,
+      inPatientOutPatient=inPatientOutPatient,
+
+        // Lab Information
+        specimen = specimen,
+        noWhy = noWhy,
+        collectionDate = collectionDate,
+        specimenType = specimenType,
+        specimenTypeOther = specimenTypeOther,
+        dateSent = dateSent,
+        labName = labName)
   }
 
   private fun generateResponse(obs: List<SearchResult<Observation>>, s: String): String {
@@ -410,6 +444,7 @@ class ClientDetailsViewModel(
             val rubellaIgM = generateResponse(obs, "rubella-igm")
             val dateLabSentResults = generateResponse(obs, "date-lab-sent-results")
             val finalClassification = generateResponse(obs, "final-classification")
+
             val subcountyName = generateResponse(obs, "contact-name")
             val subcountyDesignation = generateResponse(obs, "contact-designation")
             val subcountyPhone = generateResponse(obs, "contact-phone")

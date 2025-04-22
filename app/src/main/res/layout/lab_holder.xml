@@ -61,6 +61,7 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
+            android:textAlignment="textEnd"
             android:textStyle="normal"
             tools:text="Good" />
     </LinearLayout>
@@ -94,6 +95,7 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
+            android:textAlignment="textEnd"
             android:textStyle="normal"
             tools:text="Positive" />
     </LinearLayout>
@@ -127,6 +129,7 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
+            android:textAlignment="textEnd"
             android:textStyle="normal"
             tools:text="Negative" />
     </LinearLayout>
@@ -160,6 +163,7 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
+            android:textAlignment="textEnd"
             android:textStyle="normal"
             tools:text="14/04/2025" />
     </LinearLayout>
@@ -193,6 +197,7 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
+            android:textAlignment="textEnd"
             android:textStyle="normal"
             tools:text="Confirmed" />
     </LinearLayout>
@@ -206,6 +211,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:orientation="horizontal">
 
         <TextView
@@ -226,6 +232,7 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
+            android:textAlignment="textEnd"
             android:textStyle="normal"
             tools:text="Dr. Jane Doe" />
     </LinearLayout>
@@ -233,12 +240,14 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:visibility="gone"
         android:layout_marginVertical="8dp"
         android:background="#CCCCCC" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:orientation="horizontal">
 
         <TextView
@@ -259,6 +268,7 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
+            android:textAlignment="textEnd"
             android:textStyle="normal"
             tools:text="Mr. John Smith" />
     </LinearLayout>
@@ -266,6 +276,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:visibility="gone"
         android:layout_marginVertical="8dp"
         android:background="#CCCCCC" />
 
@@ -292,6 +303,7 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
+            android:textAlignment="textEnd"
             android:textStyle="normal"
             tools:text="Alice Wanjiku" />
     </LinearLayout>
@@ -325,6 +337,7 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
+            android:textAlignment="textEnd"
             android:textStyle="normal"
             tools:text="Surveillance Officer" />
     </LinearLayout>
@@ -358,6 +371,7 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
+            android:textAlignment="textEnd"
             android:textStyle="normal"
             tools:text="_________________" />
     </LinearLayout>
@@ -391,6 +405,7 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
+            android:textAlignment="textEnd"
             android:textStyle="normal"
             tools:text="John Doe" />
     </LinearLayout>
@@ -424,6 +439,7 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
+            android:textAlignment="textEnd"
             android:textStyle="normal"
             tools:text="Health Officer" />
     </LinearLayout>
@@ -457,6 +473,7 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
+            android:textAlignment="textEnd"
             android:textStyle="normal"
             tools:text="0701234567" />
     </LinearLayout>
@@ -490,6 +507,7 @@
             android:layout_marginEnd="@dimen/small_text_margin"
             android:layout_marginBottom="@dimen/small_text_margin"
             android:layout_weight="1"
+            android:textAlignment="textEnd"
             android:textStyle="normal"
             tools:text="johndoe@example.com" />
     </LinearLayout>

@@ -25,7 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Hello,"
+                android:text="@string/hello"
                 android:textSize="18sp" />
 
 
@@ -64,7 +64,7 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:layout_gravity="center"
-                            android:contentDescription="Client List"
+                            android:contentDescription="@string/client_list"
                             android:src="@drawable/list" />
                     </FrameLayout>
 
@@ -72,7 +72,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="MOH 502 - Case Based Reporting Form"
+                        android:text="@string/case_name"
                         android:textAlignment="center"
                         android:textSize="12sp" />
                 </LinearLayout>

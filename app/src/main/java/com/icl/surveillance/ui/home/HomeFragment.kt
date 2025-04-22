@@ -64,7 +64,7 @@ class HomeFragment : Fragment() {
     val bundle = Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-client.json") }
 
     FormatterClass()
-        .saveSharedPref("title", "MOH 502 - Case Based Reporting Form", requireContext())
+        .saveSharedPref("title", requireContext().getString(R.string.case_name), requireContext())
     findNavController().navigate(R.id.action_navigation_home_to_single_case_fragment, bundle)
   }
 

@@ -27,13 +27,13 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
     this.dateReported.text = patientItem.caseOnsetDate
     this.labResults.text = patientItem.labResults
 
-    if (patientItem.status != "Pending Results") {
+    if (patientItem.status.trim() != "Pending Results") {
       this.status.text = patientItem.status
       this.status.setTextColor(this.status.context.getColor(R.color.red))
     } else {
       this.status.text = patientItem.status
     }
-    if (patientItem.labResults == "Positive") {
+    if (patientItem.labResults.trim() == "Positive") {
       this.labResults.setTextColor(this.labResults.context.getColor(R.color.red))
     }
 

@@ -51,9 +51,9 @@ class FullCaseDetailsActivity : AppCompatActivity() {
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
               tab.text =
                   when (position) {
-                    0 -> "Reporting Site "
-                    1 -> "Identification "
-                    2 -> "Measles Case "
+                    0 -> "Reporting Site"
+                    1 -> "Case Demographics "
+                    2 -> "Measles Case Information"
                     3 -> "Clinical Information "
                     4 -> "Lab Information "
                     5 -> "Lab Results "

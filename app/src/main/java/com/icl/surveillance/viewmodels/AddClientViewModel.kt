@@ -239,11 +239,28 @@ class AddClientViewModel(application: Application, private val state: SavedState
                   createResource(obs, subjectReference, encounterReference)
                 }
 
+                "c4-date-admission" -> {
+                  val code = extractResponse(item, "valueDate")
+                  val obs = qh.codingQuestionnaire(linkId, "Date of Admission", code)
+                  obs.code.addCoding().setSystem("http://snomed.info/sct").setCode(linkId).display =
+                      "Date of Admission"
+                  obs.code.text = code
+                  createResource(obs, subjectReference, encounterReference)
+                }
+
                 "c9-patient-status" -> {
                   val code = extractResponseCode(item, "valueCoding")
                   val obs = qh.codingQuestionnaire(linkId, "Status of the patient", code)
                   obs.code.addCoding().setSystem("http://snomed.info/sct").setCode(linkId).display =
                       "Status of the patient"
+                  obs.code.text = code
+                  createResource(obs, subjectReference, encounterReference)
+                }
+                "lab-information" -> {
+                  val code = extractResponseCode(item, "valueCoding")
+                  val obs = qh.codingQuestionnaire(linkId, "Sample Collected", code)
+                  obs.code.addCoding().setSystem("http://snomed.info/sct").setCode(linkId).display =
+                      "Sample Collected"
                   obs.code.text = code
                   createResource(obs, subjectReference, encounterReference)
                 }
@@ -380,7 +397,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                 }
                 "g1b1" -> {
 
-                  val code = extractResponse(item, "valueSDate")
+                  val code = extractResponse(item, "valueDate")
                   val label = "Date(s) of specimen collection"
 
                   createObs(
@@ -419,7 +436,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                 }
                 "g1d" -> {
 
-                  val code = extractResponse(item, "valueSDate")
+                  val code = extractResponse(item, "valueDate")
                   val label = "Date specimen sent to the lab"
                   createObs(
                       qh = qh,

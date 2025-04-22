@@ -9,18 +9,21 @@ import androidx.core.view.WindowInsetsCompat
 import com.icl.surveillance.MainActivity
 import com.icl.surveillance.R
 import com.icl.surveillance.databinding.ActivityLoginBinding
+import com.icl.surveillance.models.DbSignIn
+import com.icl.surveillance.network.RetrofitCallsAuthentication
 import com.icl.surveillance.utils.FormatterClass
 
 class LoginActivity : AppCompatActivity() {
 
+  private var retrofitCallsAuthentication = RetrofitCallsAuthentication()
   private lateinit var binding: ActivityLoginBinding
 
   override fun onStart() {
     super.onStart()
-//
+
     try {
 
-      val loggedIn = FormatterClass().getSharedPref("login", this@LoginActivity)
+      val loggedIn = FormatterClass().getSharedPref("isLoggedIn", this@LoginActivity)
       if (loggedIn != null) {
         val intent = Intent(this@LoginActivity, MainActivity::class.java)
         startActivity(intent)
@@ -48,18 +51,28 @@ class LoginActivity : AppCompatActivity() {
         val email = etEmail.text.toString()
         val password = etPassword.text.toString()
 
-        // Do sample validation of admin - admin
-        if (email != "admin" || password != "admin") {
-          etEmail.error = "Invalid email or password"
-          etPassword.error = "Invalid email or password"
+        if (email.isEmpty()) {
+          binding.emailLayout.error = "Please enter email"
+          return@setOnClickListener
+        }
+        // check password
+        if (password.isEmpty()) {
+          binding.passwordLayout.error = "Please enter password"
           return@setOnClickListener
         }
 
-        FormatterClass().saveSharedPref("username", email, this@LoginActivity)
-        FormatterClass().saveSharedPref("login", "true", this@LoginActivity)
-        val intent = Intent(this@LoginActivity, MainActivity::class.java)
-        startActivity(intent)
-        this@LoginActivity.finish()
+        val dbSignIn = DbSignIn(idNumber = email, password = password, "Facility")
+        retrofitCallsAuthentication.loginUser(this@LoginActivity, dbSignIn)
+        //        ProgressDialogManager.show(this@LoginActivity, "Please wait...")
+        //        lifecycleScope.launch {
+        //          delay(3000) // Wait 3 seconds
+        //          ProgressDialogManager.dismiss()
+        //          FormatterClass().saveSharedPref("username", email, this@LoginActivity)
+        //          FormatterClass().saveSharedPref("login", "true", this@LoginActivity)
+        //          val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        //          startActivity(intent)
+        //          this@LoginActivity.finish()
+        //        }
       }
     }
   }

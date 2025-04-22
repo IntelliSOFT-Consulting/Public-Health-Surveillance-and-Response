@@ -224,9 +224,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
           for (i in 0 until items.length()) {
             val item = items.getJSONObject(i)
-            val linkId = item.getString("linkId")
-
-            when (linkId) {
+            when (val linkId = item.getString("linkId")) {
               "date-specimen-received" -> {
                 val code = extractResponse(item, "valueDate")
                 bundle
@@ -249,7 +247,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
               }
 
               "date-lab-sent-results" -> {
-                val code = extractResponseCode(item, "valueDate")
+                val code = extractResponse(item, "valueDate")
                 if (code.isNotEmpty()) {
                   bundle
                       .addEntry()

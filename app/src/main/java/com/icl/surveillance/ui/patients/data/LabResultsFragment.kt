@@ -98,7 +98,7 @@ class LabResultsFragment : Fragment() {
         binding.tvNoCase.visibility = View.VISIBLE
       } else {
         binding.tvNoCase.visibility = View.GONE
-        binding.fab.visibility = View.GONE
+//        binding.fab.visibility = View.GONE
         adapter.submitList(it)
       }
     }

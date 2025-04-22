@@ -1,6 +1,5 @@
 package com.icl.surveillance.ui.patients.data
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,11 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.fhir.FhirEngine
-import com.icl.surveillance.adapters.LabRecyclerViewAdapter
-import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.databinding.FragmentLabInformationBinding
 import com.icl.surveillance.fhir.FhirApplication
-import com.icl.surveillance.ui.patients.AddCaseActivity
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
@@ -87,29 +83,43 @@ class LabInformationFragment : Fragment() {
             )
             .get(ClientDetailsViewModel::class.java)
 
-    val adapter = LabRecyclerViewAdapter(this::onItemClicked)
-    binding.patientList.adapter = adapter
-
-    patientDetailsViewModel.liveLabData.observe(viewLifecycleOwner) {
-      if (it.isEmpty()) {
-        binding.tvNoCase.visibility = View.VISIBLE
-      } else {
-        binding.tvNoCase.visibility = View.GONE
-        binding.fab.visibility = View.GONE
-        adapter.submitList(it)
+    patientDetailsViewModel.getPatientInfo()
+    patientDetailsViewModel.livecaseData.observe(viewLifecycleOwner) {
+      binding.apply {
+        tvSpeciment.text = it.specimen
+        tvNoWhy.text = it.noWhy
+        tvSpecimenCollection.text = it.collectionDate
+        tvSpecimenType.text = it.specimenType
+        tvSpecimenTypeOther.text = it.specimenTypeOther
+        tvDateSent.text = it.dateSent
+        tvLabName.text = it.labName
       }
     }
-    patientDetailsViewModel.getPatientDiseaseData("Measles Lab Information", "$encounterId", false)
+
+    //    val adapter = LabRecyclerViewAdapter(this::onItemClicked)
+    //    binding.patientList.adapter = adapter
+
+    //    patientDetailsViewModel.liveLabData.observe(viewLifecycleOwner) {
+    //      if (it.isEmpty()) {
+    //        binding.tvNoCase.visibility = View.VISIBLE
+    //      } else {
+    //        binding.tvNoCase.visibility = View.GONE
+    //        binding.fab.visibility = View.GONE
+    //        adapter.submitList(it)
+    //      }
+    //    }
+    //    patientDetailsViewModel.getPatientDiseaseData("Measles Lab Information", "$encounterId",
+    // false)
 
     binding.apply {
-      fab.setOnClickListener {
-        FormatterClass()
-            .saveSharedPref("questionnaire", "measles-lab-results.json", requireContext())
-        FormatterClass().saveSharedPref("title", "Lab Information", requireContext())
-        val intent = Intent(requireContext(), AddCaseActivity::class.java)
-        intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "measles-lab-results.json")
-        startActivity(intent)
-      }
+      //      fab.setOnClickListener {
+      //        FormatterClass()
+      //            .saveSharedPref("questionnaire", "measles-lab-results.json", requireContext())
+      //        FormatterClass().saveSharedPref("title", "Lab Information", requireContext())
+      //        val intent = Intent(requireContext(), AddCaseActivity::class.java)
+      //        intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "measles-lab-results.json")
+      //        startActivity(intent)
+      //      }
     }
   }
 

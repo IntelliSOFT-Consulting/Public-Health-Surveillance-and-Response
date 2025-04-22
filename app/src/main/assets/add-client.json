@@ -155,11 +155,11 @@
         }
       ],
       "linkId": "section-a",
-      "text": "Name of Site Reporting & Disease being reported"
+      "text": "Reporting Site"
     },
     {
       "linkId": "section-b",
-      "text": "Identification",
+      "text": "Case Demographics",
       "type": "group",
       "extension": [
         {
@@ -772,6 +772,11 @@
           ]
         },
         {
+          "linkId": "vaccination-history",
+          "type": "display",
+          "text": "Vaccination History"
+        },
+        {
           "linkId": "c8a-vaccinated",
           "text": "Was the patient vaccinated against illness (including campaign)?",
           "type": "choice",
@@ -906,6 +911,11 @@
           ]
         },
         {
+          "linkId": "measles-surveillance",
+          "type": "display",
+          "text": "Measles Surveillance"
+        },
+        {
           "linkId": "f4a",
           "text": "Was home of patient visited for contact investigation?",
           "type": "choice",
@@ -1029,31 +1039,6 @@
         {
           "linkId": "c2-date-first-seen",
           "text": "Date first seen at health facility",
-          "type": "date",
-          "extension": [
-            {
-              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-              "valueString": "Cannot be a date in the future"
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueDate": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-                    "valueExpression": {
-                      "language": "text/fhirpath",
-                      "expression": "today()"
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "linkId": "c3-date-notified",
-          "text": "Date Health facility notified sub County level",
           "type": "date",
           "extension": [
             {
@@ -1213,7 +1198,7 @@
             }
           ],
           "linkId": "lab-information",
-          "text": "Complete Lab Information?",
+          "text": "Sample Collected ?",
           "answerOption": [
             {
               "valueCoding": {
@@ -1443,8 +1428,8 @@
           "question": "lab-information",
           "operator": "=",
           "answerCoding": {
-            "code": "no",
-            "display": "No"
+            "code": "yes",
+            "display": "Yes"
           }
         }
       ]

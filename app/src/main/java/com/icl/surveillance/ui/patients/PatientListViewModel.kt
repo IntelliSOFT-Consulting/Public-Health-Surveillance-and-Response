@@ -115,9 +115,17 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
                         ?.value
                         ?.asStringValue() ?: ""
 
+                val finalClassification =
+                    obs.firstOrNull {
+                          it.resource.code.codingFirstRep.code == "final-classification"
+                        }
+                        ?.resource
+                        ?.value
+                        ?.asStringValue() ?: ""
+
                 println("Found Child Encounter: ${it.id}")
 
-                item = item.copy(labResults = measlesIgm)
+                item = item.copy(labResults = measlesIgm, status = finalClassification)
               }
 
               // pull all Obs for this Encounter
@@ -125,6 +133,7 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
                   fhirEngine.search<Observation> {
                     filter(Observation.ENCOUNTER, { value = "Encounter/${it.logicalId}" })
                   }
+
               val epid =
                   obs.firstOrNull { it.resource.code.codingFirstRep.code == "EPID" }
                       ?.resource
@@ -278,7 +287,22 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
       val lastDoseDate: String,
       val homeVisited: String,
       val homeVisitedDate: String,
-      val epiLinked: String
+      val epiLinked: String,
+
+      // Clinical
+
+      val patientOutcome: String,
+      val sampleCollected: String,
+      val inPatientOutPatient: String,
+
+      //    Lab Information
+      val specimen: String,
+      val noWhy: String,
+      val collectionDate: String,
+      val specimenType: String,
+      val specimenTypeOther: String,
+      val dateSent: String,
+      val labName: String,
   )
 
   data class PatientDetailOverview(

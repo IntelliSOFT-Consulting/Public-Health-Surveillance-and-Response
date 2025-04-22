@@ -28,15 +28,16 @@
                 android:id="@+id/epid_no"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:textAlignment="textEnd" />
         </LinearLayout>
         <!-- Header -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:text="A. Name of Site Reporting and Disease being reported"
-            android:textSize="16sp"
+            android:text="Name of Site Reporting and Disease being reported"
+            android:textSize="14sp"
             android:textStyle="bold" />
 
         <View
@@ -55,7 +56,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="A1. Health Facility" />
+                android:text="Health Facility" />
 
             <TextView
                 android:id="@+id/tv_facility"
@@ -81,7 +82,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="A2. Type" />
+                android:text="Type" />
 
             <TextView
                 android:id="@+id/tv_type"
@@ -107,7 +108,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="A3. Sub County" />
+                android:text="Sub County" />
 
             <TextView
                 android:id="@+id/tv_sub_county"
@@ -133,7 +134,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="A4. County" />
+                android:text="County" />
 
             <TextView
                 android:id="@+id/tv_county"
@@ -158,7 +159,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="A5. Disease reported" />
+                android:text="isease reported" />
 
             <TextView
                 android:id="@+id/tv_disease"

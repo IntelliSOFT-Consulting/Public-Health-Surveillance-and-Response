@@ -1,5 +1,6 @@
 package com.icl.surveillance.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -11,6 +12,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.icl.surveillance.R
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
+import com.icl.surveillance.clients.AddParentCaseActivity
 import com.icl.surveillance.databinding.FragmentSingleCaseBinding
 import com.icl.surveillance.utils.FormatterClass
 
@@ -63,7 +65,13 @@ class SingleCaseFragment : Fragment() {
       val bundle = Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-client.json") }
       btnAdd.setOnClickListener {
         FormatterClass().saveSharedPref("title", "Add Case", requireContext())
-        findNavController().navigate(R.id.action_singleCaseFragment_to_addClientFragment, bundle)
+        //        findNavController().navigate(R.id.action_singleCaseFragment_to_addClientFragment,
+        // bundle)
+        FormatterClass().saveSharedPref("questionnaire", "add-client.json", requireContext())
+        val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
+        intent.putExtra("title", "Add Case")
+        intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "add-client.json")
+        startActivity(intent)
       }
       btnList.setOnClickListener {
         findNavController().navigate(R.id.action_singleCaseFragment_to_navigation_dashboard, bundle)

@@ -84,7 +84,7 @@ class AddClientFragment : Fragment(R.layout.fragment_add_client) {
 
   private fun onSubmitAction() {
 
-    ProgressDialogManager.show(requireContext(), "Submitting data...")
+    ProgressDialogManager.show(requireContext(), "Please wait...")
     lifecycleScope.launch {
       val questionnaireFragment =
           childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG)
