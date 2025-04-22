@@ -60,5 +60,5 @@ dependencies {
   implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
   implementation("com.squareup.retrofit2:converter-moshi:2.6.0")
   implementation("de.hdodenhof:circleimageview:3.1.0")
-  implementation("com.github.taimoorsultani:android-sweetalert2:2.0.2")
+  implementation("com.github.f0ris.sweetalert:library:1.6.2")
 }

@@ -1031,6 +1031,20 @@
               }
             }
           ]
+        },
+        {
+          "linkId": "linked-case",
+          "text": "If yes, Enter the EPID No:",
+          "type": "string",
+          "enableWhen": [
+            {
+              "question": "f5",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
         }
       ]
     },

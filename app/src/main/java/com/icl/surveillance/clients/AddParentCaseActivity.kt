@@ -10,6 +10,7 @@ import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import ca.uhn.fhir.context.FhirContext
 import ca.uhn.fhir.context.FhirVersionEnum
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.icl.surveillance.R
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
@@ -73,8 +74,8 @@ class AddParentCaseActivity : AppCompatActivity() {
     }
   }
 
+  @Suppress("MissingSuperCall")
   override fun onBackPressed() {
-    super.onBackPressed()
     showCancelScreenerQuestionnaireAlertDialog()
   }
 
@@ -121,20 +122,17 @@ class AddParentCaseActivity : AppCompatActivity() {
         Toast.makeText(this, "Please Enter all Required Fields.", Toast.LENGTH_SHORT).show()
         return@observe
       }
-      //      Toast.makeText(requireContext(), "Case is saved.", Toast.LENGTH_SHORT).show()
       val alert = SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-      
-//      SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-//        .setTitleText("Good job!")
-//        .setContentText("You clicked the button!")
-//        .setConfirmText("OK")
-//        .setConfirmClickListener { dialog ->
-//          dialog.dismissWithAnimation()
-//        }
-//        .setCancelable(false)
-//        .show()
-      
-      this@AddParentCaseActivity.finish()
+      alert
+          .setTitleText("Success!")
+          .setContentText("You have successfully created a case!")
+          .setConfirmText("OK")
+          .setConfirmClickListener { dialog ->
+            dialog.dismissWithAnimation()
+            this@AddParentCaseActivity.finish()
+          }
+          .setCancelable(false)
+      alert.show()
     }
   }
 

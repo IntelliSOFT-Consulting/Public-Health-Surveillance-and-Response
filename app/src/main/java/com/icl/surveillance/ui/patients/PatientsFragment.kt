@@ -96,6 +96,7 @@ class PatientsFragment : Fragment() {
     )
 
     patientListViewModel.liveSearchedPatients.observe(viewLifecycleOwner) {
+      binding.apply { patientListContainer.pbProgress.visibility = View.GONE }
       if (it.isEmpty()) {
         binding.apply { patientListContainer.caseCount.visibility = View.VISIBLE }
       } else {
