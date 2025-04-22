@@ -142,7 +142,7 @@ class AddParentCaseActivity : AppCompatActivity() {
   }
 
   override fun onSupportNavigateUp(): Boolean {
-    onBackPressedDispatcher.onBackPressed()
+    showCancelScreenerQuestionnaireAlertDialog()
     return true
   }
 }

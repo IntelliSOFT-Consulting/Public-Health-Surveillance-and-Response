@@ -23,7 +23,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_weight="1"
             app:cardCornerRadius="12dp"
-            app:cardElevation="6dp">
+            app:cardElevation="15dp">
 
             <GridLayout
                 android:layout_width="match_parent"
@@ -57,7 +57,7 @@
                             android:contentDescription="Add Case"
                             android:focusable="true"
                             android:foreground="?attr/selectableItemBackground"
-                            android:src="@drawable/add" />
+                            android:src="@drawable/graphic" />
                     </FrameLayout>
 
                     <TextView
@@ -79,7 +79,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_weight="1"
             app:cardCornerRadius="12dp"
-            app:cardElevation="6dp">
+            app:cardElevation="15dp">
 
             <GridLayout
                 android:layout_width="match_parent"
@@ -114,7 +114,7 @@
                             android:contentDescription="View Cases"
                             android:focusable="true"
                             android:foreground="?attr/selectableItemBackground"
-                            android:src="@drawable/list" />
+                            android:src="@drawable/eye" />
                     </FrameLayout>
 
                     <TextView

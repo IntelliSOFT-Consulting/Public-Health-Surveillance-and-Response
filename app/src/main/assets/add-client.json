@@ -1391,7 +1391,7 @@
         },
         {
           "linkId": "g1d",
-          "text": "Date specimen sent to the lab",
+          "text": "Date specimen sent to the Lab",
           "type": "date",
           "extension": [
             {

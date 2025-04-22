@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="-40dp"
             app:cardCornerRadius="16dp"
-            app:cardElevation="8dp">
+            app:cardElevation="15dp">
 
             <GridLayout
                 android:layout_width="match_parent"
@@ -65,7 +65,7 @@
                             android:layout_height="40dp"
                             android:layout_gravity="center"
                             android:contentDescription="@string/client_list"
-                            android:src="@drawable/list" />
+                            android:src="@drawable/view" />
                     </FrameLayout>
 
                     <TextView
