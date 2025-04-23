@@ -1,12 +1,16 @@
 package com.icl.surveillance.ui.home
 
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.RelativeSizeSpan
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -47,6 +51,33 @@ class HomeFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = GridLayoutManager(context, 2)
 
+        handleUser()
+
+    }
+
+    private fun handleUser() {
+        val fullText = "Hello, John Mdoe"
+        val name = "John Mdoe"
+        val spannable = SpannableString(fullText)
+        val start = fullText.indexOf(name)
+        val end = start + name.length
+        spannable.setSpan(
+            StyleSpan(Typeface.ITALIC),
+            start,
+            end,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        spannable.setSpan(
+            RelativeSizeSpan(0.8f),
+            start,
+            end,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        binding.apply {
+            greeting.text = spannable
+        }
     }
 
     private fun onItemClick(layout: HomeViewModel.Layout) {
@@ -54,7 +85,7 @@ class HomeFragment : Fragment() {
 //        when (layout.count) {
 //            0 -> {
         val bundle =
-            Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-client.json") }
+            Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-case.json") }
 
         FormatterClass()
             .saveSharedPref(

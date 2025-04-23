@@ -27,6 +27,7 @@
                 android:id="@+id/componentLayoutIconImageview"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:src="@drawable/eye"
                 android:contentDescription="components"
                 android:scaleType="centerCrop" />
         </LinearLayout>

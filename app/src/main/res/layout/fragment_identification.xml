@@ -22,14 +22,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="B1. Name of patient" />
+                android:text="Name of patient" />
 
             <TextView
                 android:id="@+id/tv_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="" />
+                android:text=""
+                android:textAlignment="textEnd" />
         </LinearLayout>
 
         <View
@@ -48,14 +49,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="B2. Sex:" />
+                android:text="Sex:" />
 
             <TextView
                 android:id="@+id/tv_sex"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="" />
+                android:text=""
+                android:textAlignment="textEnd" />
         </LinearLayout>
 
         <View
@@ -74,14 +76,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="B4. D.O.B." />
+                android:text="D.O.B." />
 
             <TextView
                 android:id="@+id/tv_dob"
                 android:layout_width="0dp"
+
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="" />
+                android:text=""
+                android:textAlignment="textEnd" />
         </LinearLayout>
 
         <View
@@ -100,14 +104,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="B5. Residence:" />
+                android:text="Residence:" />
 
             <TextView
                 android:id="@+id/tv_residence"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="" />
+
+                android:text=""
+                android:textAlignment="textEnd" />
         </LinearLayout>
 
         <View
@@ -120,7 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="B6. Tracer information:"
+            android:text="Tracer information:"
             android:textStyle="bold" />
 
         <!-- B6a. Parent/Guardian -->
@@ -134,13 +140,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="a. Parent/Guardian:" />
+                android:text="Parent/Guardian:" />
 
             <TextView
+                android:id="@+id/tv_parent"
                 android:layout_width="0dp"
+
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="......................................................." />
+                android:textAlignment="textEnd" />
         </LinearLayout>
 
         <View
@@ -159,13 +167,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="b. Residence (Village/Hse No):" />
+                android:text="Residence (Village/Hse No):" />
 
             <TextView
+                android:id="@+id/tv_house_no"
                 android:layout_width="0dp"
+
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="..........................................." />
+                android:textAlignment="textEnd" />
         </LinearLayout>
 
         <View
@@ -184,13 +194,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="c. Neighborhood major landmark:" />
+                android:text="Neighborhood major landmark:" />
 
             <TextView
+                android:id="@+id/tv_neighbor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="....................................." />
+                android:textAlignment="textEnd" />
         </LinearLayout>
 
         <View
@@ -209,13 +220,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="d. Street/Plot/Estate/S. location:" />
+                android:text="Street/Plot/Estate/S. location:" />
 
             <TextView
+                android:id="@+id/tv_street"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+
                 android:layout_weight="1"
-                android:text="........................................." />
+                android:textAlignment="textEnd" />
         </LinearLayout>
 
         <View
@@ -234,13 +247,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="e. Town/City/Location:" />
+                android:text="Town/City/Location:" />
 
             <TextView
+                android:id="@+id/tv_town"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+
                 android:layout_weight="1"
-                android:text="..................................................." />
+                android:textAlignment="textEnd" />
         </LinearLayout>
 
         <View
@@ -259,13 +274,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="f. Sub County:" />
+                android:text="Sub County:" />
 
             <TextView
+                android:id="@+id/tv_sub_county"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="..................................................." />
+                android:textAlignment="textEnd" />
         </LinearLayout>
 
         <View
@@ -287,10 +303,11 @@
                 android:text="County:" />
 
             <TextView
+                android:id="@+id/tv_county"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="..................................................." />
+                android:textAlignment="textEnd" />
 
         </LinearLayout>
 
@@ -310,13 +327,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="g. Telephone No of parent/guardian:" />
+                android:text="Telephone No of parent/guardian:" />
 
             <TextView
+                android:id="@+id/tv_phone"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="................................." />
+                android:textAlignment="textEnd" />
         </LinearLayout>
 
         <View

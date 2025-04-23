@@ -1,6 +1,7 @@
 package com.icl.surveillance.clients
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -20,103 +21,109 @@ import org.hl7.fhir.r4.model.QuestionnaireResponse
 
 class AddClientFragment : Fragment(R.layout.fragment_add_client) {
 
-  private val viewModel: AddClientViewModel by viewModels()
+    private val viewModel: AddClientViewModel by viewModels()
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
-    setUpActionBar()
-    setHasOptionsMenu(true)
-    updateArguments()
-    if (savedInstanceState == null) {
-      addQuestionnaireFragment()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUpActionBar()
+        setHasOptionsMenu(true)
+        updateArguments()
+        if (savedInstanceState == null) {
+            addQuestionnaireFragment()
+        }
+        observePatientSaveAction()
+
+        /** Use the provided cancel|submit buttons from the sdc library */
+        childFragmentManager.setFragmentResultListener(
+            QuestionnaireFragment.SUBMIT_REQUEST_KEY,
+            viewLifecycleOwner,
+        ) { _, _ ->
+            onSubmitAction()
+        }
+        childFragmentManager.setFragmentResultListener(
+            QuestionnaireFragment.CANCEL_REQUEST_KEY,
+            viewLifecycleOwner,
+        ) { _, _ ->
+            NavHostFragment.findNavController(this).navigateUp()
+        }
     }
-    observePatientSaveAction()
 
-    /** Use the provided cancel|submit buttons from the sdc library */
-    childFragmentManager.setFragmentResultListener(
-        QuestionnaireFragment.SUBMIT_REQUEST_KEY,
-        viewLifecycleOwner,
-    ) { _, _ ->
-      onSubmitAction()
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                NavHostFragment.findNavController(this).navigateUp()
+                true
+            }
+
+            else -> false
+        }
     }
-    childFragmentManager.setFragmentResultListener(
-        QuestionnaireFragment.CANCEL_REQUEST_KEY,
-        viewLifecycleOwner,
-    ) { _, _ ->
-      NavHostFragment.findNavController(this).navigateUp()
+
+    private fun setUpActionBar() {
+        (requireActivity() as AppCompatActivity).supportActionBar?.apply {
+            title = requireContext().getString(R.string.add_client)
+            setDisplayHomeAsUpEnabled(true)
+        }
     }
-  }
 
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    return when (item.itemId) {
-      android.R.id.home -> {
-        NavHostFragment.findNavController(this).navigateUp()
-        true
-      }
-      else -> false
+    private fun updateArguments() {
+        requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-case.json")
     }
-  }
 
-  private fun setUpActionBar() {
-    (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-      title = requireContext().getString(R.string.add_client)
-      setDisplayHomeAsUpEnabled(true)
+    private fun addQuestionnaireFragment() {
+        childFragmentManager.commit {
+            add(
+                R.id.add_patient_container,
+                QuestionnaireFragment.builder()
+                    .setQuestionnaire(viewModel.questionnaireJson)
+                    .setShowCancelButton(true)
+                    .setSubmitButtonText("Submit")
+                    .build(),
+                QUESTIONNAIRE_FRAGMENT_TAG,
+            )
+        }
     }
-  }
 
-  private fun updateArguments() {
-    requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-client.json")
-  }
+    private fun onSubmitAction() {
 
-  private fun addQuestionnaireFragment() {
-    childFragmentManager.commit {
-      add(
-          R.id.add_patient_container,
-          QuestionnaireFragment.builder()
-              .setQuestionnaire(viewModel.questionnaireJson)
-              .setShowCancelButton(true)
-              .setSubmitButtonText("Submit")
-              .build(),
-          QUESTIONNAIRE_FRAGMENT_TAG,
-      )
+        ProgressDialogManager.show(requireContext(), "Please wait...")
+        lifecycleScope.launch {
+            val questionnaireFragment =
+                childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG)
+                        as QuestionnaireFragment
+            savePatient(questionnaireFragment.getQuestionnaireResponse())
+        }
     }
-  }
 
-  private fun onSubmitAction() {
-
-    ProgressDialogManager.show(requireContext(), "Submitting data...")
-    lifecycleScope.launch {
-      val questionnaireFragment =
-          childFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG)
-              as QuestionnaireFragment
-      savePatient(questionnaireFragment.getQuestionnaireResponse())
+    private fun savePatient(questionnaireResponse: QuestionnaireResponse) {
+        val context = FhirContext.forR4()
+        val questionnaireResponseString =
+            context.newJsonParser().encodeResourceToString(questionnaireResponse)
+        println("Questionnaire Response: $questionnaireResponseString")
+        Log.e("TAG", "Questionnaire Response: $questionnaireResponseString")
+        viewModel.savePatientData(questionnaireResponse, questionnaireResponseString)
     }
-  }
 
-  private fun savePatient(questionnaireResponse: QuestionnaireResponse) {
-    val context = FhirContext.forR4()
-    val questionnaireResponseString =
-        context.newJsonParser().encodeResourceToString(questionnaireResponse)
-    println("Questionnaire Response: $questionnaireResponseString")
-    viewModel.savePatient(questionnaireResponse, questionnaireResponseString)
-  }
+    private fun observePatientSaveAction() {
+        viewModel.isPatientSaved.observe(viewLifecycleOwner) {
+            ProgressDialogManager.dismiss()
 
-  private fun observePatientSaveAction() {
-    viewModel.isPatientSaved.observe(viewLifecycleOwner) {
-      ProgressDialogManager.dismiss()
-
-      if (!it) {
-        Toast.makeText(requireContext(), "Please Enter all Required Fields.", Toast.LENGTH_SHORT)
-            .show()
-        return@observe
-      }
-      Toast.makeText(requireContext(), "Case is saved.", Toast.LENGTH_SHORT).show()
-      NavHostFragment.findNavController(this).navigateUp()
+            if (!it) {
+                Toast.makeText(
+                    requireContext(),
+                    "Please Enter all Required Fields.",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+                return@observe
+            }
+            Toast.makeText(requireContext(), "Case is saved.", Toast.LENGTH_SHORT).show()
+            NavHostFragment.findNavController(this).navigateUp()
+        }
     }
-  }
 
-  companion object {
-    const val QUESTIONNAIRE_FILE_PATH_KEY = "questionnaire-file-path-key"
-    const val QUESTIONNAIRE_FRAGMENT_TAG = "questionnaire-fragment-tag"
-  }
+    companion object {
+        const val QUESTIONNAIRE_FILE_PATH_KEY = "questionnaire-file-path-key"
+        const val QUESTIONNAIRE_FRAGMENT_TAG = "questionnaire-fragment-tag"
+    }
 }

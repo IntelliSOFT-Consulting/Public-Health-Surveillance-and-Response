@@ -79,6 +79,15 @@ class IdentificationFragment : Fragment() {
         tvName.text = it.name
         tvSex.text = it.sex
         tvDob.text = it.dob
+        tvResidence.text = it.residence
+        tvParent.text = it.parent
+        tvHouseNo.text = it.houseNo
+        tvNeighbor.text = it.neighbour
+        tvStreet.text = it.street
+        tvTown.text = it.town
+        tvSubCounty.text = it.subCountyName
+        tvCounty.text = it.countyName
+        tvPhone.text = it.parentPhone
       }
     }
   }

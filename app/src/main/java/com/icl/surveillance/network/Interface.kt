@@ -1,4 +1,33 @@
 package com.icl.surveillance.network
 
-class Interface {
+import com.icl.surveillance.models.DbResetPassword
+import com.icl.surveillance.models.DbSetPasswordReq
+import com.icl.surveillance.models.DbSignIn
+import com.icl.surveillance.models.DbSignInResponse
+import com.icl.surveillance.models.DbUserInfoResponse
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.POST
+import retrofit2.http.Query
+
+interface Interface {
+
+    @POST("provider/login")
+    suspend fun signInUser(@Body dbSignIn: DbSignIn): Response<DbSignInResponse>
+
+    @GET("provider/me")
+    suspend fun getUserInfo(
+        @Header("Authorization") token: String,
+    ): Response<DbUserInfoResponse>
+
+    @GET("provider/reset-password")
+    suspend fun resetPassword(
+        @Query("idNumber") idNumber: String,
+        @Query("email", encoded = true) email: String,
+    ): Response<DbResetPassword>
+
+    @POST("provider/reset-password")
+    suspend fun setNewPassword(@Body dbSetPasswordReq: DbSetPasswordReq): Response<Any>
 }

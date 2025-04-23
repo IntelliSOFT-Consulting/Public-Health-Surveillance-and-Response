@@ -296,49 +296,9 @@
       ]
     },
     {
-      "linkId": "sub-county-contact-person",
-      "text": "H. Sub County Contact Person",
-      "type": "display"
-    },
-    {
-      "linkId": "form-completed-by",
-      "text": "H1. Form completed by",
-      "type": "display"
-    },
-    {
-      "linkId": "completer-name",
-      "text": "Name of person completing form",
-      "type": "string"
-    },
-    {
-      "linkId": "completer-designation",
-      "text": "Designation",
-      "type": "string"
-    },
-    {
-      "linkId": "completer-sign",
-      "text": "Sign",
-      "type": "string"
-    },
-    {
-      "linkId": "sub-county-contact-person-details",
-      "text": "H.2 Sub County contact person details",
-      "type": "display"
-    },
-    {
-      "linkId": "contact-name",
-      "text": "Name",
-      "type": "string"
-    },
-    {
-      "linkId": "contact-designation",
-      "text": "Designation",
-      "type": "string"
-    },
-    {
-      "linkId": "contact-phone",
-      "text": "Phone No",
-      "type": "string",
+      "linkId": "final-negative-classification",
+      "text": "Final Classification. Case classification after investigation (e.g., confirmed, compatible, discarded)",
+      "type": "choice",
       "extension": [
         {
           "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -346,18 +306,35 @@
             "coding": [
               {
                 "system": "http://hl7.org/fhir/questionnaire-item-control",
-                "code": "phone-number",
-                "display": "Phone Number"
+                "code": "drop-down",
+                "display": "Drop down"
               }
             ]
           }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+          "valueBoolean": true
+        }
+      ],
+      "initial": [
+        {
+          "valueCoding": {
+            "code": "Discarded",
+            "display": "Discarded"
+          }
+        }
+      ],
+      "enableWhen": [
+        {
+          "question": "measles-igm",
+          "operator": "=",
+          "answerCoding": {
+            "code": "Negative",
+            "display": "Negative"
+          }
         }
       ]
-    },
-    {
-      "linkId": "contact-email",
-      "text": "Email",
-      "type": "string"
     }
   ]
 }

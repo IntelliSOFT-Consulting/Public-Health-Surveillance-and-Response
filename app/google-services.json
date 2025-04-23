@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "134117203565",
+    "project_id": "chanjo-ke-655ac",
+    "storage_bucket": "chanjo-ke-655ac.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:134117203565:android:5fed7afed610d4d9e1a964",
+        "android_client_info": {
+          "package_name": "com.icl.surveillance"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAARMhTAJaCVoATGGkivmdQhXNPyO2zHKs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:134117203565:android:f8853aa7b87c05b2e1a964",
+        "android_client_info": {
+          "package_name": "com.intellisoft.chanjoke"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAARMhTAJaCVoATGGkivmdQhXNPyO2zHKs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

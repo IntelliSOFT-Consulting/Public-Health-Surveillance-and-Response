@@ -1,5 +1,6 @@
 package com.icl.surveillance.ui.patients.data
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.fhir.FhirEngine
 import com.icl.surveillance.adapters.PatientDetailsRecyclerViewAdapter
+import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.databinding.FragmentClinicalInformationBinding
 import com.icl.surveillance.fhir.FhirApplication
+import com.icl.surveillance.ui.patients.AddCaseActivity
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
@@ -78,16 +81,25 @@ class ClinicalInformationFragment : Fragment() {
     // getPatientDetailData("Measles Case", null)
     patientDetailsViewModel.livecaseData.observe(viewLifecycleOwner) {
       binding.apply {
-        tvOnset.text = it.onset
         tvFirstSeen.text = it.dateFirstSeen
-        tvHospitalized.text = it.hospitalized
-        tvIpOp.text = it.ipNo
-        tvDiagnosis.text = it.diagnosis
-        tvMeans.text = it.diagnosisMeans
-        tvOtherSpecify.text = it.diagnosisMeansOther
-        tvVaccinated.text = it.wasPatientVaccinated
-        tvTwoMonths.text = it.twoMonthsVaccination
-        tvStatus.text = it.patientStatus
+        tvStatus.text = it.inPatientOutPatient
+        tvAdmissionDate.text = it.admissionDate
+        tvIpOpNo.text = it.ipNo
+        tvOutcome.text = it.patientOutcome
+        tvSampleCollected.text = it.sampleCollected
+        
+        //        tvVaccinated.text = it.wasPatientVaccinated
+        //        tvTwoMonths.text = it.twoMonthsVaccination
+        //        tvStatus.text = it.patientStatus
+      }
+    }
+    binding.apply {
+      fab.setOnClickListener {
+        FormatterClass().saveSharedPref("questionnaire", "measles-case.json", requireContext())
+        FormatterClass().saveSharedPref("title", "Measles Case", requireContext())
+        val intent = Intent(requireContext(), AddCaseActivity::class.java)
+        intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "measles-case.json")
+        startActivity(intent)
       }
     }
   }

@@ -16,6 +16,11 @@
         android:theme="@style/Theme.Surveillance"
         tools:targetApi="31">
         <activity
+            android:name=".clients.AddParentCaseActivity"
+            android:exported="false"
+            android:label="New Case"
+            android:theme="@style/Theme.Surveillance" />
+        <activity
             android:name=".ui.patients.FullCaseDetailsActivity"
             android:exported="false"
             android:label="Case Summary " />
@@ -33,17 +38,20 @@
             android:label="Case Details" />
         <activity
             android:name=".auth.LoginActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.Surveillance">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Surveillance">
+
         </activity>
     </application>
 

@@ -25,22 +25,14 @@
             android:layout_marginTop="3dp"
             android:text="@string/hello" />
 
-        <TextView
-            android:id="@+id/username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/greeting"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:text="@string/john_mdoe"
-            android:textStyle="bold" />
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/sdcLayoutsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="@dimen/component_horizontal_margin" />
+        android:layout_marginHorizontal="@dimen/component_horizontal_margin"
+        tools:listitem="@layout/landing_page_item" />
     <!-- Overlapping Card: Action Buttons -->
     <!--    <androidx.cardview.widget.CardView-->
     <!--        android:id="@+id/action_card"-->

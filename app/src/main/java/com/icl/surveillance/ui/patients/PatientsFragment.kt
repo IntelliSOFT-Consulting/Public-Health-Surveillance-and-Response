@@ -24,108 +24,120 @@ import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.utils.FormatterClass
 
 class PatientsFragment : Fragment() {
-  private lateinit var fhirEngine: FhirEngine
-  private lateinit var patientListViewModel: PatientListViewModel
-  private lateinit var searchView: SearchView
+    private lateinit var fhirEngine: FhirEngine
+    private lateinit var patientListViewModel: PatientListViewModel
+    private lateinit var searchView: SearchView
 
-  private var _binding: FragmentPatientListBinding? = null
+    private var _binding: FragmentPatientListBinding? = null
 
-  // This property is only valid between onCreateView and
-  // onDestroyView.
-  private val binding
-    get() = _binding!!
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding
+        get() = _binding!!
 
-  override fun onCreateView(
-      inflater: LayoutInflater,
-      container: ViewGroup?,
-      savedInstanceState: Bundle?
-  ): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
 
-    _binding = FragmentPatientListBinding.inflate(inflater, container, false)
-    val root: View = binding.root
-    val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        _binding = FragmentPatientListBinding.inflate(inflater, container, false)
+        val root: View = binding.root
+        val imm =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
-    binding.givenNameEditText.apply {
-      addTextChangedListener(
-          onTextChanged = { text, _, _, _ ->
-            patientListViewModel.setPatientGivenName(text.toString())
-          },
-      )
-      setOnFocusChangeListener { view, hasFocus ->
-        if (!hasFocus) {
-          imm.hideSoftInputFromWindow(view.windowToken, 0)
+        binding.tvEpidNo.apply {
+            addTextChangedListener(
+                onTextChanged = { text, _, _, _ ->
+                    patientListViewModel.setPatientGivenName(text.toString())
+                },
+            )
+            setOnFocusChangeListener { view, hasFocus ->
+                if (!hasFocus) {
+                    imm.hideSoftInputFromWindow(view.windowToken, 0)
+                }
+            }
         }
-      }
-    }
-    binding.familyNameEditText.apply {
-      addTextChangedListener(
-          onTextChanged = { text, _, _, _ ->
-            patientListViewModel.setPatientFamilyName(text.toString())
-          },
-      )
-      setOnFocusChangeListener { view, hasFocus ->
-        if (!hasFocus) {
-          imm.hideSoftInputFromWindow(view.windowToken, 0)
+        binding.familyNameEditText.apply {
+            addTextChangedListener(
+                onTextChanged = { text, _, _, _ ->
+                    patientListViewModel.setPatientFamilyName(text.toString())
+                },
+            )
+            setOnFocusChangeListener { view, hasFocus ->
+                if (!hasFocus) {
+                    imm.hideSoftInputFromWindow(view.windowToken, 0)
+                }
+            }
         }
-      }
+        return root
     }
-    return root
-  }
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
-    //    (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-    //      title = resources.getString(R.string.title_patient_list)
-    //      setDisplayHomeAsUpEnabled(true)
-    //    }
-    fhirEngine = FhirApplication.fhirEngine(requireContext())
-    patientListViewModel =
-        ViewModelProvider(
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        //    (requireActivity() as AppCompatActivity).supportActionBar?.apply {
+        //      title = resources.getString(R.string.title_patient_list)
+        //      setDisplayHomeAsUpEnabled(true)
+        //    }
+        fhirEngine = FhirApplication.fhirEngine(requireContext())
+        patientListViewModel =
+            ViewModelProvider(
                 this,
                 PatientListViewModel.PatientListViewModelFactory(
-                    requireActivity().application, fhirEngine),
+                    requireActivity().application, fhirEngine
+                ),
             )
-            .get(PatientListViewModel::class.java)
-    val recyclerView: RecyclerView = binding.patientListContainer.patientList
-    val adapter = PatientItemRecyclerViewAdapter(this::onPatientItemClicked)
-    recyclerView.adapter = adapter
-    recyclerView.addItemDecoration(
-        DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
-          setDrawable(ColorDrawable(Color.LTGRAY))
-        },
-    )
-
-    patientListViewModel.liveSearchedPatients.observe(viewLifecycleOwner) { adapter.submitList(it) }
-
-    patientListViewModel.patientCount.observe(viewLifecycleOwner) {}
-
-    requireActivity()
-        .onBackPressedDispatcher
-        .addCallback(
-            viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-              override fun handleOnBackPressed() {
-                if (searchView.query.isNotEmpty()) {
-                  searchView.setQuery("", true)
-                } else {
-                  isEnabled = false
-                  activity?.onBackPressed()
-                }
-              }
+                .get(PatientListViewModel::class.java)
+        val recyclerView: RecyclerView = binding.patientListContainer.patientList
+        val adapter = PatientItemRecyclerViewAdapter(this::onPatientItemClicked)
+        recyclerView.adapter = adapter
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
+                setDrawable(ColorDrawable(Color.LTGRAY))
             },
         )
-    setHasOptionsMenu(true)
-  }
 
-  override fun onDestroyView() {
-    super.onDestroyView()
-    _binding = null
-  }
+        patientListViewModel.liveSearchedPatients.observe(viewLifecycleOwner) {
+            binding.apply { patientListContainer.pbProgress.visibility = View.GONE }
+            if (it.isEmpty()) {
+                binding.apply { patientListContainer.caseCount.visibility = View.VISIBLE }
+            } else {
+                binding.apply { patientListContainer.caseCount.visibility = View.GONE }
+            }
 
-  private fun onPatientItemClicked(patientItem: PatientListViewModel.PatientItem) {
-    println("Going to client details activity with the id as ${patientItem.resourceId}")
-    FormatterClass().saveSharedPref("resourceId", patientItem.resourceId, requireContext())
-    FormatterClass().saveSharedPref("encounterId", patientItem.encounterId, requireContext())
-    findNavController().navigate(R.id.action_navigation_dashboard_to_fullCaseDetailsActivity)
-  }
+            adapter.submitList(it)
+        }
+
+        patientListViewModel.patientCount.observe(viewLifecycleOwner) {
+            binding.patientListContainer.caseCount.text = "$it Case(s) Found"
+        }
+        requireActivity()
+            .onBackPressedDispatcher
+            .addCallback(
+                viewLifecycleOwner,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        if (searchView.query.isNotEmpty()) {
+                            searchView.setQuery("", true)
+                        } else {
+                            isEnabled = false
+                            activity?.onBackPressed()
+                        }
+                    }
+                },
+            )
+        setHasOptionsMenu(true)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun onPatientItemClicked(patientItem: PatientListViewModel.PatientItem) {
+        println("Going to client details activity with the id as ${patientItem.resourceId} and Encounter ${patientItem.encounterId}")
+        FormatterClass().saveSharedPref("resourceId", patientItem.resourceId, requireContext())
+        FormatterClass().saveSharedPref("encounterId", patientItem.encounterId, requireContext())
+        findNavController().navigate(R.id.action_navigation_dashboard_to_fullCaseDetailsActivity)
+    }
 }

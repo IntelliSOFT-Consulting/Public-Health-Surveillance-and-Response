@@ -1,6 +1,8 @@
 plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.google.firebase.crashlytics)
 }
 
 android {
@@ -45,7 +47,8 @@ dependencies {
   implementation(libs.androidx.navigation.fragment.ktx)
   implementation(libs.androidx.navigation.ui.ktx)
   implementation(libs.androidx.activity)
-  testImplementation(libs.junit)
+    implementation(libs.firebase.crashlytics)
+    testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit)
   androidTestImplementation(libs.androidx.espresso.core)
   implementation("com.google.android.fhir:engine:1.2.0")
@@ -54,5 +57,12 @@ dependencies {
   implementation("androidx.fragment:fragment-ktx:1.8.6")
   implementation("androidx.datastore:datastore-preferences:1.1.4")
   implementation("androidx.work:work-runtime-ktx:2.10.0")
+
+  implementation("com.squareup.retrofit2:retrofit:2.9.0")
+  implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+  implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+  implementation("com.squareup.retrofit2:converter-moshi:2.6.0")
+  implementation("de.hdodenhof:circleimageview:3.1.0")
+  implementation("com.github.f0ris.sweetalert:library:1.6.2")
   
 }
