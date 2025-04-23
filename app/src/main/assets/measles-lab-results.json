@@ -176,6 +176,16 @@
             "display": "Unknown"
           }
         }
+      ],
+      "enableWhen": [
+        {
+          "question": "measles-igm",
+          "operator": "!=",
+          "answerCoding": {
+            "code": "Positive",
+            "display": "Positive"
+          }
+        }
       ]
     },
     {
@@ -232,6 +242,57 @@
             "display": "Lab results pending"
           }
         }
+      ],
+      "enableWhen": [
+        {
+          "question": "measles-igm",
+          "operator": "!=",
+          "answerCoding": {
+            "code": "Positive",
+            "display": "Positive"
+          }
+        }
+      ]
+    },
+    {
+      "linkId": "final-confirm-classification",
+      "text": "Final Classification. Case classification after investigation (e.g., confirmed, compatible, discarded)",
+      "type": "choice",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "drop-down",
+                "display": "Drop down"
+              }
+            ]
+          }
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+          "valueBoolean": true
+        }
+      ],
+      "initial": [
+        {
+          "valueCoding": {
+            "code": "Confirmed by lab",
+            "display": "Confirmed by lab"
+          }
+        }
+      ],
+      "enableWhen": [
+        {
+          "question": "measles-igm",
+          "operator": "=",
+          "answerCoding": {
+            "code": "Positive",
+            "display": "Positive"
+          }
+        }
       ]
     },
     {
@@ -245,17 +306,17 @@
       "type": "display"
     },
     {
-      "linkId": "H1.1",
+      "linkId": "completer-name",
       "text": "Name of person completing form",
       "type": "string"
     },
     {
-      "linkId": "H1.2",
+      "linkId": "completer-designation",
       "text": "Designation",
       "type": "string"
     },
     {
-      "linkId": "H1.3",
+      "linkId": "completer-sign",
       "text": "Sign",
       "type": "string"
     },
@@ -265,22 +326,36 @@
       "type": "display"
     },
     {
-      "linkId": "H2.H2.1",
+      "linkId": "contact-name",
       "text": "Name",
       "type": "string"
     },
     {
-      "linkId": "H2.2",
+      "linkId": "contact-designation",
       "text": "Designation",
       "type": "string"
     },
     {
-      "linkId": "H2.3",
+      "linkId": "contact-phone",
       "text": "Phone No",
-      "type": "string"
+      "type": "string",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "phone-number",
+                "display": "Phone Number"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
-      "linkId": "H2.4",
+      "linkId": "contact-email",
       "text": "Email",
       "type": "string"
     }

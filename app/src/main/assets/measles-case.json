@@ -2,221 +2,8 @@
   "resourceType": "Questionnaire",
   "id": "fever-rash-investigation",
   "status": "active",
-  "title": "Fever, Rash and Laboratory Investigation",
+  "title": "laboratory Information",
   "item": [
-    {
-      "linkId": "f1",
-      "text": "Presence of fever",
-      "type": "choice",
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-          "valueCodeableConcept": {
-            "coding": [
-              {
-                "system": "http://hl7.org/fhir/questionnaire-item-control",
-                "code": "radio-button",
-                "display": "Radio Button"
-              }
-            ]
-          }
-        },
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-          "valueCode": "horizontal"
-        }
-      ],
-      "answerOption": [
-        {
-          "valueCoding": {
-            "code": "1",
-            "display": "Yes"
-          }
-        },
-        {
-          "valueCoding": {
-            "code": "2",
-            "display": "No"
-          }
-        }
-      ]
-    },
-    {
-      "linkId": "f2",
-      "text": "Date of onset of rash",
-      "type": "date",
-      "extension": [
-        {
-          "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-          "valueString": "Cannot be a date in the future"
-        },
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-          "valueDate": {
-            "extension": [
-              {
-                "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-                "valueExpression": {
-                  "language": "text/fhirpath",
-                  "expression": "today()"
-                }
-              }
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "linkId": "f3",
-      "text": "Type of rash",
-      "type": "choice",
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-          "valueCodeableConcept": {
-            "coding": [
-              {
-                "system": "http://hl7.org/fhir/questionnaire-item-control",
-                "code": "radio-button",
-                "display": "Radio Button"
-              }
-            ]
-          }
-        },
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-          "valueCode": "horizontal"
-        }
-      ],
-      "answerOption": [
-        {
-          "valueCoding": {
-            "code": "maculopapular",
-            "display": "Maculopapular"
-          }
-        },
-        {
-          "valueCoding": {
-            "code": "other",
-            "display": "Other"
-          }
-        }
-      ]
-    },
-    {
-      "linkId": "f4a",
-      "text": "Was home of patient visited for contact investigation?",
-      "type": "choice",
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-          "valueCodeableConcept": {
-            "coding": [
-              {
-                "system": "http://hl7.org/fhir/questionnaire-item-control",
-                "code": "radio-button",
-                "display": "Radio Button"
-              }
-            ]
-          }
-        },
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-          "valueCode": "horizontal"
-        }
-      ],
-      "answerOption": [
-        {
-          "valueCoding": {
-            "code": "yes",
-            "display": "Yes"
-          }
-        },
-        {
-          "valueCoding": {
-            "code": "no",
-            "display": "No"
-          }
-        }
-      ]
-    },
-    {
-      "linkId": "f4b",
-      "text": "If Yes, Date of visit",
-      "type": "date",
-      "extension": [
-        {
-          "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-          "valueString": "Cannot be a date in the future"
-        },
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-          "valueDate": {
-            "extension": [
-              {
-                "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-                "valueExpression": {
-                  "language": "text/fhirpath",
-                  "expression": "today()"
-                }
-              }
-            ]
-          }
-        }
-      ],
-      "enableWhen": [
-        {
-          "question": "f4a",
-          "operator": "=",
-          "answerCoding": {
-            "code": "yes"
-          }
-        }
-      ]
-    },
-    {
-      "linkId": "f5",
-      "text": "Is the case epidemiologically linked to a lab-confirmed case?",
-      "type": "choice",
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-          "valueCodeableConcept": {
-            "coding": [
-              {
-                "system": "http://hl7.org/fhir/questionnaire-item-control",
-                "code": "radio-button",
-                "display": "Radio Button"
-              }
-            ]
-          }
-        },
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-          "valueCode": "horizontal"
-        }
-      ],
-      "answerOption": [
-        {
-          "valueCoding": {
-            "code": "yes",
-            "display": "Yes"
-          }
-        },
-        {
-          "valueCoding": {
-            "code": "no",
-            "display": "No"
-          }
-        },
-        {
-          "valueCoding": {
-            "code": "unknown",
-            "display": "Unknown"
-          }
-        }
-      ]
-    },
     {
       "linkId": "g1a",
       "text": "Specimen Collection (To be completed by the health facility)",
@@ -275,7 +62,7 @@
       "item": [
         {
           "linkId": "g1b1",
-          "text": "First date",
+          "text": "-",
           "type": "date",
           "extension": [
             {
@@ -300,7 +87,7 @@
         },
         {
           "linkId": "g1b2",
-          "text": "Second date",
+          "text": "-",
           "type": "date",
           "extension": [
             {
