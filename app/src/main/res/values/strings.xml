@@ -11,4 +11,12 @@
     <string name="family_name">Family Name</string>
     <string name="new_case_description">New Case</string>
     <string name="message_no_datetime">N/A</string>
+    <string name="moh502">Immediate Notifiable Diseases Reporting Tool</string>
+    <string name="contact_tracing">Contact tracing forms</string>
+    <string name="moh505">IDSR Weekly Epidemic Monitoring Tool</string>
+    <string name="social_form">Social Investigation Form</string>
+    <string name="rumor_tracking">Rumor Tracking Tool</string>
+    <string name="hello">Hello,</string>
+    <string name="john_mdoe">John Mdoe</string>
+
 </resources>

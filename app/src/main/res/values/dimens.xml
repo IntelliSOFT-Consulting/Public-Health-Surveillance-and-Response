@@ -6,4 +6,8 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="status_margin">16dp</dimen>
     <dimen name="small_text_margin">2dp</dimen>
+    <dimen name="component_horizontal_margin">4dp</dimen>
+    <dimen name="icon_container_height">128dp</dimen>
+    <dimen name="component_item_height">180dp</dimen>
+    <dimen name="component_vertical_margin">4dp</dimen>
 </resources>
