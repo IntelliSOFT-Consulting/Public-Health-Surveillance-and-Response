@@ -2,7 +2,7 @@
     <string name="app_name">PHIS</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Cases List</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_notifications">Profile</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add_client">Add Case</string>

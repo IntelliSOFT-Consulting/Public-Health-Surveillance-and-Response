@@ -35,6 +35,16 @@ class PatientsFragment : Fragment() {
     private val binding
         get() = _binding!!
 
+
+    override fun onResume() {
+        super.onResume()
+        try {
+            patientListViewModel.searchPatientsByName("")
+        } catch (e: Exception) {
+
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

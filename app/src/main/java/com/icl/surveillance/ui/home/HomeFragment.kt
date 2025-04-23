@@ -9,6 +9,7 @@ import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -56,8 +57,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun handleUser() {
-        val fullText = "Hello, John Mdoe"
-        val name = "John Mdoe"
+        val name = getUserNameFromDetails()
+        val fullText = "Hello, $name"
+
         val spannable = SpannableString(fullText)
         val start = fullText.indexOf(name)
         val end = start + name.length
@@ -80,26 +82,35 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun getUserNameFromDetails(): String {
+        val user = FormatterClass().getSharedPref("fullNames", requireContext())
+        return user ?: "John Mdoe"
+    }
+
     private fun onItemClick(layout: HomeViewModel.Layout) {
         val title = context?.getString(layout.textId) ?: ""
-//        when (layout.count) {
-//            0 -> {
-        val bundle =
-            Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-case.json") }
+        when (layout.count) {
+            0 -> {
+                val bundle =
+                    Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-case.json") }
 
-        FormatterClass()
-            .saveSharedPref(
-                "title", title,
-                requireContext()
-            )
+                FormatterClass()
+                    .saveSharedPref(
+                        "title", title,
+                        requireContext()
+                    )
 
-        findNavController().navigate(
-            R.id.action_navigation_home_to_single_case_fragment,
-            bundle
-        )
+                findNavController().navigate(
+                    R.id.action_navigation_home_to_single_case_fragment,
+                    bundle
+                )
 
-//            }
-//        }
+            }
+
+            else -> {
+                Toast.makeText(requireContext(), "Coming soon!!", Toast.LENGTH_SHORT).show()
+            }
+        }
 
     }
 

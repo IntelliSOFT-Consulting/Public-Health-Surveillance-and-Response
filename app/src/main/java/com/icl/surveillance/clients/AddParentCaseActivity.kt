@@ -3,6 +3,7 @@ package com.icl.surveillance.clients
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -30,14 +31,16 @@ class AddParentCaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //    enableEdgeToEdge()
+        enableEdgeToEdge()
         binding = ActivityAddParentCaseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 //    setSupportActionBar(binding.toolbar)
 
-//    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-//    val titleName = FormatterClass().getSharedPref("title", this@AddParentCaseActivity)
-//    supportActionBar.apply { title = titleName }
+    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    val titleName = FormatterClass().getSharedPref("title", this@AddParentCaseActivity)
+    supportActionBar.apply { title = titleName }
+
+
         updateArguments()
         if (savedInstanceState == null) {
             addQuestionnaireFragment()

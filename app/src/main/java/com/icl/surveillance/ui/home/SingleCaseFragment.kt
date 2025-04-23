@@ -83,12 +83,12 @@ class SingleCaseFragment : Fragment() {
 
                 FormatterClass().saveSharedPref(
                     "questionnaire",
-                    "add-client.json",
+                    "add-case.json",
                     requireContext()
                 )
                 val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
                 intent.putExtra("title", "Add Case")
-                intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "add-client.json")
+                intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "add-case.json")
                 startActivity(intent)
             }
             btnList.setOnClickListener {
