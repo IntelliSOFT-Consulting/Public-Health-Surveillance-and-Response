@@ -1,6 +1,7 @@
 package com.icl.surveillance.ui.patients
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,24 +14,42 @@ import com.google.android.fhir.search.Order
 import com.google.android.fhir.search.StringFilterModifier
 import com.google.android.fhir.search.count
 import com.google.android.fhir.search.search
+import com.icl.surveillance.utils.FormatterClass
 import java.time.LocalDate
 import java.time.ZoneId
 import kotlinx.coroutines.launch
+import org.hl7.fhir.r4.model.Coding
 import org.hl7.fhir.r4.model.Encounter
 import org.hl7.fhir.r4.model.Observation
 import org.hl7.fhir.r4.model.Patient
 
-class PatientListViewModel(application: Application, private val fhirEngine: FhirEngine) :
+class PatientListViewModel(
+    application: Application,
+    private val fhirEngine: FhirEngine
+) :
     AndroidViewModel(application) {
     val liveSearchedPatients = MutableLiveData<List<PatientItem>>()
+    val liveSearchedCases = MutableLiveData<List<PatientItem>>()
     val patientCount = MutableLiveData<Long>()
 
+
     init {
-        updatePatientListAndPatientCount({ getSearchResults() }, { searchedPatientCount() })
+        updatePatientListAndPatientCount(
+            { getSearchResults() },
+            { searchedPatientCount() })
     }
 
     fun searchPatientsByName(nameQuery: String) {
-        updatePatientListAndPatientCount({ getSearchResults(nameQuery) }, { count(nameQuery) })
+        updatePatientListAndPatientCount(
+            { getSearchResults(nameQuery) },
+            { count(nameQuery) })
+    }
+
+    fun handleCurrentCaseListing(category: String) {
+        viewModelScope.launch {
+            liveSearchedCases.value = retrieveCasesByDisease(category)
+//            patientCount.value = count()
+        }
     }
 
     /**
@@ -66,7 +85,10 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
         }
     }
 
-    private suspend fun getSearchResults(nameQuery: String = ""): List<PatientItem> {
+    private suspend fun getSearchResults(
+        nameQuery: String = "",
+    ): List<PatientItem> {
+
         val patients: MutableList<PatientItem> = mutableListOf()
         fhirEngine
             .search<Patient> {
@@ -216,6 +238,247 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
 
         return patients
     }
+
+    private suspend fun retrieveCasesByDisease(
+        nameQuery: String,
+    ): List<PatientItem> {
+
+        println("Started searching for cases *** $nameQuery")
+
+        return fhirEngine
+            .search<Patient> {
+                sort(Patient.GIVEN, Order.ASCENDING)
+                count = 100
+                from = 0
+            }
+            .mapIndexedNotNull { index, fhirPatient ->
+                // Only return the patient if one of the identifiers matches the system
+                val matchingIdentifier = fhirPatient.resource.identifier.find {
+                    it.system == nameQuery
+                }
+
+                if (matchingIdentifier != null) {
+                    // Convert the FHIR Patient resource to your PatientItem model
+                    var data = fhirPatient.resource.toPatientItem(index + 1)
+                    val logicalId = matchingIdentifier.value
+                    val obs =
+                        fhirEngine.search<Observation> {
+                            filter(
+                                Observation.ENCOUNTER,
+                                { value = "Encounter/${logicalId}" })
+                        }
+                    val epid =
+                        obs.firstOrNull { it.resource.code.codingFirstRep.code == "EPID" }
+                            ?.resource
+                            ?.value
+                            ?.asStringValue() ?: ""
+
+                    val county =
+                        obs.firstOrNull { it.resource.code.codingFirstRep.code == "a4-county" }
+                            ?.resource
+                            ?.value
+                            ?.asStringValue() ?: ""
+                    val subCounty =
+                        obs.firstOrNull { it.resource.code.codingFirstRep.code == "a3-sub-county" }
+                            ?.resource
+                            ?.value
+                            ?.asStringValue() ?: ""
+                    val onset =
+                        obs.firstOrNull { it.resource.code.codingFirstRep.code == "728034137219" }
+                            ?.resource
+                            ?.value
+                            ?.asStringValue() ?: ""
+
+                    // Loading Lab Results
+                    val childEncounter = loadChildEncounter(data.resourceId, logicalId)
+
+                    val childCaseInfoEncounter =
+                        childEncounter.firstOrNull {
+                            it.reasonCodeFirstRep.codingFirstRep.code == "Measles Lab Information"
+                        }
+                    var measlesIgm = "Pending"
+                    var finalClassification = "Pending Results"
+                    childCaseInfoEncounter?.let { kk ->
+                        val obs1 =
+                            fhirEngine.search<Observation> {
+                                filter(
+                                    Observation.ENCOUNTER,
+                                    { value = "Encounter/${kk.logicalId}" })
+                            }
+
+                        measlesIgm =
+                            obs1.firstOrNull { it.resource.code.codingFirstRep.code == "measles-igm" }
+                                ?.resource
+                                ?.value
+                                ?.asStringValue() ?: ""
+
+
+                        finalClassification = when (measlesIgm.lowercase()) {
+                            "positive" -> obs1.firstOrNull {
+                                it.resource.code.codingFirstRep.code == "final-confirm-classification"
+                            }?.resource?.value?.asStringValue() ?: ""
+
+                            "negative" -> obs1.firstOrNull {
+                                it.resource.code.codingFirstRep.code == "final-negative-classification"
+                            }?.resource?.value?.asStringValue() ?: ""
+
+                            else -> obs1.firstOrNull {
+                                it.resource.code.codingFirstRep.code == "final-classification"
+                            }?.resource?.value?.asStringValue() ?: ""
+                        }
+                    }
+                    data =
+                        data.copy(
+                            encounterId = logicalId,
+                            epid = epid, labResults = measlesIgm, status = finalClassification,
+                            county = county, subCounty = subCounty, caseOnsetDate = onset
+                        )
+                    data
+                } else {
+                    null // Not a match — exclude
+                }
+            }
+            .sortedByDescending { it.lastUpdated }
+    }
+
+//
+//    private suspend fun retrieveCasesByDisease(
+//        nameQuery: String,
+//    ): List<PatientItem> {
+//
+//        println("Started searching for cases *** $nameQuery")
+//        val patients: MutableList<PatientItem> = mutableListOf()
+//        fhirEngine
+//            .search<Patient> {
+////                filter(
+////                    Patient.IDENTIFIER,
+////                    {
+////                        value = of(Coding().apply {
+////                            system = nameQuery
+////                            code = nameQuery
+////                        })
+////                    })
+////                filter(
+////                    Patient.IDENTIFIER,
+////                    { value = of("$nameQuery|$nameQuery") }
+////                )
+//                sort(Patient.GIVEN, Order.ASCENDING)
+//                count = 100
+//                from = 0
+//            }
+//            .mapIndexedNotNull { index, fhirPatient ->
+//
+//                val patient = fhirPatient.resource.identifier.find { it.system == nameQuery }
+//                if (patient != null) {
+//                    var item = fhirPatient.resource.toPatientItem(index + 1)
+//
+//
+////                try {
+////
+////                    val encounter = loadEncounter(item.resourceId)
+////                    val caseInfoEncounter =
+////                        encounter.firstOrNull {
+////                            it.reasonCodeFirstRep.codingFirstRep.code == "Measles Case Information"
+////                        }
+////
+////                    caseInfoEncounter?.let {
+////
+////                        val childEncounter = loadChildEncounter(item.resourceId, it.logicalId)
+////                        val childCaseInfoEncounter =
+////                            childEncounter.firstOrNull {
+////                                it.reasonCodeFirstRep.codingFirstRep.code == "Measles Lab Information"
+////                            }
+////
+////                        childCaseInfoEncounter?.let { kk ->
+////                            val obs1 =
+////                                fhirEngine.search<Observation> {
+////                                    filter(
+////                                        Observation.ENCOUNTER,
+////                                        { value = "Encounter/${kk.logicalId}" })
+////                                }
+////
+////                            val measlesIgm =
+////                                obs1.firstOrNull { it.resource.code.codingFirstRep.code == "measles-igm" }
+////                                    ?.resource
+////                                    ?.value
+////                                    ?.asStringValue() ?: ""
+////
+////
+////                            val finalClassification = when (measlesIgm.lowercase()) {
+////                                "positive" -> obs1.firstOrNull {
+////                                    it.resource.code.codingFirstRep.code == "final-confirm-classification"
+////                                }?.resource?.value?.asStringValue() ?: ""
+////
+////                                "negative" -> obs1.firstOrNull {
+////                                    it.resource.code.codingFirstRep.code == "final-negative-classification"
+////                                }?.resource?.value?.asStringValue() ?: ""
+////
+////                                else -> obs1.firstOrNull {
+////                                    it.resource.code.codingFirstRep.code == "final-classification"
+////                                }?.resource?.value?.asStringValue() ?: ""
+////                            }
+////
+////                            println("Found Child Encounter: ${it.id}")
+////
+////                            item = item.copy(labResults = measlesIgm, status = finalClassification)
+////                        }
+////
+////                        // pull all Obs for this Encounter
+////                        val obs =
+////                            fhirEngine.search<Observation> {
+////                                filter(
+////                                    Observation.ENCOUNTER,
+////                                    { value = "Encounter/${it.logicalId}" })
+////                            }
+////
+////                        val epid =
+////                            obs.firstOrNull { it.resource.code.codingFirstRep.code == "EPID" }
+////                                ?.resource
+////                                ?.value
+////                                ?.asStringValue() ?: "still loading"
+////                        val county =
+////                            obs.firstOrNull { it.resource.code.codingFirstRep.code == "a4-county" }
+////                                ?.resource
+////                                ?.value
+////                                ?.asStringValue() ?: ""
+////                        val subCounty =
+////                            obs.firstOrNull { it.resource.code.codingFirstRep.code == "a3-sub-county" }
+////                                ?.resource
+////                                ?.value
+////                                ?.asStringValue() ?: ""
+////                        val onset =
+////                            obs.firstOrNull { it.resource.code.codingFirstRep.code == "728034137219" }
+////                                ?.resource
+////                                ?.value
+////                                ?.asStringValue() ?: ""
+////
+////                        item =
+////                            item.copy(
+////                                encounterId = it.logicalId,
+////                                epid = epid,
+////                                subCounty = subCounty,
+////                                county = county,
+////                                caseOnsetDate = onset
+////                            )
+////                    }
+////
+////
+////                } catch (e: Exception) {
+////                    e.printStackTrace()
+////
+////                    println("Error Loading Page : ${e.message}")
+////                }
+//                    item
+//                }
+//            }
+//            .let {
+//                val sortedCases = it.sortedByDescending { q -> q.lastUpdated }
+//
+//                patients.addAll(sortedCases)
+//            }
+//
+//        return patients
+//    }
 
     /** The Patient's details for display purposes. */
     data class PatientItem(
@@ -423,12 +686,14 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
                     from = 0
                 }
                 .mapIndexed { index, fhirPatient ->
+
                     val item = fhirPatient.resource.toPatientItem(index + 1)
                     try {
                         val encounter = loadEncounter(item.resourceId)
                         encounter.forEach {
                             println(
-                                "Printing Encounter Details: it.resource.reasonCode: ${it.reasonCodeFirstRep.codingFirstRep.code}")
+                                "Printing Encounter Details: it.resource.reasonCode: ${it.reasonCodeFirstRep.codingFirstRep.code}"
+                            )
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -448,7 +713,10 @@ class PatientListViewModel(application: Application, private val fhirEngine: Fhi
             .map { it.resource }
     }
 
-    private suspend fun loadChildEncounter(patientId: String, encounterId: String): List<Encounter> {
+    private suspend fun loadChildEncounter(
+        patientId: String,
+        encounterId: String
+    ): List<Encounter> {
         return fhirEngine
             .search<Encounter> {
                 filter(Encounter.SUBJECT, { value = "Patient/$patientId" })
@@ -509,22 +777,23 @@ internal fun Patient.toPatientItem(
         lastUpdated = ""
     }
 
-    val encounterId=
+    val encounterId =
 
-    return PatientListViewModel.PatientItem(
-        id = position.toString(),
-        encounterId = "encounterId",
-        resourceId = patientId,
-        name = " $name",
-        gender = gender ?: "",
-        dob = dob,
-        phone = phone ?: "",
-        city = city ?: "",
-        country = country ?: "",
-        isActive = isActive,
-        epid = epid,
-        county = county,
-        subCounty = subCounty,
-        caseOnsetDate = caseOnsetDate,
-        lastUpdated = lastUpdated)
+        return PatientListViewModel.PatientItem(
+            id = position.toString(),
+            encounterId = "encounterId",
+            resourceId = patientId,
+            name = " $name",
+            gender = gender ?: "",
+            dob = dob,
+            phone = phone ?: "",
+            city = city ?: "",
+            country = country ?: "",
+            isActive = isActive,
+            epid = epid,
+            county = county,
+            subCounty = subCounty,
+            caseOnsetDate = caseOnsetDate,
+            lastUpdated = lastUpdated
+        )
 }

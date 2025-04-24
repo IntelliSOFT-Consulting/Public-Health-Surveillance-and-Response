@@ -115,7 +115,7 @@ class ClientDetailsViewModel(
             .map { it.resource }
     }
 
-    private suspend fun getPatientInfoCard(): PatientListViewModel.CaseDetailData {
+    private suspend fun getPatientInfoCard(slug: String): PatientListViewModel.CaseDetailData {
         val searchResult =
             fhirEngine.search<Patient> { filter(Resource.RES_ID, { value = of(patientId) }) }
         var logicalId = ""
@@ -189,17 +189,16 @@ class ClientDetailsViewModel(
                         it.resource.birthDateElement.valueAsString
                     else ""
                 else ""
-
-            val encounter = loadEncounter(logicalId)
-            val caseInfoEncounter =
-                encounter.firstOrNull { it.reasonCodeFirstRep.codingFirstRep.code == "Case Information" }
-
-            caseInfoEncounter?.let {
+            val matchingIdentifier = it.resource.identifier.find {
+                it.system == slug
+            }
+            if (matchingIdentifier != null) {
                 val obs =
                     fhirEngine.search<Observation> {
-                        filter(Observation.ENCOUNTER, { value = "Encounter/${it.logicalId}" })
+                        filter(
+                            Observation.ENCOUNTER,
+                            { value = "Encounter/${matchingIdentifier.value}" })
                     }
-                obs.forEach { println("Observation Details :::: ${it.resource.value}") }
 
                 // Lab Information
                 specimen = generateResponse(obs, "918495737998")
@@ -408,9 +407,9 @@ class ClientDetailsViewModel(
             ?.asStringValue() ?: ""
     }
 
-    fun getPatientInfo() {
+    fun getPatientInfo(slug: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            val patientData = getPatientInfoCard()
+            val patientData = getPatientInfoCard(slug)
             withContext(Dispatchers.Main) { livecaseData.value = patientData }
         }
     }

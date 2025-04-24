@@ -15,6 +15,7 @@ import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.ui.patients.AddCaseActivity
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
+import com.icl.surveillance.utils.toSlug
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
 
@@ -77,7 +78,11 @@ class ClinicalInformationFragment : Fragment() {
             .get(ClientDetailsViewModel::class.java)
 
     val adapter = PatientDetailsRecyclerViewAdapter(this::onItemClicked)
-    patientDetailsViewModel.getPatientInfo()
+    val currentCase = FormatterClass().getSharedPref("currentCase", requireContext())
+    if (currentCase != null) {
+      val slug = currentCase.toSlug()
+      patientDetailsViewModel.getPatientInfo(slug)
+    }
     // getPatientDetailData("Measles Case", null)
     patientDetailsViewModel.livecaseData.observe(viewLifecycleOwner) {
       binding.apply {

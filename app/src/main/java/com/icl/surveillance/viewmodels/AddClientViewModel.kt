@@ -254,19 +254,24 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     identifierSystem0.system = "system-creation"
                     identifierSystem0.type = typeCodeableConcept0
 
+                    var case = "case-information"
+                    if (reasonCode != null) {
+                        case = reasonCode.toSlug()
+
+                    }
                     val identifierSystem = Identifier()
                     val typeCodeableConcept = CodeableConcept()
                     val codingList = ArrayList<Coding>()
                     val coding = Coding()
-                    coding.system = "case-information"
-                    coding.code = "case-information"
-                    coding.display = "Case Information"
+                    coding.system = case
+                    coding.code = case
+                    coding.display = case
                     codingList.add(coding)
                     typeCodeableConcept.coding = codingList
                     typeCodeableConcept.text = encounterId
 
                     identifierSystem.value = encounterId
-                    identifierSystem.system = "case-information"
+                    identifierSystem.system = case
                     identifierSystem.type = typeCodeableConcept
 
 
@@ -298,6 +303,9 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         "EPID No"
                     obs.code.text = epid
                     createResource(obs, subjectReference, encounterReference)
+
+
+
                     extractedAnswers.forEach {
 
                         val obs = qh.codingQuestionnaire(
@@ -318,6 +326,15 @@ class AddClientViewModel(application: Application, private val state: SavedState
                 withContext(Dispatchers.Main) { isPatientSaved.value = true }
             }
         }
+    }
+
+    private fun String.toSlug(): String {
+        return this
+            .trim() // remove leading/trailing spaces
+            .lowercase() // make all lowercase
+            .replace("[^a-z0-9\\s-]".toRegex(), "") // remove special characters
+            .replace("\\s+".toRegex(), "-") // replace spaces with hyphens
+            .replace("-+".toRegex(), "-") // collapse multiple hyphens
     }
 
     private fun extractStructuredAnswers(response: JSONObject): List<QuestionnaireAnswer> {

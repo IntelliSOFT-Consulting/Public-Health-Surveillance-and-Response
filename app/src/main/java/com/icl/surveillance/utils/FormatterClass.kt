@@ -13,6 +13,15 @@ class FormatterClass {
     private val dateInverseFormatSeconds: SimpleDateFormat =
         SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
 
+    fun String.toSlug(): String {
+        return this
+            .trim() // remove leading/trailing spaces
+            .lowercase() // make all lowercase
+            .replace("[^a-z0-9\\s-]".toRegex(), "") // remove special characters
+            .replace("\\s+".toRegex(), "-") // replace spaces with hyphens
+            .replace("-+".toRegex(), "-") // collapse multiple hyphens
+    }
+
     fun saveSharedPref(key: String, value: String, context: Context) {
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences(context.getString(R.string.app_name), MODE_PRIVATE)

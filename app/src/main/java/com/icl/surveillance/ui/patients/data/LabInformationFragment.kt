@@ -11,6 +11,7 @@ import com.icl.surveillance.databinding.FragmentLabInformationBinding
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
+import com.icl.surveillance.utils.toSlug
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
 
@@ -61,7 +62,11 @@ class LabInformationFragment : Fragment() {
         super.onResume()
         try {
             val encounterId = FormatterClass().getSharedPref("encounterId", requireContext())
-            patientDetailsViewModel.getPatientInfo()
+            val currentCase = FormatterClass().getSharedPref("currentCase", requireContext())
+            if (currentCase != null) {
+                val slug = currentCase.toSlug()
+                patientDetailsViewModel.getPatientInfo(slug)
+            }
         } catch (e: Exception) {
             println(e.message)
         }
@@ -83,7 +88,11 @@ class LabInformationFragment : Fragment() {
             )
                 .get(ClientDetailsViewModel::class.java)
 
-        patientDetailsViewModel.getPatientInfo()
+        val currentCase = FormatterClass().getSharedPref("currentCase", requireContext())
+        if (currentCase != null) {
+            val slug = currentCase.toSlug()
+            patientDetailsViewModel.getPatientInfo(slug)
+        }
         patientDetailsViewModel.livecaseData.observe(viewLifecycleOwner) {
             binding.apply {
                 tvSpecimen.text = it.specimen

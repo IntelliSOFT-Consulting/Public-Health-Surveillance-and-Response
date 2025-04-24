@@ -12,6 +12,7 @@ import com.icl.surveillance.databinding.FragmentReportingSiteBinding
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
+import com.icl.surveillance.utils.toSlug
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
 
@@ -25,89 +26,94 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class ReportingSiteFragment : Fragment() {
-  // TODO: Rename and change types of parameters
-  private var param1: String? = null
-  private var param2: String? = null
+    // TODO: Rename and change types of parameters
+    private var param1: String? = null
+    private var param2: String? = null
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    arguments?.let {
-      param1 = it.getString(ARG_PARAM1)
-      param2 = it.getString(ARG_PARAM2)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            param1 = it.getString(ARG_PARAM1)
+            param2 = it.getString(ARG_PARAM2)
+        }
     }
-  }
 
-  private lateinit var fhirEngine: FhirEngine
-  private lateinit var patientDetailsViewModel: ClientDetailsViewModel
-  private var _binding: FragmentReportingSiteBinding? = null
+    private lateinit var fhirEngine: FhirEngine
+    private lateinit var patientDetailsViewModel: ClientDetailsViewModel
+    private var _binding: FragmentReportingSiteBinding? = null
 
-  // This property is only valid between onCreateView and
-  // onDestroyView.
-  private val binding
-    get() = _binding!!
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding
+        get() = _binding!!
 
-  override fun onCreateView(
-      inflater: LayoutInflater,
-      container: ViewGroup?,
-      savedInstanceState: Bundle?
-  ): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
-    _binding = FragmentReportingSiteBinding.inflate(inflater, container, false)
-    val root: View = binding.root
+        _binding = FragmentReportingSiteBinding.inflate(inflater, container, false)
+        val root: View = binding.root
 
-    return root
-  }
+        return root
+    }
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    val patientId = FormatterClass().getSharedPref("resourceId", requireContext())
-    val encounterId = FormatterClass().getSharedPref("encounterId", requireContext())
+        val patientId = FormatterClass().getSharedPref("resourceId", requireContext())
+        val encounterId = FormatterClass().getSharedPref("encounterId", requireContext())
 
-    fhirEngine = FhirApplication.fhirEngine(requireContext())
-    patientDetailsViewModel =
-        ViewModelProvider(
+        fhirEngine = FhirApplication.fhirEngine(requireContext())
+        patientDetailsViewModel =
+            ViewModelProvider(
                 this,
                 PatientDetailsViewModelFactory(
-                    requireActivity().application, fhirEngine, "$patientId"),
+                    requireActivity().application, fhirEngine, "$patientId"
+                ),
             )
-            .get(ClientDetailsViewModel::class.java)
+                .get(ClientDetailsViewModel::class.java)
 
-    val adapter = PatientDetailsRecyclerViewAdapter(this::onItemClicked)
-    patientDetailsViewModel.getPatientInfo()
-    // getPatientDetailData("Measles Case", null)
-    patientDetailsViewModel.livecaseData.observe(viewLifecycleOwner) {
-      binding.apply {
-        epidNo.text = it.epid
-        tvFacility.text = it.facility
-        tvType.text = it.type
-        tvCounty.text = it.county
-        tvSubCounty.text = it.subCounty
-        tvDisease.text = it.disease
-      }
-    }
-  }
-
-  private fun onItemClicked(encounterItem: PatientListViewModel.EncounterItem) {}
-
-  companion object {
-    /**
-     * Use this factory method to create a new instance of this fragment using the provided
-     * parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ReportingSiteFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    @JvmStatic
-    fun newInstance(param1: String, param2: String) =
-        ReportingSiteFragment().apply {
-          arguments =
-              Bundle().apply {
-                putString(ARG_PARAM1, param1)
-                putString(ARG_PARAM2, param2)
-              }
+        val adapter = PatientDetailsRecyclerViewAdapter(this::onItemClicked)
+        val currentCase = FormatterClass().getSharedPref("currentCase", requireContext())
+        if (currentCase != null) {
+            val slug = currentCase.toSlug()
+            patientDetailsViewModel.getPatientInfo(slug)
         }
-  }
+        // getPatientDetailData("Measles Case", null)
+        patientDetailsViewModel.livecaseData.observe(viewLifecycleOwner) {
+            binding.apply {
+                epidNo.text = it.epid
+                tvFacility.text = it.facility
+                tvType.text = it.type
+                tvCounty.text = it.county
+                tvSubCounty.text = it.subCounty
+                tvDisease.text = it.disease
+            }
+        }
+    }
+
+    private fun onItemClicked(encounterItem: PatientListViewModel.EncounterItem) {}
+
+    companion object {
+        /**
+         * Use this factory method to create a new instance of this fragment using the provided
+         * parameters.
+         *
+         * @param param1 Parameter 1.
+         * @param param2 Parameter 2.
+         * @return A new instance of fragment ReportingSiteFragment.
+         */
+        // TODO: Rename and change types and number of parameters
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            ReportingSiteFragment().apply {
+                arguments =
+                    Bundle().apply {
+                        putString(ARG_PARAM1, param1)
+                        putString(ARG_PARAM2, param2)
+                    }
+            }
+    }
 }

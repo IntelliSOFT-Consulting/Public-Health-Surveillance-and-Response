@@ -37,6 +37,7 @@ class CaseListingActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val titleName = FormatterClass().getSharedPref("title", this)
+        val currentCase = FormatterClass().getSharedPref("currentCase", this)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.apply {
@@ -68,7 +69,13 @@ class CaseListingActivity : AppCompatActivity() {
             },
         )
 
-        patientListViewModel.liveSearchedPatients.observe(this) {
+        println("Started searching for cases *** $currentCase")
+        if (currentCase != null) {
+            val slug = currentCase.toSlug()
+            patientListViewModel.handleCurrentCaseListing(slug)
+        }
+
+        patientListViewModel.liveSearchedCases.observe(this) {
             binding.apply { patientListContainer.pbProgress.visibility = View.GONE }
             if (it.isEmpty()) {
                 binding.apply { patientListContainer.caseCount.visibility = View.VISIBLE }
@@ -87,8 +94,18 @@ class CaseListingActivity : AppCompatActivity() {
         startActivity(Intent(this@CaseListingActivity, FullCaseDetailsActivity::class.java))
     }
 
+    private fun String.toSlug(): String {
+        return this
+            .trim() // remove leading/trailing spaces
+            .lowercase() // make all lowercase
+            .replace("[^a-z0-9\\s-]".toRegex(), "") // remove special characters
+            .replace("\\s+".toRegex(), "-") // replace spaces with hyphens
+            .replace("-+".toRegex(), "-") // collapse multiple hyphens
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         onBackPressedDispatcher.onBackPressed()
         return true
     }
 }
+

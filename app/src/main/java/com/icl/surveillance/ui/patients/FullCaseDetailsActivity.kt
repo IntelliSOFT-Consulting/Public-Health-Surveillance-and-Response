@@ -15,6 +15,7 @@ import com.icl.surveillance.databinding.ActivityFullCaseDetailsBinding
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.ui.patients.data.ViewPagerAdapter
 import com.icl.surveillance.utils.FormatterClass
+import com.icl.surveillance.utils.toSlug
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
 
@@ -30,6 +31,7 @@ class FullCaseDetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val patientId = FormatterClass().getSharedPref("resourceId", this@FullCaseDetailsActivity)
+        val currentCase = FormatterClass().getSharedPref("currentCase", this)
 
         fhirEngine = FhirApplication.fhirEngine(this@FullCaseDetailsActivity)
         patientDetailsViewModel =
@@ -40,7 +42,11 @@ class FullCaseDetailsActivity : AppCompatActivity() {
                 ),
             )
                 .get(ClientDetailsViewModel::class.java)
-        patientDetailsViewModel.getPatientInfo()
+        println("Started searching for cases *** $currentCase")
+        if (currentCase != null) {
+            val slug = currentCase.toSlug()
+            patientDetailsViewModel.getPatientInfo(slug)
+        }
         patientDetailsViewModel.livecaseData.observe(this) {
             println("Patient Detail Information ${it.name}")
             binding.apply {
