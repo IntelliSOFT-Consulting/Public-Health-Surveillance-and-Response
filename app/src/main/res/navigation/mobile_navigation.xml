@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.icl.surveillance.ui.home.HomeFragment"
-        android:label="@string/title_home"
+        android:label=""
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_navigation_home_to_single_case_fragment"
@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.icl.surveillance.ui.patients.PatientsFragment"
-        android:label="@string/title_dashboard"
+        android:label=""
         tools:layout="@layout/fragment_patient_list">
         <action
             android:id="@+id/action_navigation_dashboard_to_fullCaseDetailsActivity"
@@ -28,7 +28,7 @@
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.icl.surveillance.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
+        android:label=""
         tools:layout="@layout/fragment_notifications" />
     <fragment
         android:id="@+id/addClientFragment"
@@ -38,12 +38,12 @@
     <activity
         android:id="@+id/clientDetailsActivity"
         android:name="com.icl.surveillance.ui.patients.ClientDetailsActivity"
-        android:label="activity_client_details"
+        android:label=""
         tools:layout="@layout/activity_client_details" />
     <fragment
         android:id="@+id/singleCaseFragment"
         android:name="com.icl.surveillance.ui.home.SingleCaseFragment"
-        android:label="MOH 502 - Case Based Reporting Form"
+        android:label=""
         tools:layout="@layout/fragment_single_case">
         <action
             android:id="@+id/action_singleCaseFragment_to_addClientFragment"
@@ -55,6 +55,6 @@
     <activity
         android:id="@+id/fullCaseDetailsActivity"
         android:name="com.icl.surveillance.ui.patients.FullCaseDetailsActivity"
-        android:label="activity_full_case_details"
+        android:label=""
         tools:layout="@layout/activity_full_case_details" />
 </navigation>

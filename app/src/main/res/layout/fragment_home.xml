@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context=".ui.home.HomeFragment">
@@ -14,7 +15,8 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_marginTop="30dp">
+        android:background="@color/blue"
+        android:paddingTop="30dp">
 
 
         <TextView
@@ -23,7 +25,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="3dp"
-            android:text="@string/hello" />
+            android:text="@string/hello"
+            android:textColor="@color/white" />
 
     </RelativeLayout>
 
@@ -32,6 +35,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginHorizontal="@dimen/component_horizontal_margin"
+        android:clipToPadding="false"
+        android:padding="40dp"
+        android:paddingBottom="100dp"
         tools:listitem="@layout/landing_page_item" />
     <!-- Overlapping Card: Action Buttons -->
     <!--    <androidx.cardview.widget.CardView-->

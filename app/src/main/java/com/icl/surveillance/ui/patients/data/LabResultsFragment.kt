@@ -80,7 +80,8 @@ class LabResultsFragment : Fragment() {
     
     val patientId = FormatterClass().getSharedPref("resourceId", requireContext())
     val encounterId = FormatterClass().getSharedPref("encounterId", requireContext())
-    
+
+    println("Current Parent Encounter $encounterId")
     fhirEngine = FhirApplication.fhirEngine(requireContext())
     patientDetailsViewModel =
       ViewModelProvider(
@@ -106,6 +107,8 @@ class LabResultsFragment : Fragment() {
     
     binding.apply {
       fab.setOnClickListener {
+
+        println("Current Parent Encounter $encounterId")
         FormatterClass()
           .saveSharedPref("questionnaire", "measles-lab-results.json", requireContext())
         FormatterClass().saveSharedPref("title", "Lab Results", requireContext())

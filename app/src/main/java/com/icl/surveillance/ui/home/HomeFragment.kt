@@ -50,7 +50,7 @@ class HomeFragment : Fragment() {
             HomeRecyclerViewAdapter(::onItemClick).apply { submitList(viewModel.getLayoutList()) }
         val recyclerView = requireView().findViewById<RecyclerView>(R.id.sdcLayoutsRecyclerView)
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = GridLayoutManager(context, 2)
+        recyclerView.layoutManager = GridLayoutManager(context, 1)
 
         handleUser()
 
@@ -58,27 +58,28 @@ class HomeFragment : Fragment() {
 
     private fun handleUser() {
         val name = getUserNameFromDetails()
-        val fullText = "Hello, $name"
+        val time = FormatterClass().getTimeOfDay()
+        val fullText = "$time, \n\n$name"
 
-        val spannable = SpannableString(fullText)
-        val start = fullText.indexOf(name)
-        val end = start + name.length
-        spannable.setSpan(
-            StyleSpan(Typeface.ITALIC),
-            start,
-            end,
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-
-        spannable.setSpan(
-            RelativeSizeSpan(0.8f),
-            start,
-            end,
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
+//        val spannable = SpannableString(fullText)
+//        val start = fullText.indexOf(name)
+//        val end = start + name.length
+//        spannable.setSpan(
+//            StyleSpan(Typeface.ITALIC),
+//            start,
+//            end,
+//            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+//        )
+//
+//        spannable.setSpan(
+//            RelativeSizeSpan(0.8f),
+//            start,
+//            end,
+//            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+//        )
 
         binding.apply {
-            greeting.text = spannable
+            greeting.text = fullText
         }
     }
 
@@ -119,3 +120,4 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 }
+

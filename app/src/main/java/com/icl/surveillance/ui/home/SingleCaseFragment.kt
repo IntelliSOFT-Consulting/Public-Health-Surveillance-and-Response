@@ -6,14 +6,24 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import com.icl.surveillance.R
+import com.icl.surveillance.adapters.HomeRecyclerViewAdapter
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.clients.AddParentCaseActivity
 import com.icl.surveillance.databinding.FragmentSingleCaseBinding
 import com.icl.surveillance.utils.FormatterClass
+import kotlin.getValue
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -39,6 +49,8 @@ class SingleCaseFragment : Fragment() {
 
     private var _binding: FragmentSingleCaseBinding? = null
 
+    private val viewModel: HomeViewModel by viewModels()
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding
@@ -63,42 +75,114 @@ class SingleCaseFragment : Fragment() {
 
         val activity = requireActivity() as AppCompatActivity
         activity.supportActionBar?.apply {
-            title = "$titleName"
+            title = ""
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
         }
 
         // Let the Fragment receive menu callbacks
         setHasOptionsMenu(true)
+
         binding.apply {
-            val bundle =
-                Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-case.json") }
-            btnAdd.setOnClickListener {
-                FormatterClass().saveSharedPref("title", "Add Case", requireContext())
-//                findNavController().navigate(
-//                    R.id.action_singleCaseFragment_to_addClientFragment,
-//                    bundle
-//                )
+            greeting.text = titleName
+        }
+        val adapter =
+            HomeRecyclerViewAdapter(::onItemClick).apply { submitList(viewModel.getLayoutList()) }
+        val recyclerView = requireView().findViewById<RecyclerView>(R.id.sdcLayoutsRecyclerView)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = GridLayoutManager(context, 1)
+    }
+
+    private fun onItemClick(layout: HomeViewModel.Layout) {
+        val title = context?.getString(layout.textId) ?: ""
+        when (layout.count) {
+            0 -> {
 
 
-                FormatterClass().saveSharedPref(
-                    "questionnaire",
-                    "add-case.json",
-                    requireContext()
-                )
-                val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
-                intent.putExtra("title", "Add Case")
-                intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "add-case.json")
-                startActivity(intent)
             }
-            btnList.setOnClickListener {
-                findNavController().navigate(
-                    R.id.action_singleCaseFragment_to_navigation_dashboard,
-                    bundle
-                )
+
+            else -> {
+                Toast.makeText(requireContext(), "Coming soon!!", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
+//        binding.apply {
+//            val bundle =
+//                Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-case.json") }
+//            btnAdd.setOnClickListener {
+//
+//                testActions()
+////                FormatterClass().saveSharedPref("title", "Add Case", requireContext())
+////                findNavController().navigate(
+////                    R.id.action_singleCaseFragment_to_addClientFragment,
+////                    bundle
+////                )
+//
+//
+////                FormatterClass().saveSharedPref(
+////                    "questionnaire",
+////                    "add-case.json",
+////                    requireContext()
+////                )
+////                val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
+////                intent.putExtra("title", "Add Case")
+////                intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "add-case.json")
+////                startActivity(intent)
+//            }
+//            btnList.setOnClickListener {
+//                findNavController().navigate(
+//                    R.id.action_singleCaseFragment_to_navigation_dashboard,
+//                    bundle
+//                )
+//            }
+//        }
+//    }
+
+//    private fun testActions() {
+//        val dialogView = LayoutInflater.from(context).inflate(R.layout.custom_alert_dialog, null)
+//
+//        val alertDialog = AlertDialog.Builder(requireContext())
+//            .setView(dialogView)
+//            .create()
+//
+//        val titleText = dialogView.findViewById<TextView>(R.id.customTitle)
+//        val messageText = dialogView.findViewById<TextView>(R.id.customMessage)
+//        val afpButton = dialogView.findViewById<MaterialButton>(R.id.afpButton)
+//        val measlesButton = dialogView.findViewById<MaterialButton>(R.id.measlesButton)
+//
+//        titleText.text = getString(R.string.case_selection)
+//        messageText.text = getString(R.string.please_select_an_option_below_to_proceed)
+//
+//        afpButton.setOnClickListener {
+//            FormatterClass().saveSharedPref("title", "Add AFP Case", requireContext())
+//            FormatterClass().saveSharedPref(
+//                "questionnaire",
+//                "afp-case.json",
+//                requireContext()
+//            )
+//            val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
+//            intent.putExtra("title", "Add AFP Case")
+//            intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "afp-case.json")
+//            startActivity(intent)
+//            alertDialog.dismiss()
+//        }
+//        measlesButton.setOnClickListener {
+//            FormatterClass().saveSharedPref("title", "Add Measles Case", requireContext())
+//            FormatterClass().saveSharedPref(
+//                "questionnaire",
+//                "add-case.json",
+//                requireContext()
+//            )
+//            val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
+//            intent.putExtra("title", "Add Measles Case")
+//            intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "add-case.json")
+//            startActivity(intent)
+//            alertDialog.dismiss()
+//        }
+//
+//        alertDialog.show()
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

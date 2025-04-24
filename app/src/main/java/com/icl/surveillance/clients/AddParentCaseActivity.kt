@@ -36,9 +36,9 @@ class AddParentCaseActivity : AppCompatActivity() {
         setContentView(binding.root)
 //    setSupportActionBar(binding.toolbar)
 
-    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    val titleName = FormatterClass().getSharedPref("title", this@AddParentCaseActivity)
-    supportActionBar.apply { title = titleName }
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        val titleName = FormatterClass().getSharedPref("title", this@AddParentCaseActivity)
+        supportActionBar.apply { title = titleName }
 
 
         updateArguments()
@@ -108,7 +108,7 @@ class AddParentCaseActivity : AppCompatActivity() {
                 QuestionnaireFragment.builder()
                     .setQuestionnaire(viewModel.questionnaireJson)
                     .setShowCancelButton(true)
-                    .showReviewPageBeforeSubmit(true)
+//                    .showReviewPageBeforeSubmit(true)
                     .setSubmitButtonText("Submit")
                     .build(),
                 QUESTIONNAIRE_FRAGMENT_TAG,

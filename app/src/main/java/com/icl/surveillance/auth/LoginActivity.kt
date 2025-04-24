@@ -18,26 +18,25 @@ class LoginActivity : AppCompatActivity() {
     private var retrofitCallsAuthentication = RetrofitCallsAuthentication()
     private lateinit var binding: ActivityLoginBinding
 
-    override fun onStart() {
-        super.onStart()
-
-        try {
-            val loggedIn = FormatterClass().getSharedPref("isLoggedIn", this@LoginActivity)
-            if (loggedIn != null) {
-                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                startActivity(intent)
-                this@LoginActivity.finish()
-            }
-        } catch (e: Exception) {
-
-            e.printStackTrace()
-        }
-    }
+//    override fun onStart() {
+//        super.onStart()
+//
+//        try {
+//            val loggedIn = FormatterClass().getSharedPref("isLoggedIn", this@LoginActivity)
+//            if (loggedIn != null) {
+//                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+//                startActivity(intent)
+//                this@LoginActivity.finish()
+//            }
+//        } catch (e: Exception) {
+//
+//            e.printStackTrace()
+//        }
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_login)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
