@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.icl.surveillance.R
+import com.icl.surveillance.adapters.DiseasesRecyclerViewAdapter
 import com.icl.surveillance.adapters.HomeRecyclerViewAdapter
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.clients.AddParentCaseActivity
@@ -87,22 +88,46 @@ class SingleCaseFragment : Fragment() {
             greeting.text = titleName
         }
         val adapter =
-            HomeRecyclerViewAdapter(::onItemClick).apply { submitList(viewModel.getLayoutList()) }
+            DiseasesRecyclerViewAdapter(::onItemClick).apply { submitList(viewModel.getDiseasesList()) }
         val recyclerView = requireView().findViewById<RecyclerView>(R.id.sdcLayoutsRecyclerView)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = GridLayoutManager(context, 1)
     }
 
-    private fun onItemClick(layout: HomeViewModel.Layout) {
+    private fun onItemClick(layout: HomeViewModel.Diseases) {
         val title = context?.getString(layout.textId) ?: ""
         when (layout.count) {
             0 -> {
+                val bundle =
+                    Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-case.json") }
 
+                FormatterClass()
+                    .saveSharedPref(
+                        "title", title,
+                        requireContext()
+                    )
 
+                findNavController().navigate(
+                    R.id.action_singleCaseFragment_to_caseSelectionFragment,
+                    bundle
+                )
             }
 
             else -> {
-                Toast.makeText(requireContext(), "Coming soon!!", Toast.LENGTH_SHORT).show()
+
+                val bundle =
+                    Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "afp-case.json") }
+
+                FormatterClass()
+                    .saveSharedPref(
+                        "title", title,
+                        requireContext()
+                    )
+
+                findNavController().navigate(
+                    R.id.action_singleCaseFragment_to_caseSelectionFragment,
+                    bundle
+                )
             }
         }
 

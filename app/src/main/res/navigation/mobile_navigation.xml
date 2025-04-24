@@ -51,10 +51,18 @@
         <action
             android:id="@+id/action_singleCaseFragment_to_navigation_dashboard"
             app:destination="@id/navigation_dashboard" />
+        <action
+            android:id="@+id/action_singleCaseFragment_to_caseSelectionFragment"
+            app:destination="@id/caseSelectionFragment" />
     </fragment>
     <activity
         android:id="@+id/fullCaseDetailsActivity"
         android:name="com.icl.surveillance.ui.patients.FullCaseDetailsActivity"
         android:label=""
         tools:layout="@layout/activity_full_case_details" />
+    <fragment
+        android:id="@+id/caseSelectionFragment"
+        android:name="com.icl.surveillance.ui.home.CaseSelectionFragment"
+        android:label=""
+        tools:layout="@layout/fragment_case_selection" />
 </navigation>

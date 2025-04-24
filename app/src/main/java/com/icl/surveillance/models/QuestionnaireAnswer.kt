@@ -53,3 +53,9 @@ data class DbUser(
     val phone: String?, // nullable
     val email: String
 )
+
+data class CaseOption(
+    val title: String,
+    val showCount: Boolean = false,
+    val count: Int = 0
+)

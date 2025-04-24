@@ -32,4 +32,6 @@
     <string name="please_select_an_option_below_to_proceed">Please select an option below to proceed.</string>
     <string name="case_selection">Case Selection!</string>
     <string name="select_reported_disease">Select reported disease</string>
+    <string name="measles">Measles</string>
+    <string name="afp">AFP</string>
 </resources>

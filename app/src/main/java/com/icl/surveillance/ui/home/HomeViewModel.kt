@@ -18,6 +18,26 @@ class HomeViewModel(application: Application, private val state: SavedStateHandl
         return Layout.values().toList()
     }
 
+    fun getDiseasesList(): List<Diseases> {
+        return Diseases.values().toList()
+    }
+
+    enum class Diseases(
+        @DrawableRes val iconId: Int,
+        @StringRes val textId: Int,
+        val count: Int,
+    ) {
+
+        MEASLES(
+            R.drawable.searching,
+            R.string.measles, 0
+        ),
+        AFP(
+            R.drawable.searching,
+            R.string.afp, 1
+        ),
+    }
+
     enum class Layout(
         @DrawableRes val iconId: Int,
         @StringRes val textId: Int,
