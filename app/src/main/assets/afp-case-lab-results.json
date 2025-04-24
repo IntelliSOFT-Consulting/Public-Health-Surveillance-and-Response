@@ -1,0 +1,1540 @@
+{
+  "resourceType": "Questionnaire",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/4.0/StructureDefinition/Questionnaire"
+    ]
+  },
+  "title": "AFP Surveillance Results",
+  "status": "draft",
+  "item": [
+    {
+      "item": [
+        {
+          "type": "date",
+          "linkId": "689825280680",
+          "text": "Date specimen received at the national level"
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "482422649078",
+          "text": "Status of specimen at reception at the lab",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "adequate",
+                "display": "Adequate"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "inadequate",
+                "display": "Inadequate"
+              }
+            }
+          ]
+        },
+        {
+          "type": "date",
+          "linkId": "381386487834",
+          "text": "Date combined Cell Culture was done"
+        },
+        {
+          "type": "date",
+          "linkId": "294651853506",
+          "text": "Date Results sent to national EPI"
+        },
+        {
+          "type": "date",
+          "linkId": "825243480539",
+          "text": "Date Results received at national EPI"
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "314664353334",
+          "text": "Final cell culture results",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "suspectedpolio",
+                "display": "Suspected polio virus"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "negative",
+                "display": "Negative"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "npent",
+                "display": "NPENT"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "suspectedpoliovirus",
+                "display": "Suspected poliovirus + NPENT"
+              }
+            }
+          ]
+        },
+        {
+          "type": "date",
+          "linkId": "664540760261",
+          "text": "Date sent from I-C/National laboratory to regional lab results"
+        },
+        {
+          "type": "date",
+          "linkId": "722030957484",
+          "text": "Date I-T differentiation sent to EPI"
+        },
+        {
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "page",
+                    "display": "Page"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "175784290593",
+          "text": "ITD Lab Information"
+        },
+        {
+          "type": "date",
+          "linkId": "227970871286",
+          "text": "Date I-T differentiation results received by EPI"
+        }
+      ],
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "115027662768",
+      "text": "Stool Specimen Results"
+    },
+    {
+      "item": [
+        {
+          "type": "date",
+          "linkId": "309115311461",
+          "text": "Date L_Arm Isolate received"
+        },
+        {
+          "type": "date",
+          "linkId": "450268834120",
+          "text": "Date R_Arm Isolate received"
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "182061775266",
+          "text": "Source of Isolate",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "rightarm",
+                "display": "Right Arm"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "leftarm",
+                "display": "Left Arm"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "559190044029",
+          "text": "FTA card",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "147804391964",
+          "text": "ITD Lab ID Number"
+        },
+        {
+          "type": "string",
+          "linkId": "379580967971",
+          "text": "Name of ITD Lab"
+        },
+        {
+          "type": "string",
+          "linkId": "555866549945",
+          "text": "Refering Lab ID"
+        },
+        {
+          "type": "string",
+          "linkId": "588753377451",
+          "text": "Name of Laboratory referring Isolate"
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "604576595427",
+          "text": "Condition of Isolate on receipt",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "good",
+                "display": "Good"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "poor",
+                "display": "Poor"
+              }
+            }
+          ]
+        },
+        {
+          "type": "date",
+          "linkId": "899206340098",
+          "text": "Date Isolate received in ITD lab"
+        }
+      ],
+      "type": "string",
+      "linkId": "759506945582",
+      "text": "ITD Lab Information"
+    },
+    {
+      "item": [
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "670564765735",
+          "text": "rRT_PCR_ITD",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "pv1nsl",
+                "display": "PVI NSL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pv2nsl",
+                "display": "PV2 NSL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pv3nsl",
+                "display": "PV3 NSL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pv1sl",
+                "display": "PV1 SL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pv2sl",
+                "display": "PV2 SL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pv3sl",
+                "display": "PV3 SL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "npev",
+                "display": "NPEV"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "nev",
+                "display": "NEV"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "invalid",
+                "display": "Invalid"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "mixture",
+                "display": "Mixture"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "notrequired",
+                "display": "Not required"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pv2",
+                "display": "PV2"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "n0pv2",
+                "display": "nOPV2"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "795171205431",
+          "text": "rRT_PCR_VDPV",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "pv1nsl",
+                "display": "PVI NSL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pv2nsl",
+                "display": "PV2 NSL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pv3nsl",
+                "display": "PV3 NSL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pv1sl",
+                "display": "PV1 SL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pv2sl",
+                "display": "PV2 SL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pv3sl",
+                "display": "PV3 SL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "npev",
+                "display": "NPEV"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "nev",
+                "display": "NEV"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "invalid",
+                "display": "Invalid"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "mixture",
+                "display": "Mixture"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "not-required",
+                "display": "Not required"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "194632710244",
+          "text": "NSL1",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "814898215847",
+          "text": "NSL2",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "938956068345",
+          "text": "NSL3",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "748636325943",
+          "text": "SL1",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "869333548534",
+          "text": "SL2",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "316656745446",
+          "text": "rRT_PCR_VDPV1",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "pv1nsl",
+                "display": "PV1 NSL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pv1sl",
+                "display": "PV1 SL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "notrequired",
+                "display": "Not required"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "906760113640",
+          "text": "rRT_PCR_VDPV2",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "pv1nsl",
+                "display": "PV1 NSL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pv1sl",
+                "display": "PV1 SL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "notrequired",
+                "display": "Not required"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "579529262394",
+          "text": "rRT_PCR_VDPV3",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "pv1nsl",
+                "display": "PV1 NSL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pv1sl",
+                "display": "PV1 SL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "notrequired",
+                "display": "Not required"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "132333641777",
+          "text": "ITD_NPENT",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "175266509822",
+          "text": "NEV",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "392363322139",
+          "text": "Final Combined ITD results",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "pv1nsl",
+                "display": "PVI NSL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pv2nsl",
+                "display": "PV2 NSL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pv3nsl",
+                "display": "PV3 NSL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pv1sl",
+                "display": "PV1 SL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pv2sl",
+                "display": "PV2 SL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pv3sl",
+                "display": "PV3 SL"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "npev",
+                "display": "NPEV"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "nev",
+                "display": "NEV"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "invalid",
+                "display": "Invalid"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "mixture",
+                "display": "Mixture"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "not-required",
+                "display": "Not required"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pv1discordant",
+                "display": "PV1 Discordant"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pv2discordant",
+                "display": "PV2 Discordant"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pv3discordant",
+                "display": "PV3 Discordant"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pv2",
+                "display": "PV2"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "n0pv2",
+                "display": "nOPV2"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "303783620410",
+          "text": "ITD Mixture"
+        },
+        {
+          "type": "date",
+          "linkId": "491282170031",
+          "text": "Date final combined ITD result"
+        },
+        {
+          "type": "date",
+          "linkId": "349581384607",
+          "text": "Date final ITD results sent to referring Lab/EPI"
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "873179362660",
+          "text": "Isolate sent for sequencing?",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        }
+      ],
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "986570187519",
+      "text": "ITD Results"
+    },
+    {
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "971403815348",
+      "text": "Final Laboratory Result",
+      "item": [
+        {
+          "type": "string",
+          "linkId": "785896758719",
+          "text": "Sequence name"
+        },
+        {
+          "type": "string",
+          "linkId": "449083966360",
+          "text": "Sequencing Lab"
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "488660441709",
+          "text": "W1",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "304726305375",
+          "text": "W2",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "429298085556",
+          "text": "W3",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "603390896339",
+          "text": "SL1",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "positive",
+                "display": "Positive"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "negative",
+                "display": "Negative"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "637386699350",
+          "text": "SL2",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "positive",
+                "display": "Positive"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "negative",
+                "display": "Negative"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "642108278020",
+          "text": "SL3",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "positive",
+                "display": "Positive"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "negative",
+                "display": "Negative"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "993167573301",
+          "text": "VDPV1",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "positive",
+                "display": "Positive"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "negative",
+                "display": "Negative"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "887531494210",
+          "text": "VDPV2",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "positive",
+                "display": "Positive"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "negative",
+                "display": "Negative"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "873571107268",
+          "text": "VDPV3",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "positive",
+                "display": "Positive"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "negative",
+                "display": "Negative"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "259831634933",
+          "text": "(R)NPENT",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "734480121751",
+          "text": "NEV",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "date",
+          "linkId": "884059764011",
+          "text": "Date isolate sent for sequencing"
+        },
+        {
+          "type": "date",
+          "linkId": "112582142968",
+          "text": "Date final sequencing results sent to program"
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "329949474707",
+          "text": "Final classification of the case",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "confirmed",
+                "display": "Confirmed"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "compatible",
+                "display": "Compatible"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "discarded",
+                "display": "Discarded"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "not-an-afp",
+                "display": "Not an AFP"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "cvdpv",
+                "display": "cVDPV"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "avdpv",
+                "display": "aVDPV"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "ivdpv",
+                "display": "iVDPV"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "603703292281",
+          "text": "Name of Investigator"
+        },
+        {
+          "type": "string",
+          "linkId": "687763288866",
+          "text": "Designation"
+        },
+        {
+          "type": "string",
+          "linkId": "185009111706",
+          "text": "Unit"
+        },
+        {
+          "type": "string",
+          "linkId": "923170318537",
+          "text": "Address"
+        },
+        {
+          "type": "string",
+          "linkId": "205898169162",
+          "text": "Telephone no. ",
+          "item": [
+            {
+              "linkId": "205898169162_helpText",
+              "type": "display",
+              "text": "Telephone number of investigator at Lab",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "help",
+                        "display": "Help-Button"
+                      }
+                    ],
+                    "text": "Help-Button"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
