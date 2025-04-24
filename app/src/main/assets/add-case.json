@@ -320,7 +320,7 @@
         }
       ],
       "linkId": "477144604557",
-      "text": "Case Information",
+      "text": "Clinical Information",
       "item": [
         {
           "type": "date",
@@ -910,6 +910,7 @@
           ],
           "linkId": "508745697175",
           "text": "Outcome",
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -996,7 +997,7 @@
         }
       ],
       "linkId": "216343227137",
-      "text": "Clinical Information"
+      "text": "Case Information"
     },
     {
       "type": "group",

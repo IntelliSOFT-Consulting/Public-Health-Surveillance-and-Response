@@ -52,7 +52,7 @@ class FullCaseDetailsActivity : AppCompatActivity() {
                         when (position) {
                             0 -> "Reporting Site"
                             1 -> "Case Demographics"
-                            2 -> "Measles Case Information"
+                            2 -> "Case Information"
                             3 -> "Clinical Information"
                             4 -> "Lab Information"
                             5 -> "Lab Results"

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.icl.surveillance.R
 import com.icl.surveillance.adapters.CaseOptionsAdapter
 import com.icl.surveillance.adapters.DiseasesRecyclerViewAdapter
+import com.icl.surveillance.cases.CaseListingActivity
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.clients.AddParentCaseActivity
 import com.icl.surveillance.databinding.FragmentCaseSelectionBinding
@@ -141,7 +142,33 @@ class CaseSelectionFragment : Fragment() {
                 }
 
                 "Measles Cases List" -> {
-                    Toast.makeText(requireContext(), "Coming Soon", Toast.LENGTH_SHORT).show()
+                    FormatterClass().saveSharedPref(
+                        "title",
+                        " ${option.title}",
+                        requireContext()
+                    )
+                    FormatterClass().saveSharedPref(
+                        "currentCase",
+                        "Measles Case Information",
+                        requireContext()
+                    )
+                    val intent = Intent(requireContext(), CaseListingActivity::class.java)
+                    startActivity(intent)
+                }
+
+                "AFP Cases List" -> {
+                    FormatterClass().saveSharedPref(
+                        "title",
+                        " ${option.title}",
+                        requireContext()
+                    )
+                    FormatterClass().saveSharedPref(
+                        "currentCase",
+                        "AFP Case Information",
+                        requireContext()
+                    )
+                    val intent = Intent(requireContext(), CaseListingActivity::class.java)
+                    startActivity(intent)
                 }
 
                 else -> {
