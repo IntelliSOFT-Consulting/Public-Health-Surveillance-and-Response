@@ -95,6 +95,12 @@ class CaseSelectionFragment : Fragment() {
         recyclerView.adapter = CaseOptionsAdapter(caseOptions) { option ->
             when (option.title) {
                 "Add new AFP case" -> {
+
+                    FormatterClass().saveSharedPref(
+                        "currentCase",
+                        "AFP Case Information",
+                        requireContext()
+                    )
                     FormatterClass().saveSharedPref(
                         "title",
                         "Add $titleName Case",
@@ -112,6 +118,12 @@ class CaseSelectionFragment : Fragment() {
                 }
 
                 "Add new Measles case" -> {
+
+                    FormatterClass().saveSharedPref(
+                        "currentCase",
+                        "Measles Case Information",
+                        requireContext()
+                    )
                     FormatterClass().saveSharedPref(
                         "title",
                         "Add $titleName Case",

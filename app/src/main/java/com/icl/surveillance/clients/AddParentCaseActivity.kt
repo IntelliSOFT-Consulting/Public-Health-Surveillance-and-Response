@@ -98,7 +98,11 @@ class AddParentCaseActivity : AppCompatActivity() {
         val questionnaireResponseString =
             context.newJsonParser().encodeResourceToString(questionnaireResponse)
         println("Questionnaire Response: $questionnaireResponseString")
-        viewModel.savePatientData(questionnaireResponse, questionnaireResponseString)
+        viewModel.savePatientData(
+            questionnaireResponse,
+            questionnaireResponseString,
+            this@AddParentCaseActivity
+        )
     }
 
     private fun addQuestionnaireFragment() {

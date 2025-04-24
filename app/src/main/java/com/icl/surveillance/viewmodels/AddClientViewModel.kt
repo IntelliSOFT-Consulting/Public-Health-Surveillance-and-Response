@@ -1,6 +1,7 @@
 package com.icl.surveillance.viewmodels
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -64,7 +65,8 @@ class AddClientViewModel(application: Application, private val state: SavedState
      */
     fun savePatientData(
         questionnaireResponse: QuestionnaireResponse,
-        questionnaireResponseString: String
+        questionnaireResponseString: String,
+        context: Context
     ) {
         viewModelScope.launch {
             if (QuestionnaireResponseValidator.validateQuestionnaireResponse(
@@ -84,7 +86,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
             val subjectReference = Reference("Patient/$patientId")
             val jsonObject = JSONObject(questionnaireResponseString)
             val extractedAnswers = extractStructuredAnswers(jsonObject)
-
+            val reasonCode = FormatterClass().getSharedPref(
+                "currentCase",
+                context
+            )
             var patient = Patient()
             patient.id = patientId
 
@@ -93,7 +98,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
             val enc = qh.generalEncounter(null)
             enc.id = encounterId
             enc.subject = subjectReference
-            enc.reasonCodeFirstRep.codingFirstRep.code = "Case Information"
+            enc.reasonCodeFirstRep.codingFirstRep.code = "$reasonCode"
 
             val patientNameEntry = extractedAnswers.find { it.linkId == "794460715014" }
 

@@ -73,56 +73,8 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "AFP",
-                "display": "AFP"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "NNT",
-                "display": "NNT"
-              }
-            },
-            {
-              "valueCoding": {
                 "code": "Measles",
                 "display": "Measles"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Meningitis",
-                "display": "Meningitis"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Plaque",
-                "display": "Plaque"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "VHFs",
-                "display": "VHFs"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Yellow Fever",
-                "display": "Yellow Fever"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "SARI /AI",
-                "display": "SARI/ AI"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Other",
-                "display": "Other"
               }
             }
           ]
@@ -216,7 +168,6 @@
               }
             }
           ]
-
         },
         {
           "type": "integer",
@@ -484,7 +435,6 @@
               }
             }
           ]
-
         },
         {
           "type": "choice",
@@ -678,7 +628,6 @@
               }
             }
           ]
-
         },
         {
           "type": "display",
@@ -758,7 +707,6 @@
               }
             }
           ]
-
         },
         {
           "type": "choice",
@@ -856,12 +804,10 @@
               }
             }
           ],
-
           "linkId": "554231819382",
           "text": "Date 1st seen at health facility",
           "required": true
         },
-
         {
           "type": "choice",
           "extension": [
@@ -935,7 +881,6 @@
               }
             }
           ]
-
         },
         {
           "type": "string",
@@ -1198,7 +1143,6 @@
               }
             }
           ]
-
         },
         {
           "type": "choice",
@@ -1326,7 +1270,6 @@
               }
             }
           ]
-
         },
         {
           "type": "string",

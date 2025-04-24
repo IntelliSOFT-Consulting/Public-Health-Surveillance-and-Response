@@ -101,7 +101,11 @@ class AddClientFragment : Fragment(R.layout.fragment_add_client) {
             context.newJsonParser().encodeResourceToString(questionnaireResponse)
         println("Questionnaire Response: $questionnaireResponseString")
         Log.e("TAG", "Questionnaire Response: $questionnaireResponseString")
-        viewModel.savePatientData(questionnaireResponse, questionnaireResponseString)
+        viewModel.savePatientData(
+            questionnaireResponse,
+            questionnaireResponseString,
+            requireContext()
+        )
     }
 
     private fun observePatientSaveAction() {
