@@ -252,7 +252,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     bundle
                                         .addEntry()
                                         .setResource(
-                                            qh.codingQuestionnaire(linkId, "Date lab sent results to district", code))
+                                            qh.codingTimeAutoQuestionnaire(linkId, "Date lab sent results to district", code))
                                         .request
                                         .url = "Observation"
                                 }
@@ -292,6 +292,16 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 }
                             }
                             "final-classification" -> {
+                                val code = extractResponseCode(item, "valueCoding")
+                                if (code.isNotEmpty()) {
+                                    bundle
+                                        .addEntry()
+                                        .setResource(qh.codingQuestionnaire(linkId, "Final Classification", code))
+                                        .request
+                                        .url = "Observation"
+                                }
+                            }
+                            "final-negative-classification" -> {
                                 val code = extractResponseCode(item, "valueCoding")
                                 if (code.isNotEmpty()) {
                                     bundle

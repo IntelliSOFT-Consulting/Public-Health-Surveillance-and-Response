@@ -452,7 +452,10 @@ class ClientDetailsViewModel(
                     val measlesIgM = generateResponse(obs, "measles-igm")
                     val rubellaIgM = generateResponse(obs, "rubella-igm")
                     val dateLabSentResults = generateResponse(obs, "date-lab-sent-results")
-                    val finalClassification = generateResponse(obs, "final-classification")
+                    val finalDClassification = generateResponse(obs, "final-classification")
+                    val finalNClassification =
+                        generateResponse(obs, "final-negative-classification")
+                    val finalPClassification = generateResponse(obs, "final-confirm-classification")
 
                     val subcountyName = generateResponse(obs, "contact-name")
                     val subcountyDesignation = generateResponse(obs, "contact-designation")
@@ -462,6 +465,13 @@ class ClientDetailsViewModel(
                     val nameOfPersonCompletingForm = generateResponse(obs, "completer-name")
                     val designation = generateResponse(obs, "completer-designation")
                     val sign = generateResponse(obs, "completer-sign")
+
+                    val finalClassification = when (measlesIgM.lowercase()) {
+                        "positive" -> finalPClassification
+                        "negative" -> finalNClassification
+                        else -> finalDClassification
+
+                    }
 
                     loop =
                         loop.copy(
