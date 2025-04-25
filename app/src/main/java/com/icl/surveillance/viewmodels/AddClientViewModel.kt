@@ -380,6 +380,35 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     obs.code.text = epid
                     createResource(obs, subjectReference, encounterReference)
                 }
+                "vl-case-information" -> {
+
+
+                    val subCountyEntry = extractedAnswers.find { it.linkId == "990815709263" }
+                    val countyEntry = extractedAnswers.find { it.linkId == "221146691983" }
+                    var county = ""
+                    var subCounty = ""
+                    val currentYear = LocalDate.now().year
+
+                    if (subCountyEntry != null) {
+                        subCounty = subCountyEntry.answer
+                    }
+                    if (countyEntry != null) {
+                        county = countyEntry.answer
+                    }
+
+                    val countyCode = county.padEnd(3, 'X').take(3).uppercase()
+                    val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
+
+
+                    val epid = "KEN-$countyCode-$subCountyCode-$currentYear-"
+
+                    val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
+                    obs.code.addCoding().setSystem("http://snomed.info/sct")
+                        .setCode("EPID").display =
+                        "EPID No"
+                    obs.code.text = epid
+                    createResource(obs, subjectReference, encounterReference)
+                }
 
             }
             withContext(Dispatchers.IO) {

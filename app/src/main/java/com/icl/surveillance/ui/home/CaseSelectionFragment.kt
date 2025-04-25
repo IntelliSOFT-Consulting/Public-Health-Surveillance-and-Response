@@ -99,10 +99,14 @@ class CaseSelectionFragment : Fragment() {
 //        val recyclerView = requireView().findViewById<RecyclerView>(R.id.sdcLayoutsRecyclerView)
 //        recyclerView.adapter = adapter
 //        recyclerView.layoutManager = GridLayoutManager(context, 1)
+        val title = when (titleName) {
+            "Visceral Leishmaniasis (Kala-azar) Case Management Form" -> "VL"
+            else -> titleName
+        }
         val caseOptions = listOf(
-            CaseOption("Add New $titleName Case"),
+            CaseOption("Add New $title Case"),
             CaseOption(
-                "$titleName Case List",
+                "$title Case List",
                 showCount = true,
                 count = listenToCaseCount(titleName)
             )
@@ -112,6 +116,43 @@ class CaseSelectionFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = CaseOptionsAdapter(caseOptions) { option ->
             when (option.title) {
+                "Add New VL Case" -> {
+                    FormatterClass().saveSharedPref(
+                        "currentCase",
+                        "VL Case Information",
+                        requireContext()
+                    )
+                    FormatterClass().saveSharedPref(
+                        "title",
+                        " $titleName",
+                        requireContext()
+                    )
+                    FormatterClass().saveSharedPref(
+                        "questionnaire",
+                        "vl-case.json",
+                        requireContext()
+                    )
+                    val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
+                    intent.putExtra("title", " $titleName")
+                    intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "vl-case.json")
+                    startActivity(intent)
+                }
+
+                "VL Case List" -> {
+                    FormatterClass().saveSharedPref(
+                        "title",
+                        " ${option.title}",
+                        requireContext()
+                    )
+                    FormatterClass().saveSharedPref(
+                        "currentCase",
+                        "VL Case Information",
+                        requireContext()
+                    )
+                    val intent = Intent(requireContext(), CaseListingActivity::class.java)
+                    startActivity(intent)
+                }
+
                 "Add New AFP Case" -> {
 
                     FormatterClass().saveSharedPref(

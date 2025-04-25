@@ -153,7 +153,7 @@
                 android:layout_marginBottom="@dimen/small_text_margin"
                 android:layout_weight="1"
                 android:text="Lab Results:"
-                android:textStyle="bold" />
+                android:textStyle="normal" />
 
         </LinearLayout>
 
