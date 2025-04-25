@@ -174,8 +174,19 @@ class AddCaseActivity : AppCompatActivity() {
         intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, json)
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressedDispatcher.onBackPressed()
-        return true
+    override fun onBackPressed() {
+        val dialog = AlertDialog.Builder(this)
+            .setTitle("Exit")
+            .setMessage("Are you sure you want to exit?")
+            .setPositiveButton("Yes") { _, _ ->
+                super.onBackPressed() // Exit the activity
+            }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss() // Dismiss the dialog
+            }
+            .create()
+
+        dialog.show()
     }
+
 }

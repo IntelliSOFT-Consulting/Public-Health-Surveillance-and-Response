@@ -1,5 +1,6 @@
 package com.icl.surveillance.ui.home
 
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.SpannableString
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.icl.surveillance.R
 import com.icl.surveillance.adapters.HomeRecyclerViewAdapter
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
+import com.icl.surveillance.clients.AddParentCaseActivity
 import com.icl.surveillance.databinding.FragmentHomeBinding
 import com.icl.surveillance.utils.FormatterClass
 
@@ -91,6 +93,30 @@ class HomeFragment : Fragment() {
     private fun onItemClick(layout: HomeViewModel.Layout) {
         val title = context?.getString(layout.textId) ?: ""
         when (layout.count) {
+            4 -> {
+                FormatterClass().saveSharedPref(
+                    "currentCase",
+                    "Rumor Case Information",
+                    requireContext()
+                )
+                FormatterClass()
+                    .saveSharedPref(
+                        "title", title,
+                        requireContext()
+                    )
+
+                FormatterClass().saveSharedPref(
+                    "questionnaire",
+                    "rumor-tracking-case.json",
+                    requireContext()
+                )
+                val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
+                intent.putExtra("title", "Add Rumor Case")
+                intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "rumor-tracking-case.json")
+                startActivity(intent)
+
+            }
+
             0 -> {
                 val bundle =
                     Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-case.json") }

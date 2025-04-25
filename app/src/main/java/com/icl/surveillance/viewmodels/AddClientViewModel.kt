@@ -63,6 +63,52 @@ class AddClientViewModel(application: Application, private val state: SavedState
      *
      * @param questionnaireResponse patient registration questionnaire response
      */
+    fun saveGeneralQuestion(
+        questionnaireResponse: QuestionnaireResponse,
+        questionnaireResponseString: String,
+        context: Context,
+        title: String
+    ) {
+        viewModelScope.launch {
+            if (QuestionnaireResponseValidator.validateQuestionnaireResponse(
+                    questionnaire,
+                    questionnaireResponse,
+                    getApplication(),
+                )
+                    .values
+                    .flatten()
+                    .any { it is Invalid }
+            ) {
+                isPatientSaved.value = false
+                return@launch
+            }
+
+            val patientId = generateUuid()
+            val subjectReference = Reference("Patient/$patientId")
+            val jsonObject = JSONObject(questionnaireResponseString)
+            val extractedAnswers = extractStructuredAnswers(jsonObject)
+            val reasonCode = FormatterClass().getSharedPref(
+                "currentCase",
+                context
+            )
+            var patient = Patient()
+            patient.id = patientId
+
+            val qh = QuestionnaireHelper()
+            val encounterId = generateUuid()
+            val enc = qh.generalEncounter(null)
+            enc.id = encounterId
+            enc.subject = subjectReference
+            enc.reasonCodeFirstRep.codingFirstRep.code = "$reasonCode"
+            var case = "case-information"
+            if (reasonCode != null) {
+                case = reasonCode.toSlug()
+
+            }
+
+        }
+    }
+
     fun savePatientData(
         questionnaireResponse: QuestionnaireResponse,
         questionnaireResponseString: String,
@@ -324,6 +370,37 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     obs.code.text = epid
                     createResource(obs, subjectReference, encounterReference)
                 }
+
+                "rumor-case-information" -> {
+
+
+                    val subCountyEntry = extractedAnswers.find { it.linkId == "329541932661" }
+                    val countyEntry = extractedAnswers.find { it.linkId == "259363373547" }
+                    var county = ""
+                    var subCounty = ""
+                    val currentYear = LocalDate.now().year
+
+                    if (subCountyEntry != null) {
+                        subCounty = subCountyEntry.answer
+                    }
+                    if (countyEntry != null) {
+                        county = countyEntry.answer
+                    }
+
+                    val countyCode = county.padEnd(3, 'X').take(3).uppercase()
+                    val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
+
+
+                    val epid = "KEN-$countyCode-$subCountyCode-$currentYear-"
+
+                    val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
+                    obs.code.addCoding().setSystem("http://snomed.info/sct")
+                        .setCode("EPID").display =
+                        "EPID No"
+                    obs.code.text = epid
+                    createResource(obs, subjectReference, encounterReference)
+                }
+
             }
             withContext(Dispatchers.IO) {
                 try {

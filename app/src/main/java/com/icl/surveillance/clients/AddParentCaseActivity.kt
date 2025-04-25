@@ -20,6 +20,7 @@ import com.icl.surveillance.R
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FRAGMENT_TAG
 import com.icl.surveillance.databinding.ActivityAddParentCaseBinding
+import com.icl.surveillance.ui.patients.AddCaseActivity
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.utils.ProgressDialogManager
 import com.icl.surveillance.viewmodels.AddClientViewModel
@@ -101,16 +102,31 @@ class AddParentCaseActivity : AppCompatActivity() {
         val questionnaireResponseString =
             context.newJsonParser().encodeResourceToString(questionnaireResponse)
         println("Questionnaire Response: $questionnaireResponseString")
+        val questionnaire =
+            FormatterClass().getSharedPref("questionnaire", this@AddParentCaseActivity)
+
         viewModel.savePatientData(
             questionnaireResponse,
             questionnaireResponseString,
             this@AddParentCaseActivity
         )
+
     }
 
+
     override fun onBackPressed() {
-        showCancelScreenerQuestionnaireAlertDialog()
-        super.onBackPressed()
+        val dialog = AlertDialog.Builder(this)
+            .setTitle("Exit")
+            .setMessage("Are you sure you want to exit?")
+            .setPositiveButton("Yes") { _, _ ->
+                super.onBackPressed() // Exit the activity
+            }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss() // Dismiss the dialog
+            }
+            .create()
+
+        dialog.show()
     }
 
     private fun addQuestionnaireFragment() {

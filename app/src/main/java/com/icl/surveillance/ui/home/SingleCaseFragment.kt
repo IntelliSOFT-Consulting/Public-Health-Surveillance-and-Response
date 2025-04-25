@@ -110,7 +110,11 @@ class SingleCaseFragment : Fragment() {
                         "title", title,
                         requireContext()
                     )
-
+                FormatterClass().saveSharedPref(
+                    "questionnaire",
+                    "add-case.json",
+                    requireContext()
+                )
                 findNavController().navigate(
                     R.id.action_singleCaseFragment_to_caseSelectionFragment,
                     bundle
@@ -127,7 +131,11 @@ class SingleCaseFragment : Fragment() {
                         "title", title,
                         requireContext()
                     )
-
+                FormatterClass().saveSharedPref(
+                    "questionnaire",
+                    "afp-case.json",
+                    requireContext()
+                )
                 findNavController().navigate(
                     R.id.action_singleCaseFragment_to_caseSelectionFragment,
                     bundle
