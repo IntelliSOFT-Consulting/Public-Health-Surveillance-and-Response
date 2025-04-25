@@ -1,0 +1,771 @@
+{
+  "resourceType": "Questionnaire",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/4.0/StructureDefinition/Questionnaire"
+    ]
+  },
+  "title": "Rumor Tracking Tool",
+  "status": "draft",
+  "item": [
+    {
+      "item": [
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "701496224461",
+          "text": "Name of Ministry",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "moh",
+                "display": "MoH"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "256928760972",
+          "text": "Name of Directorate",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "drc-ph",
+                "display": "Directorate of Public Health"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "drc-ms",
+                "display": "Directorate of Medical Services"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "drc-dhir",
+                "display": "Directorate of Digital Health, Informatics & Research"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "drc-pol-res-plan",
+                "display": "Directorate of Health Policy, Research and Planning"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "drc-pre-pro-health",
+                "display": "Directorate of Preventive and Promotive Health"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "drc-fam-health",
+                "display": "Directorate of Family Health"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "drc-dhsqar",
+                "display": "Directorate of Health Standards, Quality Assurance and Regulation"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "drc-pharms",
+                "display": "Directorate of Pharmaceutical Services"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "686990243396",
+          "text": "Name of Division",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "dvs-001",
+                "display": "Division of Disease Surveillance and Response"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "dvs-002",
+                "display": "Division of Vector-Borne and Neglected Tropical Diseases"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "dvs-003",
+                "display": "Division of Environmental Health"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "dvs-004",
+                "display": "Division of Community Health"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "dvs-005",
+                "display": "Division of Port Health"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "dvs-006",
+                "display": "Division of Non-Communicable Diseases"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "dvs-007",
+                "display": "Division of Tobacco Control"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "dvs-008",
+                "display": "Division of Health Promotion"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "871818396498",
+          "text": "Village/Community Health unit",
+          "required": true
+        },
+        {
+          "type": "string",
+          "linkId": "767958314742",
+          "text": "Sub-location",
+          "required": true
+        },
+        {
+          "type": "string",
+          "linkId": "161645846607",
+          "text": "location",
+          "required": true
+        },
+        {
+          "type": "string",
+          "linkId": "124372068729",
+          "text": "Ward",
+          "required": true
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "329541932661",
+          "text": "Sub-county",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "kasarani",
+                "display": "Kasarani"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "kisauni",
+                "display": "Kisauni"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "259363373547",
+          "text": "County",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "nairobi",
+                "display": "Nairobi"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "mombasa",
+                "display": "Mombasa"
+              }
+            }
+          ]
+        }
+      ],
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "735623392446",
+      "text": "Administrative Details"
+    },
+    {
+      "item": [
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "683805917262",
+          "text": "Reporting Cadre",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "communitypromoter",
+                "display": "Community Health Promoter"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "communityleader",
+                "display": "Community Leader"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "religiousleader",
+                "display": "Religious Leader"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "animal-ds-reporter",
+                "display": "Community Animal Disease Reporter"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "traditionalhealer",
+                "display": "Traditional Healer"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "hcw",
+                "display": "Health Care Worker"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "dss-surv-officer",
+                "display": "Disease Surveillance Officer"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "hpo",
+                "display": "Health Promotion Officer"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "c-hlth-fperson",
+                "display": "Community Health Strategy Focal Person"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "c-hlth-assistant",
+                "display": "Community Health Assistant"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "otherReportingCdre",
+                "display": "Others (Specify)"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "223529605110",
+          "text": "Other Cadre(Specify)",
+          "enableWhen": [
+            {
+              "question": "683805917262",
+              "operator": "=",
+              "answerCoding": {
+                "code": "otherReportingCdre",
+                "display": "Others (Specify)"
+              }
+            }
+          ],
+          "required": true
+        }
+      ],
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "145437239629",
+      "text": "Reporter Information"
+    },
+    {
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "104925460221",
+      "text": "Community Insights",
+      "item": [
+        {
+          "type": "string",
+          "linkId": "765331413106",
+          "text": "Report of Harmful Practice Likely to Affect Health",
+          "required": true
+        },
+        {
+          "type": "string",
+          "linkId": "433160095184",
+          "text": "Report of Negative Behaviour Related to Health Interventions",
+          "required": true
+        },
+        {
+          "type": "string",
+          "linkId": "560083852118",
+          "text": "Report of Negative Comments, Rumors, Misinformation, Disinformation on Health Interventions shared in the community",
+          "required": true
+        },
+        {
+          "type": "string",
+          "linkId": "169682375523",
+          "text": "What exactly did they say?",
+          "required": true
+        },
+        {
+          "type": "display",
+          "linkId": "217867281789",
+          "text": "Source of message"
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "701956366417",
+          "text": "Social Media",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "facebook",
+                "display": "Facebook"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "whatsapp",
+                "display": "WhatsApp"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "twitter",
+                "display": "X(Twitter)"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "tiktok",
+                "display": "TikTok"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "others",
+                "display": "Other(Specify)"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "979067790514",
+          "text": "Other Social Media (Specify)",
+          "enableWhen": [
+            {
+              "question": "701956366417",
+              "operator": "=",
+              "answerCoding": {
+                "code": "others",
+                "display": "Other(Specify)"
+              }
+            }
+          ],
+          "required": true
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "626104365539",
+          "text": "Mass Media",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "radio-station",
+                "display": "Radio Station"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "tv-station",
+                "display": "TV Station"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "otherspecify",
+                "display": "Other (Specify)"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "803387665675",
+          "text": "Radio Station (Specify Name)",
+          "enableWhen": [
+            {
+              "question": "626104365539",
+              "operator": "=",
+              "answerCoding": {
+                "code": "radio-station",
+                "display": "Radio Station"
+              }
+            }
+          ],
+          "required": true
+        },
+        {
+          "type": "string",
+          "linkId": "334025067430",
+          "text": "TV Station (Specify Name)",
+          "enableWhen": [
+            {
+              "question": "626104365539",
+              "operator": "=",
+              "answerCoding": {
+                "code": "tv-station",
+                "display": "TV Station"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "704187583781",
+          "text": "Other Mass Media (Specify)",
+          "enableWhen": [
+            {
+              "question": "626104365539",
+              "operator": "=",
+              "answerCoding": {
+                "code": "otherspecify",
+                "display": "Other (Specify)"
+              }
+            }
+          ],
+          "required": true
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "330042491643",
+          "text": "What did you do with the message?",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "frwd-rlves",
+                "display": "Forwarded to Friends and Relatives"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "shr-chp",
+                "display": "Shared with Community Health Promoter"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "shr-cdr",
+                "display": "Shared with Community Disease Reporter"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "shr-hcw",
+                "display": "Shared with Health Care Worker"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "shr-cl",
+                "display": "Shared with Community Leader"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "did-nothing",
+                "display": "Did Nothing"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "otherspecify",
+                "display": "Other (Specify)"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "572081717574",
+          "text": "Specify what you did with the message? ",
+          "enableWhen": [
+            {
+              "question": "330042491643",
+              "operator": "=",
+              "answerCoding": {
+                "code": "otherspecify",
+                "display": "Other (Specify)"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "808764633907",
+          "text": "Did you trust the source of the message?",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "305405975161",
+          "text": "if yes, why?",
+          "enableWhen": [
+            {
+              "question": "808764633907",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "required": true
+        },
+        {
+          "type": "string",
+          "linkId": "719281771251",
+          "text": "Reason for Trust",
+          "enableWhen": [
+            {
+              "question": "808764633907",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "required": true
+        },
+        {
+          "type": "string",
+          "linkId": "801665079239",
+          "text": "Additional Observations/Comments",
+          "required": true
+        }
+      ]
+    }
+  ]
+}
