@@ -1,7 +1,9 @@
 package com.icl.surveillance.clients
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -13,6 +15,7 @@ import ca.uhn.fhir.context.FhirContext
 import ca.uhn.fhir.context.FhirVersionEnum
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.datacapture.QuestionnaireFragment
+import com.google.android.material.button.MaterialButton
 import com.icl.surveillance.R
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FRAGMENT_TAG
@@ -133,18 +136,43 @@ class AddParentCaseActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please Enter all Required Fields.", Toast.LENGTH_SHORT).show()
                 return@observe
             }
-            val alert = SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-            alert
-                .setTitleText("Success!")
-                .setContentText("You have successfully created a case!")
-                .setConfirmText("OK")
-                .setConfirmClickListener { dialog ->
-                    dialog.dismissWithAnimation()
-                    this@AddParentCaseActivity.finish()
-                }
-                .setCancelable(false)
-            alert.show()
+            showSuccessDialog(this@AddParentCaseActivity)
+//            val alert = SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+//            alert
+//                .setTitleText("Success!")
+//                .setContentText("You have successfully created a case!")
+//                .setConfirmText("OK")
+//                .setConfirmClickListener { dialog ->
+//                    dialog.dismissWithAnimation()
+//                    this@AddParentCaseActivity.finish()
+//                }
+//                .setCancelable(false)
+//            alert.show()
+
+
         }
+    }
+
+    fun showSuccessDialog(context: Context) {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.success_dialog, null)
+        val alertDialog = AlertDialog.Builder(context)
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+
+        dialogView.findViewById<MaterialButton>(R.id.btn_cancel).setOnClickListener {
+            alertDialog.dismiss()
+            this@AddParentCaseActivity.finish()
+        }
+
+        dialogView.findViewById<MaterialButton>(R.id.btn_finish).setOnClickListener {
+            // handle finish action
+            this@AddParentCaseActivity.finish()
+            alertDialog.dismiss()
+        }
+
+        alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        alertDialog.show()
     }
 
     private fun updateArguments() {

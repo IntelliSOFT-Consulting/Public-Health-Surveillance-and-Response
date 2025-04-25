@@ -28,28 +28,162 @@
       "text": "Reporting Site",
       "item": [
         {
-          "type": "string",
+          "type": "choice",
           "linkId": "185989158723",
           "text": "Health Facility",
-          "required": true
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Kenyatta National Hospital",
+                "display": "Kenyatta National Hospital"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Mama Lucy Kibaki Hospital",
+                "display": "Mama Lucy Kibaki Hospital"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Mbagathi, District Hospital",
+                "display": "Mbagathi District Hospital"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Pumwani Maternity Hospital",
+                "display": "Pumwani Maternity Hospital"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Mathari National Teaching Referral Hospital",
+                "display": "Mathari National Teaching Referral Hospital"
+              }
+            }
+          ]
         },
         {
-          "type": "string",
+          "type": "choice",
           "linkId": "438862163919",
           "text": "Type",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Private",
+                "display": "Private"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Public",
+                "display": "Public"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Faith Based",
+                "display": "Faith Based"
+              }
+            }
+          ]
         },
         {
-          "type": "string",
+          "type": "choice",
           "linkId": "a3-sub-county",
           "text": "Sub County",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Nairobi Central",
+                "display": "Nairobi Central"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Embakasi East",
+                "display": "Embakasi East"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Lang'ata",
+                "display": "Lang'ata"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Starehe",
+                "display": "Starehe"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Mathare",
+                "display": "Mathare"
+              }
+            }
+          ]
         },
         {
-          "type": "string",
+          "type": "choice",
           "linkId": "a4-county",
           "text": "County",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Nairobi",
+                "display": "Nairobi"
+              }
+            }
+          ]
         },
         {
           "type": "choice",
