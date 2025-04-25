@@ -344,24 +344,24 @@
         },
         {
           "type": "choice",
-         "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "929966324957",
           "text": "Sex.",
           "required": true,
@@ -460,34 +460,54 @@
         },
         {
           "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
           "linkId": "951993881290",
           "text": "Date of Birth.",
-          "extension": [
-  {
-    "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-    "valueString": "Cannot be a date in the future"
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-    "valueDate": {
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-          "valueExpression": {
-            "language": "text/fhirpath",
-            "expression": "today()"
-          }
-        }
-      ]
-    }
-  }
-],
+          "enableWhen": [
+            {
+              "question": "257830485990",
+              "operator": "=",
+              "answerCoding": {
+                "code": "known",
+                "display": "Known"
+              }
+            }
+          ],
           "required": true
         },
         {
-          "type": "string",
+          "type": "integer",
           "linkId": "122072333233",
           "text": "Age in Years.",
+          "enableWhen": [
+            {
+              "question": "257830485990",
+              "operator": "=",
+              "answerCoding": {
+                "code": "unknown",
+                "display": "Unknown"
+              }
+            }
+          ],
           "item": [
             {
               "linkId": "122072333233_helpText",
@@ -512,9 +532,19 @@
           ]
         },
         {
-          "type": "string",
+          "type": "integer",
           "linkId": "879612276990",
           "text": "Age in Months.",
+          "enableWhen": [
+            {
+              "question": "257830485990",
+              "operator": "=",
+              "answerCoding": {
+                "code": "unknown",
+                "display": "Unknown"
+              }
+            }
+          ],
           "item": [
             {
               "linkId": "879612276990_helpText",
@@ -539,9 +569,19 @@
           ]
         },
         {
-          "type": "string",
+          "type": "integer",
           "linkId": "296206902941",
           "text": "Age in Days.",
+          "enableWhen": [
+            {
+              "question": "257830485990",
+              "operator": "=",
+              "answerCoding": {
+                "code": "unknown",
+                "display": "Unknown"
+              }
+            }
+          ],
           "item": [
             {
               "linkId": "296206902941_helpText",
@@ -822,25 +862,25 @@
           "text": "Date of Investigation.",
           "required": true,
           "extension": [
-  {
-    "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-    "valueString": "Cannot be a date in the future"
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-    "valueDate": {
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-          "valueExpression": {
-            "language": "text/fhirpath",
-            "expression": "today()"
-          }
-        }
-      ]
-    }
-  }
-],
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
           "item": [
             {
               "linkId": "502488184403_helpText",
@@ -870,25 +910,25 @@
           "text": "Date of Notification.",
           "required": true,
           "extension": [
-  {
-    "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-    "valueString": "Cannot be a date in the future"
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-    "valueDate": {
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-          "valueExpression": {
-            "language": "text/fhirpath",
-            "expression": "today()"
-          }
-        }
-      ]
-    }
-  }
-],
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
           "item": [
             {
               "linkId": "426321975477_helpText",
@@ -956,24 +996,24 @@
         },
         {
           "type": "choice",
-         "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "336643888536",
           "text": "Hospitalization?",
           "required": true,
@@ -1016,29 +1056,39 @@
         },
         {
           "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
           "linkId": "507199621281",
           "text": "Date of admission.",
+          "enableWhen": [
+            {
+              "question": "336643888536",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true,
-          "extension": [
-  {
-    "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-    "valueString": "Cannot be a date in the future"
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-    "valueDate": {
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-          "valueExpression": {
-            "language": "text/fhirpath",
-            "expression": "today()"
-          }
-        }
-      ]
-    }
-  }
-],
           "item": [
             {
               "linkId": "507199621281_helpText",
@@ -1112,185 +1162,51 @@
     {
       "item": [
         {
-          "type": "string",
-          "linkId": "712285796455",
-          "text": "Contact Information."
-        },
-        {
-          "type": "string",
-          "linkId": "259774404000",
-          "text": "Reason for collection of contact samples"
-        },
-        {
-          "type": "string",
-          "linkId": "267256699369",
-          "text": "Date of contact stool collection",
-          "required": true
-        },
-        {
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ]
-              }
-            }
-          ],
-          "linkId": "783385806794",
-          "text": "Relation to index case",
-          "required": true,
-          "answerOption": [
-            {
-              "valueCoding": {
-                "display": "example-father"
-              }
-            },
-            {
-              "valueCoding": {
-                "display": "example-sibling"
-              }
-            }
-          ]
-        },
-        {
-          "type": "integer",
-          "linkId": "959211906632",
-          "text": "Period of exposure to index AFP case",
-          "required": true
-        },
-        {
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ]
-              }
-            }
-          ],
-          "linkId": "620895907584",
-          "text": "Admitted in Hospital?",
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "no",
-                "display": "No"
-              }
-            }
-          ]
-        },
-        {
-          "type": "date",
-          "linkId": "475387889560",
-          "text": "Date of admission",
-          "extension": [
-  {
-    "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-    "valueString": "Cannot be a date in the future"
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-    "valueDate": {
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-          "valueExpression": {
-            "language": "text/fhirpath",
-            "expression": "today()"
-          }
-        }
-      ]
-    }
-  }
-],
-          "required": true
-        }
-      ],
-      "type": "group",
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-          "valueCodeableConcept": {
-            "coding": [
-              {
-                "system": "http://hl7.org/fhir/questionnaire-item-control",
-                "code": "page",
-                "display": "Page"
-              }
-            ]
-          }
-        }
-      ],
-      "linkId": "262403747774",
-      "text": "Notification/Investigation"
-    },
-    {
-      "item": [
-        {
           "type": "date",
           "linkId": "702432206585",
           "text": "Date of onset of paralysis.",
           "extension": [
-  {
-    "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-    "valueString": "Cannot be a date in the future"
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-    "valueDate": {
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-          "valueExpression": {
-            "language": "text/fhirpath",
-            "expression": "today()"
-          }
-        }
-      ]
-    }
-  }
-],
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
           "required": true
         },
         {
           "type": "choice",
-        "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "932108244312",
           "text": "Fever at onset of paralysis?",
           "required": true,
@@ -1312,23 +1228,23 @@
         {
           "type": "choice",
           "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "396371836778",
           "text": "Is paralysis of sudden onset?",
           "required": true,
@@ -1350,23 +1266,23 @@
         {
           "type": "choice",
           "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "917680711879",
           "text": "Progressive Paralysis < 3 days?",
           "required": true,
@@ -1409,24 +1325,24 @@
         },
         {
           "type": "choice",
-         "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "776980947995",
           "text": "Is paralysiss flaccid(floppy)?",
           "required": true,
@@ -1448,23 +1364,23 @@
         {
           "type": "choice",
           "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "679475123276",
           "text": "Is the paralysis asymetric?",
           "required": true,
@@ -1539,28 +1455,38 @@
           "type": "string",
           "linkId": "815911574910",
           "text": "Specify other site of Paralysis",
+          "enableWhen": [
+            {
+              "question": "828001350323",
+              "operator": "=",
+              "answerCoding": {
+                "code": "othersite",
+                "display": "Other (Specify)"
+              }
+            }
+          ],
           "required": true
         },
         {
           "type": "choice",
           "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "249388449455",
           "text": "Paralyzed limb sensitive to pain?",
           "required": true,
@@ -1582,23 +1508,23 @@
         {
           "type": "choice",
           "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "638592165160",
           "text": "Was there any injection just before onset of paralysis?",
           "required": true,
@@ -1635,6 +1561,16 @@
           ],
           "linkId": "701518392602",
           "text": "Site of injection ( check all that applies).",
+          "enableWhen": [
+            {
+              "question": "638592165160",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "answerOption": [
             {
               "valueCoding": {
@@ -1694,24 +1630,24 @@
         },
         {
           "type": "choice",
-         "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "564450145870",
           "text": "After Investigation, was this a true AFP?",
           "answerOption": [
@@ -1791,24 +1727,24 @@
       "item": [
         {
           "type": "choice",
-        "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "970455623029",
           "text": "Was the patient vaccinated against illness (including campaign)? ",
           "required": true,
@@ -1853,6 +1789,16 @@
           "type": "integer",
           "linkId": "495924992534",
           "text": "Number of doses administered(Excluding birth OPV Dose)",
+          "enableWhen": [
+            {
+              "question": "970455623029",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true,
           "item": [
             {
@@ -1879,158 +1825,218 @@
         },
         {
           "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
           "linkId": "413372430071",
           "text": "Date of OPV dose at birth.",
-          "extension": [
-  {
-    "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-    "valueString": "Cannot be a date in the future"
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-    "valueDate": {
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-          "valueExpression": {
-            "language": "text/fhirpath",
-            "expression": "today()"
-          }
-        }
-      ]
-    }
-  }
-],
+          "enableWhen": [
+            {
+              "question": "970455623029",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true
         },
         {
           "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
           "linkId": "671158128551",
           "text": "Date of 1st dose.",
-          "extension": [
-  {
-    "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-    "valueString": "Cannot be a date in the future"
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-    "valueDate": {
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-          "valueExpression": {
-            "language": "text/fhirpath",
-            "expression": "today()"
-          }
-        }
-      ]
-    }
-  }
-],
+          "enableWhen": [
+            {
+              "question": "970455623029",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true
         },
         {
           "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
           "linkId": "286826008175",
           "text": "Date of 2nd dose.",
-          "extension": [
-  {
-    "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-    "valueString": "Cannot be a date in the future"
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-    "valueDate": {
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-          "valueExpression": {
-            "language": "text/fhirpath",
-            "expression": "today()"
-          }
-        }
-      ]
-    }
-  }
-],
+          "enableWhen": [
+            {
+              "question": "970455623029",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true
         },
         {
           "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
           "linkId": "705067672267",
           "text": "Date of 3rd Dose.",
-          "extension": [
-  {
-    "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-    "valueString": "Cannot be a date in the future"
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-    "valueDate": {
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-          "valueExpression": {
-            "language": "text/fhirpath",
-            "expression": "today()"
-          }
-        }
-      ]
-    }
-  }
-],
+          "enableWhen": [
+            {
+              "question": "970455623029",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true
         },
         {
           "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
           "linkId": "974686716540",
           "text": "Date of 4th Dose.",
-          "extension": [
-  {
-    "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-    "valueString": "Cannot be a date in the future"
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-    "valueDate": {
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-          "valueExpression": {
-            "language": "text/fhirpath",
-            "expression": "today()"
-          }
-        }
-      ]
-    }
-  }
-],
+          "enableWhen": [
+            {
+              "question": "970455623029",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true
         },
         {
           "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
           "linkId": "597572769623",
           "text": "If more than 4 doses, date of last dose.",
-          "extension": [
-  {
-    "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-    "valueString": "Cannot be a date in the future"
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-    "valueDate": {
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-          "valueExpression": {
-            "language": "text/fhirpath",
-            "expression": "today()"
-          }
-        }
-      ]
-    }
-  }
-],
+          "enableWhen": [
+            {
+              "question": "970455623029",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "item": [
             {
               "linkId": "597572769623_helpText",
@@ -2057,25 +2063,35 @@
         {
           "type": "choice",
           "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "610048088023",
           "text": "We there any vaccines given in last 30 days?",
+          "enableWhen": [
+            {
+              "question": "970455623029",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "answerOption": [
             {
               "valueCoding": {
@@ -2117,33 +2133,53 @@
           "type": "integer",
           "linkId": "960020813971",
           "text": "if yes, confirm number of days/interval",
+          "enableWhen": [
+            {
+              "question": "610048088023",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true
         },
         {
           "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
           "linkId": "910678978959",
           "text": "Date of last OPV dose received through SIA.",
+          "enableWhen": [
+            {
+              "question": "970455623029",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true,
-          "extension": [
-  {
-    "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-    "valueString": "Cannot be a date in the future"
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-    "valueDate": {
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-          "valueExpression": {
-            "language": "text/fhirpath",
-            "expression": "today()"
-          }
-        }
-      ]
-    }
-  }
-],
           "item": [
             {
               "linkId": "910678978959_helpText",
@@ -2171,6 +2207,16 @@
           "type": "integer",
           "linkId": "774679982525",
           "text": "Total OPV (bOPV/mOPV2) doses received through SIA.",
+          "enableWhen": [
+            {
+              "question": "970455623029",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true,
           "item": [
             {
@@ -2199,6 +2245,16 @@
           "type": "integer",
           "linkId": "440401067645",
           "text": "Total OPV (bOPV/mOPV2/) doses received through RI.",
+          "enableWhen": [
+            {
+              "question": "970455623029",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true,
           "item": [
             {
@@ -2227,6 +2283,16 @@
           "type": "integer",
           "linkId": "799376740588",
           "text": "Total IPV doses received through SIA",
+          "enableWhen": [
+            {
+              "question": "970455623029",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true,
           "item": [
             {
@@ -2255,6 +2321,16 @@
           "type": "integer",
           "linkId": "999346763880",
           "text": "Total IPV doses received through RI.",
+          "enableWhen": [
+            {
+              "question": "970455623029",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true,
           "item": [
             {
@@ -2281,29 +2357,39 @@
         },
         {
           "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
           "linkId": "766122504504",
           "text": "Date of last IPV dose received through RI or SIA.",
+          "enableWhen": [
+            {
+              "question": "970455623029",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true,
-          "extension": [
-  {
-    "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-    "valueString": "Cannot be a date in the future"
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-    "valueDate": {
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-          "valueExpression": {
-            "language": "text/fhirpath",
-            "expression": "today()"
-          }
-        }
-      ]
-    }
-  }
-],
           "item": [
             {
               "linkId": "766122504504_helpText",
@@ -2345,6 +2431,16 @@
           ],
           "linkId": "650080600932",
           "text": "Source of RI vaccination Information.   ",
+          "enableWhen": [
+            {
+              "question": "970455623029",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true,
           "answerOption": [
             {
@@ -2449,25 +2545,25 @@
           "text": "Date 1st specimen collected.",
           "required": true,
           "extension": [
-  {
-    "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-    "valueString": "Cannot be a date in the future"
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-    "valueDate": {
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-          "valueExpression": {
-            "language": "text/fhirpath",
-            "expression": "today()"
-          }
-        }
-      ]
-    }
-  }
-],
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
           "item": [
             {
               "linkId": "737703942433_helpText",
@@ -2496,25 +2592,25 @@
           "linkId": "711388438654",
           "text": "Date 2nd specimen collected.",
           "extension": [
-  {
-    "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-    "valueString": "Cannot be a date in the future"
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-    "valueDate": {
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-          "valueExpression": {
-            "language": "text/fhirpath",
-            "expression": "today()"
-          }
-        }
-      ]
-    }
-  }
-],
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
           "required": true
         },
         {
@@ -2522,50 +2618,50 @@
           "linkId": "808177332790",
           "text": "Date Specimen sent to the national level",
           "extension": [
-  {
-    "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-    "valueString": "Cannot be a date in the future"
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-    "valueDate": {
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-          "valueExpression": {
-            "language": "text/fhirpath",
-            "expression": "today()"
-          }
-        }
-      ]
-    }
-  }
-],
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
           "required": true
         },
         {
           "type": "date",
           "linkId": "400183607168",
           "extension": [
-  {
-    "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-    "valueString": "Cannot be a date in the future"
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-    "valueDate": {
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-          "valueExpression": {
-            "language": "text/fhirpath",
-            "expression": "today()"
-          }
-        }
-      ]
-    }
-  }
-],
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
           "text": "Date specimen sent to the national level."
         }
       ],
