@@ -100,9 +100,9 @@ class CaseSelectionFragment : Fragment() {
 //        recyclerView.adapter = adapter
 //        recyclerView.layoutManager = GridLayoutManager(context, 1)
         val caseOptions = listOf(
-            CaseOption("Add new $titleName case"),
+            CaseOption("Add New $titleName Case"),
             CaseOption(
-                "$titleName Cases List",
+                "$titleName Case List",
                 showCount = true,
                 count = listenToCaseCount(titleName)
             )
@@ -112,7 +112,7 @@ class CaseSelectionFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = CaseOptionsAdapter(caseOptions) { option ->
             when (option.title) {
-                "Add new AFP case" -> {
+                "Add New AFP Case" -> {
 
                     FormatterClass().saveSharedPref(
                         "currentCase",
@@ -135,7 +135,7 @@ class CaseSelectionFragment : Fragment() {
                     startActivity(intent)
                 }
 
-                "Add new Measles case" -> {
+                "Add New Measles Case" -> {
 
                     FormatterClass().saveSharedPref(
                         "currentCase",
@@ -158,7 +158,7 @@ class CaseSelectionFragment : Fragment() {
                     startActivity(intent)
                 }
 
-                "Measles Cases List" -> {
+                "Measles Case List" -> {
                     FormatterClass().saveSharedPref(
                         "title",
                         " ${option.title}",
@@ -173,7 +173,7 @@ class CaseSelectionFragment : Fragment() {
                     startActivity(intent)
                 }
 
-                "AFP Cases List" -> {
+                "AFP Case List" -> {
                     FormatterClass().saveSharedPref(
                         "title",
                         " ${option.title}",

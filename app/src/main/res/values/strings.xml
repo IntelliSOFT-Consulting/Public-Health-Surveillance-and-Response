@@ -34,4 +34,6 @@
     <string name="select_reported_disease">Select reported disease</string>
     <string name="measles">Measles</string>
     <string name="afp">AFP</string>
+    <string name="vl_forms">Visceral Leishmaniasis (Kala-azar) Case Management Form</string>
+    <string name="monthly">IDSR Monthly Reporting Tool</string>
 </resources>

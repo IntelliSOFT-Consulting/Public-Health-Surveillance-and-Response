@@ -93,6 +93,27 @@ class HomeFragment : Fragment() {
     private fun onItemClick(layout: HomeViewModel.Layout) {
         val title = context?.getString(layout.textId) ?: ""
         when (layout.count) {
+            5 -> {
+                val bundle =
+                    Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-vl.json") }
+
+                FormatterClass()
+                    .saveSharedPref(
+                        "stage", "isMonthly",
+                        requireContext()
+                    )
+                FormatterClass()
+                    .saveSharedPref(
+                        "title", title,
+                        requireContext()
+                    )
+
+                findNavController().navigate(
+                    R.id.action_navigation_home_to_single_case_fragment,
+                    bundle
+                )
+            }
+
             4 -> {
                 FormatterClass().saveSharedPref(
                     "currentCase",
@@ -126,7 +147,11 @@ class HomeFragment : Fragment() {
                         "title", title,
                         requireContext()
                     )
-
+                FormatterClass()
+                    .saveSharedPref(
+                        "stage", "isCurrent",
+                        requireContext()
+                    )
                 findNavController().navigate(
                     R.id.action_navigation_home_to_single_case_fragment,
                     bundle

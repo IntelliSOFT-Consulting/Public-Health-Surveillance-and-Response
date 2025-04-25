@@ -25,7 +25,7 @@
         }
       ],
       "linkId": "151479012557",
-      "text": "Reporting Site",
+      "text": "Name of Site Reporting & Disease being reported",
       "item": [
         {
           "type": "choice",
@@ -235,8 +235,19 @@
       "item": [
         {
           "type": "string",
-          "linkId": "794460715014",
-          "text": "Name of the Patient",
+          "linkId": "873240407472",
+          "text": "Patient's first name",
+          "required": true
+        },
+        {
+          "type": "string",
+          "linkId": "246751846436",
+          "text": "Patient's middle name"
+        },
+        {
+          "type": "string",
+          "linkId": "486402457213",
+          "text": "Patients' family name",
           "required": true
         },
         {

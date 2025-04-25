@@ -73,6 +73,7 @@ class SingleCaseFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         var titleName = FormatterClass().getSharedPref("title", requireContext())
+        var stage = FormatterClass().getSharedPref("stage", requireContext())
 
         val activity = requireActivity() as AppCompatActivity
         activity.supportActionBar?.apply {
@@ -92,7 +93,16 @@ class SingleCaseFragment : Fragment() {
             greeting.text = titleName
         }
         val adapter =
-            DiseasesRecyclerViewAdapter(::onItemClick).apply { submitList(viewModel.getDiseasesList()) }
+            DiseasesRecyclerViewAdapter(::onItemClick).apply {
+                if (stage != null) {
+                    if (stage == "isCurrent") {
+                        submitList(viewModel.getDiseasesList())
+                    } else if (stage == "isMonthly") {
+                        submitList(viewModel.getMonthlyList())
+                    }
+                }
+
+            }
         val recyclerView = requireView().findViewById<RecyclerView>(R.id.sdcLayoutsRecyclerView)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = GridLayoutManager(context, 1)

@@ -151,11 +151,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
             }
 
-            val patientNameEntry = extractedAnswers.find { it.linkId == "794460715014" }
 
-            var firstName: String? = null
-            var secondName: String? = null
-            var otherNames: List<String> = emptyList()
             var pfirstName: String? = null
             var psecondName: String? = null
             var potherNames: List<String> = emptyList()
@@ -173,29 +169,24 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val pSubCountyEntry = extractedAnswers.find { it.linkId == "885995384353" }
                     val pCountyEntry = extractedAnswers.find { it.linkId == "301322368614" }
                     val pPhoneEntry = extractedAnswers.find { it.linkId == "754217593839" }
-
+                    val patientFNameEntry = extractedAnswers.find { it.linkId == "873240407472" }
+                    val patientMNameEntry = extractedAnswers.find { it.linkId == "246751846436" }
+                    val patientLNameEntry = extractedAnswers.find { it.linkId == "486402457213" }
                     val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
                     val countyEntry = extractedAnswers.find { it.linkId == "a4-county" }
 
-                    patientNameEntry?.answer?.let { fullName ->
-                        val parts = fullName.trim().split("\\s+".toRegex())
-                        when (parts.size) {
-                            1 -> {
-                                firstName = parts[0]
-                            }
-
-                            2 -> {
-                                firstName = parts[0]
-                                secondName = parts[1]
-                            }
-
-                            else -> {
-                                firstName = parts[0]
-                                secondName = parts[1]
-                                otherNames = parts.drop(2)
-                            }
-                        }
+                    if (patientLNameEntry != null) {
+                        patient.nameFirstRep.family = patientLNameEntry.answer
                     }
+
+                    if (patientFNameEntry != null) {
+                        patient.nameFirstRep.addGiven(patientFNameEntry.answer)
+                    }
+
+                    if (patientMNameEntry != null) {
+                        patient.nameFirstRep.addGiven(patientMNameEntry.answer)
+                    }
+
                     parentEntry?.answer?.let { fullName ->
                         val parts = fullName.trim().split("\\s+".toRegex())
                         when (parts.size) {
@@ -261,18 +252,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         e.printStackTrace()
                     }
 
-                    if (firstName != null) {
-                        patient.nameFirstRep.family = firstName
 
-                    }
-                    if (secondName != null) {
-                        patient.nameFirstRep.addGiven(secondName)
-                    }
-                    if (otherNames.isNotEmpty()) {
-                        otherNames.forEach {
-                            patient.nameFirstRep.addGiven(it)
-                        }
-                    }
                     val parentName = HumanName()
                     if (pfirstName != null) {
                         parentName.family = pfirstName

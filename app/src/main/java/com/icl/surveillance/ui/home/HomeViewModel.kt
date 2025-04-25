@@ -19,22 +19,33 @@ class HomeViewModel(application: Application, private val state: SavedStateHandl
     }
 
     fun getDiseasesList(): List<Diseases> {
-        return Diseases.values().toList()
+        return Diseases.values().filter { it.isCurrent }.toList()
+    }
+
+    fun getMonthlyList(): List<Diseases> {
+        return Diseases.values().filter { it.isMonthly }.toList()
     }
 
     enum class Diseases(
         @DrawableRes val iconId: Int,
         @StringRes val textId: Int,
         val count: Int,
+        val isCurrent: Boolean,
+        val isWeekly: Boolean,
+        val isMonthly: Boolean
     ) {
 
         MEASLES(
             R.drawable.searching,
-            R.string.measles, 0
+            R.string.measles, 0, true, false, false
         ),
         AFP(
             R.drawable.searching,
-            R.string.afp, 1
+            R.string.afp, 1, true, false, false
+        ),
+        VL(
+            R.drawable.searching,
+            R.string.vl_forms, 1, false, false, true
         ),
     }
 
@@ -52,6 +63,7 @@ class HomeViewModel(application: Application, private val state: SavedStateHandl
             R.drawable.searching,
             R.string.contact_tracing, 1
         ),
+        MONTHLYFORM(R.drawable.searching, R.string.monthly, 5),
         MOH505FORM(R.drawable.searching, R.string.moh505, 2),
         SOCIALFORM(R.drawable.searching, R.string.social_form, 3),
         RUMORTOOL(R.drawable.searching, R.string.rumor_tracking, 4),
