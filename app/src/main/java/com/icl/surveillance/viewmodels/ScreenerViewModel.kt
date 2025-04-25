@@ -381,7 +381,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         .addEntry()
                                         .setResource(
                                             qh.codingQuestionnaire(
-                                                linkId,
+                                                "final-classification",
                                                 "Final Classification",
                                                 code
                                             )

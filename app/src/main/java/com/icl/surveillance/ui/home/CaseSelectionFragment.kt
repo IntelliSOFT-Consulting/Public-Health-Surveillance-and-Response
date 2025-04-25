@@ -10,18 +10,19 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.fhir.FhirEngine
 import com.icl.surveillance.R
 import com.icl.surveillance.adapters.CaseOptionsAdapter
-import com.icl.surveillance.adapters.DiseasesRecyclerViewAdapter
 import com.icl.surveillance.cases.CaseListingActivity
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.clients.AddParentCaseActivity
 import com.icl.surveillance.databinding.FragmentCaseSelectionBinding
-import com.icl.surveillance.databinding.FragmentSingleCaseBinding
+import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.models.CaseOption
+import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
 import kotlin.getValue
 
@@ -53,6 +54,8 @@ class CaseSelectionFragment : Fragment() {
         get() = _binding!!
     private val viewModel: HomeViewModel by viewModels()
 
+    private lateinit var fhirEngine: FhirEngine
+    private lateinit var patientListViewModel: PatientListViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -78,6 +81,16 @@ class CaseSelectionFragment : Fragment() {
         // Let the Fragment receive menu callbacks
         setHasOptionsMenu(true)
 
+        fhirEngine = FhirApplication.fhirEngine(requireContext())
+        patientListViewModel =
+            ViewModelProvider(
+                this,
+                PatientListViewModel.PatientListViewModelFactory(
+                    requireActivity().application, fhirEngine
+                ),
+            )
+                .get(PatientListViewModel::class.java)
+
         binding.apply {
             greeting.text = titleName
         }
@@ -88,7 +101,11 @@ class CaseSelectionFragment : Fragment() {
 //        recyclerView.layoutManager = GridLayoutManager(context, 1)
         val caseOptions = listOf(
             CaseOption("Add new $titleName case"),
-            CaseOption("$titleName Cases List", showCount = true, count = 38)
+            CaseOption(
+                "$titleName Cases List",
+                showCount = true,
+                count = listenToCaseCount(titleName)
+            )
         )
 
         val recyclerView = requireView().findViewById<RecyclerView>(R.id.sdcLayoutsRecyclerView)
@@ -190,6 +207,20 @@ class CaseSelectionFragment : Fragment() {
 
         }
 
+    }
+
+    private fun listenToCaseCount(titleName: String?): Int {
+        var count = 0
+        when (titleName) {
+            "Measles" -> {
+                patientListViewModel.handleCurrentCaseListing("measles-case-information")
+                patientListViewModel.liveSearchedCases.observe(viewLifecycleOwner) {
+                    count = it.size
+                }
+            }
+        }
+
+        return count
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

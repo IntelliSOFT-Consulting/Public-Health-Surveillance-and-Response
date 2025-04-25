@@ -63,11 +63,11 @@ class CaseListingActivity : AppCompatActivity() {
         val recyclerView: RecyclerView = binding.patientListContainer.patientList
         val adapter = PatientItemRecyclerViewAdapter(this::onPatientItemClicked)
         recyclerView.adapter = adapter
-        recyclerView.addItemDecoration(
-            DividerItemDecoration(this, DividerItemDecoration.VERTICAL).apply {
-                setDrawable(ColorDrawable(Color.LTGRAY))
-            },
-        )
+//        recyclerView.addItemDecoration(
+//            DividerItemDecoration(this, DividerItemDecoration.VERTICAL).apply {
+//                setDrawable(ColorDrawable(Color.LTGRAY))
+//            },
+//        )
 
         println("Started searching for cases *** $currentCase")
         if (currentCase != null) {
@@ -76,7 +76,11 @@ class CaseListingActivity : AppCompatActivity() {
         }
 
         patientListViewModel.liveSearchedCases.observe(this) {
-            binding.apply { patientListContainer.pbProgress.visibility = View.GONE }
+            binding.apply {
+                count.text = "Showing ${it.size} Results"
+                patientListContainer.pbProgress.visibility = View.GONE
+            }
+
             if (it.isEmpty()) {
                 binding.apply { patientListContainer.caseCount.visibility = View.VISIBLE }
             } else {

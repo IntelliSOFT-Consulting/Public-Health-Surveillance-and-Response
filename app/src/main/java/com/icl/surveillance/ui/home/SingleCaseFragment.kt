@@ -72,7 +72,7 @@ class SingleCaseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val titleName = FormatterClass().getSharedPref("title", requireContext())
+        var titleName = FormatterClass().getSharedPref("title", requireContext())
 
         val activity = requireActivity() as AppCompatActivity
         activity.supportActionBar?.apply {
@@ -85,6 +85,10 @@ class SingleCaseFragment : Fragment() {
         setHasOptionsMenu(true)
 
         binding.apply {
+            titleName = when (titleName) {
+                "Immediate Notifiable Diseases Reporting Tool" -> "Integrated Case Based Surveillance form"
+                else -> titleName
+            }
             greeting.text = titleName
         }
         val adapter =

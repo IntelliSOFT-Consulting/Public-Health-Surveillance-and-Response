@@ -311,21 +311,26 @@ class PatientListViewModel(
                                 ?.resource
                                 ?.value
                                 ?.asStringValue() ?: ""
+                        finalClassification =
+                            obs1.firstOrNull { it.resource.code.codingFirstRep.code == "final-classification" }
+                                ?.resource
+                                ?.value
+                                ?.asStringValue() ?: ""
 
 
-                        finalClassification = when (measlesIgm.lowercase()) {
-                            "positive" -> obs1.firstOrNull {
-                                it.resource.code.codingFirstRep.code == "final-confirm-classification"
-                            }?.resource?.value?.asStringValue() ?: ""
-
-                            "negative" -> obs1.firstOrNull {
-                                it.resource.code.codingFirstRep.code == "final-negative-classification"
-                            }?.resource?.value?.asStringValue() ?: ""
-
-                            else -> obs1.firstOrNull {
-                                it.resource.code.codingFirstRep.code == "final-classification"
-                            }?.resource?.value?.asStringValue() ?: ""
-                        }
+//                        finalClassification = when (measlesIgm.lowercase()) {
+//                            "positive" -> obs1.firstOrNull {
+//                                it.resource.code.codingFirstRep.code == "final-confirm-classification"
+//                            }?.resource?.value?.asStringValue() ?: ""
+//
+//                            "negative" -> obs1.firstOrNull {
+//                                it.resource.code.codingFirstRep.code == "final-negative-classification"
+//                            }?.resource?.value?.asStringValue() ?: ""
+//
+//                            else -> obs1.firstOrNull {
+//                                it.resource.code.codingFirstRep.code == "final-classification"
+//                            }?.resource?.value?.asStringValue() ?: ""
+//                        }
                     }
                     data =
                         data.copy(

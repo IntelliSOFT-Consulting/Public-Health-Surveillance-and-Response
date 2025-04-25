@@ -99,6 +99,11 @@ class AddClientViewModel(application: Application, private val state: SavedState
             enc.id = encounterId
             enc.subject = subjectReference
             enc.reasonCodeFirstRep.codingFirstRep.code = "$reasonCode"
+            var case = "case-information"
+            if (reasonCode != null) {
+                case = reasonCode.toSlug()
+
+            }
 
             val patientNameEntry = extractedAnswers.find { it.linkId == "794460715014" }
 
@@ -108,61 +113,72 @@ class AddClientViewModel(application: Application, private val state: SavedState
             var pfirstName: String? = null
             var psecondName: String? = null
             var potherNames: List<String> = emptyList()
-            val genderEntry = extractedAnswers.find { it.linkId == "929966324957" }
-            val dobEntry = extractedAnswers.find { it.linkId == "257830485990" }
-            val parentEntry = extractedAnswers.find { it.linkId == "856448027666" }
-            val residenceEntry = extractedAnswers.find { it.linkId == "242811643559" }
-            val pNeighborEntry = extractedAnswers.find { it.linkId == "946232932304" }
-            val pStreetEntry = extractedAnswers.find { it.linkId == "424111786438" }
-            val pTownEntry = extractedAnswers.find { it.linkId == "110761799063" }
-            val pSubCountyEntry = extractedAnswers.find { it.linkId == "885995384353" }
-            val pCountyEntry = extractedAnswers.find { it.linkId == "301322368614" }
-            val pPhoneEntry = extractedAnswers.find { it.linkId == "754217593839" }
 
-            val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
-            val countyEntry = extractedAnswers.find { it.linkId == "a4-county" }
+            val encounterReference = Reference("Encounter/$encounterId")
+            when (case) {
+                "measles-case-information" -> {
+                    val genderEntry = extractedAnswers.find { it.linkId == "929966324957" }
+                    val dobEntry = extractedAnswers.find { it.linkId == "257830485990" }
+                    val parentEntry = extractedAnswers.find { it.linkId == "856448027666" }
+                    val residenceEntry = extractedAnswers.find { it.linkId == "242811643559" }
+                    val pNeighborEntry = extractedAnswers.find { it.linkId == "946232932304" }
+                    val pStreetEntry = extractedAnswers.find { it.linkId == "424111786438" }
+                    val pTownEntry = extractedAnswers.find { it.linkId == "110761799063" }
+                    val pSubCountyEntry = extractedAnswers.find { it.linkId == "885995384353" }
+                    val pCountyEntry = extractedAnswers.find { it.linkId == "301322368614" }
+                    val pPhoneEntry = extractedAnswers.find { it.linkId == "754217593839" }
 
+                    val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
+                    val countyEntry = extractedAnswers.find { it.linkId == "a4-county" }
 
-            patientNameEntry?.answer?.let { fullName ->
-                val parts = fullName.trim().split("\\s+".toRegex())
-                when (parts.size) {
-                    1 -> {
-                        firstName = parts[0]
+                    patientNameEntry?.answer?.let { fullName ->
+                        val parts = fullName.trim().split("\\s+".toRegex())
+                        when (parts.size) {
+                            1 -> {
+                                firstName = parts[0]
+                            }
+
+                            2 -> {
+                                firstName = parts[0]
+                                secondName = parts[1]
+                            }
+
+                            else -> {
+                                firstName = parts[0]
+                                secondName = parts[1]
+                                otherNames = parts.drop(2)
+                            }
+                        }
+                    }
+                    parentEntry?.answer?.let { fullName ->
+                        val parts = fullName.trim().split("\\s+".toRegex())
+                        when (parts.size) {
+                            1 -> {
+                                pfirstName = parts[0]
+                            }
+
+                            2 -> {
+                                pfirstName = parts[0]
+                                psecondName = parts[1]
+                            }
+
+                            else -> {
+                                pfirstName = parts[0]
+                                psecondName = parts[1]
+                                potherNames = parts.drop(2)
+                            }
+                        }
                     }
 
-                    2 -> {
-                        firstName = parts[0]
-                        secondName = parts[1]
+                    if (genderEntry != null) {
+                        val gender = when (genderEntry.answer) {
+                            "Male" -> Enumerations.AdministrativeGender.MALE
+                            "Female" -> Enumerations.AdministrativeGender.FEMALE
+                            else -> Enumerations.AdministrativeGender.UNKNOWN
+                        }
+                        patient.gender = gender
                     }
 
-                    else -> {
-                        firstName = parts[0]
-                        secondName = parts[1]
-                        otherNames = parts.drop(2)
-                    }
-                }
-            }
-            parentEntry?.answer?.let { fullName ->
-                val parts = fullName.trim().split("\\s+".toRegex())
-                when (parts.size) {
-                    1 -> {
-                        pfirstName = parts[0]
-                    }
-
-                    2 -> {
-                        pfirstName = parts[0]
-                        psecondName = parts[1]
-                    }
-
-                    else -> {
-                        pfirstName = parts[0]
-                        psecondName = parts[1]
-                        potherNames = parts.drop(2)
-                    }
-                }
-            }
-            withContext(Dispatchers.IO) {
-                try {
                     val parentPhone = ContactPoint()
                     if (pPhoneEntry != null) {
 
@@ -230,56 +246,6 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     patient.contactFirstRep.addTelecom(parentPhone)
 
 
-                    if (genderEntry != null) {
-                        val gender = when (genderEntry.answer) {
-                            "Male" -> Enumerations.AdministrativeGender.MALE
-                            "Female" -> Enumerations.AdministrativeGender.FEMALE
-                            else -> Enumerations.AdministrativeGender.UNKNOWN
-                        }
-                        patient.gender = gender
-                    }
-
-                    val identifierSystem0 = Identifier()
-                    val typeCodeableConcept0 = CodeableConcept()
-                    val codingList0 = ArrayList<Coding>()
-                    val coding0 = Coding()
-                    coding0.system = "system-creation"
-                    coding0.code = "system_creation"
-                    coding0.display = "System Creation"
-                    codingList0.add(coding0)
-                    typeCodeableConcept0.coding = codingList0
-                    typeCodeableConcept0.text = FormatterClass().formatCurrentDateTime(Date())
-
-                    identifierSystem0.value = FormatterClass().formatCurrentDateTime(Date())
-                    identifierSystem0.system = "system-creation"
-                    identifierSystem0.type = typeCodeableConcept0
-
-                    var case = "case-information"
-                    if (reasonCode != null) {
-                        case = reasonCode.toSlug()
-
-                    }
-                    val identifierSystem = Identifier()
-                    val typeCodeableConcept = CodeableConcept()
-                    val codingList = ArrayList<Coding>()
-                    val coding = Coding()
-                    coding.system = case
-                    coding.code = case
-                    coding.display = case
-                    codingList.add(coding)
-                    typeCodeableConcept.coding = codingList
-                    typeCodeableConcept.text = encounterId
-
-                    identifierSystem.value = encounterId
-                    identifierSystem.system = case
-                    identifierSystem.type = typeCodeableConcept
-
-
-                    patient.identifier.add(identifierSystem0)
-                    patient.identifier.add(identifierSystem)
-                    fhirEngine.create(patient)
-                    fhirEngine.create(enc)
-                    val encounterReference = Reference("Encounter/$encounterId")
                     var county = ""
                     var subCounty = ""
                     val currentYear = LocalDate.now().year
@@ -303,6 +269,101 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         "EPID No"
                     obs.code.text = epid
                     createResource(obs, subjectReference, encounterReference)
+
+
+                }
+
+                "afp-case-information" -> {
+                    val fNameEntry = extractedAnswers.find { it.linkId == "873240407472" }
+                    val mNameEntry = extractedAnswers.find { it.linkId == "246751846436" }
+                    val lNameEntry = extractedAnswers.find { it.linkId == "486402457213" }
+                    val genderEntry = extractedAnswers.find { it.linkId == "929966324957" }
+
+                    val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
+                    val countyEntry = extractedAnswers.find { it.linkId == "a4-county" }
+
+                    if (genderEntry != null) {
+                        val gender = when (genderEntry.answer.lowercase()) {
+                            "male" -> Enumerations.AdministrativeGender.MALE
+                            "female" -> Enumerations.AdministrativeGender.FEMALE
+                            else -> Enumerations.AdministrativeGender.UNKNOWN
+                        }
+                        patient.gender = gender
+                    }
+                    if (fNameEntry != null) {
+                        patient.nameFirstRep.family = fNameEntry.answer
+                    }
+                    if (mNameEntry != null) {
+                        patient.nameFirstRep.addGiven(mNameEntry.answer)
+                    }
+                    if (lNameEntry != null) {
+                        patient.nameFirstRep.addGiven(lNameEntry.answer)
+                    }
+
+                    var county = ""
+                    var subCounty = ""
+                    val currentYear = LocalDate.now().year
+
+                    if (subCountyEntry != null) {
+                        subCounty = subCountyEntry.answer
+                    }
+                    if (countyEntry != null) {
+                        county = countyEntry.answer
+                    }
+
+                    val countyCode = county.padEnd(3, 'X').take(3).uppercase()
+                    val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
+
+
+                    val epid = "KEN-$countyCode-$subCountyCode-$currentYear-"
+
+                    val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
+                    obs.code.addCoding().setSystem("http://snomed.info/sct")
+                        .setCode("EPID").display =
+                        "EPID No"
+                    obs.code.text = epid
+                    createResource(obs, subjectReference, encounterReference)
+                }
+            }
+            withContext(Dispatchers.IO) {
+                try {
+
+                    val identifierSystem0 = Identifier()
+                    val typeCodeableConcept0 = CodeableConcept()
+                    val codingList0 = ArrayList<Coding>()
+                    val coding0 = Coding()
+                    coding0.system = "system-creation"
+                    coding0.code = "system_creation"
+                    coding0.display = "System Creation"
+                    codingList0.add(coding0)
+                    typeCodeableConcept0.coding = codingList0
+                    typeCodeableConcept0.text = FormatterClass().formatCurrentDateTime(Date())
+
+                    identifierSystem0.value = FormatterClass().formatCurrentDateTime(Date())
+                    identifierSystem0.system = "system-creation"
+                    identifierSystem0.type = typeCodeableConcept0
+
+
+                    val identifierSystem = Identifier()
+                    val typeCodeableConcept = CodeableConcept()
+                    val codingList = ArrayList<Coding>()
+                    val coding = Coding()
+                    coding.system = case
+                    coding.code = case
+                    coding.display = case
+                    codingList.add(coding)
+                    typeCodeableConcept.coding = codingList
+                    typeCodeableConcept.text = encounterId
+
+                    identifierSystem.value = encounterId
+                    identifierSystem.system = case
+                    identifierSystem.type = typeCodeableConcept
+
+
+                    patient.identifier.add(identifierSystem0)
+                    patient.identifier.add(identifierSystem)
+                    fhirEngine.create(patient)
+                    fhirEngine.create(enc)
 
 
 

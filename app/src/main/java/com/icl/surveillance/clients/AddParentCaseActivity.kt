@@ -105,6 +105,11 @@ class AddParentCaseActivity : AppCompatActivity() {
         )
     }
 
+    override fun onBackPressed() {
+        showCancelScreenerQuestionnaireAlertDialog()
+        super.onBackPressed()
+    }
+
     private fun addQuestionnaireFragment() {
         supportFragmentManager.commit {
             add(

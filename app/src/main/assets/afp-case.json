@@ -40,7 +40,7 @@
         },
         {
           "type": "string",
-          "linkId": "960174071454",
+          "linkId": "a4-county",
           "text": "Reporting County",
           "required": true
         },

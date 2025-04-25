@@ -20,7 +20,7 @@
             android:layout_marginHorizontal="20dp"
             android:text="@string/search_patient_by"
             android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <!-- Horizontal layout for Given Name and Family Name -->
         <LinearLayout
@@ -40,7 +40,13 @@
                 android:layout_weight="1"
                 android:hint="@string/epid"
                 app:boxBackgroundMode="outline"
-                app:hintEnabled="true">
+                app:boxCornerRadiusBottomEnd="50dp"
+                app:boxCornerRadiusBottomStart="50dp"
+                app:boxCornerRadiusTopEnd="50dp"
+                app:boxCornerRadiusTopStart="50dp"
+                app:hintEnabled="true"
+                app:startIconDrawable="@android:drawable/ic_menu_search"
+                app:startIconTint="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tv_epid_no"
@@ -48,6 +54,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:padding="12dp"
+                    android:paddingStart="40dp"
                     android:textColor="@android:color/black"
                     android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -61,6 +68,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_weight="1"
                 android:hint="@string/patient_name"
+                android:visibility="gone"
                 app:boxBackgroundMode="outline"
                 app:hintEnabled="true">
 
@@ -70,12 +78,21 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:padding="12dp"
+                    android:paddingStart="8dp"
                     android:textColor="@android:color/black"
                     android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="20dp"
+            android:text="Showing 0 Results"
+            android:visibility="visible" />
         <!-- Patient List -->
         <include
             android:id="@+id/patient_list_container"

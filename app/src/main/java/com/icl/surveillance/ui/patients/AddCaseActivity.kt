@@ -130,7 +130,7 @@ class AddCaseActivity : AppCompatActivity() {
             val alert = SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
             alert
                 .setTitleText("Success!")
-                .setContentText("You have successfully created a case!")
+                .setContentText("Record successfully saved!")
                 .setConfirmText("OK")
                 .setConfirmClickListener { dialog ->
                     dialog.dismissWithAnimation()

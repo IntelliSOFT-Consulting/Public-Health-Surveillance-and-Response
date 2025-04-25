@@ -106,17 +106,17 @@ class PatientsFragment : Fragment() {
                 setDrawable(ColorDrawable(Color.LTGRAY))
             },
         )
-
-        patientListViewModel.liveSearchedPatients.observe(viewLifecycleOwner) {
-            binding.apply { patientListContainer.pbProgress.visibility = View.GONE }
-            if (it.isEmpty()) {
-                binding.apply { patientListContainer.caseCount.visibility = View.VISIBLE }
-            } else {
-                binding.apply { patientListContainer.caseCount.visibility = View.GONE }
-            }
-
-            adapter.submitList(it)
-        }
+//
+//        patientListViewModel.liveSearchedPatients.observe(viewLifecycleOwner) {
+//            binding.apply { patientListContainer.pbProgress.visibility = View.GONE }
+//            if (it.isEmpty()) {
+//                binding.apply { patientListContainer.caseCount.visibility = View.VISIBLE }
+//            } else {
+//                binding.apply { patientListContainer.caseCount.visibility = View.GONE }
+//            }
+//
+//            adapter.submitList(it)
+//        }
 
         patientListViewModel.patientCount.observe(viewLifecycleOwner) {
             binding.patientListContainer.caseCount.text = "$it Case(s) Found"

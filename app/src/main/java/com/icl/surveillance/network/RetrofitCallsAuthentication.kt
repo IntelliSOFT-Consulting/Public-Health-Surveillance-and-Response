@@ -107,7 +107,7 @@ class RetrofitCallsAuthentication {
                         } else {
                             apiInterface.errorBody()?.let {
                                 //                  val errorBody = JSONObject(it.string())
-                                messageToast = "Error" // errorBody.getString("error")
+                                messageToast = "Invalid login credentials. Please try again." // errorBody.getString("error")
                             }
                         }
                     } catch (e: Exception) {
