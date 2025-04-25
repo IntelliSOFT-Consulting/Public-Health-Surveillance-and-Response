@@ -1,0 +1,1133 @@
+{
+  "resourceType": "Questionnaire",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/4.0/StructureDefinition/Questionnaire"
+    ]
+  },
+  "title": "VL Surveillance",
+  "status": "draft",
+  "item": [
+    {
+      "item": [
+        {
+          "type": "display",
+          "linkId": "440987819789",
+          "text": "Hospital/Facility Location"
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "784459993798",
+          "text": "Health Facility Name",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "mfl001",
+                "display": "Kenyatta National Hospital"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "mfl002",
+                "display": "Kenyatta University - placeholder"
+              }
+            }
+          ]
+        },
+        {
+          "type": "quantity",
+          "linkId": "223713088770",
+          "text": "Ward"
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "990815709263",
+          "text": "Sub-County",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "sub-001",
+                "display": "Westlands"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "sub-002",
+                "display": "Kisauni"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "221146691983",
+          "text": "County",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "047",
+                "display": "Nairobi"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "001",
+                "display": "Mombasa"
+              }
+            }
+          ]
+        },
+        {
+          "type": "date",
+          "linkId": "185890957847",
+          "text": "Date of Diagnosis"
+        }
+      ],
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "306799299376",
+      "text": "Presentation Phase"
+    },
+    {
+      "item": [
+        {
+          "type": "string",
+          "linkId": "123103147447",
+          "text": "OP/No"
+        },
+        {
+          "type": "string",
+          "linkId": "817903655885",
+          "text": "Patient First Name",
+          "required": true
+        },
+        {
+          "type": "string",
+          "linkId": "606848143908",
+          "text": "Patient Family Name",
+          "required": true
+        },
+        {
+          "type": "string",
+          "linkId": "760016167907",
+          "text": "Patient Mobile Contact ",
+          "required": true
+        },
+        {
+          "type": "date",
+          "linkId": "761800309411",
+          "text": "Date of Birth"
+        },
+        {
+          "type": "integer",
+          "linkId": "985553481852",
+          "text": "Age in Years"
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "543806612685",
+          "text": "Gender",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "male",
+                "display": "Male"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "female",
+                "display": "Female"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "743522593349",
+          "text": "Pregnancy Status",
+          "enableWhen": [
+            {
+              "question": "543806612685",
+              "operator": "=",
+              "answerCoding": {
+                "code": "female",
+                "display": "Female"
+              }
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "notknown",
+                "display": "Not Known"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "positive",
+                "display": "Positive"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "negative",
+                "display": "Negative"
+              }
+            }
+          ]
+        },
+        {
+          "type": "decimal",
+          "linkId": "832804021140",
+          "text": "Weight (Kg)"
+        },
+        {
+          "type": "decimal",
+          "linkId": "856786488810",
+          "text": "Height (cm)"
+        },
+        {
+          "type": "decimal",
+          "linkId": "361227700960",
+          "text": "Temperature (°C)"
+        },
+        {
+          "type": "display",
+          "linkId": "350480749254",
+          "text": "Patient Location"
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "845666899224",
+          "text": "Nearest Health Facility",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "knh",
+                "display": "KNH"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "116279465819",
+          "text": "Village"
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "754362784943",
+          "text": "Ward"
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "999881476256",
+          "text": "Occupation",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "occ-001",
+                "display": "None"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "occ-002",
+                "display": "Student"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "occ-003",
+                "display": "Animal Herder"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "occ-004",
+                "display": "Self Employed"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "occ-005",
+                "display": "Homemaker"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "occ-006",
+                "display": "Other (Specify)"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "673073919688",
+          "text": "Other Occupation(Specify) ",
+          "enableWhen": [
+            {
+              "question": "999881476256",
+              "operator": "=",
+              "answerCoding": {
+                "code": "occ-006",
+                "display": "Other (Specify)"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "899673957595",
+          "text": "Education Level",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "edu-001",
+                "display": "None"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "edu-002",
+                "display": "Primary"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "edu-003",
+                "display": "Secondary"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "edu-004",
+                "display": "Post–Secondary"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "edu-005",
+                "display": "Other (Specify)"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "261509225024",
+          "text": "Other Education ( Specify)",
+          "enableWhen": [
+            {
+              "question": "899673957595",
+              "operator": "=",
+              "answerCoding": {
+                "code": "edu-005",
+                "display": "Other (Specify)"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "657999955440",
+          "text": "Name of Contact Person"
+        },
+        {
+          "type": "string",
+          "linkId": "354738003178",
+          "text": "Mobile Contact (of Contact Person)"
+        }
+      ],
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "565301843046",
+      "text": "Case Information"
+    },
+    {
+      "item": [
+        {
+          "type": "date",
+          "linkId": "451005827955",
+          "text": "Date of Onset of Symptoms"
+        },
+        {
+          "type": "integer",
+          "linkId": "920645761660",
+          "text": "Days Since Onset of Symptoms"
+        },
+        {
+          "type": "string",
+          "linkId": "997694179371",
+          "text": "Name of Village Where Patient Probably Got Infected"
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "648643802331",
+          "text": "Is It an Imported Case (from outside the country)?",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "405254523776",
+          "text": "If Yes, Indicate Name of Country",
+          "enableWhen": [
+            {
+              "question": "648643802331",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Ken",
+                "display": "Kenya"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "ug",
+                "display": "Uganda"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "241783748776",
+          "text": "Did Patient Travel to Endemic Area in Last 6 Months?",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "display",
+          "linkId": "240876879827",
+          "text": "If yes, indicate the place(s) visited:",
+          "enableWhen": [
+            {
+              "question": "241783748776",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "304570397907",
+          "text": "Village",
+          "enableWhen": [
+            {
+              "question": "241783748776",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "required": true
+        },
+        {
+          "type": "string",
+          "linkId": "201707720724",
+          "text": "Location",
+          "enableWhen": [
+            {
+              "question": "241783748776",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "required": true
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "563886181043",
+          "text": "Sub-county",
+          "enableWhen": [
+            {
+              "question": "241783748776",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "sub-002",
+                "display": "Westlands"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "742577347417",
+          "text": "Did Patient Visit Traditional Healer before visiting Health Facility?",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "291919290357",
+          "text": "Previous Admission Due to Visceral Leishmaniasis?",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "653200828098",
+          "text": "If Yes, When Admitted?",
+          "enableWhen": [
+            {
+              "question": "291919290357",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "admin-001",
+                "display": "3 months ago"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "admin-002",
+                "display": "6 months ago"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "admin-003",
+                "display": "1 year ago"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "admin-004",
+                "display": "More than 1 year ago"
+              }
+            }
+          ]
+        }
+      ],
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "682361027621",
+      "text": "History of the disease"
+    },
+    {
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "119408288668",
+      "text": "Physical Examination",
+      "item": [
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "699010843343",
+          "text": "Has Patient Had Fever for Last 2 Weeks?",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "458194698702",
+          "text": "Abdominal Distension Present?",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "788908031336",
+          "text": "Organ Enlargement?",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "594158306957",
+          "text": "Liver Enlarged?",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "decimal",
+          "linkId": "754134389540",
+          "text": "Liver Measurement (cm)",
+          "enableWhen": [
+            {
+              "question": "594158306957",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "required": true
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "433410405758",
+          "text": "Spleen Enlarged?",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "decimal",
+          "linkId": "808046746150",
+          "text": "Spleen Measurement (cm)",
+          "enableWhen": [
+            {
+              "question": "433410405758",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "required": true
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "496596553090",
+          "text": "Presence of Concomitant Infections at presentation?",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "968034282530",
+          "text": "Name(s) of Concomitant Infections ",
+          "enableWhen": [
+            {
+              "question": "496596553090",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "required": true
+        },
+        {
+          "type": "string",
+          "linkId": "332723314026",
+          "text": "Clinician's Name"
+        },
+        {
+          "type": "string",
+          "linkId": "493012943787",
+          "text": "Clinician's Signature"
+        }
+      ]
+    }
+  ]
+}
