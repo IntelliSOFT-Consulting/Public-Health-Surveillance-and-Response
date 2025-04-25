@@ -17,6 +17,7 @@ import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.ui.patients.AddCaseActivity
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
+import com.icl.surveillance.utils.toSlug
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
 
@@ -81,6 +82,7 @@ class LabResultsFragment : Fragment() {
 
         val patientId = FormatterClass().getSharedPref("resourceId", requireContext())
         val encounterId = FormatterClass().getSharedPref("encounterId", requireContext())
+        val currentCase = FormatterClass().getSharedPref("currentCase", requireContext())
 
         println("Current Parent Encounter $encounterId")
         fhirEngine = FhirApplication.fhirEngine(requireContext())
@@ -108,22 +110,76 @@ class LabResultsFragment : Fragment() {
                 adapter.submitList(it)
             }
         }
-        patientDetailsViewModel.getPatientDiseaseData(
-            "Measles Lab Information",
-            "$encounterId",
-            false
-        )
+        if (currentCase != null) {
+            val slug = currentCase.toSlug()
+            when (slug) {
+                "measles-case-information" -> {
+                    patientDetailsViewModel.getPatientDiseaseData(
+                        "Measles Lab Information",
+                        "$encounterId",
+                        false
+                    )
+                }
+
+                "afp-case-information" -> {
+                    patientDetailsViewModel.getPatientDiseaseData(
+                        "AFP Lab Information",
+                        "$encounterId",
+                        false
+                    )
+                }
+            }
+        }
 
         binding.apply {
             fab.setOnClickListener {
+                if (currentCase != null) {
+                    val slug = currentCase.toSlug()
+                    when (slug) {
+                        "measles-case-information" -> {
+                            FormatterClass()
+                                .saveSharedPref(
+                                    "questionnaire",
+                                    "measles-lab-results.json",
+                                    requireContext()
+                                )
+                            FormatterClass().saveSharedPref(
+                                "title",
+                                "Measles Lab Results",
+                                requireContext()
+                            )
+                            val intent = Intent(requireContext(), AddCaseActivity::class.java)
+                            intent.putExtra(
+                                QUESTIONNAIRE_FILE_PATH_KEY,
+                                "measles-lab-results.json"
+                            )
+                            startActivity(intent)
+                        }
 
-                println("Current Parent Encounter $encounterId")
-                FormatterClass()
-                    .saveSharedPref("questionnaire", "measles-lab-results.json", requireContext())
-                FormatterClass().saveSharedPref("title", "Lab Results", requireContext())
-                val intent = Intent(requireContext(), AddCaseActivity::class.java)
-                intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "measles-lab-results.json")
-                startActivity(intent)
+                        "afp-case-information" -> {
+                            FormatterClass()
+                                .saveSharedPref(
+                                    "questionnaire",
+                                    "afp-case-lab-results.json",
+                                    requireContext()
+                                )
+                            FormatterClass().saveSharedPref(
+                                "title",
+                                "AFP Lab Results",
+                                requireContext()
+                            )
+                            val intent = Intent(requireContext(), AddCaseActivity::class.java)
+                            intent.putExtra(
+                                QUESTIONNAIRE_FILE_PATH_KEY,
+                                "measles-lab-results.json"
+                            )
+                            startActivity(intent)
+                        }
+
+                    }
+                }
+
+
             }
         }
     }

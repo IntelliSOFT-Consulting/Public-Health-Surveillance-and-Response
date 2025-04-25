@@ -91,6 +91,7 @@ class CaseListingActivity : AppCompatActivity() {
         println("Going to client details activity with the id as ${patientItem.resourceId} and Encounter ${patientItem.encounterId}")
         FormatterClass().saveSharedPref("resourceId", patientItem.resourceId, this)
         FormatterClass().saveSharedPref("encounterId", patientItem.encounterId, this)
+
         startActivity(Intent(this@CaseListingActivity, FullCaseDetailsActivity::class.java))
     }
 

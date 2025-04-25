@@ -55,7 +55,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         viewModelScope.launch {
             val bundle = ResourceMapper.extract(questionnaireResource, questionnaireResponse)
             val context = FhirContext.forR4()
-            val questionnaire = context.newJsonParser().encodeResourceToString(questionnaireResponse)
+            val questionnaire =
+                context.newJsonParser().encodeResourceToString(questionnaireResponse)
 
             CoroutineScope(Dispatchers.IO).launch {
                 try {
@@ -89,7 +90,13 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (code.isNotEmpty()) {
                                     bundle
                                         .addEntry()
-                                        .setResource(qh.codingQuestionnaire("f1", "Presence of fever", code))
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "f1",
+                                                "Presence of fever",
+                                                code
+                                            )
+                                        )
                                         .request
                                         .url = "Observation"
                                 }
@@ -100,7 +107,12 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 bundle
                                     .addEntry()
                                     .setResource(
-                                        qh.codingTimeAutoQuestionnaire("f2", "Date of onset of rash", code))
+                                        qh.codingTimeAutoQuestionnaire(
+                                            "f2",
+                                            "Date of onset of rash",
+                                            code
+                                        )
+                                    )
                                     .request
                                     .url = "Observation"
                             }
@@ -110,7 +122,13 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (code.isNotEmpty()) {
                                     bundle
                                         .addEntry()
-                                        .setResource(qh.codingQuestionnaire("f3", "Type of rash", code))
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                "f3",
+                                                "Type of rash",
+                                                code
+                                            )
+                                        )
                                         .request
                                         .url = "Observation"
                                 }
@@ -125,7 +143,9 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                             qh.codingQuestionnaire(
                                                 "f4a",
                                                 "Was home of patient visited for contact investigation?",
-                                                code))
+                                                code
+                                            )
+                                        )
                                         .request
                                         .url = "Observation"
                                 }
@@ -136,7 +156,12 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 bundle
                                     .addEntry()
                                     .setResource(
-                                        qh.codingTimeAutoQuestionnaire("f4b", "If Yes, Date of visit", code))
+                                        qh.codingTimeAutoQuestionnaire(
+                                            "f4b",
+                                            "If Yes, Date of visit",
+                                            code
+                                        )
+                                    )
                                     .request
                                     .url = "Observation"
                             }
@@ -150,11 +175,14 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                             qh.codingQuestionnaire(
                                                 "f5",
                                                 "Is the case epidemiologically linked to a lab-confirmed case?",
-                                                code))
+                                                code
+                                            )
+                                        )
                                         .request
                                         .url = "Observation"
                                 }
                             }
+
                             "g1a" -> {
                                 val code = extractResponseCode(item, "valueCoding")
                                 if (code.isNotEmpty()) {
@@ -164,11 +192,14 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                             qh.codingQuestionnaire(
                                                 "g1a",
                                                 "Specimen Collection (To be completed by the health facility)",
-                                                code))
+                                                code
+                                            )
+                                        )
                                         .request
                                         .url = "Observation"
                                 }
                             }
+
                             "g1a1" -> {
                                 val code = extractResponse(item, "valueString")
                                 bundle
@@ -196,12 +227,14 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
     fun completeLabAssessment(
         questionnaireResponse: QuestionnaireResponse,
         patientId: String,
-        encounter: String
+        encounter: String,
+        title: String
     ) {
         viewModelScope.launch {
             val bundle = ResourceMapper.extract(questionnaireResource, questionnaireResponse)
             val context = FhirContext.forR4()
-            val questionnaire = context.newJsonParser().encodeResourceToString(questionnaireResponse)
+            val questionnaire =
+                context.newJsonParser().encodeResourceToString(questionnaireResponse)
 
             CoroutineScope(Dispatchers.IO).launch {
                 try {
@@ -217,7 +250,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                     /** Extract Observations, Patient Data */
                     val qh = QuestionnaireHelper()
-                    bundle.addEntry().setResource(qh.generalEncounter(encounter)).request.url = "Encounter"
+                    bundle.addEntry().setResource(qh.generalEncounter(encounter)).request.url =
+                        "Encounter"
 
                     val json = JSONObject(questionnaire)
                     val items = json.getJSONArray("item")
@@ -230,7 +264,12 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 bundle
                                     .addEntry()
                                     .setResource(
-                                        qh.codingTimeAutoQuestionnaire(linkId, "Date sent form to District", code))
+                                        qh.codingTimeAutoQuestionnaire(
+                                            linkId,
+                                            "Date sent form to District",
+                                            code
+                                        )
+                                    )
                                     .request
                                     .url = "Observation"
                             }
@@ -240,7 +279,13 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (code.isNotEmpty()) {
                                     bundle
                                         .addEntry()
-                                        .setResource(qh.codingQuestionnaire(linkId, "Specimen Condition", code))
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                linkId,
+                                                "Specimen Condition",
+                                                code
+                                            )
+                                        )
                                         .request
                                         .url = "Observation"
                                 }
@@ -252,7 +297,12 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                     bundle
                                         .addEntry()
                                         .setResource(
-                                            qh.codingTimeAutoQuestionnaire(linkId, "Date lab sent results to district", code))
+                                            qh.codingTimeAutoQuestionnaire(
+                                                linkId,
+                                                "Date lab sent results to district",
+                                                code
+                                            )
+                                        )
                                         .request
                                         .url = "Observation"
                                 }
@@ -263,7 +313,13 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (code.isNotEmpty()) {
                                     bundle
                                         .addEntry()
-                                        .setResource(qh.codingQuestionnaire(linkId, "Measles IgM Result", code))
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                linkId,
+                                                "Measles IgM Result",
+                                                code
+                                            )
+                                        )
                                         .request
                                         .url = "Observation"
                                 }
@@ -274,11 +330,18 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                 if (code.isNotEmpty()) {
                                     bundle
                                         .addEntry()
-                                        .setResource(qh.codingQuestionnaire(linkId, "Rubella IgM Result", code))
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                linkId,
+                                                "Rubella IgM Result",
+                                                code
+                                            )
+                                        )
                                         .request
                                         .url = "Observation"
                                 }
                             }
+
                             "final-confirm-classification" -> {
                                 val code = extractResponseCode(item, "valueCoding")
                                 if (code.isNotEmpty()) {
@@ -286,93 +349,145 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                                         .addEntry()
                                         .setResource(
                                             qh.codingQuestionnaire(
-                                                "final-classification", "Final Classification", code))
+                                                "final-classification", "Final Classification", code
+                                            )
+                                        )
                                         .request
                                         .url = "Observation"
                                 }
                             }
+
                             "final-classification" -> {
                                 val code = extractResponseCode(item, "valueCoding")
                                 if (code.isNotEmpty()) {
                                     bundle
                                         .addEntry()
-                                        .setResource(qh.codingQuestionnaire(linkId, "Final Classification", code))
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                linkId,
+                                                "Final Classification",
+                                                code
+                                            )
+                                        )
                                         .request
                                         .url = "Observation"
                                 }
                             }
+
                             "final-negative-classification" -> {
                                 val code = extractResponseCode(item, "valueCoding")
                                 if (code.isNotEmpty()) {
                                     bundle
                                         .addEntry()
-                                        .setResource(qh.codingQuestionnaire(linkId, "Final Classification", code))
+                                        .setResource(
+                                            qh.codingQuestionnaire(
+                                                linkId,
+                                                "Final Classification",
+                                                code
+                                            )
+                                        )
                                         .request
                                         .url = "Observation"
                                 }
                             }
+
                             "completer-name" -> {
                                 val code = extractResponse(item, "valueString")
                                 bundle
                                     .addEntry()
                                     .setResource(
-                                        qh.codingQuestionnaire(linkId, " Name of person completing form", code))
+                                        qh.codingQuestionnaire(
+                                            linkId,
+                                            " Name of person completing form",
+                                            code
+                                        )
+                                    )
                                     .request
                                     .url = "Observation"
                             }
+
                             "completer-designation" -> {
                                 val code = extractResponse(item, "valueString")
                                 bundle
                                     .addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
-                                            linkId, "Designation of person completing form", code))
+                                            linkId, "Designation of person completing form", code
+                                        )
+                                    )
                                     .request
                                     .url = "Observation"
                             }
+
                             "completer-sign" -> {
                                 val code = extractResponse(item, "valueString")
                                 bundle
                                     .addEntry()
                                     .setResource(
-                                        qh.codingQuestionnaire(linkId, "Sign of person completing form", code))
+                                        qh.codingQuestionnaire(
+                                            linkId,
+                                            "Sign of person completing form",
+                                            code
+                                        )
+                                    )
                                     .request
                                     .url = "Observation"
                             }
+
                             "contact-name" -> {
                                 val code = extractResponse(item, "valueString")
                                 bundle
                                     .addEntry()
                                     .setResource(
-                                        qh.codingQuestionnaire(linkId, "Sub County contact person - Name", code))
+                                        qh.codingQuestionnaire(
+                                            linkId,
+                                            "Sub County contact person - Name",
+                                            code
+                                        )
+                                    )
                                     .request
                                     .url = "Observation"
                             }
+
                             "contact-designation" -> {
                                 val code = extractResponse(item, "valueString")
                                 bundle
                                     .addEntry()
                                     .setResource(
                                         qh.codingQuestionnaire(
-                                            linkId, "Sub County contact person - Designation", code))
+                                            linkId, "Sub County contact person - Designation", code
+                                        )
+                                    )
                                     .request
                                     .url = "Observation"
                             }
+
                             "contact-phone" -> {
                                 val code = extractResponse(item, "valueString")
                                 bundle
                                     .addEntry()
                                     .setResource(
-                                        qh.codingQuestionnaire(linkId, "Sub County contact person - Phone", code))
+                                        qh.codingQuestionnaire(
+                                            linkId,
+                                            "Sub County contact person - Phone",
+                                            code
+                                        )
+                                    )
                                     .request
                                     .url = "Observation"
                             }
+
                             "contact-email" -> {
                                 val code = extractResponse(item, "valueString")
                                 bundle
                                     .addEntry()
                                     .setResource(
-                                        qh.codingQuestionnaire(linkId, "Sub County contact person - Email", code))
+                                        qh.codingQuestionnaire(
+                                            linkId,
+                                            "Sub County contact person - Email",
+                                            code
+                                        )
+                                    )
                                     .request
                                     .url = "Observation"
                             }
@@ -381,7 +496,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                     val encounterId = generateUuid()
                     val subjectReference = Reference("Patient/$patientId")
-                    val title = "Measles Lab Information"
+
                     saveResources(bundle, subjectReference, encounterId, title)
                     CoroutineScope(Dispatchers.Main).launch { isResourcesSaved.value = true }
                 } catch (e: Exception) {
@@ -438,6 +553,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         saveResourceToDatabase(resource)
                     }
                 }
+
                 is Condition -> {
                     if (resource.hasCode()) {
                         resource.id = generateUuid()
@@ -446,6 +562,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         saveResourceToDatabase(resource)
                     }
                 }
+
                 is Encounter -> {
                     resource.subject = subjectReference
                     resource.id = encounterId
