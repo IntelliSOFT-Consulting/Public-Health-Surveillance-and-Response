@@ -2,6 +2,7 @@ package com.icl.surveillance.holders
 
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.icl.surveillance.R
 import com.icl.surveillance.databinding.LabHolderBinding
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import java.time.OffsetDateTime
@@ -25,7 +26,10 @@ class LabItemViewHolder(binding: LabHolderBinding) : RecyclerView.ViewHolder(bin
         this.rubellaIgmView.text = patientItem.rubellaIgM
         this.dateLabSentResultsView.text = handleDate(patientItem.dateLabSentResults)
         this.finalClassificationView.text = patientItem.finalClassification
+        if (patientItem.finalClassification.trim() == "Confirmed by lab") {
 
+            this.finalClassificationView.setTextColor(this.finalClassificationView.context.getColor(R.color.red))
+        }
         this.itemView.setOnClickListener { onItemClicked(patientItem) }
     }
 

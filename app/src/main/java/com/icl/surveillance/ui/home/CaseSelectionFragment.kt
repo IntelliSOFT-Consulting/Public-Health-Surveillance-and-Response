@@ -67,6 +67,26 @@ class CaseSelectionFragment : Fragment() {
         return root
     }
 
+    override fun onResume() {
+        super.onResume()
+        val titleName = FormatterClass().getSharedPref("title", requireContext())
+//
+//        try {
+//            if (titleName != null) {
+//                val title = when (titleName) {
+//                    "Visceral Leishmaniasis (Kala-azar) Case Management Form" -> "VL"
+//                    else -> titleName
+//                }
+//
+//                setupRecyclerView()
+//            }
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        }
+
+
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val titleName = FormatterClass().getSharedPref("title", requireContext())
@@ -94,11 +114,15 @@ class CaseSelectionFragment : Fragment() {
         binding.apply {
             greeting.text = titleName
         }
-//        val adapter =
-//            DiseasesRecyclerViewAdapter(::onItemClick).apply { submitList(viewModel.getDiseasesList()) }
-//        val recyclerView = requireView().findViewById<RecyclerView>(R.id.sdcLayoutsRecyclerView)
-//        recyclerView.adapter = adapter
-//        recyclerView.layoutManager = GridLayoutManager(context, 1)
+        if (titleName != null) {
+            setupRecyclerView()
+        }
+
+    }
+
+    private fun setupRecyclerView() {
+        val titleName = FormatterClass().getSharedPref("title", requireContext())
+
         val title = when (titleName) {
             "Visceral Leishmaniasis (Kala-azar) Case Management Form" -> "VL"
             else -> titleName
@@ -125,7 +149,7 @@ class CaseSelectionFragment : Fragment() {
                     )
                     FormatterClass().saveSharedPref(
                         "title",
-                        " $titleName",
+                        "Visceral Leishmaniasis (Kala-azar) Case Management Form",
                         requireContext()
                     )
                     FormatterClass().saveSharedPref(
@@ -248,9 +272,11 @@ class CaseSelectionFragment : Fragment() {
 
 
         }
-        val caseType = when (titleName?.trim()) {
+
+        val caseType = when (title?.trim()) {
             "Measles" -> "measles-case-information"
             "AFP" -> "afp-case-information"
+            "VL" -> "vl-case-information"
             else -> null
         }
 
@@ -267,27 +293,8 @@ class CaseSelectionFragment : Fragment() {
                 e.printStackTrace()
             }
         }
-
-
     }
 
-    private fun listenToCaseCount(titleName: String?): Int {
-        var count = 0
-        if (titleName != null) {
-            println("started *** $titleName")
-            when (titleName.trim()) {
-                "Measles" -> {
-                    patientListViewModel.handleCurrentCaseListing("measles-case-information")
-                    patientListViewModel.liveSearchedCases.observe(viewLifecycleOwner) {
-                        count = it.size
-                        println("started *** Final Count $count")
-                    }
-                }
-            }
-        }
-
-        return count
-    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

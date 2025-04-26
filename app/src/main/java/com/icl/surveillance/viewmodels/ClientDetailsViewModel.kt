@@ -175,6 +175,21 @@ class ClientDetailsViewModel(
         var epiLinkedName = ""
         var epiLinkedNumber = ""
 
+        var bloodSpecimenCollected = ""
+        var noWhyBlood = ""
+        var dateBloodSpecimen = ""
+        var urineSpecimenCollected = ""
+        var noWhyUrine = ""
+        var dateUrineSpecimen = ""
+        var respiratorySampleCollected = ""
+        var dateRespiratorySample = ""
+        var noWhyRespiratory = ""
+        var otherSpecimenCollected = ""
+        var specifyOtherSpecimen = ""
+        var dateOtherSpecimen = ""
+        var dateSpecimenSentToLab = ""
+
+
         searchResult.first().let {
             logicalId = it.resource.logicalId
             name =
@@ -208,6 +223,22 @@ class ClientDetailsViewModel(
                 specimenTypeOther = generateResponse(obs, "834246950025")
                 dateSent = generateResponse(obs, "718251724172")
                 labName = generateResponse(obs, "868259191903")
+
+                bloodSpecimenCollected = generateResponse(obs, "918495737998")
+                noWhyBlood = generateResponse(obs, "752178052107")
+                dateBloodSpecimen = generateResponse(obs, "8962468583341")
+                urineSpecimenCollected = generateResponse(obs, "433195098993")
+                noWhyUrine = generateResponse(obs, "329542687751")
+                dateUrineSpecimen = generateResponse(obs, "915783129731")
+                respiratorySampleCollected = generateResponse(obs, "270749570400")
+                dateRespiratorySample = generateResponse(obs, "183705125522")
+                noWhyRespiratory = generateResponse(obs, "427973727975")
+                otherSpecimenCollected = generateResponse(obs, "258912872921")
+                specifyOtherSpecimen = generateResponse(obs, "340507649387")
+                dateOtherSpecimen = generateResponse(obs, "699353598445")
+                dateSpecimenSentToLab = generateResponse(obs, "718251724172")
+
+
 
                 // Case Details
 
@@ -395,7 +426,23 @@ class ClientDetailsViewModel(
             specimenType = specimenType,
             specimenTypeOther = specimenTypeOther,
             dateSent = dateSent,
-            labName = labName
+            labName = labName,
+
+            bloodSpecimenCollected = bloodSpecimenCollected,
+            noWhyBlood = noWhyBlood,
+            dateBloodSpecimen = dateBloodSpecimen,
+            urineSpecimenCollected = urineSpecimenCollected,
+            noWhyUrine = noWhyUrine,
+            dateUrineSpecimen = dateUrineSpecimen,
+            respiratorySampleCollected = respiratorySampleCollected,
+            dateRespiratorySample = dateRespiratorySample,
+            noWhyRespiratory = noWhyRespiratory,
+            otherSpecimenCollected = otherSpecimenCollected,
+            specifyOtherSpecimen = specifyOtherSpecimen,
+            dateOtherSpecimen = dateOtherSpecimen,
+            dateSpecimenSentToLab = dateSpecimenSentToLab
+
+
         )
     }
 

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".ui.patients.data.ClinicalInformationFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -30,14 +31,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Date first seen at health facility:" />
+                    android:text="Date first seen at health facility:"
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/tv_first_seen"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textAlignment="textEnd" />
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <View
@@ -56,14 +59,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Status of Patient:" />
+                    android:text="Status of Patient:"
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/tv_status"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textAlignment="textEnd" />
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <View
@@ -82,14 +87,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Date of Admission:" />
+                    android:text="Date of Admission:"
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/tv_admission_date"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textAlignment="textEnd" />
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <View
@@ -108,14 +115,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="IP/OP No.:" />
+                    android:text="IP/OP No.:"
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/tv_ip_op_no"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textAlignment="textEnd" />
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <View
@@ -134,14 +143,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Outcome:" />
+                    android:text="Outcome:"
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/tv_outcome"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textAlignment="textEnd" />
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <View
@@ -154,20 +165,23 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Sample Collected?" />
+                    android:text="Sample Collected?"
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/tv_sample_collected"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textAlignment="textEnd" />
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <View

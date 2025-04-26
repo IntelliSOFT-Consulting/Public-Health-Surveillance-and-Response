@@ -52,10 +52,10 @@ class FormatterClass {
 
         val currentTime = LocalTime.now()
         return when (currentTime.hour) {
-            in 5..11 -> "Good morning"
-            in 12..16 -> "Good afternoon"
-            in 17..20 -> "Good evening"
-            else -> "Good night"
+            in 5..11 -> "Good Morning"
+            in 12..16 -> "Good Afternoon"
+            in 17..20 -> "Good Evening"
+            else -> "Good Night"
         }
     }
 }

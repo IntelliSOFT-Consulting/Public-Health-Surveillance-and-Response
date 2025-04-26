@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".ui.patients.data.IdentificationFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -22,7 +23,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Name of patient" />
+                android:text="Name of patient"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tv_name"
@@ -30,7 +32,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text=""
-                android:textAlignment="textEnd" />
+                android:textAlignment="textEnd"
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <View
@@ -49,7 +52,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Sex:" />
+                android:text="Sex:"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tv_sex"
@@ -57,7 +61,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text=""
-                android:textAlignment="textEnd" />
+                android:textAlignment="textEnd"
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <View
@@ -76,7 +81,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="D.O.B." />
+                android:text="D.O.B."
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tv_dob"
@@ -85,7 +91,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text=""
-                android:textAlignment="textEnd" />
+                android:textAlignment="textEnd"
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <View
@@ -104,16 +111,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Residence:" />
+                android:text="Residence:"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tv_residence"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-
                 android:text=""
-                android:textAlignment="textEnd" />
+                android:textAlignment="textEnd"
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <View
@@ -127,6 +135,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="Tracer information:"
+            android:textColor="@color/black"
             android:textStyle="bold" />
 
         <!-- B6a. Parent/Guardian -->
@@ -140,15 +149,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Parent/Guardian:" />
+                android:text="Parent/Guardian:"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tv_parent"
                 android:layout_width="0dp"
-
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAlignment="textEnd" />
+                android:textAlignment="textEnd"
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <View
@@ -167,15 +177,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Residence (Village/Hse No):" />
+                android:text="Residence (Village/Hse No):"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tv_house_no"
                 android:layout_width="0dp"
-
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAlignment="textEnd" />
+                android:textAlignment="textEnd"
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <View
@@ -194,14 +205,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Neighborhood major landmark:" />
+                android:text="Neighborhood major landmark:"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tv_neighbor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAlignment="textEnd" />
+                android:textAlignment="textEnd"
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <View
@@ -220,15 +233,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Street/Plot/Estate/S. location:" />
+                android:text="Street/Plot/Estate/S. location:"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tv_street"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-
                 android:layout_weight="1"
-                android:textAlignment="textEnd" />
+                android:textAlignment="textEnd"
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <View
@@ -247,15 +261,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Town/City/Location:" />
+                android:text="Town/City/Location:"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tv_town"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-
                 android:layout_weight="1"
-                android:textAlignment="textEnd" />
+                android:textAlignment="textEnd"
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <View
@@ -274,14 +289,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Sub County:" />
+                android:text="Sub County:"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tv_sub_county"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAlignment="textEnd" />
+                android:textAlignment="textEnd"
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <View
@@ -300,14 +317,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="County:" />
+                android:text="County:"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tv_county"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAlignment="textEnd" />
+                android:textAlignment="textEnd"
+                android:textColor="@color/black" />
 
         </LinearLayout>
 
@@ -327,14 +346,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Telephone No of parent/guardian:" />
+                android:text="Telephone No of parent/guardian:"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tv_phone"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAlignment="textEnd" />
+                android:textAlignment="textEnd"
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <View

@@ -95,19 +95,27 @@ class LabInformationFragment : Fragment() {
         }
         patientDetailsViewModel.livecaseData.observe(viewLifecycleOwner) {
             binding.apply {
-                tvSpecimen.text = it.specimen
-                if (it.specimen == "Yes") {
-                    tvNoWhy.visibility = View.GONE
+                tvBloodSpecimenCollected.text = it.bloodSpecimenCollected
+                tvNoWhyBlood.text = it.noWhyBlood
+                tvDateBloodSpecimen.text = it.dateBloodSpecimen
+                tvUrineSpecimenCollected.text = it.urineSpecimenCollected
+                tvNoWhyUrine.text = it.noWhyUrine
+                tvDateUrineSpecimen.text = it.dateUrineSpecimen
+                tvRespiratorySampleCollected.text = it.respiratorySampleCollected
+                tvDateRespiratorySample.text = it.dateRespiratorySample
+                tvNoWhyRespiratory.text = it.noWhyRespiratory
+                tvOtherSpecimenCollected.text = it.otherSpecimenCollected
+                tvSpecifyOtherSpecimen.text = it.specifyOtherSpecimen
+                tvDateOtherSpecimen.text = it.dateOtherSpecimen
+                tvDateSpecimenSentToLab.text = it.dateSpecimenSentToLab
+
+                if (it.bloodSpecimenCollected.trim() == "Yes") {
+                    lnBloodNo.visibility = View.GONE
+                    vnBloodNo.visibility = View.GONE
+                } else {
+                    lnBloodYes.visibility = View.GONE
+                    vnBloodYes.visibility = View.GONE
                 }
-                tvNoWhy.text = it.noWhy
-                tvSpecimenCollection.text = it.collectionDate
-                tvSpecimenType.text = it.specimenType
-                if (it.specimenType != "Other") {
-                    tvSpecimenTypeOther.visibility = View.GONE
-                }
-                tvSpecimenTypeOther.text = it.specimenTypeOther
-                tvDateSent.text = it.dateSent
-                tvLabName.text = it.labName
             }
         }
 

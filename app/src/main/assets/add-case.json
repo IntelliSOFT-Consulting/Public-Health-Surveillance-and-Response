@@ -894,42 +894,6 @@
           "required": true
         },
         {
-          "type": "date",
-          "linkId": "544290619304",
-          "text": "Date of last vaccination",
-          "enableWhen": [
-            {
-              "question": "308128177300",
-              "operator": "=",
-              "answerCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
-            }
-          ],
-          "required": true,
-          "extension": [
-            {
-              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-              "valueString": "Cannot be a date in the future"
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueDate": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-                    "valueExpression": {
-                      "language": "text/fhirpath",
-                      "expression": "today()"
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        {
           "type": "display",
           "linkId": "817978705295",
           "text": "Measles Surveilance"
@@ -1209,6 +1173,42 @@
           ]
         },
         {
+          "type": "date",
+          "linkId": "544290619304",
+          "text": "Date of last vaccination",
+          "enableWhen": [
+            {
+              "question": "308128177300",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "required": true,
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
           "type": "choice",
           "extension": [
             {
@@ -1248,54 +1248,6 @@
               "valueCoding": {
                 "code": "Unknown",
                 "display": "Unknown"
-              }
-            }
-          ]
-        },
-        {
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "radio-button",
-                    "display": "Radio Button"
-                  }
-                ]
-              }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-              "valueCode": "horizontal"
-            }
-          ],
-          "linkId": "602355761864",
-          "text": "Sample collected?",
-          "enableWhen": [
-            {
-              "question": "865158268604",
-              "operator": "=",
-              "answerCoding": {
-                "code": "no",
-                "display": "No"
-              }
-            }
-          ],
-          "required": true,
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "no",
-                "display": "No"
               }
             }
           ]
@@ -1380,7 +1332,7 @@
               }
             }
           ],
-          "linkId": "896246858334",
+          "linkId": "8962468583341",
           "text": "Date of blood specimen collection",
           "enableWhen": [
             {
@@ -1688,16 +1640,6 @@
           ],
           "linkId": "718251724172",
           "text": "Date specimen sent to lab",
-          "enableWhen": [
-            {
-              "question": "918495737998",
-              "operator": "=",
-              "answerCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
-            }
-          ],
           "required": true
         }
       ],
@@ -1717,17 +1659,7 @@
         }
       ],
       "linkId": "271053545237",
-      "text": "Sample/Specimen Collection",
-      "enableWhen": [
-        {
-          "question": "602355761864",
-          "operator": "=",
-          "answerCoding": {
-            "code": "yes",
-            "display": "Yes"
-          }
-        }
-      ]
+      "text": "Sample/Specimen Collection"
     }
   ]
 }

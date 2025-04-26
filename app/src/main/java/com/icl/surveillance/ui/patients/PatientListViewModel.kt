@@ -610,6 +610,20 @@ class PatientListViewModel(
         val specimenTypeOther: String,
         val dateSent: String,
         val labName: String,
+        val bloodSpecimenCollected: String,
+        val noWhyBlood: String,
+        val dateBloodSpecimen: String,
+        val urineSpecimenCollected: String,
+        val noWhyUrine: String,
+        val dateUrineSpecimen: String,
+        val respiratorySampleCollected: String,
+        val dateRespiratorySample: String,
+        val noWhyRespiratory: String,
+        val otherSpecimenCollected: String,
+        val specifyOtherSpecimen: String,
+        val dateOtherSpecimen: String,
+        val dateSpecimenSentToLab: String
+
     )
 
     data class PatientDetailOverview(

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".ui.patients.data.ReportingSiteFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -22,13 +23,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="EPID No" />
+                android:text="EPID No"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/epid_no"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:textAlignment="textEnd"
+                android:textColor="@color/black" />
         </LinearLayout>
         <!-- Header -->
         <TextView
@@ -36,6 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:text="Name of Site Reporting and Disease being reported"
+            android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold" />
 
@@ -55,14 +60,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Health Facility" />
+                android:text="Health Facility"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tv_facility"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAlignment="textEnd" />
+                android:textAlignment="textEnd"
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <View
@@ -81,14 +88,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Type" />
+                android:text="Type"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tv_type"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAlignment="textEnd" />
+                android:textAlignment="textEnd"
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <View
@@ -107,14 +116,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Sub County" />
+                android:text="Sub County"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tv_sub_county"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAlignment="textEnd" />
+                android:textAlignment="textEnd"
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <View
@@ -133,14 +144,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="County" />
+                android:text="County"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tv_county"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAlignment="textEnd" />
+                android:textAlignment="textEnd"
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <View
@@ -152,20 +165,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Disease reported" />
+                android:text="Disease reported"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tv_disease"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAlignment="textEnd" />
+                android:textAlignment="textEnd"
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <View

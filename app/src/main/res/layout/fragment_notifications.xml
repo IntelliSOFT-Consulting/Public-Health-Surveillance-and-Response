@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:padding="20dp"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:padding="30dp"
     tools:context=".ui.notifications.NotificationsFragment">
 
 
@@ -19,7 +21,6 @@
         android:text="Logout"
         android:textColor="@color/white"
         app:cornerRadius="20dp"
-        app:icon="@drawable/eye"
         app:iconGravity="start"
         app:iconPadding="1dp"
         app:iconSize="40dp"
