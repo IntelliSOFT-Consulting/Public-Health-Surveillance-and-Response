@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.fhir.FhirEngine
@@ -69,9 +70,25 @@ class LabResultsFragment : Fragment() {
         super.onResume()
         try {
             val encounterId = FormatterClass().getSharedPref("encounterId", requireContext())
-            patientDetailsViewModel.getPatientDiseaseData(
-                "Measles Lab Information", "$encounterId", false
-            )
+            val currentCase = FormatterClass().getSharedPref("currentCase", requireContext())
+            if (currentCase != null) {
+                val slug = currentCase.toSlug()
+                when (slug) {
+                    "measles-case-information" -> {
+                        patientDetailsViewModel.getPatientDiseaseData(
+                            "Measles Lab Information", "$encounterId", false
+                        )
+                    }
+
+                    "afp-case-information" -> {
+                        patientDetailsViewModel.getPatientDiseaseData(
+                            "AFP Lab Information",
+                            "$encounterId",
+                            false
+                        )
+                    }
+                }
+            }
         } catch (e: Exception) {
             println(e.message)
         }
@@ -171,9 +188,14 @@ class LabResultsFragment : Fragment() {
                             val intent = Intent(requireContext(), AddCaseActivity::class.java)
                             intent.putExtra(
                                 QUESTIONNAIRE_FILE_PATH_KEY,
-                                "measles-lab-results.json"
+                                "afp-case-lab-results.json"
                             )
                             startActivity(intent)
+                        }
+
+                        else -> {
+                            Toast.makeText(requireContext(), "Coming Soon!!", Toast.LENGTH_SHORT)
+                                .show()
                         }
 
                     }

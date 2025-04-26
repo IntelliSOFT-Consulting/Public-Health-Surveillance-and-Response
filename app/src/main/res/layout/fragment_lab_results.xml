@@ -28,7 +28,7 @@
             android:layout_centerInParent="true"
             android:text="@string/lab_results_not_captured"
             android:textAlignment="center"
-            android:visibility="visible" />
+            android:visibility="gone" />
     </RelativeLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

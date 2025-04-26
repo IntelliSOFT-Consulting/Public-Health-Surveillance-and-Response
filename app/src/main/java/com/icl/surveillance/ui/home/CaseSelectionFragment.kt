@@ -103,14 +103,15 @@ class CaseSelectionFragment : Fragment() {
             "Visceral Leishmaniasis (Kala-azar) Case Management Form" -> "VL"
             else -> titleName
         }
-        val caseOptions = listOf(
+        val caseOptions = mutableListOf(
             CaseOption("Add New $title Case"),
             CaseOption(
                 "$title Case List",
                 showCount = true,
-                count = listenToCaseCount(titleName)
+                count = 0
             )
         )
+
 
         val recyclerView = requireView().findViewById<RecyclerView>(R.id.sdcLayoutsRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -247,16 +248,40 @@ class CaseSelectionFragment : Fragment() {
 
 
         }
+        val caseType = when (titleName?.trim()) {
+            "Measles" -> "measles-case-information"
+            "AFP" -> "afp-case-information"
+            else -> null
+        }
+
+        caseType?.let {
+            try {
+                patientListViewModel.handleCurrentCaseListing(it)
+
+                patientListViewModel.liveSearchedCases.observe(viewLifecycleOwner) { cases ->
+                    caseOptions[1] = caseOptions[1].copy(count = cases.size)
+                    recyclerView.adapter?.notifyDataSetChanged()
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
 
     }
 
     private fun listenToCaseCount(titleName: String?): Int {
         var count = 0
-        when (titleName) {
-            "Measles" -> {
-                patientListViewModel.handleCurrentCaseListing("measles-case-information")
-                patientListViewModel.liveSearchedCases.observe(viewLifecycleOwner) {
-                    count = it.size
+        if (titleName != null) {
+            println("started *** $titleName")
+            when (titleName.trim()) {
+                "Measles" -> {
+                    patientListViewModel.handleCurrentCaseListing("measles-case-information")
+                    patientListViewModel.liveSearchedCases.observe(viewLifecycleOwner) {
+                        count = it.size
+                        println("started *** Final Count $count")
+                    }
                 }
             }
         }

@@ -5,9 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
+    android:background="@color/white"
+    android:backgroundTint="@color/white"
     android:elevation="15dp"
     android:orientation="vertical"
     android:paddingVertical="@dimen/fab_margin"
+    app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="20dp">
 
     <LinearLayout
@@ -28,6 +31,7 @@
                 android:layout_marginBottom="@dimen/small_text_margin"
                 android:layout_weight="1"
                 android:text="Name"
+                android:textColor="@color/black"
                 android:textStyle="normal" />
 
             <TextView
@@ -39,6 +43,7 @@
                 android:layout_weight="1"
                 android:text="EPID No:"
 
+                android:textColor="@color/black"
                 android:textStyle="normal" />
 
         </LinearLayout>
@@ -57,6 +62,7 @@
                 android:layout_marginBottom="@dimen/small_text_margin"
                 android:layout_weight="1"
                 android:textStyle="bold"
+                android:textColor="@color/black"
                 tools:text="Navya Patel" />
 
 
@@ -69,6 +75,7 @@
                 android:layout_marginBottom="@dimen/small_text_margin"
                 android:layout_weight="1"
                 android:textStyle="bold"
+                android:textColor="@color/black"
                 tools:text="Navya Patel" />
         </LinearLayout>
 
@@ -86,6 +93,7 @@
                 android:layout_weight="1"
                 android:text="County:"
 
+                android:textColor="@color/black"
                 android:textStyle="normal" />
 
 
@@ -98,6 +106,7 @@
                 android:layout_weight="1"
                 android:text="Sub County:"
 
+                android:textColor="@color/black"
                 android:textStyle="normal" />
         </LinearLayout>
 
@@ -115,6 +124,7 @@
                 android:layout_marginBottom="@dimen/small_text_margin"
                 android:layout_weight="1"
 
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 tools:text="Navya Patel" />
 
@@ -127,6 +137,7 @@
                 android:layout_marginBottom="@dimen/small_text_margin"
                 android:layout_weight="1"
                 android:textStyle="bold"
+                android:textColor="@color/black"
                 tools:text="Navya Patel" />
         </LinearLayout>
 
@@ -142,6 +153,7 @@
                 android:layout_marginEnd="@dimen/small_text_margin"
                 android:layout_marginBottom="@dimen/small_text_margin"
                 android:layout_weight="1"
+                android:textColor="@color/black"
                 android:text="Onset of illness:"
                 android:textStyle="normal" />
 
@@ -152,6 +164,7 @@
                 android:layout_marginEnd="@dimen/small_text_margin"
                 android:layout_marginBottom="@dimen/small_text_margin"
                 android:layout_weight="1"
+                android:textColor="@color/black"
                 android:text="Lab Results:"
                 android:textStyle="normal" />
 
@@ -171,6 +184,7 @@
                 android:layout_marginBottom="@dimen/small_text_margin"
                 android:layout_weight="1"
                 android:textStyle="bold"
+                android:textColor="@color/black"
                 tools:text="Navya Patel" />
 
 
@@ -199,6 +213,7 @@
                 android:layout_marginEnd="@dimen/small_text_margin"
                 android:layout_marginBottom="@dimen/small_text_margin"
                 android:layout_weight="1"
+                android:textColor="@color/black"
                 android:text="Final Classification:"
                 android:textStyle="normal" />
 

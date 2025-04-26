@@ -81,7 +81,8 @@ class HomeFragment : Fragment() {
 //        )
 
         binding.apply {
-            greeting.text = fullText
+            greetingText.text = time
+            usernameText.text = name
         }
     }
 
@@ -122,7 +123,7 @@ class HomeFragment : Fragment() {
                 )
                 FormatterClass()
                     .saveSharedPref(
-                        "title", title,
+                        "title", "Rumor Tracking Tool",
                         requireContext()
                     )
 

@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".cases.CaseListingActivity">
 
     <LinearLayout
@@ -44,6 +45,7 @@
                 app:boxCornerRadiusBottomStart="50dp"
                 app:boxCornerRadiusTopEnd="50dp"
                 app:boxCornerRadiusTopStart="50dp"
+                app:boxStrokeColor="@android:color/black"
                 app:hintEnabled="true"
                 app:startIconDrawable="@android:drawable/ic_menu_search"
                 app:startIconTint="@color/black">
@@ -92,6 +94,7 @@
             android:layout_centerInParent="true"
             android:layout_marginStart="20dp"
             android:text="Showing 0 Results"
+            android:textColor="@color/black"
             android:visibility="visible" />
         <!-- Patient List -->
         <include
