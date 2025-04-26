@@ -97,6 +97,14 @@ class AddCaseActivity : AppCompatActivity() {
                     "Measles Lab Information"
                 )
 
+            "measles-lab-reg-results.json" ->
+                viewModel.completeLabAssessment(
+                    questionnaireResponse,
+                    "$patientId",
+                    "$encounter",
+                    "Measles Regional Lab Information"
+                )
+
             "afp-case-lab-results.json" ->
                 viewModel.completeLabAssessment(
                     questionnaireResponse,

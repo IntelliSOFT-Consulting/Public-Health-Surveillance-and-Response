@@ -1,5 +1,6 @@
 package com.icl.surveillance.ui.patients.data
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.fhir.FhirEngine
+import com.google.android.material.button.MaterialButton
 import com.icl.surveillance.R
 import com.icl.surveillance.adapters.LabRecyclerViewAdapter
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
@@ -154,23 +156,9 @@ class LabResultsFragment : Fragment() {
                     val slug = currentCase.toSlug()
                     when (slug) {
                         "measles-case-information" -> {
-                            FormatterClass()
-                                .saveSharedPref(
-                                    "questionnaire",
-                                    "measles-lab-results.json",
-                                    requireContext()
-                                )
-                            FormatterClass().saveSharedPref(
-                                "title",
-                                "Measles Lab Results",
-                                requireContext()
-                            )
-                            val intent = Intent(requireContext(), AddCaseActivity::class.java)
-                            intent.putExtra(
-                                QUESTIONNAIRE_FILE_PATH_KEY,
-                                "measles-lab-results.json"
-                            )
-                            startActivity(intent)
+
+                            showLocalOrRegionalLab()
+
                         }
 
                         "afp-case-information" -> {
@@ -204,6 +192,66 @@ class LabResultsFragment : Fragment() {
 
             }
         }
+    }
+
+    private fun showLocalOrRegionalLab() {
+        val dialogView =
+            LayoutInflater.from(requireContext()).inflate(R.layout.dialog_lab_info, null)
+
+        val labButton = dialogView.findViewById<MaterialButton>(R.id.btnLabInformation)
+        val regionalLabButton =
+            dialogView.findViewById<MaterialButton>(R.id.btnRegionalLabInformation)
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .setCancelable(true)
+            .create()
+
+        labButton.setOnClickListener {
+            dialog.dismiss()
+            FormatterClass()
+                .saveSharedPref(
+                    "questionnaire",
+                    "measles-lab-results.json",
+                    requireContext()
+                )
+            FormatterClass().saveSharedPref(
+                "title",
+                "Measles Lab Results",
+                requireContext()
+            )
+            val intent = Intent(requireContext(), AddCaseActivity::class.java)
+            intent.putExtra(
+                QUESTIONNAIRE_FILE_PATH_KEY,
+                "measles-lab-results.json"
+            )
+            startActivity(intent)
+        }
+
+        regionalLabButton.setOnClickListener {
+            dialog.dismiss()
+            FormatterClass()
+                .saveSharedPref(
+                    "questionnaire",
+                    "measles-lab-reg-results.json",
+                    requireContext()
+                )
+            FormatterClass().saveSharedPref(
+                "title",
+                "Regional Measles Lab Results",
+                requireContext()
+            )
+            val intent = Intent(requireContext(), AddCaseActivity::class.java)
+            intent.putExtra(
+                QUESTIONNAIRE_FILE_PATH_KEY,
+                "measles-lab-reg-results.json"
+            )
+            startActivity(intent)
+        }
+
+        dialog.show()
+
+
     }
 
     private fun onItemClicked(encounterItem: PatientListViewModel.CaseLabResultsData) {}
