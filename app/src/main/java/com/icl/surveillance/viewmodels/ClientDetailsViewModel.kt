@@ -267,7 +267,11 @@ class ClientDetailsViewModel(
                 // Case Details
 
                 onset = generateResponse(obs, "728034137219")
-                clinicalSymptoms += generateResponse(obs, "745196148424") + ", "
+                clinicalSymptoms += generateResponse(obs, "848847022926") + ", "
+                clinicalSymptoms += generateResponse(obs, "547137374562") + ", "
+                clinicalSymptoms += generateResponse(obs, "203174333568") + ", "
+                clinicalSymptoms += generateResponse(obs, "317122026276") + ", "
+                clinicalSymptoms += generateResponse(obs, "178038943620") + ", "
                 rashDate = generateResponse(obs, "576528567552")
                 rashType = generateResponse(obs, "704922081985")
                 patientVaccinated = generateResponse(obs, "517772812375")
@@ -299,7 +303,7 @@ class ClientDetailsViewModel(
                 noOfDoses = generateResponse(obs, "c8a-no-of-doses")
                 twoMonthsVaccination = generateResponse(obs, "c8b-recent-vaccine")
                 vaccineDate = generateResponse(obs, "c8b-date-of-vaccine")
-                inPatientOutPatient = generateResponse(obs, "999822503482")
+                inPatientOutPatient = generateResponse(obs, "483042281962")
             }
 
             parent =

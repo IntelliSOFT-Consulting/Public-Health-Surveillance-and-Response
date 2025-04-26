@@ -67,7 +67,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Status of Patient:"
+                    android:text="Hospitalization:"
                     android:textColor="@color/black" />
 
                 <TextView
@@ -167,7 +167,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginVertical="8dp"
-                android:background="#CCCCCC" />
+                android:background="#CCCCCC"
+                android:visibility="gone" />
 
             <!-- Sample Collected? -->
             <LinearLayout

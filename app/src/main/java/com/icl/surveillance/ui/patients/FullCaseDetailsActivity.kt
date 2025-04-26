@@ -59,9 +59,9 @@ class FullCaseDetailsActivity : AppCompatActivity() {
                             0 -> "Reporting Site"
                             1 -> "Case Demographics"
                             2 -> "Case Information"
-                            3 -> "Clinical Information"
-                            4 -> "Lab Information"
-                            5 -> "Lab Results"
+                            3 -> "Clinical History"
+                            4 -> "Sample/Specimen Information"
+                            5 -> "Lab Information"
                             else -> "Reporting Site"
                         }
                 }

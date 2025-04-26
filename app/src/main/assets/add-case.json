@@ -639,7 +639,7 @@
             }
           ],
           "linkId": "483042281962",
-          "text": "Hospitalized?",
+          "text": "Hospitalized? ",
           "required": true,
           "answerOption": [
             {
@@ -755,7 +755,7 @@
                   {
                     "system": "http://hl7.org/fhir/questionnaire-item-control",
                     "code": "check-box",
-                    "display": "Check Box"
+                    "display": "Check-box"
                   }
                 ]
               }
@@ -798,9 +798,41 @@
           ]
         },
         {
-          "type": "date",
-          "linkId": "576528567552",
-          "text": "Date of Onset of rash",
+          "type": "string",
+          "linkId": "848847022926",
+          "text": "Fever",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "745196148424",
+              "operator": "=",
+              "answerCoding": {
+                "code": "Fever",
+                "display": "Fever"
+              }
+            }
+          ],
+          "initial": [
+            {
+              "valueString": "Fever"
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "547137374562",
+          "text": "Rash",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "enableWhen": [
             {
               "question": "745196148424",
@@ -811,7 +843,92 @@
               }
             }
           ],
-          "required": true,
+          "initial": [
+            {
+              "valueString": "Rash"
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "203174333568",
+          "text": "Cough",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "745196148424",
+              "operator": "=",
+              "answerCoding": {
+                "code": "Cough",
+                "display": "Cough"
+              }
+            }
+          ],
+          "initial": [
+            {
+              "valueString": "Cough"
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "317122026276",
+          "text": "Coryza",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "745196148424",
+              "operator": "=",
+              "answerCoding": {
+                "code": "Coryza",
+                "display": "Coryza"
+              }
+            }
+          ],
+          "initial": [
+            {
+              "valueString": "Coryza"
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "178038943620",
+          "text": "Conjunctivitis",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "745196148424",
+              "operator": "=",
+              "answerCoding": {
+                "code": "Conjunctivitis",
+                "display": "Conjunctivitis"
+              }
+            }
+          ],
+          "initial": [
+            {
+              "valueString": "Conjunctivitis"
+            }
+          ]
+        },
+        {
+          "type": "date",
           "extension": [
             {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
@@ -831,7 +948,20 @@
                 ]
               }
             }
-          ]
+          ],
+          "linkId": "576528567552",
+          "text": "Date of Onset of rash",
+          "enableWhen": [
+            {
+              "question": "745196148424",
+              "operator": "=",
+              "answerCoding": {
+                "code": "Rash",
+                "display": "Rash"
+              }
+            }
+          ],
+          "required": true
         },
         {
           "type": "choice",
