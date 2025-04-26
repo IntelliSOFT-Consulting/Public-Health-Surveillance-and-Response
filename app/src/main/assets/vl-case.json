@@ -148,7 +148,8 @@
         {
           "type": "string",
           "linkId": "123103147447",
-          "text": "OP/No"
+          "text": "OP/No",
+          "required": true
         },
         {
           "type": "string",
@@ -158,25 +159,21 @@
         },
         {
           "type": "string",
+          "linkId": "164840483828",
+          "text": "Patient Middle Name",
+          "required": true
+        },
+        {
+          "type": "string",
           "linkId": "606848143908",
           "text": "Patient Family Name",
-          "required": true
+          "required": false
         },
         {
           "type": "string",
           "linkId": "760016167907",
           "text": "Patient Mobile Contact ",
           "required": true
-        },
-        {
-          "type": "date",
-          "linkId": "761800309411",
-          "text": "Date of Birth"
-        },
-        {
-          "type": "integer",
-          "linkId": "985553481852",
-          "text": "Age in Years"
         },
         {
           "type": "choice",
@@ -187,8 +184,73 @@
                 "coding": [
                   {
                     "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "795662352924",
+          "text": "Date of Birth known or unknown?",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "known",
+                "display": "Known"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "unknown",
+                "display": "Unknown"
+              }
+            }
+          ]
+        },
+        {
+          "type": "date",
+          "linkId": "761800309411",
+          "text": "Date of Birth",
+          "enableWhen": [
+            {
+              "question": "795662352924",
+              "operator": "=",
+              "answerCoding": {
+                "code": "known",
+                "display": "Known"
+              }
+            }
+          ],
+          "required": true
+        },
+        {
+          "type": "integer",
+          "linkId": "985553481852",
+          "text": "Age in Years",
+          "enableWhen": [
+            {
+              "question": "795662352924",
+              "operator": "=",
+              "answerCoding": {
+                "code": "unknown",
+                "display": "Unknown"
+              }
+            }
+          ],
+          "required": true
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
                   }
                 ]
               }
@@ -240,6 +302,7 @@
               }
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -264,17 +327,20 @@
         {
           "type": "decimal",
           "linkId": "832804021140",
-          "text": "Weight (Kg)"
+          "text": "Weight (Kg)",
+          "required": true
         },
         {
           "type": "decimal",
           "linkId": "856786488810",
-          "text": "Height (cm)"
+          "text": "Height (cm)",
+          "required": true
         },
         {
           "type": "decimal",
           "linkId": "361227700960",
-          "text": "Temperature (°C)"
+          "text": "Temperature (°C)",
+          "required": true
         },
         {
           "type": "display",
@@ -299,6 +365,7 @@
           ],
           "linkId": "845666899224",
           "text": "Nearest Health Facility",
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -311,26 +378,14 @@
         {
           "type": "string",
           "linkId": "116279465819",
-          "text": "Village"
+          "text": "Village",
+          "required": true
         },
         {
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ]
-              }
-            }
-          ],
+          "type": "string",
           "linkId": "754362784943",
-          "text": "Ward"
+          "text": "Ward",
+          "required": true
         },
         {
           "type": "choice",
@@ -350,6 +405,7 @@
           ],
           "linkId": "999881476256",
           "text": "Occupation",
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -402,7 +458,8 @@
                 "display": "Other (Specify)"
               }
             }
-          ]
+          ],
+          "required": true
         },
         {
           "type": "choice",
@@ -422,6 +479,7 @@
           ],
           "linkId": "899673957595",
           "text": "Education Level",
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -468,17 +526,20 @@
                 "display": "Other (Specify)"
               }
             }
-          ]
+          ],
+          "required": true
         },
         {
           "type": "string",
           "linkId": "657999955440",
-          "text": "Name of Contact Person"
+          "text": "Name of Contact Person",
+          "required": true
         },
         {
           "type": "string",
           "linkId": "354738003178",
-          "text": "Mobile Contact (of Contact Person)"
+          "text": "Mobile Contact (of Contact Person)",
+          "required": true
         }
       ],
       "type": "group",
@@ -504,17 +565,20 @@
         {
           "type": "date",
           "linkId": "451005827955",
-          "text": "Date of Onset of Symptoms"
+          "text": "Date of Onset of Symptoms",
+          "required": true
         },
         {
           "type": "integer",
           "linkId": "920645761660",
-          "text": "Days Since Onset of Symptoms"
+          "text": "Days Since Onset of Symptoms",
+          "required": true
         },
         {
           "type": "string",
           "linkId": "997694179371",
-          "text": "Name of Village Where Patient Probably Got Infected"
+          "text": "Name of Village Where Patient Probably Got Infected",
+          "required": true
         },
         {
           "type": "choice",
@@ -534,6 +598,7 @@
           ],
           "linkId": "648643802331",
           "text": "Is It an Imported Case (from outside the country)?",
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -611,6 +676,7 @@
           ],
           "linkId": "241783748776",
           "text": "Did Patient Travel to Endemic Area in Last 6 Months?",
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -729,6 +795,7 @@
           ],
           "linkId": "742577347417",
           "text": "Did Patient Visit Traditional Healer before visiting Health Facility?",
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -762,6 +829,7 @@
           ],
           "linkId": "291919290357",
           "text": "Previous Admission Due to Visceral Leishmaniasis?",
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -853,23 +921,6 @@
       "text": "History of the disease"
     },
     {
-      "type": "group",
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-          "valueCodeableConcept": {
-            "coding": [
-              {
-                "system": "http://hl7.org/fhir/questionnaire-item-control",
-                "code": "page",
-                "display": "Page"
-              }
-            ]
-          }
-        }
-      ],
-      "linkId": "119408288668",
-      "text": "Physical Examination",
       "item": [
         {
           "type": "choice",
@@ -889,6 +940,7 @@
           ],
           "linkId": "699010843343",
           "text": "Has Patient Had Fever for Last 2 Weeks?",
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -922,6 +974,7 @@
           ],
           "linkId": "458194698702",
           "text": "Abdominal Distension Present?",
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -955,6 +1008,7 @@
           ],
           "linkId": "788908031336",
           "text": "Organ Enlargement?",
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -988,6 +1042,7 @@
           ],
           "linkId": "594158306957",
           "text": "Liver Enlarged?",
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -1037,6 +1092,7 @@
           ],
           "linkId": "433410405758",
           "text": "Spleen Enlarged?",
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -1086,6 +1142,7 @@
           ],
           "linkId": "496596553090",
           "text": "Presence of Concomitant Infections at presentation?",
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -1120,14 +1177,33 @@
         {
           "type": "string",
           "linkId": "332723314026",
-          "text": "Clinician's Name"
+          "text": "Clinician's Name",
+          "required": true
         },
         {
           "type": "string",
           "linkId": "493012943787",
-          "text": "Clinician's Signature"
+          "text": "Clinician's Signature",
+          "required": true
         }
-      ]
+      ],
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "119408288668",
+      "text": "Physical Examination"
     }
   ]
 }
