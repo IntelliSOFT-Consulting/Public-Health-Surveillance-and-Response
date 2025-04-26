@@ -12,8 +12,8 @@ class ViewPagerAdapter(fragmentActivity: FragmentActivity) :
     return when (position) {
       0 -> ReportingSiteFragment()
       1 -> IdentificationFragment()
-      3 -> ClinicalInformationFragment()
-      2 -> CaseInformationFragment()
+      3 -> CaseInformationFragment()
+      2 -> ClinicalInformationFragment()
       4 -> LabInformationFragment()
       5 -> LabResultsFragment()
       else -> ReportingSiteFragment()

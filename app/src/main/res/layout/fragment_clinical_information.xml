@@ -18,6 +18,14 @@
             android:orientation="vertical"
             android:padding="10dp">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:text="Case Information"
+                android:textColor="@color/blue"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <!-- Section Header -->
 

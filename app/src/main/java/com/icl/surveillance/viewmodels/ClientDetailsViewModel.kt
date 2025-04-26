@@ -119,6 +119,7 @@ class ClientDetailsViewModel(
         val searchResult =
             fhirEngine.search<Patient> { filter(Resource.RES_ID, { value = of(patientId) }) }
         var logicalId = ""
+
         var name = ""
         var sex = ""
         var dob = ""
@@ -189,6 +190,12 @@ class ClientDetailsViewModel(
         var dateOtherSpecimen = ""
         var dateSpecimenSentToLab = ""
 
+        var country = ""
+        var yearOfReporting = ""
+        var healthFacility = ""
+        var typeOfHealthFacility = ""
+        var subcountyOfFacility = ""
+        var countyOfFacility = ""
 
         searchResult.first().let {
             logicalId = it.resource.logicalId
@@ -215,6 +222,24 @@ class ClientDetailsViewModel(
                             { value = "Encounter/${matchingIdentifier.value}" })
                     }
 
+                // SECTION SITE REPORTING
+
+                subCounty = generateResponse(obs, "a3-sub-county")
+                county = generateResponse(obs, "a4-county")
+                country = generateResponse(obs, "602440958701")
+                yearOfReporting = generateResponse(obs, "596681097855")
+                healthFacility = generateResponse(obs, "185989158723")
+                typeOfHealthFacility = generateResponse(obs, "438862163919")
+                subcountyOfFacility = generateResponse(obs, "819946803642")
+                countyOfFacility = generateResponse(obs, "294367770999")
+
+                residence = generateResponse(obs, "407548372315")
+                epid = generateResponse(obs, "EPID")
+                facility = generateResponse(obs, "185989158723")
+                type = generateResponse(obs, "438862163919")
+                disease = generateResponse(obs, "970724948648")
+
+
                 // Lab Information
                 specimen = generateResponse(obs, "918495737998")
                 noWhy = generateResponse(obs, "752178052107")
@@ -239,7 +264,6 @@ class ClientDetailsViewModel(
                 dateSpecimenSentToLab = generateResponse(obs, "718251724172")
 
 
-
                 // Case Details
 
                 onset = generateResponse(obs, "728034137219")
@@ -258,13 +282,6 @@ class ClientDetailsViewModel(
                 epiLinkedNumber = generateResponse(obs, "512392582851")
 
                 //        End of Case details
-                residence = generateResponse(obs, "407548372315")
-                epid = generateResponse(obs, "EPID")
-                county = generateResponse(obs, "a4-county")
-                subCounty = generateResponse(obs, "a3-sub-county")
-                facility = generateResponse(obs, "185989158723")
-                type = generateResponse(obs, "438862163919")
-                disease = generateResponse(obs, "970724948648")
 
                 /** Section C* */
                 dateFirstSeen = generateResponse(obs, "554231819382")
@@ -360,8 +377,6 @@ class ClientDetailsViewModel(
 
         return PatientListViewModel.CaseDetailData(
             epid = epid,
-            county = county,
-            subCounty = subCounty,
             onset = onset,
             logicalId = logicalId,
 
@@ -384,6 +399,15 @@ class ClientDetailsViewModel(
             facility = facility,
             disease = disease,
             type = type,
+            subCounty = subCounty,
+            county = county,
+            country = country,
+            yearOfReporting = yearOfReporting,
+            healthFacility = healthFacility,
+            typeOfHealthFacility = typeOfHealthFacility,
+            subcountyOfFacility = subcountyOfFacility,
+            countyOfFacility = countyOfFacility,
+
             // SECTION B
 
             name = name,

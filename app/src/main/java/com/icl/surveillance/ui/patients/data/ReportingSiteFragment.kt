@@ -85,11 +85,15 @@ class ReportingSiteFragment : Fragment() {
         patientDetailsViewModel.livecaseData.observe(viewLifecycleOwner) {
             binding.apply {
                 epidNo.text = it.epid
-                tvFacility.text = it.facility
-                tvType.text = it.type
-                tvCounty.text = it.county
-                tvSubCounty.text = it.subCounty
-                tvDisease.text = it.disease
+                subCounty.text = it.subCounty
+                county.text = it.county
+                country.text = it.country
+                yearOfReporting.text = it.yearOfReporting
+                healthFacility.text = it.healthFacility
+                typeOfHealthFacility.text = it.typeOfHealthFacility
+                subcountyOfFacility.text = it.subcountyOfFacility
+                countyOfFacility.text = it.countyOfFacility
+
             }
         }
     }

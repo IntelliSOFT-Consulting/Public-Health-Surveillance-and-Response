@@ -20,6 +20,16 @@
             android:background="@color/white"
             android:orientation="vertical"
             android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:text="Clinical Information"
+                android:textColor="@color/blue"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
             <!-- C1. Date of onset -->
             <LinearLayout
                 android:layout_width="match_parent"

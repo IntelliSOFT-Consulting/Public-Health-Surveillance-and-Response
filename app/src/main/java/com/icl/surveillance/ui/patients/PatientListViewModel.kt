@@ -1,5 +1,6 @@
 package com.icl.surveillance.ui.patients
 
+import android.R
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
@@ -555,8 +556,15 @@ class PatientListViewModel(
         val sex: String,
         val dob: String,
         val epid: String,
-        val county: String,
         val subCounty: String,
+        val county: String,
+        val country: String,
+        val yearOfReporting: String,
+        val healthFacility: String,
+        val typeOfHealthFacility: String,
+        val subcountyOfFacility: String,
+        val countyOfFacility: String,
+
         val onset: String,
         val residence: String,
         val facility: String,
