@@ -380,8 +380,31 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     obs.code.text = epid
                     createResource(obs, subjectReference, encounterReference)
                 }
-                "vl-case-information" -> {
 
+                "vl-case-information" -> {
+                    val fNameEntry = extractedAnswers.find { it.linkId == "817903655885" }
+                    val mNameEntry = extractedAnswers.find { it.linkId == "164840483828" }
+                    val lNameEntry = extractedAnswers.find { it.linkId == "606848143908" }
+                    val genderEntry = extractedAnswers.find { it.linkId == "543806612685" }
+
+
+                    if (genderEntry != null) {
+                        val gender = when (genderEntry.answer.lowercase()) {
+                            "male" -> Enumerations.AdministrativeGender.MALE
+                            "female" -> Enumerations.AdministrativeGender.FEMALE
+                            else -> Enumerations.AdministrativeGender.UNKNOWN
+                        }
+                        patient.gender = gender
+                    }
+                    if (fNameEntry != null) {
+                        patient.nameFirstRep.family = fNameEntry.answer
+                    }
+                    if (mNameEntry != null) {
+                        patient.nameFirstRep.addGiven(mNameEntry.answer)
+                    }
+                    if (lNameEntry != null) {
+                        patient.nameFirstRep.addGiven(lNameEntry.answer)
+                    }
 
                     val subCountyEntry = extractedAnswers.find { it.linkId == "990815709263" }
                     val countyEntry = extractedAnswers.find { it.linkId == "221146691983" }

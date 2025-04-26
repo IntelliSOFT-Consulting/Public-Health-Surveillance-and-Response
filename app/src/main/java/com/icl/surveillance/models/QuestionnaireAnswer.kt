@@ -1,13 +1,45 @@
 package com.icl.surveillance.models
 
 import com.icl.surveillance.R
+import kotlinx.serialization.Serializable
 
 data class QuestionnaireAnswer(
     val linkId: String,
     val text: String,
     val answer: String
 )
+@Serializable
+data class OutputGroup(
+    val linkId: String,
+    val text: String,
+    val type: String,
+    val items: List<OutputItem> = emptyList()
+)
 
+@Serializable
+data class OutputItem(
+    val linkId: String,
+    val text: String,
+    val type: String
+)
+@Serializable
+data class QuestionnaireItem(
+    val item: List<GroupItem>
+)
+@Serializable
+data class GroupItem(
+    val linkId: String,
+    val text: String,
+    val type: String,
+    val item: List<ChildItem>? = null
+)
+@Serializable
+data class ChildItem(
+    val linkId: String,
+    val text: String,
+    val type: String,
+    val item: List<ChildItem>? = null
+)
 
 enum class UrlData(var message: Int) {
     BASE_URL(R.string.base_url),
@@ -18,6 +50,7 @@ data class DbSignIn(
     val password: String,
     val location: String,
 )
+
 data class DbResetPasswordData(val idNumber: String, val email: String)
 
 

@@ -123,25 +123,25 @@
           "type": "date",
           "linkId": "185890957847",
           "extension": [
-  {
-    "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-    "valueString": "Cannot be a date in the future"
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-    "valueDate": {
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-          "valueExpression": {
-            "language": "text/fhirpath",
-            "expression": "today()"
-          }
-        }
-      ]
-    }
-  }
-],
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
           "text": "Date of Diagnosis"
         }
       ],
@@ -197,24 +197,24 @@
         },
         {
           "type": "choice",
-        "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "795662352924",
           "text": "Date of Birth known or unknown?",
           "answerOption": [
@@ -237,25 +237,25 @@
           "linkId": "761800309411",
           "text": "Date of Birth",
           "extension": [
-  {
-    "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-    "valueString": "Cannot be a date in the future"
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-    "valueDate": {
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-          "valueExpression": {
-            "language": "text/fhirpath",
-            "expression": "today()"
-          }
-        }
-      ]
-    }
-  }
-],
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
           "enableWhen": [
             {
               "question": "795662352924",
@@ -286,24 +286,24 @@
         },
         {
           "type": "choice",
-         "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "543806612685",
           "text": "Gender",
           "required": true,
@@ -615,25 +615,25 @@
           "linkId": "451005827955",
           "text": "Date of Onset of Symptoms",
           "extension": [
-  {
-    "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-    "valueString": "Cannot be a date in the future"
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-    "valueDate": {
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-          "valueExpression": {
-            "language": "text/fhirpath",
-            "expression": "today()"
-          }
-        }
-      ]
-    }
-  }
-],
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
           "required": true
         },
         {
@@ -650,24 +650,24 @@
         },
         {
           "type": "choice",
-         "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "648643802331",
           "text": "Is It an Imported Case (from outside the country)?",
           "required": true,
@@ -732,24 +732,24 @@
         },
         {
           "type": "choice",
-        "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "241783748776",
           "text": "Did Patient Travel to Endemic Area in Last 6 Months?",
           "required": true,
@@ -855,24 +855,24 @@
         },
         {
           "type": "choice",
-        "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "742577347417",
           "text": "Did Patient Visit Traditional Healer before visiting Health Facility?",
           "required": true,
@@ -893,24 +893,24 @@
         },
         {
           "type": "choice",
-       "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "291919290357",
           "text": "Previous Admission Due to Visceral Leishmaniasis?",
           "required": true,
@@ -1008,24 +1008,24 @@
       "item": [
         {
           "type": "choice",
-         "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "699010843343",
           "text": "Has Patient Had Fever for Last 2 Weeks?",
           "required": true,
@@ -1046,24 +1046,24 @@
         },
         {
           "type": "choice",
-         "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "458194698702",
           "text": "Abdominal Distension Present?",
           "required": true,
@@ -1085,23 +1085,23 @@
         {
           "type": "choice",
           "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "788908031336",
           "text": "Organ Enlargement?",
           "required": true,
@@ -1122,24 +1122,24 @@
         },
         {
           "type": "choice",
-        "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "594158306957",
           "text": "Liver Enlarged?",
           "required": true,
@@ -1176,24 +1176,24 @@
         },
         {
           "type": "choice",
-      "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "433410405758",
           "text": "Spleen Enlarged?",
           "required": true,
@@ -1230,24 +1230,24 @@
         },
         {
           "type": "choice",
-         "extension": [
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-    "valueCodeableConcept": {
-      "coding": [
-        {
-          "system": "http://hl7.org/fhir/questionnaire-item-control",
-          "code": "radio-button",
-          "display": "Radio Button"
-        }
-      ]
-    }
-  },
-  {
-    "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-    "valueCode": "horizontal"
-  }
-],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "496596553090",
           "text": "Presence of Concomitant Infections at presentation?",
           "required": true,

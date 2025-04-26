@@ -16,6 +16,10 @@
         android:theme="@style/Theme.Surveillance"
         tools:targetApi="31">
         <activity
+            android:name=".ui.patients.SummarizedActivity"
+            android:exported="false"
+            android:label="Case Summary " />
+        <activity
             android:name=".cases.CaseListingActivity"
             android:exported="false" />
         <activity

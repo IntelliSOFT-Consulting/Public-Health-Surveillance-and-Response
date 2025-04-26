@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -21,7 +22,9 @@ import com.icl.surveillance.databinding.ActivityFullCaseDetailsBinding
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.ui.patients.FullCaseDetailsActivity
 import com.icl.surveillance.ui.patients.PatientListViewModel
+import com.icl.surveillance.ui.patients.SummarizedActivity
 import com.icl.surveillance.utils.FormatterClass
+import com.icl.surveillance.utils.toSlug
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 
 class CaseListingActivity : AppCompatActivity() {
@@ -92,11 +95,39 @@ class CaseListingActivity : AppCompatActivity() {
     }
 
     private fun onPatientItemClicked(patientItem: PatientListViewModel.PatientItem) {
+
+        val currentCase = FormatterClass().getSharedPref("currentCase", this)
         println("Going to client details activity with the id as ${patientItem.resourceId} and Encounter ${patientItem.encounterId}")
         FormatterClass().saveSharedPref("resourceId", patientItem.resourceId, this)
         FormatterClass().saveSharedPref("encounterId", patientItem.encounterId, this)
 
-        startActivity(Intent(this@CaseListingActivity, FullCaseDetailsActivity::class.java))
+        if (currentCase != null) {
+            val slug = currentCase.toSlug()
+
+            when (slug) {
+                "afp-case-information" -> {
+
+                    startActivity(
+                        Intent(
+                            this@CaseListingActivity,
+                            SummarizedActivity::class.java
+                        )
+                    )
+                }
+
+                else -> {
+
+                    startActivity(
+                        Intent(
+                            this@CaseListingActivity,
+                            FullCaseDetailsActivity::class.java
+                        )
+                    )
+                }
+            }
+        } else {
+            Toast.makeText(this, "Please try again later ", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun String.toSlug(): String {

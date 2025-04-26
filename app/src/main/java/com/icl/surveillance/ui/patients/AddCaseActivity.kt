@@ -61,7 +61,7 @@ class AddCaseActivity : AppCompatActivity() {
     }
 
     private fun onSubmitAction() {
-        ProgressDialogManager.show(this, "Please Wait.....")
+        ProgressDialogManager.show(this, "Please wait.....")
         lifecycleScope.launch {
             val questionnaireFragment =
                 supportFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG)

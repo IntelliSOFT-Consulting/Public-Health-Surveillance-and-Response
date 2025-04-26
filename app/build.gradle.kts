@@ -57,7 +57,7 @@ dependencies {
   implementation("androidx.fragment:fragment-ktx:1.8.6")
   implementation("androidx.datastore:datastore-preferences:1.1.4")
   implementation("androidx.work:work-runtime-ktx:2.10.0")
-
+  implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
   implementation("com.squareup.retrofit2:retrofit:2.9.0")
   implementation("com.squareup.retrofit2:converter-gson:2.9.0")
   implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
