@@ -513,7 +513,6 @@ class PatientListViewModel(
     data class ObservationItem(
         val id: String,
         val code: String,
-        val effective: String,
         val value: String,
     ) {
         override fun toString(): String = code
@@ -549,6 +548,15 @@ class PatientListViewModel(
         val firstInGroup: Boolean
         val lastInGroup: Boolean
     }
+
+    data class CaseDetailSummaryData(
+        val name: String,
+        val sex: String,
+        val dob: String,
+        val logicalId: String,
+        val encounterId: String,
+        val observations: List<ObservationItem> = emptyList<ObservationItem>()
+    )
 
     data class CaseDetailData(
         val logicalId: String,

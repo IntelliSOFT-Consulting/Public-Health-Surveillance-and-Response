@@ -8,6 +8,7 @@ data class QuestionnaireAnswer(
     val text: String,
     val answer: String
 )
+
 @Serializable
 data class OutputGroup(
     val linkId: String,
@@ -20,12 +21,15 @@ data class OutputGroup(
 data class OutputItem(
     val linkId: String,
     val text: String,
-    val type: String
+    val type: String,
+    var value: String? = ""
 )
+
 @Serializable
 data class QuestionnaireItem(
     val item: List<GroupItem>
 )
+
 @Serializable
 data class GroupItem(
     val linkId: String,
@@ -33,6 +37,7 @@ data class GroupItem(
     val type: String,
     val item: List<ChildItem>? = null
 )
+
 @Serializable
 data class ChildItem(
     val linkId: String,

@@ -3,6 +3,7 @@ package com.icl.surveillance.viewmodels
 import android.app.Application
 import android.content.res.Resources
 import android.icu.text.DateFormat
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -14,6 +15,7 @@ import com.google.android.fhir.search.revInclude
 import com.google.android.fhir.search.search
 import com.icl.surveillance.R
 import com.icl.surveillance.ui.patients.PatientListViewModel
+import com.icl.surveillance.ui.patients.toPatientItem
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
@@ -37,6 +39,7 @@ class ClientDetailsViewModel(
 ) : AndroidViewModel(application) {
     val livePatientData = MutableLiveData<List<PatientListViewModel.PatientDetailData>>()
     val livecaseData = MutableLiveData<PatientListViewModel.CaseDetailData>()
+    val liveSummaryData = MutableLiveData<PatientListViewModel.CaseDetailSummaryData>()
     val liveDiseaseData = MutableLiveData<List<PatientListViewModel.CaseDiseaseData>>()
     val liveLabData = MutableLiveData<List<PatientListViewModel.CaseLabResultsData>>()
 
@@ -113,6 +116,76 @@ class ClientDetailsViewModel(
         return fhirEngine
             .search<Encounter> { filter(Encounter.SUBJECT, { value = "Patient/$patientId" }) }
             .map { it.resource }
+    }
+
+    private suspend fun getPatientInfoSummary(slug: String): PatientListViewModel.CaseDetailSummaryData {
+        var logicalId = ""
+        var name = ""
+        var sex = ""
+        var dob = ""
+        var encounterId = ""
+        var observations = mutableListOf<PatientListViewModel.ObservationItem>()
+
+        val searchResult =
+            fhirEngine.search<Patient> { filter(Resource.RES_ID, { value = of(patientId) }) }
+        searchResult.first().let {
+            logicalId = it.resource.logicalId
+            name =
+                if (it.resource.hasName()) {
+                    "${it.resource.name[0].givenAsSingleString} ${it.resource.name[0].family} "
+                } else ""
+            sex = if (it.resource.hasGenderElement()) it.resource.gender.display else ""
+            dob =
+                if (it.resource.hasBirthDateElement())
+                    if (it.resource.birthDateElement.hasValue())
+                        it.resource.birthDateElement.valueAsString
+                    else ""
+                else ""
+            val matchingIdentifier = it.resource.identifier.find {
+                it.system == slug
+            }
+            if (matchingIdentifier != null) {
+                encounterId = matchingIdentifier.value
+
+                fhirEngine.search<Observation> {
+                    filter(
+                        Observation.ENCOUNTER,
+                        { value = "Encounter/${matchingIdentifier.value}" })
+                }
+                    .map { ob ->
+                        Log.e(
+                            "Observation",
+                            "Observation Parent ***** ${ob.resource.code.codingFirstRep.code} ${ob.resource.valueStringType.asStringValue()}"
+                        )
+
+                        val value =
+                            if (ob.resource.hasValueQuantity()) {
+                                ob.resource.valueQuantity.value.toString()
+                            } else if (ob.resource.hasValueCodeableConcept()) {
+                                ob.resource.valueCodeableConcept.coding.firstOrNull()?.display ?: ""
+                            } else if (ob.resource.hasValueStringType()) {
+                                ob.resource.valueStringType.valueAsString
+                            } else {
+                                ""
+                            }
+                        val item = PatientListViewModel.ObservationItem(
+                            id = ob.resource.logicalId,
+                            code = ob.resource.code.codingFirstRep.code,
+                            value = value
+                        )
+                        observations.add(item)
+                    }
+            }
+
+        }
+        return PatientListViewModel.CaseDetailSummaryData(
+            logicalId = logicalId,
+            encounterId = encounterId,
+            name = name,
+            dob = dob,
+            sex = sex,
+            observations = observations
+        )
     }
 
     private suspend fun getPatientInfoCard(slug: String): PatientListViewModel.CaseDetailData {
@@ -489,6 +562,13 @@ class ClientDetailsViewModel(
         }
     }
 
+    fun getPatientInfoSummaryData(slug: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val patientData = getPatientInfoSummary(slug)
+            withContext(Dispatchers.Main) { liveSummaryData.value = patientData }
+        }
+    }
+
     fun getPatientDiseaseData(reason: String, parent: String, isCase: Boolean) {
         CoroutineScope(Dispatchers.IO).launch {
             if (isCase) {
@@ -652,7 +732,6 @@ class ClientDetailsViewModel(
          */
         private fun createObservationItem(
             observation: Observation,
-            resources: Resources,
         ): PatientListViewModel.ObservationItem {
             val observationCode = observation.code.text ?: observation.code.codingFirstRep.display
 
@@ -661,13 +740,15 @@ class ClientDetailsViewModel(
                 if (observation.hasEffectiveDateTimeType()) {
                     observation.effectiveDateTimeType.asStringValue()
                 } else {
-                    resources.getText(R.string.message_no_datetime).toString()
+                    ""
                 }
             val value =
                 if (observation.hasValueQuantity()) {
                     observation.valueQuantity.value.toString()
                 } else if (observation.hasValueCodeableConcept()) {
                     observation.valueCodeableConcept.coding.firstOrNull()?.display ?: ""
+                } else if (observation.hasValueStringType()) {
+                    observation.valueStringType.valueAsString
                 } else {
                     ""
                 }
@@ -682,7 +763,6 @@ class ClientDetailsViewModel(
             return PatientListViewModel.ObservationItem(
                 observation.logicalId,
                 observationCode,
-                dateTimeString,
                 valueString,
             )
         }
