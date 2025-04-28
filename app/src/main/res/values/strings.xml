@@ -40,4 +40,6 @@
     <string name="add_form">Add Form</string>
     <string name="no_final_laboratory_results_available">No Final Laboratory Results available</string>
     <string name="no_contact_information_available">No Contact Information available</string>
+    <string name="no_treatment_information_available">No Treatment information available</string>
+    <string name="no_follow_up_information_available">No Follow Up information available</string>
 </resources>

@@ -105,7 +105,7 @@ class AddCaseActivity : AppCompatActivity() {
                     "$patientId",
                     "$encounter",
                     "Measles Regional Lab Information",
-                            questionnaireResponseString
+                    questionnaireResponseString
                 )
 
             "afp-case-stool-lab-results.json" ->
@@ -114,6 +114,33 @@ class AddCaseActivity : AppCompatActivity() {
                     "$patientId",
                     "$encounter",
                     "AFP Stool Lab Information",
+                    questionnaireResponseString
+                )
+
+            "vl-case-lab-information.json" ->
+                viewModel.completeLabAssessment(
+                    questionnaireResponse,
+                    "$patientId",
+                    "$encounter",
+                    "VL Laboratory Examination",
+                    questionnaireResponseString
+                )
+
+            "vl-case-sixMonthsFollowup.json" ->
+                viewModel.completeLabAssessment(
+                    questionnaireResponse,
+                    "$patientId",
+                    "$encounter",
+                    "VL Follow Up Information",
+                    questionnaireResponseString
+                )
+
+            "vl-case-hospitilization.json" ->
+                viewModel.completeLabAssessment(
+                    questionnaireResponse,
+                    "$patientId",
+                    "$encounter",
+                    "VL Hospitalization Information",
                     questionnaireResponseString
                 )
         }
