@@ -298,9 +298,23 @@
           "text": "Date Isolate received in ITD lab"
         }
       ],
-      "type": "string",
+      "type": "group",
       "linkId": "759506945582",
-      "text": "ITD Lab Information"
+      "text": "ITD Lab Information",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "item": [
@@ -1005,20 +1019,6 @@
         }
       ],
       "type": "group",
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-          "valueCodeableConcept": {
-            "coding": [
-              {
-                "system": "http://hl7.org/fhir/questionnaire-item-control",
-                "code": "page",
-                "display": "Page"
-              }
-            ]
-          }
-        }
-      ],
       "linkId": "986570187519",
       "text": "ITD Results"
     },

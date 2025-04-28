@@ -37,16 +37,20 @@
                 android:layout_height="wrap_content"
                 android:text="@string/no_stool_specimen_results_available"
                 android:textAlignment="center" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/getStartedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/add_form"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                app:cornerRadius="20dp" />
         </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/ln_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp" />
+        </ScrollView>
+
     </RelativeLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

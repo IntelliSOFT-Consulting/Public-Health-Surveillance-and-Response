@@ -680,7 +680,9 @@ class ClientDetailsViewModel(
                             code = reason
                         })
                     })
-            }.map { enc ->
+            }
+            .take(500)
+            .map { enc ->
 
                 Log.e("Lab Results: ", "Lab results coming here Parent ${enc.resource.logicalId}")
                 val observations: MutableList<PatientListViewModel.ObservationItem> =
@@ -714,31 +716,6 @@ class ClientDetailsViewModel(
                     observations = observations
 
                 )
-
-//                fhirEngine.search<Observation> {
-//                    filter(
-//                        Observation.ENCOUNTER,
-//                        { value = "Encounter/${enc.resource.logicalId}" })
-//                }
-//                    .map { ob ->
-//
-//
-//                        val value =
-//                            if (ob.resource.hasValueQuantity()) {
-//                                ob.resource.valueQuantity.value.toString()
-//                            } else if (ob.resource.hasValueCodeableConcept()) {
-//                                ob.resource.valueCodeableConcept.coding.firstOrNull()?.display ?: ""
-//                            } else if (ob.resource.hasValueStringType()) {
-//                                ob.resource.valueStringType.valueAsString
-//                            } else {
-//                                ""
-//                            }
-//                        val item = PatientListViewModel.ObservationItem(
-//                            id = ob.resource.logicalId,
-//                            code = ob.resource.code.codingFirstRep.code,
-//                            value = value
-//                        )
-//                    }
                 encounters.add(lab)
             }
         return encounters
