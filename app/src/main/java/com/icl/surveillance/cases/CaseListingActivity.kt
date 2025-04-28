@@ -103,8 +103,19 @@ class CaseListingActivity : AppCompatActivity() {
 
         if (currentCase != null) {
             val slug = currentCase.toSlug()
-
+            FormatterClass().saveSharedPref("latestEncounter", slug, this)
             when (slug) {
+                "vl-case-information" -> {
+
+
+                    startActivity(
+                        Intent(
+                            this@CaseListingActivity,
+                            SummarizedActivity::class.java
+                        )
+                    )
+                }
+
                 "afp-case-information" -> {
 
                     startActivity(

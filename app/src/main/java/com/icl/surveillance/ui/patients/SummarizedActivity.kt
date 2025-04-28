@@ -3,6 +3,7 @@ package com.icl.surveillance.ui.patients
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -13,21 +14,22 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 import com.icl.surveillance.R
 import com.icl.surveillance.adapters.GroupPagerAdapter
-import com.icl.surveillance.databinding.ActivityFullCaseDetailsBinding
 import com.icl.surveillance.databinding.ActivitySummarizedBinding
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.models.ChildItem
 import com.icl.surveillance.models.OutputGroup
 import com.icl.surveillance.models.OutputItem
 import com.icl.surveillance.models.QuestionnaireItem
-import com.icl.surveillance.ui.patients.FullCaseDetailsActivity
+import com.icl.surveillance.ui.patients.custom.ContactInformationFragment
+import com.icl.surveillance.ui.patients.custom.LocalLabFragment
+import com.icl.surveillance.ui.patients.custom.RegionalLabFragment
+import com.icl.surveillance.ui.patients.custom.VlFollowupFragment
+import com.icl.surveillance.ui.patients.custom.VlLabFragment
+import com.icl.surveillance.ui.patients.custom.VlTreatmentFragment
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.utils.toSlug
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
-import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.json.Json
 
 class SummarizedActivity : AppCompatActivity() {
     private lateinit var groups: List<OutputGroup>
@@ -42,6 +44,7 @@ class SummarizedActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val patientId = FormatterClass().getSharedPref("resourceId", this@SummarizedActivity)
         val currentCase = FormatterClass().getSharedPref("currentCase", this)
+        val latestEncounter = FormatterClass().getSharedPref("latestEncounter", this)
 
         fhirEngine = FhirApplication.fhirEngine(this@SummarizedActivity)
         patientDetailsViewModel =
@@ -57,69 +60,105 @@ class SummarizedActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        if (latestEncounter != null) {
 
-        groups = parseFromAssets(this) // this = Context
-        for (group in groups) {
-            Log.d("Group", "Group Item: ${group.text} (${group.linkId})")
-            for (item in group.items) {
-                Log.d("Item", " - Item: ${item.text} (${item.linkId}) Type: ${item.type}")
-            }
-        }
-        val viewPager = binding.viewPager
-        val tabLayout = binding.tabLayout
-
-        if (currentCase != null) {
-            val slug = currentCase.toSlug()
-            patientDetailsViewModel.getPatientInfoSummaryData(slug)
-        }
-        patientDetailsViewModel.liveSummaryData.observe(this) { data ->
-            Log.e("Observation", "Observation ***** Name ${data.name}")
-            data.observations.forEach {
-                Log.e("Observation", "Observation ***** ${it.code}  ${it.value}")
-            }
-            groups.forEach { group ->
-                // For each item inside the group
-                group.items.forEach { outputItem ->
-                    // Try to find a matching observation
-                    val matchingObservation = data.observations.find { obs ->
-                        obs.code == outputItem.linkId
-                    }
-
-                    if (matchingObservation != null) {
-                        outputItem.value = matchingObservation.value
-                    }
+            groups = parseFromAssets(this, latestEncounter) // this = Context
+            for (group in groups) {
+                Log.d("Group", "Group Item: ${group.text} (${group.linkId})")
+                for (item in group.items) {
+                    Log.d("Item", " - Item: ${item.text} (${item.linkId}) Type: ${item.type}")
                 }
             }
-            viewPager.adapter = GroupPagerAdapter(this, groups)
+            val viewPager = binding.viewPager
+            val tabLayout = binding.tabLayout
 
-            TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-                tab.text = groups[position].text
-            }.attach()
+            if (currentCase != null) {
+                val slug = currentCase.toSlug()
+                patientDetailsViewModel.getPatientInfoSummaryData(slug)
+            }
+
+            val customFragments = when (latestEncounter) {
+                "afp-case-information" -> {
+                    listOf(
+                        "Stool Specimen Results" to LocalLabFragment(),
+                        "Final Lab Results" to RegionalLabFragment(),
+                        "Contact Information" to ContactInformationFragment()
+                    )
+                }
+
+                "vl-case-information" -> {
+                    listOf(
+                        "Laboratory Examination" to VlLabFragment(),
+                        "Treatment/Hospitalization" to VlTreatmentFragment(),
+                        "Six months followup examinations" to VlFollowupFragment()
+                    )
+                }
+
+                else -> emptyList()
+            }
+            patientDetailsViewModel.liveSummaryData.observe(this) { data ->
+
+                groups.forEach { group ->
+                    // For each item inside the group
+                    group.items.forEach { outputItem ->
+                        // Try to find a matching observation
+                        val matchingObservation = data.observations.find { obs ->
+                            obs.code == outputItem.linkId
+                        }
+
+                        if (matchingObservation != null) {
+                            outputItem.value = matchingObservation.value
+                        }
+                    }
+                }
+//            viewPager.adapter = GroupPagerAdapter(this, groups,customFragments)
+                val adapter = GroupPagerAdapter(this, groups, customFragments)
+                viewPager.adapter = adapter
+
+                TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+//                tab.text = groups[position].text
+                    tab.text = adapter.getTabTitle(position)
+                }.attach()
+            }
+
+        } else {
+            Toast.makeText(this, "Please try again later!!", Toast.LENGTH_SHORT).show()
         }
-
-
     }
 
 
-    fun parseFromAssets(context: Context): List<OutputGroup> {
-        // Read JSON file from assets
-        val jsonContent = context.assets.open("afp-case.json")
-            .bufferedReader()
-            .use { it.readText() }
+    fun parseFromAssets(context: Context, latestEncounter: String): List<OutputGroup> {
+        var outputGroups: List<OutputGroup> = emptyList()
 
-        val gson = Gson()
-        val questionnaire = gson.fromJson(jsonContent, QuestionnaireItem::class.java)
-
-        val outputGroups = questionnaire.item.map { group ->
-            OutputGroup(
-                linkId = group.linkId,
-                text = group.text,
-                type = group.type,
-                items = group.item?.flatMap { flattenItems(it) } ?: emptyList()
-            )
+        val assets = when (latestEncounter) {
+            "afp-case-information" -> "afp-case.json"
+            "vl-case-information" -> "vl-case.json"
+            else -> ""
         }
+        try {
+            if (assets.isNotEmpty()) {
+                val jsonContent = context.assets.open(assets)
+                    .bufferedReader()
+                    .use { it.readText() }
 
+                val gson = Gson()
+                val questionnaire = gson.fromJson(jsonContent, QuestionnaireItem::class.java)
+
+                outputGroups = questionnaire.item.map { group ->
+                    OutputGroup(
+                        linkId = group.linkId,
+                        text = group.text,
+                        type = group.type,
+                        items = group.item?.flatMap { flattenItems(it) } ?: emptyList()
+                    )
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.e("TAG", "File Error ${e.message}")
+        }
         return outputGroups
+
     }
 
     override fun onSupportNavigateUp(): Boolean {

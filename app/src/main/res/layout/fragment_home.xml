@@ -14,7 +14,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:background="#1976D2"
+        android:background="@color/blue"
         android:padding="16dp">
 
         <!-- Greeting Text -->
