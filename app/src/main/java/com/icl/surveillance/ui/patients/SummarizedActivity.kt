@@ -133,6 +133,7 @@ class SummarizedActivity : AppCompatActivity() {
         val assets = when (latestEncounter) {
             "afp-case-information" -> "afp-case.json"
             "vl-case-information" -> "vl-case.json"
+            "social-listening-and-rumor-tracking-tool" -> "rumor-tracking-case.json"
             else -> ""
         }
         try {

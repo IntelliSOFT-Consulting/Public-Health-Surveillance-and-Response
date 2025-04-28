@@ -105,8 +105,17 @@ class CaseListingActivity : AppCompatActivity() {
             val slug = currentCase.toSlug()
             FormatterClass().saveSharedPref("latestEncounter", slug, this)
             when (slug) {
-                "vl-case-information" -> {
+                "social-listening-and-rumor-tracking-tool" -> {
 
+                    startActivity(
+                        Intent(
+                            this@CaseListingActivity,
+                            SummarizedActivity::class.java
+                        )
+                    )
+                }
+
+                "vl-case-information" -> {
 
                     startActivity(
                         Intent(
