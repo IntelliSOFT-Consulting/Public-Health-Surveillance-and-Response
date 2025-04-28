@@ -14,7 +14,6 @@ import com.google.android.material.button.MaterialButton
 import com.icl.surveillance.R
 import com.icl.surveillance.adapters.LabRecyclerViewAdapter
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
-import com.icl.surveillance.databinding.FragmentLabInformationBinding
 import com.icl.surveillance.databinding.FragmentLabResultsBinding
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.ui.patients.AddCaseActivity
@@ -51,8 +50,6 @@ class LabResultsFragment : Fragment() {
     private lateinit var patientDetailsViewModel: ClientDetailsViewModel
     private var _binding: FragmentLabResultsBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding
         get() = _binding!!
 
@@ -125,7 +122,6 @@ class LabResultsFragment : Fragment() {
                     println("Lab Information Here **** ${k.dateSpecimenReceived}")
                 }
                 binding.tvNoCase.visibility = View.GONE
-//        binding.fab.visibility = View.GONE
                 adapter.submitList(it)
             }
         }
@@ -165,7 +161,7 @@ class LabResultsFragment : Fragment() {
                             FormatterClass()
                                 .saveSharedPref(
                                     "questionnaire",
-                                    "afp-case-lab-results.json",
+                                    "afp-case-stool-lab-results.json",
                                     requireContext()
                                 )
                             FormatterClass().saveSharedPref(
@@ -176,7 +172,7 @@ class LabResultsFragment : Fragment() {
                             val intent = Intent(requireContext(), AddCaseActivity::class.java)
                             intent.putExtra(
                                 QUESTIONNAIRE_FILE_PATH_KEY,
-                                "afp-case-lab-results.json"
+                                "afp-case-stool-lab-results.json"
                             )
                             startActivity(intent)
                         }

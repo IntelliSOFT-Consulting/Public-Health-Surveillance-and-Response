@@ -525,6 +525,11 @@ class PatientListViewModel(
         val rash: String = ""
     )
 
+    data class LabResults(
+        val encounterId: String,
+        val observations: List<ObservationItem> = emptyList<ObservationItem>()
+    )
+
     data class CaseLabResultsData(
         val logicalId: String,
         val reasonCode: String,

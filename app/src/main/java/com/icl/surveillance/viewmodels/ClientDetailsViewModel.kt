@@ -25,6 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.hl7.fhir.r4.model.Coding
 import org.hl7.fhir.r4.model.Condition
 import org.hl7.fhir.r4.model.Encounter
 import org.hl7.fhir.r4.model.Observation
@@ -42,6 +43,7 @@ class ClientDetailsViewModel(
     val liveSummaryData = MutableLiveData<PatientListViewModel.CaseDetailSummaryData>()
     val liveDiseaseData = MutableLiveData<List<PatientListViewModel.CaseDiseaseData>>()
     val liveLabData = MutableLiveData<List<PatientListViewModel.CaseLabResultsData>>()
+    val currentLiveLabData = MutableLiveData<List<PatientListViewModel.LabResults>>()
 
     /** Emits list of [PatientDetailData]. */
     fun getPatientDetailData(category: String, parent: String?) {
@@ -581,6 +583,13 @@ class ClientDetailsViewModel(
         }
     }
 
+    fun getPatientResultsDiseaseData(reason: String, parent: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val patientData = getPatientLabDataDataInformation(reason, parent)
+            withContext(Dispatchers.Main) { currentLiveLabData.value = patientData }
+        }
+    }
+
     private suspend fun getPatientLabDataInformation(
         reason: String,
         parent: String
@@ -653,6 +662,86 @@ class ClientDetailsViewModel(
             .let { patients.addAll(it) }
 
         return patients
+    }
+
+    private suspend fun getPatientLabDataDataInformation(
+        reason: String,
+        parent: String
+    ): List<PatientListViewModel.LabResults> {
+        val encounters: MutableList<PatientListViewModel.LabResults> = mutableListOf()
+        fhirEngine
+            .search<Encounter> {
+                filter(Encounter.SUBJECT, { value = "Patient/$patientId" })
+                filter(Encounter.PART_OF, { value = "Encounter/$parent" })
+                filter(
+                    Encounter.REASON_CODE,
+                    {
+                        value = of(Coding().apply {
+                            code = reason
+                        })
+                    })
+            }.map { enc ->
+
+                Log.e("Lab Results: ", "Lab results coming here Parent ${enc.resource.logicalId}")
+                val observations: MutableList<PatientListViewModel.ObservationItem> =
+                    mutableListOf()
+                fhirEngine.search<Observation> {
+                    filter(
+                        Observation.ENCOUNTER,
+                        { value = "Encounter/${enc.resource.logicalId}" })
+                }.map { ob ->
+                    val value =
+                        if (ob.resource.hasValueQuantity()) {
+                            ob.resource.valueQuantity.value.toString()
+                        } else if (ob.resource.hasValueCodeableConcept()) {
+                            ob.resource.valueCodeableConcept.coding.firstOrNull()?.display ?: ""
+                        } else if (ob.resource.hasValueStringType()) {
+                            ob.resource.valueStringType.valueAsString
+                        } else {
+                            ""
+                        }
+                    val item = PatientListViewModel.ObservationItem(
+                        id = ob.resource.logicalId,
+                        code = ob.resource.code.codingFirstRep.code,
+                        value = value
+                    )
+                    observations.add(item)
+                }
+
+
+                val lab = PatientListViewModel.LabResults(
+                    encounterId = enc.resource.logicalId,
+                    observations = observations
+
+                )
+
+//                fhirEngine.search<Observation> {
+//                    filter(
+//                        Observation.ENCOUNTER,
+//                        { value = "Encounter/${enc.resource.logicalId}" })
+//                }
+//                    .map { ob ->
+//
+//
+//                        val value =
+//                            if (ob.resource.hasValueQuantity()) {
+//                                ob.resource.valueQuantity.value.toString()
+//                            } else if (ob.resource.hasValueCodeableConcept()) {
+//                                ob.resource.valueCodeableConcept.coding.firstOrNull()?.display ?: ""
+//                            } else if (ob.resource.hasValueStringType()) {
+//                                ob.resource.valueStringType.valueAsString
+//                            } else {
+//                                ""
+//                            }
+//                        val item = PatientListViewModel.ObservationItem(
+//                            id = ob.resource.logicalId,
+//                            code = ob.resource.code.codingFirstRep.code,
+//                            value = value
+//                        )
+//                    }
+                encounters.add(lab)
+            }
+        return encounters
     }
 
     private suspend fun getPatientDiseaseDataInformation(

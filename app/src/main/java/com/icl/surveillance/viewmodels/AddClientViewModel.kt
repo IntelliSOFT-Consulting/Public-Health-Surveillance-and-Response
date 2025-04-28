@@ -96,7 +96,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
             val qh = QuestionnaireHelper()
             val encounterId = generateUuid()
-            val enc = qh.generalEncounter(null)
+            val enc = qh.generalEncounter(null, encounterId)
             enc.id = encounterId
             enc.subject = subjectReference
             enc.reasonCodeFirstRep.codingFirstRep.code = "$reasonCode"
@@ -141,7 +141,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
             val qh = QuestionnaireHelper()
             val encounterId = generateUuid()
-            val enc = qh.generalEncounter(null)
+            val enc = qh.generalEncounter(null, encounterId)
             enc.id = encounterId
             enc.subject = subjectReference
             enc.reasonCodeFirstRep.codingFirstRep.code = "$reasonCode"
@@ -507,7 +507,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
             .replace("-+".toRegex(), "-") // collapse multiple hyphens
     }
 
-    private fun extractStructuredAnswers(response: JSONObject): List<QuestionnaireAnswer> {
+      fun extractStructuredAnswers(response: JSONObject): List<QuestionnaireAnswer> {
         val results = mutableListOf<QuestionnaireAnswer>()
 
         fun extractFromItems(items: JSONArray?) {
@@ -603,7 +603,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                 val subjectReference = Reference("Patient/$patientId")
                 val qh = QuestionnaireHelper()
                 val encounterId = generateUuid()
-                val enc = qh.generalEncounter(null)
+                val enc = qh.generalEncounter(null, encounterId)
                 enc.id = encounterId
                 enc.subject = subjectReference
                 enc.reasonCodeFirstRep.codingFirstRep.code = "Case Information"

@@ -13,13 +13,11 @@ import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import ca.uhn.fhir.context.FhirContext
 import ca.uhn.fhir.context.FhirVersionEnum
-import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.google.android.material.button.MaterialButton
 import com.icl.surveillance.R
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FRAGMENT_TAG
-import com.icl.surveillance.clients.AddParentCaseActivity
 import com.icl.surveillance.databinding.ActivityAddCaseBinding
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.utils.ProgressDialogManager
@@ -83,6 +81,9 @@ class AddCaseActivity : AppCompatActivity() {
         val patientId = FormatterClass().getSharedPref("resourceId", this@AddCaseActivity)
         val questionnaire = FormatterClass().getSharedPref("questionnaire", this@AddCaseActivity)
         val encounter = FormatterClass().getSharedPref("encounterId", this@AddCaseActivity)
+        val context = FhirContext.forR4()
+        val questionnaireResponseString =
+            context.newJsonParser().encodeResourceToString(questionnaireResponse)
 
         println("Parent Encounter $encounter")
         when (questionnaire) {
@@ -94,7 +95,8 @@ class AddCaseActivity : AppCompatActivity() {
                     questionnaireResponse,
                     "$patientId",
                     "$encounter",
-                    "Measles Lab Information"
+                    "Measles Lab Information",
+                    questionnaireResponseString
                 )
 
             "measles-lab-reg-results.json" ->
@@ -102,15 +104,17 @@ class AddCaseActivity : AppCompatActivity() {
                     questionnaireResponse,
                     "$patientId",
                     "$encounter",
-                    "Measles Regional Lab Information"
+                    "Measles Regional Lab Information",
+                            questionnaireResponseString
                 )
 
-            "afp-case-lab-results.json" ->
+            "afp-case-stool-lab-results.json" ->
                 viewModel.completeLabAssessment(
                     questionnaireResponse,
                     "$patientId",
                     "$encounter",
-                    "AFP Lab Information"
+                    "AFP Stool Lab Information",
+                    questionnaireResponseString
                 )
         }
     }
