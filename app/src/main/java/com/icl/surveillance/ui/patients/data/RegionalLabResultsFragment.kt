@@ -1,4 +1,4 @@
-package com.icl.surveillance.ui.patients.custom
+package com.icl.surveillance.ui.patients.data
 
 import android.app.AlertDialog
 import android.content.Context
@@ -19,7 +19,9 @@ import com.google.gson.Gson
 import com.icl.surveillance.R
 import com.icl.surveillance.adapters.LabRecyclerViewAdapter
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
-import com.icl.surveillance.databinding.FragmentLocalLabBinding
+import com.icl.surveillance.databinding.FragmentLabResultsBinding
+import com.icl.surveillance.databinding.FragmentRegionalLabBinding
+import com.icl.surveillance.databinding.FragmentRegionalLabResultsBinding
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.models.ChildItem
 import com.icl.surveillance.models.OutputGroup
@@ -31,7 +33,6 @@ import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.utils.toSlug
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
-import java.sql.DataTruncation
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -40,10 +41,10 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [LocalLabFragment.newInstance] factory method to
+ * Use the [RegionalLabResultsFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class LocalLabFragment : Fragment() {
+class RegionalLabResultsFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -58,8 +59,8 @@ class LocalLabFragment : Fragment() {
 
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientDetailsViewModel: ClientDetailsViewModel
-    private var _binding: FragmentLocalLabBinding? = null
-    private lateinit var parentLayout: LinearLayout
+    private var _binding: FragmentRegionalLabResultsBinding? = null
+
     private val binding
         get() = _binding!!
 
@@ -68,7 +69,7 @@ class LocalLabFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentLocalLabBinding.inflate(inflater, container, false)
+        _binding = FragmentRegionalLabResultsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         return root
@@ -83,15 +84,17 @@ class LocalLabFragment : Fragment() {
                 val slug = currentCase.toSlug()
                 when (slug) {
                     "measles-case-information" -> {
-                        patientDetailsViewModel.getPatientDiseaseData(
-                            "Measles Lab Information", "$encounterId", false
+                        patientDetailsViewModel.getPatientResultsDiseaseData(
+                            "Measles Regional Lab Information",
+                            "$encounterId",
                         )
                     }
 
                     "afp-case-information" -> {
-                        patientDetailsViewModel.getPatientResultsDiseaseData(
-                            "AFP Stool Lab Information",
+                        patientDetailsViewModel.getPatientDiseaseData(
+                            "AFP Lab Information",
                             "$encounterId",
+                            false
                         )
                     }
                 }
@@ -102,6 +105,8 @@ class LocalLabFragment : Fragment() {
     }
 
     private lateinit var groups: List<OutputGroup>
+    private lateinit var parentLayout: LinearLayout
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -109,6 +114,7 @@ class LocalLabFragment : Fragment() {
         val encounterId = FormatterClass().getSharedPref("encounterId", requireContext())
         val currentCase = FormatterClass().getSharedPref("currentCase", requireContext())
 
+        println("Current Parent Encounter $encounterId")
         fhirEngine = FhirApplication.fhirEngine(requireContext())
         patientDetailsViewModel =
             ViewModelProvider(
@@ -118,48 +124,55 @@ class LocalLabFragment : Fragment() {
                 ),
             )
                 .get(ClientDetailsViewModel::class.java)
+
+//        val adapter = LabRecyclerViewAdapter(this::onItemClicked)
+//        binding.patientList.adapter = adapter
         parentLayout = binding.lnParent
 
-        groups = parseFromAssets(requireContext())
-        patientDetailsViewModel.currentLiveLabData.observe(viewLifecycleOwner) {
+        val outputGroups = parseFromAssets(requireContext())
+        patientDetailsViewModel.currentLiveLabData.observe(viewLifecycleOwner) { results ->
 
-            if (it.isEmpty()) {
-                binding.lnEmpty.visibility = View.VISIBLE
+            if (results.isEmpty()) {
+                binding.tvNoCase.visibility = View.VISIBLE
             } else {
-                // this = Context
-                parentLayout.removeAllViews()
-                for (group in groups) {
-                    val fieldView = createCustomLabel(group.text)
-                    parentLayout.addView(fieldView)
-                    Log.d("Group", "Group Item Lab Results: ${group.text} (${group.linkId})")
-                    for (item in group.items) {
-                        Log.d("Item", " - Item: ${item.text} (${item.linkId}) Type: ${item.type}")
-                        item.value = getValueBasedOnId(item, it.first().observations)
-                        val childFieldView = createCustomField(item)
-                        parentLayout.addView(childFieldView)
-                    }
-                }
 
-                binding.lnEmpty.visibility = View.GONE
+                binding.tvNoCase.visibility = View.GONE
                 binding.fab.visibility = View.GONE
-//                adapter.submitList(it)
+
+                parentLayout.removeAllViews()
+                outputGroups.forEach { group ->
+                    Log.d(
+                        "OutputGroup",
+                        "OutputGroup LinkId: ${group.linkId}, Text: ${group.text}, Type: ${group.type}"
+                    )
+
+                    val item = OutputItem(
+                        linkId = group.linkId,
+                        text = group.text,
+                        type = group.text,
+                        value = getValueBasedOnId(item = group.linkId, results.first().observations)
+
+                    )
+                    val childFieldView = createCustomField(item)
+                    parentLayout.addView(childFieldView)
+                }
             }
         }
         if (currentCase != null) {
             val slug = currentCase.toSlug()
             when (slug) {
                 "measles-case-information" -> {
-                    patientDetailsViewModel.getPatientDiseaseData(
-                        "Measles Lab Information",
+                    patientDetailsViewModel.getPatientResultsDiseaseData(
+                        "Measles Regional Lab Information",
                         "$encounterId",
-                        false
                     )
                 }
 
                 "afp-case-information" -> {
-                    patientDetailsViewModel.getPatientResultsDiseaseData(
-                        "AFP Stool Lab Information",
+                    patientDetailsViewModel.getPatientDiseaseData(
+                        "AFP Lab Information",
                         "$encounterId",
+                        false
                     )
                 }
             }
@@ -172,7 +185,25 @@ class LocalLabFragment : Fragment() {
                     when (slug) {
                         "measles-case-information" -> {
 
-                            showLocalOrRegionalLab()
+//                            showLocalOrRegionalLab()
+
+                            FormatterClass()
+                                .saveSharedPref(
+                                    "questionnaire",
+                                    "measles-lab-reg-results.json",
+                                    requireContext()
+                                )
+                            FormatterClass().saveSharedPref(
+                                "title",
+                                "Regional Measles Lab Results",
+                                requireContext()
+                            )
+                            val intent = Intent(requireContext(), AddCaseActivity::class.java)
+                            intent.putExtra(
+                                QUESTIONNAIRE_FILE_PATH_KEY,
+                                "measles-lab-reg-results.json"
+                            )
+                            startActivity(intent)
 
                         }
 
@@ -210,13 +241,13 @@ class LocalLabFragment : Fragment() {
     }
 
     private fun getValueBasedOnId(
-        item: OutputItem,
+        item: String,
         items: List<PatientListViewModel.ObservationItem>
     ): String {
         var response = ""
         items.forEach { outputItem ->
             val matchingObservation = items.find { obs ->
-                obs.code == item.linkId
+                obs.code == item
             }
 
             if (matchingObservation != null) {
@@ -224,50 +255,6 @@ class LocalLabFragment : Fragment() {
             }
         }
         return response
-    }
-
-    fun parseFromAssets(context: Context): List<OutputGroup> {
-        var outputGroups: List<OutputGroup> = emptyList()
-
-        try {
-            val jsonContent = context.assets.open("afp-case-stool-lab-results.json")
-                .bufferedReader()
-                .use { it.readText() }
-
-            val gson = Gson()
-            val questionnaire = gson.fromJson(jsonContent, QuestionnaireItem::class.java)
-
-            outputGroups = questionnaire.item.map { group ->
-                OutputGroup(
-                    linkId = group.linkId,
-                    text = group.text,
-                    type = group.type,
-                    items = group.item?.flatMap { flattenItems(it) } ?: emptyList()
-                )
-
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Log.e("TAG", "File Error ${e.message}")
-        }
-        return outputGroups
-
-    }
-
-    fun flattenItems(item: ChildItem): List<OutputItem> {
-        val children = item.item?.flatMap { flattenItems(it) } ?: emptyList()
-
-        // If current item is NOT of type "display", include it
-        return if (item.type != "display") {
-            val current = OutputItem(
-                linkId = item.linkId,
-                text = item.text,
-                type = item.type
-            )
-            listOf(current) + children
-        } else {
-            children
-        }
     }
 
     private fun createCustomField(item: OutputItem): View {
@@ -378,6 +365,72 @@ class LocalLabFragment : Fragment() {
         return layout
     }
 
+    fun parseFromAssets(context: Context): List<OutputGroup> {
+        return try {
+            val jsonContent = context.assets.open("measles-lab-reg-results.json")
+                .bufferedReader()
+                .use { it.readText() }
+
+            val gson = Gson()
+            val questionnaire = gson.fromJson(jsonContent, QuestionnaireItem::class.java)
+
+            questionnaire.item.map { item ->
+                OutputGroup(
+                    linkId = item.linkId,
+                    text = item.text,
+                    type = item.type
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.e("TAG", "File Error: ${e.message}")
+            emptyList()
+        }
+    }
+
+//    fun parseFromAssets(context: Context): List<OutputGroup> {
+//        var outputGroups: List<OutputGroup> = emptyList()
+//
+//        try {
+//            val jsonContent = context.assets.open("measles-lab-reg-results.json")
+//                .bufferedReader()
+//                .use { it.readText() }
+//
+//            val gson = Gson()
+//            val questionnaire = gson.fromJson(jsonContent, QuestionnaireItem::class.java)
+//
+//            outputGroups = questionnaire.item.map { group ->
+//                OutputGroup(
+//                    linkId = group.linkId,
+//                    text = group.text,
+//                    type = group.type,
+//                    items = group.item?.flatMap { flattenItems(it) } ?: emptyList()
+//                )
+//
+//            }
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            Log.e("TAG", "File Error ${e.message}")
+//        }
+//        return outputGroups
+//
+//    }
+//
+//    fun flattenItems(item: ChildItem): List<OutputItem> {
+//        val children = item.item?.flatMap { flattenItems(it) } ?: emptyList()
+//
+//        // If current item is NOT of type "display", include it
+//        return if (item.type != "display") {
+//            val current = OutputItem(
+//                linkId = item.linkId,
+//                text = item.text,
+//                type = item.type
+//            )
+//            listOf(current) + children
+//        } else {
+//            children
+//        }
+//    }
 
     private fun showLocalOrRegionalLab() {
         val dialogView =
@@ -448,12 +501,12 @@ class LocalLabFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment LocalLabFragment.
+         * @return A new instance of fragment RegionalLabResultsFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            LocalLabFragment().apply {
+            RegionalLabResultsFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
@@ -461,6 +514,3 @@ class LocalLabFragment : Fragment() {
             }
     }
 }
-
-
-

@@ -1,21 +1,29 @@
 package com.icl.surveillance.ui.patients.data
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.fhir.FhirEngine
 import com.google.android.material.button.MaterialButton
+import com.google.gson.Gson
 import com.icl.surveillance.R
 import com.icl.surveillance.adapters.LabRecyclerViewAdapter
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.databinding.FragmentLabResultsBinding
 import com.icl.surveillance.fhir.FhirApplication
+import com.icl.surveillance.models.OutputGroup
+import com.icl.surveillance.models.OutputItem
+import com.icl.surveillance.models.QuestionnaireItem
 import com.icl.surveillance.ui.patients.AddCaseActivity
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
@@ -53,6 +61,7 @@ class LabResultsFragment : Fragment() {
     private val binding
         get() = _binding!!
 
+    private lateinit var parentLayout: LinearLayout
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -74,8 +83,8 @@ class LabResultsFragment : Fragment() {
                 val slug = currentCase.toSlug()
                 when (slug) {
                     "measles-case-information" -> {
-                        patientDetailsViewModel.getPatientDiseaseData(
-                            "Measles Lab Information", "$encounterId", false
+                        patientDetailsViewModel.getPatientResultsDiseaseData(
+                            "Measles Lab Information", "$encounterId"
                         )
                     }
 
@@ -111,28 +120,45 @@ class LabResultsFragment : Fragment() {
             )
                 .get(ClientDetailsViewModel::class.java)
 
-        val adapter = LabRecyclerViewAdapter(this::onItemClicked)
-        binding.patientList.adapter = adapter
+//        val adapter = LabRecyclerViewAdapter(this::onItemClicked)
+//        binding.patientList.adapter = adapter
+        parentLayout = binding.lnParent
 
-        patientDetailsViewModel.liveLabData.observe(viewLifecycleOwner) {
+        val outputGroups = parseFromAssets(requireContext())
+        patientDetailsViewModel.currentLiveLabData.observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
                 binding.tvNoCase.visibility = View.VISIBLE
             } else {
-                it.forEach { k ->
-                    println("Lab Information Here **** ${k.dateSpecimenReceived}")
-                }
+
                 binding.tvNoCase.visibility = View.GONE
-                adapter.submitList(it)
+                binding.fab.visibility = View.GONE
+//                adapter.submitList(it)
+                parentLayout.removeAllViews()
+                outputGroups.forEach { group ->
+                    Log.d(
+                        "OutputGroup",
+                        "OutputGroup LinkId: ${group.linkId}, Text: ${group.text}, Type: ${group.type}"
+                    )
+
+                    val item = OutputItem(
+                        linkId = group.linkId,
+                        text = group.text,
+                        type = group.text,
+                        value = getValueBasedOnId(item = group.linkId, it.first().observations)
+
+                    )
+                    val childFieldView = createCustomField(item)
+                    parentLayout.addView(childFieldView)
+                }
             }
         }
         if (currentCase != null) {
             val slug = currentCase.toSlug()
             when (slug) {
                 "measles-case-information" -> {
-                    patientDetailsViewModel.getPatientDiseaseData(
+                    patientDetailsViewModel.getPatientResultsDiseaseData(
                         "Measles Lab Information",
                         "$encounterId",
-                        false
                     )
                 }
 
@@ -153,7 +179,25 @@ class LabResultsFragment : Fragment() {
                     when (slug) {
                         "measles-case-information" -> {
 
-                            showLocalOrRegionalLab()
+//                            showLocalOrRegionalLab()
+
+                            FormatterClass()
+                                .saveSharedPref(
+                                    "questionnaire",
+                                    "measles-lab-results.json",
+                                    requireContext()
+                                )
+                            FormatterClass().saveSharedPref(
+                                "title",
+                                "Measles Lab Results",
+                                requireContext()
+                            )
+                            val intent = Intent(requireContext(), AddCaseActivity::class.java)
+                            intent.putExtra(
+                                QUESTIONNAIRE_FILE_PATH_KEY,
+                                "measles-lab-results.json"
+                            )
+                            startActivity(intent)
 
                         }
 
@@ -187,6 +231,106 @@ class LabResultsFragment : Fragment() {
 
 
             }
+        }
+    }
+
+    private fun getValueBasedOnId(
+        item: String,
+        items: List<PatientListViewModel.ObservationItem>
+    ): String {
+        var response = ""
+        items.forEach { outputItem ->
+            val matchingObservation = items.find { obs ->
+                obs.code == item
+            }
+
+            if (matchingObservation != null) {
+                response = matchingObservation.value
+            }
+        }
+        return response
+    }
+
+    private fun createCustomField(item: OutputItem): View {
+        // Create the main LinearLayout to hold the views
+        val layout = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(8, 8, 8, 8)
+        }
+
+        // Create the horizontal LinearLayout for the two TextViews
+        val horizontalLayout = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.HORIZONTAL
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        }
+
+        // First TextView (label)
+        val label = TextView(requireContext()).apply {
+            text = item.text
+            textSize = 12f
+            setTextColor(android.graphics.Color.BLACK)
+            layoutParams = LinearLayout.LayoutParams(
+                0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f
+            )
+        }
+        horizontalLayout.addView(label)
+
+        // Second TextView (dynamic content)
+        val tvEpiLink = TextView(requireContext()).apply {
+            id = R.id.tv_epi_link // Set ID if needed for further reference
+            text = item.value // Assuming item.text is the dynamic text you want to show
+            textSize = 13f
+            textAlignment = TextView.TEXT_ALIGNMENT_TEXT_END
+            setTextColor(android.graphics.Color.BLACK)
+            setTypeface(typeface, android.graphics.Typeface.BOLD)
+            layoutParams = LinearLayout.LayoutParams(
+                0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f
+            )
+        }
+        horizontalLayout.addView(tvEpiLink)
+
+        // Add the horizontal layout with two TextViews to the main layout
+        layout.addView(horizontalLayout)
+
+        // Add a separator View (divider)
+        val divider = View(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                1 // Divider thickness
+            ).apply {
+                topMargin = 8
+                bottomMargin = 8
+            }
+            setBackgroundColor(android.graphics.Color.parseColor("#CCCCCC"))
+        }
+        layout.addView(divider)
+
+        return layout
+    }
+
+    fun parseFromAssets(context: Context): List<OutputGroup> {
+        return try {
+            val jsonContent = context.assets.open("measles-lab-results.json")
+                .bufferedReader()
+                .use { it.readText() }
+
+            val gson = Gson()
+            val questionnaire = gson.fromJson(jsonContent, QuestionnaireItem::class.java)
+
+            questionnaire.item.map { item ->
+                OutputGroup(
+                    linkId = item.linkId,
+                    text = item.text,
+                    type = item.type
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.e("TAG", "File Error: ${e.message}")
+            emptyList()
         }
     }
 

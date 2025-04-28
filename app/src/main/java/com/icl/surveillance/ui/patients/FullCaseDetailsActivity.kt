@@ -61,7 +61,8 @@ class FullCaseDetailsActivity : AppCompatActivity() {
                             2 -> "Case Information"
                             3 -> "Clinical History"
                             4 -> "Sample/Specimen Information"
-                            5 -> "Lab Information"
+                            5 -> "Laboratory Information"
+                            6 -> "Regional Laboratory Information"
                             else -> "Reporting Site"
                         }
                 }
