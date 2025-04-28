@@ -100,7 +100,7 @@ class HomeFragment : Fragment() {
 
                 FormatterClass()
                     .saveSharedPref(
-                        "stage", "isMonthly",
+                        "stage", "1",
                         requireContext()
                     )
                 FormatterClass()
@@ -116,26 +116,45 @@ class HomeFragment : Fragment() {
             }
 
             4 -> {
-                FormatterClass().saveSharedPref(
-                    "currentCase",
-                    "Rumor Case Information",
-                    requireContext()
-                )
+
+                val bundle =
+                    Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-vl.json") }
+
                 FormatterClass()
                     .saveSharedPref(
-                        "title", "Rumor Tracking Tool",
+                        "stage", "2",
+                        requireContext()
+                    )
+                FormatterClass()
+                    .saveSharedPref(
+                        "title", title,
                         requireContext()
                     )
 
-                FormatterClass().saveSharedPref(
-                    "questionnaire",
-                    "rumor-tracking-case.json",
-                    requireContext()
+                findNavController().navigate(
+                    R.id.action_navigation_home_to_single_case_fragment,
+                    bundle
                 )
-                val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
-                intent.putExtra("title", "Add Rumor Case")
-                intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "rumor-tracking-case.json")
-                startActivity(intent)
+//                FormatterClass().saveSharedPref(
+//                    "currentCase",
+//                    "Rumor Case Information",
+//                    requireContext()
+//                )
+//                FormatterClass()
+//                    .saveSharedPref(
+//                        "title", "Rumor Tracking Tool",
+//                        requireContext()
+//                    )
+//
+//                FormatterClass().saveSharedPref(
+//                    "questionnaire",
+//                    "rumor-tracking-case.json",
+//                    requireContext()
+//                )
+//                val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
+//                intent.putExtra("title", "Add Rumor Case")
+//                intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "rumor-tracking-case.json")
+//                startActivity(intent)
 
             }
 
@@ -150,7 +169,7 @@ class HomeFragment : Fragment() {
                     )
                 FormatterClass()
                     .saveSharedPref(
-                        "stage", "isCurrent",
+                        "stage", "0",
                         requireContext()
                     )
                 findNavController().navigate(

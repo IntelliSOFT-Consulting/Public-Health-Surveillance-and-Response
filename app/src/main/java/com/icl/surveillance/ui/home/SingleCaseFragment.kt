@@ -95,10 +95,12 @@ class SingleCaseFragment : Fragment() {
         val adapter =
             DiseasesRecyclerViewAdapter(::onItemClick).apply {
                 if (stage != null) {
-                    if (stage == "isCurrent") {
+                    if (stage == "0") {
                         submitList(viewModel.getDiseasesList())
-                    } else if (stage == "isMonthly") {
+                    } else if (stage == "1") {
                         submitList(viewModel.getMonthlyList())
+                    } else if (stage == "2") {
+                        submitList(viewModel.getRumorList())
                     }
                 }
 

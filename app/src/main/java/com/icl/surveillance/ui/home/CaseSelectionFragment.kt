@@ -57,8 +57,7 @@ class CaseSelectionFragment : Fragment() {
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientListViewModel: PatientListViewModel
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentCaseSelectionBinding.inflate(inflater, container, false)
@@ -102,14 +101,12 @@ class CaseSelectionFragment : Fragment() {
         setHasOptionsMenu(true)
 
         fhirEngine = FhirApplication.fhirEngine(requireContext())
-        patientListViewModel =
-            ViewModelProvider(
-                this,
-                PatientListViewModel.PatientListViewModelFactory(
-                    requireActivity().application, fhirEngine
-                ),
-            )
-                .get(PatientListViewModel::class.java)
+        patientListViewModel = ViewModelProvider(
+            this,
+            PatientListViewModel.PatientListViewModelFactory(
+                requireActivity().application, fhirEngine
+            ),
+        ).get(PatientListViewModel::class.java)
 
         binding.apply {
             greeting.text = titleName
@@ -125,27 +122,48 @@ class CaseSelectionFragment : Fragment() {
 
         val title = when (titleName) {
             "Visceral Leishmaniasis (Kala-azar) Case Management Form" -> "VL"
+            "Social Listening and Rumor Tracking Tool" -> "SLR"
             else -> titleName
         }
+        val add = when (title) {
+            "SLR" -> "Add new case"
+            else -> "Add New $title Case"
+        }
+        val view = when (title) {
+            "SLR" -> "View Reported Cases"
+            else -> "$title Case List"
+        }
         val caseOptions = mutableListOf(
-            CaseOption("Add New $title Case"),
-            CaseOption(
-                "$title Case List",
-                showCount = true,
-                count = 0
+            CaseOption(add), CaseOption(
+                view, showCount = true, count = 0
             )
         )
-
 
         val recyclerView = requireView().findViewById<RecyclerView>(R.id.sdcLayoutsRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = CaseOptionsAdapter(caseOptions) { option ->
             when (option.title) {
+                "Add new case" -> {
+                    FormatterClass().saveSharedPref(
+                        "currentCase", "Social Listening and Rumor Tracking Tool", requireContext()
+                    )
+                    FormatterClass().saveSharedPref(
+                        "title",
+                        "Social Listening and Rumor Tracking Tool",
+                        requireContext()
+                    )
+                    FormatterClass().saveSharedPref(
+                        "questionnaire", "rumor-tracking-case.json", requireContext()
+                    )
+                    val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
+                    intent.putExtra("title", " $titleName")
+                    intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "rumor-tracking-case.json")
+                    startActivity(intent)
+                }
+
                 "Add New VL Case" -> {
                     FormatterClass().saveSharedPref(
-                        "currentCase",
-                        "VL Case Information",
-                        requireContext()
+                        "currentCase", "VL Case Information", requireContext()
                     )
                     FormatterClass().saveSharedPref(
                         "title",
@@ -153,9 +171,7 @@ class CaseSelectionFragment : Fragment() {
                         requireContext()
                     )
                     FormatterClass().saveSharedPref(
-                        "questionnaire",
-                        "vl-case.json",
-                        requireContext()
+                        "questionnaire", "vl-case.json", requireContext()
                     )
                     val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
                     intent.putExtra("title", " $titleName")
@@ -165,14 +181,21 @@ class CaseSelectionFragment : Fragment() {
 
                 "VL Case List" -> {
                     FormatterClass().saveSharedPref(
-                        "title",
-                        " ${option.title}",
-                        requireContext()
+                        "title", " ${option.title}", requireContext()
                     )
                     FormatterClass().saveSharedPref(
-                        "currentCase",
-                        "VL Case Information",
-                        requireContext()
+                        "currentCase", "VL Case Information", requireContext()
+                    )
+                    val intent = Intent(requireContext(), CaseListingActivity::class.java)
+                    startActivity(intent)
+                }
+
+                "View Reported Cases" -> {
+                    FormatterClass().saveSharedPref(
+                        "title", "Social Listening and Rumor Tracking Tool", requireContext()
+                    )
+                    FormatterClass().saveSharedPref(
+                        "currentCase", "Social Listening and Rumor Tracking Tool", requireContext()
                     )
                     val intent = Intent(requireContext(), CaseListingActivity::class.java)
                     startActivity(intent)
@@ -181,19 +204,13 @@ class CaseSelectionFragment : Fragment() {
                 "Add New AFP Case" -> {
 
                     FormatterClass().saveSharedPref(
-                        "currentCase",
-                        "AFP Case Information",
-                        requireContext()
+                        "currentCase", "AFP Case Information", requireContext()
                     )
                     FormatterClass().saveSharedPref(
-                        "title",
-                        "Add $titleName Case",
-                        requireContext()
+                        "title", "Add $titleName Case", requireContext()
                     )
                     FormatterClass().saveSharedPref(
-                        "questionnaire",
-                        "afp-case.json",
-                        requireContext()
+                        "questionnaire", "afp-case.json", requireContext()
                     )
                     val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
                     intent.putExtra("title", "Add $titleName Case")
@@ -204,19 +221,13 @@ class CaseSelectionFragment : Fragment() {
                 "Add New Measles Case" -> {
 
                     FormatterClass().saveSharedPref(
-                        "currentCase",
-                        "Measles Case Information",
-                        requireContext()
+                        "currentCase", "Measles Case Information", requireContext()
                     )
                     FormatterClass().saveSharedPref(
-                        "title",
-                        "Add $titleName Case",
-                        requireContext()
+                        "title", "Add $titleName Case", requireContext()
                     )
                     FormatterClass().saveSharedPref(
-                        "questionnaire",
-                        "add-case.json",
-                        requireContext()
+                        "questionnaire", "add-case.json", requireContext()
                     )
                     val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
                     intent.putExtra("title", "Add $titleName Case")
@@ -226,14 +237,10 @@ class CaseSelectionFragment : Fragment() {
 
                 "Measles Case List" -> {
                     FormatterClass().saveSharedPref(
-                        "title",
-                        " ${option.title}",
-                        requireContext()
+                        "title", " ${option.title}", requireContext()
                     )
                     FormatterClass().saveSharedPref(
-                        "currentCase",
-                        "Measles Case Information",
-                        requireContext()
+                        "currentCase", "Measles Case Information", requireContext()
                     )
                     val intent = Intent(requireContext(), CaseListingActivity::class.java)
                     startActivity(intent)
@@ -241,14 +248,10 @@ class CaseSelectionFragment : Fragment() {
 
                 "AFP Case List" -> {
                     FormatterClass().saveSharedPref(
-                        "title",
-                        " ${option.title}",
-                        requireContext()
+                        "title", " ${option.title}", requireContext()
                     )
                     FormatterClass().saveSharedPref(
-                        "currentCase",
-                        "AFP Case Information",
-                        requireContext()
+                        "currentCase", "AFP Case Information", requireContext()
                     )
                     val intent = Intent(requireContext(), CaseListingActivity::class.java)
                     startActivity(intent)
@@ -260,23 +263,13 @@ class CaseSelectionFragment : Fragment() {
             }
 
 
-//            Toast.makeText(requireContext(), "Clicked: ${option.title}", Toast.LENGTH_SHORT).show()
-
-            // let's check clicks with when
-
-//            when (option) {
-//                'Add new measles case' -> {}
-//                'Measles Cases List' -> {}
-//
-//            }
-
-
         }
 
         val caseType = when (title?.trim()) {
             "Measles" -> "measles-case-information"
             "AFP" -> "afp-case-information"
             "VL" -> "vl-case-information"
+            "SLR" -> "social-listening-and-rumor-tracking-tool"
             else -> null
         }
 
@@ -319,12 +312,11 @@ class CaseSelectionFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CaseSelectionFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+        fun newInstance(param1: String, param2: String) = CaseSelectionFragment().apply {
+            arguments = Bundle().apply {
+                putString(ARG_PARAM1, param1)
+                putString(ARG_PARAM2, param2)
             }
+        }
     }
 }

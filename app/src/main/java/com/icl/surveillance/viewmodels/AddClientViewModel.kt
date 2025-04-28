@@ -351,7 +351,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     createResource(obs, subjectReference, encounterReference)
                 }
 
-                "rumor-case-information" -> {
+                "social-listening-and-rumor-tracking-tool" -> {
 
 
                     val subCountyEntry = extractedAnswers.find { it.linkId == "329541932661" }
