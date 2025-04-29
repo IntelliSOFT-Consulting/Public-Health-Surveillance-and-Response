@@ -122,6 +122,7 @@ class CaseSelectionFragment : Fragment() {
 
         val title = when (titleName) {
             "Visceral Leishmaniasis (Kala-azar) Case Management Form" -> "VL"
+            "Visceral Leishmaniasis Case Management Form" -> "VL"
             "Social Listening and Rumor Tracking Tool" -> "SLR"
             else -> titleName
         }

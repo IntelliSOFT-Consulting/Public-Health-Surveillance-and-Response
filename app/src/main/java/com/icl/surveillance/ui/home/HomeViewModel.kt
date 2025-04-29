@@ -53,29 +53,29 @@ class HomeViewModel(application: Application, private val state: SavedStateHandl
 
         RUMOR_TOOL(
             R.drawable.searching,
-            R.string.rumor_tool, 3, 0
+            R.string.rumor_tool, 3, 30
         ),
         SOCIAL_INV(
             R.drawable.searching,
-            R.string.social_inv, 3, 1
+            R.string.social_inv, 3, 31
         ),
         VL_FORM(
             R.drawable.searching,
-            R.string.vl_form, 2, 0
+            R.string.vl_form, 2, 20
         ),
 
         // Mass
         POLIO(
             R.drawable.searching,
-            R.string.polio, 1, 0
+            R.string.polio, 1, 10
         ),
         MEASLES_IMM(
             R.drawable.searching,
-            R.string.measles_imm, 1, 1
+            R.string.measles_imm, 1, 11
         ),
         CHOLERA(
             R.drawable.searching,
-            R.string.cholera, 1, 2
+            R.string.cholera, 1, 12
         ),
         // Top Layer
 

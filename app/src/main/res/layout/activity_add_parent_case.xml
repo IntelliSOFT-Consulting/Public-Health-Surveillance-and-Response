@@ -14,7 +14,6 @@
         android:layout_height="match_parent"
         android:layout_marginTop="60dp"
         android:layout_marginBottom="?attr/actionBarSize"
-        android:clipToPadding="false"
-        android:paddingBottom="100dp"
+
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

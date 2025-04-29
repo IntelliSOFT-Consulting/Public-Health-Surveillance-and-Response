@@ -73,5 +73,8 @@
         <action
             android:id="@+id/action_childFragment_to_singleCaseFragment"
             app:destination="@id/singleCaseFragment" />
+        <action
+            android:id="@+id/action_childFragment_to_caseSelectionFragment"
+            app:destination="@id/caseSelectionFragment" />
     </fragment>
 </navigation>

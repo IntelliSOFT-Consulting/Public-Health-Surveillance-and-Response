@@ -145,6 +145,49 @@ class ChildFragment : Fragment() {
                 )
             }
 
+            30 -> {
+
+                val bundle =
+                    Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-case.json") }
+
+                FormatterClass()
+                    .saveSharedPref(
+                        "grandTitle", "Social Listening and Rumor Tracking Tool",
+                        requireContext()
+                    )
+                FormatterClass()
+                    .saveSharedPref(
+                        "childStage", "6",
+                        requireContext()
+                    )
+
+                findNavController().navigate(
+                    R.id.action_childFragment_to_caseSelectionFragment,
+                    bundle
+                )
+            }
+
+            20 -> {
+                val bundle =
+                    Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-case.json") }
+
+                FormatterClass()
+                    .saveSharedPref(
+                        "grandTitle", title,
+                        requireContext()
+                    )
+                FormatterClass()
+                    .saveSharedPref(
+                        "childStage", "6",
+                        requireContext()
+                    )
+
+                findNavController().navigate(
+                    R.id.action_childFragment_to_caseSelectionFragment,
+                    bundle
+                )
+            }
+
             else -> {
 
                 Toast.makeText(requireContext(), "Coming soon ....", Toast.LENGTH_SHORT).show()
