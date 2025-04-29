@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_centerHorizontal="true"
-        android:text="National Public Health\nIntelligence\nInformation\nSystem (NPHIIS)"
+        android:text="@string/national_public_health_nintelligence_ninformation_nsystem_nphiis"
         android:textColor="@android:color/white"
         android:textSize="24sp"
         android:textStyle="bold" />

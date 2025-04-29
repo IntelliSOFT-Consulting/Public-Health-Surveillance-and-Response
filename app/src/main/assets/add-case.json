@@ -12,120 +12,6 @@
       "item": [
         {
           "type": "choice",
-          "linkId": "a3-sub-county",
-          "text": "Sub County",
-          "required": true,
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ]
-              }
-            }
-          ],
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "Nairobi Central",
-                "display": "Nairobi Central"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Embakasi East",
-                "display": "Embakasi East"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Lang'ata",
-                "display": "Lang'ata"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Starehe",
-                "display": "Starehe"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Mathare",
-                "display": "Mathare"
-              }
-            }
-          ]
-        },
-        {
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ]
-              }
-            }
-          ],
-          "linkId": "a4-county",
-          "text": "County",
-          "required": true,
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "Nairobi",
-                "display": "Nairobi"
-              }
-            }
-          ]
-        },
-        {
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ]
-              }
-            }
-          ],
-          "linkId": "602440958701",
-          "text": "Country",
-          "required": true,
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "kenya",
-                "display": "Kenya"
-              }
-            }
-          ]
-        },
-        {
-          "type": "integer",
-          "linkId": "596681097855",
-          "text": "Year of reporting",
-          "required": true
-        },
-        {
-          "type": "choice",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -289,7 +175,7 @@
         }
       ],
       "linkId": "151479012557",
-      "text": "Name of Site Reporting & Disease being reported"
+      "text": "Reporting Site"
     },
     {
       "item": [
@@ -542,13 +428,13 @@
         },
         {
           "type": "string",
-          "linkId": "885995384353",
+          "linkId": "a3-sub-county",
           "text": "Sub County",
           "required": true
         },
         {
           "type": "string",
-          "linkId": "301322368614",
+          "linkId": "a4-county",
           "text": "County",
           "required": true
         },
@@ -1789,7 +1675,17 @@
         }
       ],
       "linkId": "271053545237",
-      "text": "Sample/Specimen Collection"
+      "text": "Sample/Specimen Collection",
+      "enableWhen": [
+        {
+          "question": "865158268604",
+          "operator": "=",
+          "answerCoding": {
+            "code": "no",
+            "display": "No"
+          }
+        }
+      ]
     }
   ]
 }
