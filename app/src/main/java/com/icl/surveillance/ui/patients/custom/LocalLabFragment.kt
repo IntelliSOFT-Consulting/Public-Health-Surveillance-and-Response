@@ -131,9 +131,7 @@ class LocalLabFragment : Fragment() {
                 for (group in groups) {
                     val fieldView = createCustomLabel(group.text)
                     parentLayout.addView(fieldView)
-                    Log.d("Group", "Group Item Lab Results: ${group.text} (${group.linkId})")
                     for (item in group.items) {
-                        Log.d("Item", " - Item: ${item.text} (${item.linkId}) Type: ${item.type}")
                         item.value = getValueBasedOnId(item, it.first().observations)
                         val childFieldView = createCustomField(item)
                         parentLayout.addView(childFieldView)
@@ -166,47 +164,56 @@ class LocalLabFragment : Fragment() {
         }
 
         binding.apply {
+            getStartedButton.setOnClickListener {
+                handleCase(currentCase)
+
+            }
             fab.setOnClickListener {
-                if (currentCase != null) {
-                    val slug = currentCase.toSlug()
-                    when (slug) {
-                        "measles-case-information" -> {
-
-                            showLocalOrRegionalLab()
-
-                        }
-
-                        "afp-case-information" -> {
-                            FormatterClass()
-                                .saveSharedPref(
-                                    "questionnaire",
-                                    "afp-case-stool-lab-results.json",
-                                    requireContext()
-                                )
-                            FormatterClass().saveSharedPref(
-                                "title",
-                                "AFP Lab Results",
-                                requireContext()
-                            )
-                            val intent = Intent(requireContext(), AddCaseActivity::class.java)
-                            intent.putExtra(
-                                QUESTIONNAIRE_FILE_PATH_KEY,
-                                "afp-case-stool-lab-results.json"
-                            )
-                            startActivity(intent)
-                        }
-
-                        else -> {
-                            Toast.makeText(requireContext(), "Coming Soon!!", Toast.LENGTH_SHORT)
-                                .show()
-                        }
-
-                    }
-                }
+                handleCase(currentCase)
 
 
             }
         }
+    }
+
+    private fun handleCase(currentCase: String?) {
+        if (currentCase != null) {
+            val slug = currentCase.toSlug()
+            when (slug) {
+                "measles-case-information" -> {
+
+                    showLocalOrRegionalLab()
+
+                }
+
+                "afp-case-information" -> {
+                    FormatterClass()
+                        .saveSharedPref(
+                            "questionnaire",
+                            "afp-case-stool-lab-results.json",
+                            requireContext()
+                        )
+                    FormatterClass().saveSharedPref(
+                        "title",
+                        "AFP Lab Results",
+                        requireContext()
+                    )
+                    val intent = Intent(requireContext(), AddCaseActivity::class.java)
+                    intent.putExtra(
+                        QUESTIONNAIRE_FILE_PATH_KEY,
+                        "afp-case-stool-lab-results.json"
+                    )
+                    startActivity(intent)
+                }
+
+                else -> {
+                    Toast.makeText(requireContext(), "Coming Soon!!", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+            }
+        }
+
     }
 
     private fun getValueBasedOnId(

@@ -143,6 +143,24 @@ class AddCaseActivity : AppCompatActivity() {
                     "VL Hospitalization Information",
                     questionnaireResponseString
                 )
+
+            "afp-final-lab-results.json" ->
+                viewModel.completeLabAssessment(
+                    questionnaireResponse,
+                    "$patientId",
+                    "$encounter",
+                    "AFP Final Lab Information",
+                    questionnaireResponseString
+                )
+
+            "afp-contact-tracing.json" ->
+                viewModel.completeLabAssessment(
+                    questionnaireResponse,
+                    "$patientId",
+                    "$encounter",
+                    "AFP Contact Information",
+                    questionnaireResponseString
+                )
         }
     }
 
