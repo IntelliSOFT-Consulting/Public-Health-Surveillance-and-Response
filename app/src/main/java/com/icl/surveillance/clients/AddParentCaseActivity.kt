@@ -41,7 +41,7 @@ class AddParentCaseActivity : AppCompatActivity() {
 //    setSupportActionBar(binding.toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        val titleName = FormatterClass().getSharedPref("title", this@AddParentCaseActivity)
+        val titleName = FormatterClass().getSharedPref("AddParentTitle", this@AddParentCaseActivity)
         supportActionBar.apply { title = titleName }
 
 

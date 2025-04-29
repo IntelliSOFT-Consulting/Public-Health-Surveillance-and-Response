@@ -18,39 +18,93 @@ class HomeViewModel(application: Application, private val state: SavedStateHandl
         return Layout.values().toList()
     }
 
-    fun getDiseasesList(): List<Diseases> {
+    fun getDiseasesList(int: Int): List<Diseases> {
+        return Diseases.values().filter { it.count == int }.toList()
+    }
+
+
+    fun getNotifiableList(): List<Diseases> {
         return Diseases.values().filter { it.count == 0 }.toList()
     }
 
-    fun getMonthlyList(): List<Diseases> {
+    fun getMassList(): List<Diseases> {
         return Diseases.values().filter { it.count == 1 }.toList()
     }
 
-    fun getRumorList(): List<Diseases> {
+    fun getCaseList(): List<Diseases> {
         return Diseases.values().filter { it.count == 2 }.toList()
     }
+
+    fun getSocialList(): List<Diseases> {
+        return Diseases.values().filter { it.count == 3 }.toList()
+    }
+
+    fun getAssessmentList(): List<Diseases> {
+        return Diseases.values().filter { it.count == 4 }.toList()
+    }
+
 
     enum class Diseases(
         @DrawableRes val iconId: Int,
         @StringRes val textId: Int,
-        val count: Int
+        val count: Int,
+        val level: Int
     ) {
+
+        RUMOR_TOOL(
+            R.drawable.searching,
+            R.string.rumor_tool, 3, 0
+        ),
+        SOCIAL_INV(
+            R.drawable.searching,
+            R.string.social_inv, 3, 1
+        ),
+        VL_FORM(
+            R.drawable.searching,
+            R.string.vl_form, 2, 0
+        ),
+
+        // Mass
+        POLIO(
+            R.drawable.searching,
+            R.string.polio, 1, 0
+        ),
+        MEASLES_IMM(
+            R.drawable.searching,
+            R.string.measles_imm, 1, 1
+        ),
+        CHOLERA(
+            R.drawable.searching,
+            R.string.cholera, 1, 2
+        ),
+        // Top Layer
+
+        IMMEDIATE(
+            R.drawable.searching,
+            R.string.immediate_reportable, 0, 0
+        ),
+        WEEKLY(
+            R.drawable.searching,
+            R.string.weekly_reported, 0, 1
+        ),
+        MONTHLY(
+            R.drawable.searching,
+            R.string.monthly_reported, 0, 2
+        ),
+
 
         MEASLES(
             R.drawable.searching,
-            R.string.measles, 0
+            R.string.measles, 6, 0
         ),
         AFP(
             R.drawable.searching,
-            R.string.afp, 0
+            R.string.afp, 6, 0
         ),
-        VL(
-            R.drawable.searching,
-            R.string.vl_forms, 1
-        ),
+
         RUMOR(
             R.drawable.searching,
-            R.string.rumor_tracking, 2
+            R.string.rumor_tracking, 7, 0
         ),
     }
 
@@ -60,17 +114,38 @@ class HomeViewModel(application: Application, private val state: SavedStateHandl
         val count: Int,
     ) {
 
-        MOH502FORM(
+        //        MOH502FORM(
+//            R.drawable.searching,
+//            R.string.moh502, 0
+//        ),
+//        CONTACTTRACINGFORM(
+//            R.drawable.searching,
+//            R.string.contact_tracing, 1
+//        ),
+//        MONTHLYFORM(R.drawable.searching, R.string.monthly, 5),
+//        MOH505FORM(R.drawable.searching, R.string.moh505, 2),
+//        SOCIALFORM(R.drawable.searching, R.string.social_form, 3),
+//        RUMORTOOL(R.drawable.searching, R.string.rumor_tracking, 4),
+        NOTIFIABLE(
             R.drawable.searching,
-            R.string.moh502, 0
+            R.string.notifiable,
+            0
         ),
-        CONTACTTRACINGFORM(
+        MASS(
             R.drawable.searching,
-            R.string.contact_tracing, 1
+            R.string.mass, 1
         ),
-        MONTHLYFORM(R.drawable.searching, R.string.monthly, 5),
-        MOH505FORM(R.drawable.searching, R.string.moh505, 2),
-        SOCIALFORM(R.drawable.searching, R.string.social_form, 3),
-        RUMORTOOL(R.drawable.searching, R.string.rumor_tracking, 4),
+        CASE(
+            R.drawable.searching,
+            R.string.case_management, 2
+        ),
+        SOCIAL(
+            R.drawable.searching,
+            R.string.social, 3
+        ),
+        SURVEY(
+            R.drawable.searching,
+            R.string.surveys, 4
+        )
     }
 }

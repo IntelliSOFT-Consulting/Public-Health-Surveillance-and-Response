@@ -39,7 +39,7 @@ class CaseListingActivity : AppCompatActivity() {
         binding = ActivityCaseListingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val titleName = FormatterClass().getSharedPref("title", this)
+        val titleName = FormatterClass().getSharedPref("listingTitle", this)
         val currentCase = FormatterClass().getSharedPref("currentCase", this)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

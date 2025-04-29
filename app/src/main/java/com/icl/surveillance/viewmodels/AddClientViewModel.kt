@@ -174,6 +174,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val patientLNameEntry = extractedAnswers.find { it.linkId == "486402457213" }
                     val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
                     val countyEntry = extractedAnswers.find { it.linkId == "a4-county" }
+                    val linkedEntry = extractedAnswers.find { it.linkId == "865158268604" }
 
                     if (patientLNameEntry != null) {
                         patient.nameFirstRep.family = patientLNameEntry.answer
@@ -285,9 +286,16 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
                     val countyCode = county.padEnd(3, 'X').take(3).uppercase()
                     val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
+                    var linked = "C"
 
+                    if (linkedEntry != null) {
+                        linked = when (linkedEntry.answer.lowercase()) {
+                            "yes" -> "L"
+                            else -> "C"
+                        }
+                    }
 
-                    val epid = "KEN-$countyCode-$subCountyCode-$currentYear-"
+                    val epid = "KEN-$countyCode-$subCountyCode-$currentYear-$linked"
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
                     obs.code.addCoding().setSystem("http://snomed.info/sct")
@@ -507,7 +515,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
             .replace("-+".toRegex(), "-") // collapse multiple hyphens
     }
 
-      fun extractStructuredAnswers(response: JSONObject): List<QuestionnaireAnswer> {
+    fun extractStructuredAnswers(response: JSONObject): List<QuestionnaireAnswer> {
         val results = mutableListOf<QuestionnaireAnswer>()
 
         fun extractFromItems(items: JSONArray?) {

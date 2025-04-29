@@ -1,27 +1,21 @@
 package com.icl.surveillance.ui.home
 
-import android.content.Intent
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.button.MaterialButton
 import com.icl.surveillance.R
 import com.icl.surveillance.adapters.DiseasesRecyclerViewAdapter
-import com.icl.surveillance.adapters.HomeRecyclerViewAdapter
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
-import com.icl.surveillance.clients.AddParentCaseActivity
+import com.icl.surveillance.databinding.FragmentChildBinding
 import com.icl.surveillance.databinding.FragmentSingleCaseBinding
 import com.icl.surveillance.utils.FormatterClass
 import kotlin.getValue
@@ -32,10 +26,11 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 /**
- * A simple [Fragment] subclass. Use the [SingleCaseFragment.newInstance] factory method to create
- * an instance of this fragment.
+ * A simple [Fragment] subclass.
+ * Use the [ChildFragment.newInstance] factory method to
+ * create an instance of this fragment.
  */
-class SingleCaseFragment : Fragment() {
+class ChildFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -48,7 +43,7 @@ class SingleCaseFragment : Fragment() {
         }
     }
 
-    private var _binding: FragmentSingleCaseBinding? = null
+    private var _binding: FragmentChildBinding? = null
 
     private val viewModel: HomeViewModel by viewModels()
 
@@ -63,7 +58,7 @@ class SingleCaseFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentSingleCaseBinding.inflate(inflater, container, false)
+        _binding = FragmentChildBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         return root
@@ -72,8 +67,8 @@ class SingleCaseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var titleName = FormatterClass().getSharedPref("childTitle", requireContext())
-        var stage = FormatterClass().getSharedPref("childStage", requireContext())
+        var titleName = FormatterClass().getSharedPref("title", requireContext())
+        var stage = FormatterClass().getSharedPref("stage", requireContext())
 
         val activity = requireActivity() as AppCompatActivity
         activity.supportActionBar?.apply {
@@ -96,12 +91,24 @@ class SingleCaseFragment : Fragment() {
             DiseasesRecyclerViewAdapter(::onItemClick).apply {
                 if (stage != null) {
                     when (stage) {
-                        "6" -> {
-                            submitList(viewModel.getDiseasesList(6))
+                        "0" -> {
+                            submitList(viewModel.getNotifiableList())
+                        }
+
+                        "1" -> {
+                            submitList(viewModel.getMassList())
+                        }
+
+                        "2" -> {
+                            submitList(viewModel.getCaseList())
+                        }
+
+                        "3" -> {
+                            submitList(viewModel.getSocialList())
                         }
 
                         else -> {
-                            println("Noting to Show")
+                            println("Coming soon ....")
                         }
                     }
 
@@ -115,46 +122,33 @@ class SingleCaseFragment : Fragment() {
 
     private fun onItemClick(layout: HomeViewModel.Diseases) {
         val title = context?.getString(layout.textId) ?: ""
-        when (layout.count) {
+
+        when (layout.level) {
             0 -> {
                 val bundle =
                     Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-case.json") }
 
                 FormatterClass()
                     .saveSharedPref(
-                        "grandTitle", title,
+                        "childTitle", title,
                         requireContext()
                     )
-                FormatterClass().saveSharedPref(
-                    "questionnaire",
-                    "add-case.json",
-                    requireContext()
-                )
+                FormatterClass()
+                    .saveSharedPref(
+                        "childStage", "6",
+                        requireContext()
+                    )
+
                 findNavController().navigate(
-                    R.id.action_singleCaseFragment_to_caseSelectionFragment,
+                    R.id.action_childFragment_to_singleCaseFragment,
                     bundle
                 )
             }
 
             else -> {
 
-                val bundle =
-                    Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "afp-case.json") }
+                Toast.makeText(requireContext(), "Coming soon ....", Toast.LENGTH_SHORT).show()
 
-                FormatterClass()
-                    .saveSharedPref(
-                        "grandTitle", title,
-                        requireContext()
-                    )
-                FormatterClass().saveSharedPref(
-                    "questionnaire",
-                    "afp-case.json",
-                    requireContext()
-                )
-                findNavController().navigate(
-                    R.id.action_singleCaseFragment_to_caseSelectionFragment,
-                    bundle
-                )
             }
         }
 
@@ -174,22 +168,21 @@ class SingleCaseFragment : Fragment() {
 
     companion object {
         /**
-         * Use this factory method to create a new instance of this fragment using the provided
-         * parameters.
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment SingleCaseFragment.
+         * @return A new instance of fragment ChildFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            SingleCaseFragment().apply {
-                arguments =
-                    Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
+            ChildFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
             }
     }
 }

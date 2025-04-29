@@ -88,7 +88,7 @@ class CaseSelectionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val titleName = FormatterClass().getSharedPref("title", requireContext())
+        val titleName = FormatterClass().getSharedPref("grandTitle", requireContext())
 
         val activity = requireActivity() as AppCompatActivity
         activity.supportActionBar?.apply {
@@ -118,7 +118,7 @@ class CaseSelectionFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        val titleName = FormatterClass().getSharedPref("title", requireContext())
+        val titleName = FormatterClass().getSharedPref("grandTitle", requireContext())
 
         val title = when (titleName) {
             "Visceral Leishmaniasis (Kala-azar) Case Management Form" -> "VL"
@@ -148,7 +148,7 @@ class CaseSelectionFragment : Fragment() {
                         "currentCase", "Social Listening and Rumor Tracking Tool", requireContext()
                     )
                     FormatterClass().saveSharedPref(
-                        "title",
+                        "AddParentTitle",
                         "Social Listening and Rumor Tracking Tool",
                         requireContext()
                     )
@@ -156,7 +156,7 @@ class CaseSelectionFragment : Fragment() {
                         "questionnaire", "rumor-tracking-case.json", requireContext()
                     )
                     val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
-                    intent.putExtra("title", " $titleName")
+                    intent.putExtra("AddParentTitle", " $titleName")
                     intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "rumor-tracking-case.json")
                     startActivity(intent)
                 }
@@ -166,7 +166,7 @@ class CaseSelectionFragment : Fragment() {
                         "currentCase", "VL Case Information", requireContext()
                     )
                     FormatterClass().saveSharedPref(
-                        "title",
+                        "AddParentTitle",
                         "Visceral Leishmaniasis (Kala-azar) Case Management Form",
                         requireContext()
                     )
@@ -174,14 +174,14 @@ class CaseSelectionFragment : Fragment() {
                         "questionnaire", "vl-case.json", requireContext()
                     )
                     val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
-                    intent.putExtra("title", " $titleName")
+                    intent.putExtra("AddParentTitle", " $titleName")
                     intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "vl-case.json")
                     startActivity(intent)
                 }
 
                 "VL Case List" -> {
                     FormatterClass().saveSharedPref(
-                        "title", " ${option.title}", requireContext()
+                        "listingTitle", " ${option.title}", requireContext()
                     )
                     FormatterClass().saveSharedPref(
                         "currentCase", "VL Case Information", requireContext()
@@ -192,7 +192,7 @@ class CaseSelectionFragment : Fragment() {
 
                 "View Reported Cases" -> {
                     FormatterClass().saveSharedPref(
-                        "title", "Social Listening and Rumor Tracking Tool", requireContext()
+                        "listingTitle", "Social Listening and Rumor Tracking Tool", requireContext()
                     )
                     FormatterClass().saveSharedPref(
                         "currentCase", "Social Listening and Rumor Tracking Tool", requireContext()
@@ -207,13 +207,13 @@ class CaseSelectionFragment : Fragment() {
                         "currentCase", "AFP Case Information", requireContext()
                     )
                     FormatterClass().saveSharedPref(
-                        "title", "Add $titleName Case", requireContext()
+                        "listingTitle", "Add $titleName Case", requireContext()
                     )
                     FormatterClass().saveSharedPref(
                         "questionnaire", "afp-case.json", requireContext()
                     )
                     val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
-                    intent.putExtra("title", "Add $titleName Case")
+                    intent.putExtra("AddParentTitle", "Add $titleName Case")
                     intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "afp-case.json")
                     startActivity(intent)
                 }
@@ -230,14 +230,14 @@ class CaseSelectionFragment : Fragment() {
                         "questionnaire", "add-case.json", requireContext()
                     )
                     val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
-                    intent.putExtra("title", "Add $titleName Case")
+                    intent.putExtra("AddParentTitle", "Add $titleName Case")
                     intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "add-case.json")
                     startActivity(intent)
                 }
 
                 "Measles Case List" -> {
                     FormatterClass().saveSharedPref(
-                        "title", " ${option.title}", requireContext()
+                        "listingTitle", " ${option.title}", requireContext()
                     )
                     FormatterClass().saveSharedPref(
                         "currentCase", "Measles Case Information", requireContext()
@@ -248,7 +248,7 @@ class CaseSelectionFragment : Fragment() {
 
                 "AFP Case List" -> {
                     FormatterClass().saveSharedPref(
-                        "title", " ${option.title}", requireContext()
+                        "listingTitle", " ${option.title}", requireContext()
                     )
                     FormatterClass().saveSharedPref(
                         "currentCase", "AFP Case Information", requireContext()

@@ -63,22 +63,6 @@ class HomeFragment : Fragment() {
         val time = FormatterClass().getTimeOfDay()
         val fullText = "$time, \n\n$name"
 
-//        val spannable = SpannableString(fullText)
-//        val start = fullText.indexOf(name)
-//        val end = start + name.length
-//        spannable.setSpan(
-//            StyleSpan(Typeface.ITALIC),
-//            start,
-//            end,
-//            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-//        )
-//
-//        spannable.setSpan(
-//            RelativeSizeSpan(0.8f),
-//            start,
-//            end,
-//            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-//        )
 
         binding.apply {
             greetingText.text = time
@@ -94,96 +78,54 @@ class HomeFragment : Fragment() {
     private fun onItemClick(layout: HomeViewModel.Layout) {
         val title = context?.getString(layout.textId) ?: ""
         when (layout.count) {
-            5 -> {
-                val bundle =
-                    Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-vl.json") }
+            0 -> {
+                handleClick("0", title)
+            }
 
-                FormatterClass()
-                    .saveSharedPref(
-                        "stage", "1",
-                        requireContext()
-                    )
-                FormatterClass()
-                    .saveSharedPref(
-                        "title", title,
-                        requireContext()
-                    )
+            1 -> {
+                handleClick("1", title)
+            }
 
-                findNavController().navigate(
-                    R.id.action_navigation_home_to_single_case_fragment,
-                    bundle
-                )
+            2 -> {
+                handleClick("2", title)
+            }
+
+            3 -> {
+                handleClick("3", title)
             }
 
             4 -> {
-
-                val bundle =
-                    Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-vl.json") }
-
-                FormatterClass()
-                    .saveSharedPref(
-                        "stage", "2",
-                        requireContext()
-                    )
-                FormatterClass()
-                    .saveSharedPref(
-                        "title", title,
-                        requireContext()
-                    )
-
-                findNavController().navigate(
-                    R.id.action_navigation_home_to_single_case_fragment,
-                    bundle
-                )
-//                FormatterClass().saveSharedPref(
-//                    "currentCase",
-//                    "Rumor Case Information",
-//                    requireContext()
-//                )
-//                FormatterClass()
-//                    .saveSharedPref(
-//                        "title", "Rumor Tracking Tool",
-//                        requireContext()
-//                    )
-//
-//                FormatterClass().saveSharedPref(
-//                    "questionnaire",
-//                    "rumor-tracking-case.json",
-//                    requireContext()
-//                )
-//                val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
-//                intent.putExtra("title", "Add Rumor Case")
-//                intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "rumor-tracking-case.json")
-//                startActivity(intent)
-
-            }
-
-            0 -> {
-                val bundle =
-                    Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-case.json") }
-
-                FormatterClass()
-                    .saveSharedPref(
-                        "title", title,
-                        requireContext()
-                    )
-                FormatterClass()
-                    .saveSharedPref(
-                        "stage", "0",
-                        requireContext()
-                    )
-                findNavController().navigate(
-                    R.id.action_navigation_home_to_single_case_fragment,
-                    bundle
-                )
-
+                Toast.makeText(requireContext(), "Coming soon!!", Toast.LENGTH_SHORT).show()
             }
 
             else -> {
                 Toast.makeText(requireContext(), "Coming soon!!", Toast.LENGTH_SHORT).show()
             }
+
+
         }
 
+    }
+
+    private fun handleClick(stage: String, title: String) {
+        val bundle =
+            Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-vl.json") }
+
+        FormatterClass()
+            .saveSharedPref(
+                "stage", stage,
+                requireContext()
+            )
+        FormatterClass()
+            .saveSharedPref(
+                "title", title,
+                requireContext()
+            )
+
+        findNavController().navigate(
+            R.id.action_navigation_home_to_childFragment,
+            bundle
+        )
     }
 
     override fun onDestroyView() {

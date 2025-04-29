@@ -11,8 +11,8 @@
         android:label=""
         tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_navigation_home_to_single_case_fragment"
-            app:destination="@id/singleCaseFragment" />
+            android:id="@+id/action_navigation_home_to_childFragment"
+            app:destination="@id/childFragment" />
     </fragment>
 
     <fragment
@@ -65,4 +65,13 @@
         android:name="com.icl.surveillance.ui.home.CaseSelectionFragment"
         android:label=""
         tools:layout="@layout/fragment_case_selection" />
+    <fragment
+        android:id="@+id/childFragment"
+        android:name="com.icl.surveillance.ui.home.ChildFragment"
+        android:label=""
+        tools:layout="@layout/fragment_child" >
+        <action
+            android:id="@+id/action_childFragment_to_singleCaseFragment"
+            app:destination="@id/singleCaseFragment" />
+    </fragment>
 </navigation>

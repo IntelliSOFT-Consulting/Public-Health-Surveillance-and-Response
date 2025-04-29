@@ -43,4 +43,18 @@
     <string name="no_treatment_information_available">No Treatment information available</string>
     <string name="no_follow_up_information_available">No Follow Up information available</string>
     <string name="national_public_health_nintelligence_ninformation_nsystem_nphiis">National Public Health\nIntelligence\nInformation\nSystem (NPHIIS)</string>
+    <string name="notifiable">Notifiable Diseases</string>
+    <string name="mass">Mass Immunization</string>
+    <string name="case_management">Case Management</string>
+    <string name="social">Social Mobilization</string>
+    <string name="surveys">Assessments/Surveys</string>
+    <string name="monthly_reported">Monthly Reportable Diseases</string>
+    <string name="weekly_reported">Weekly Reportable Diseases</string>
+    <string name="immediate_reportable">Immediate Reportable Diseases</string>
+    <string name="polio">Polio Immunization (OPV)</string>
+    <string name="measles_imm">Measles Immunization</string>
+    <string name="cholera">Cholera Immunization</string>
+    <string name="social_inv">Social Investigation Form</string>
+    <string name="rumor_tool">Rumor Tracking Tool</string>
+    <string name="vl_form">Visceral Leishmaniasis Case Management Form</string>
 </resources>
