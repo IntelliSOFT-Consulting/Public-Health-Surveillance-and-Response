@@ -39,7 +39,7 @@ class FhirApplication : Application(), DataCaptureConfig.Provider {
                 httpLogger =
                     HttpLogger(
                         HttpLogger.Configuration(
-                            //                            if (BuildConfig.DEBUG)
+//                                                        if (BuildConfig.DEBUG)
                             // HttpLogger.Level.BODY
                             //                            else
                             HttpLogger.Level.BASIC,

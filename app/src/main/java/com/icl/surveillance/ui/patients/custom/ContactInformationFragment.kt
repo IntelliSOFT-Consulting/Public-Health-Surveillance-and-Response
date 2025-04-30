@@ -3,6 +3,8 @@ package com.icl.surveillance.ui.patients.custom
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,10 +16,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.FragmentContainer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.fhir.FhirEngine
 import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
 import com.icl.surveillance.R
+import com.icl.surveillance.adapters.ContactsAdapter
+import com.icl.surveillance.adapters.PatientItemRecyclerViewAdapter
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.databinding.FragmentContactInformationBinding
 import com.icl.surveillance.databinding.FragmentLocalLabBinding
@@ -80,6 +86,8 @@ class ContactInformationFragment : Fragment() {
         try {
             val encounterId = FormatterClass().getSharedPref("encounterId", requireContext())
             val currentCase = FormatterClass().getSharedPref("currentCase", requireContext())
+
+            val patientId = FormatterClass().getSharedPref("resourceId", requireContext())
             if (currentCase != null) {
                 val slug = currentCase.toSlug()
                 when (slug) {
@@ -90,9 +98,8 @@ class ContactInformationFragment : Fragment() {
                     }
 
                     "afp-case-information" -> {
-                        patientDetailsViewModel.getPatientResultsDiseaseData(
-                            "AFP Contact Information",
-                            "$encounterId",
+                        patientDetailsViewModel.getLinkedContacts(
+                            "$patientId",
                         )
                     }
                 }
@@ -119,33 +126,35 @@ class ContactInformationFragment : Fragment() {
                 ),
             )
                 .get(ClientDetailsViewModel::class.java)
-        parentLayout = binding.lnParent
+//        parentLayout = binding.lnParent
 
         groups = parseFromAssets(requireContext())
-        patientDetailsViewModel.currentLiveLabData.observe(viewLifecycleOwner) {
-
+        val recyclerView: RecyclerView = binding.patientList
+        val adapter = ContactsAdapter(this::onPatientItemClicked)
+        recyclerView.adapter = adapter
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
+                setDrawable(ColorDrawable(Color.LTGRAY))
+            },
+        )
+        patientDetailsViewModel.liveLinkedData.observe(viewLifecycleOwner) {
+            println("Dealing with Patient With ID  as Response ${it.count()}")
             if (it.isEmpty()) {
                 binding.lnEmpty.visibility = View.VISIBLE
             } else {
-                // this = Context
-                parentLayout.removeAllViews()
-                for (group in groups) {
-                    val fieldView = createCustomLabel(group.text)
-                    parentLayout.addView(fieldView)
-                    for (item in group.items) {
-                        item.value = getValueBasedOnId(item, it.first().observations)
-                        val childFieldView = createCustomField(item)
-                        parentLayout.addView(childFieldView)
-                    }
+                it.forEach { item ->
+                    item.epid = getValueBasedOnId("992818778559", item.observations)
                 }
+
+                adapter.submitList(it)
 
                 binding.lnEmpty.visibility = View.GONE
                 binding.fab.visibility = View.GONE
-//                adapter.submitList(it)
             }
         }
         if (currentCase != null) {
             val slug = currentCase.toSlug()
+            println("Dealing with Patient With ID $patientId")
             when (slug) {
                 "measles-case-information" -> {
                     patientDetailsViewModel.getPatientDiseaseData(
@@ -156,9 +165,8 @@ class ContactInformationFragment : Fragment() {
                 }
 
                 "afp-case-information" -> {
-                    patientDetailsViewModel.getPatientResultsDiseaseData(
-                        "AFP Contact Information",
-                        "$encounterId",
+                    patientDetailsViewModel.getLinkedContacts(
+                        "$patientId",
                     )
                 }
             }
@@ -213,13 +221,13 @@ class ContactInformationFragment : Fragment() {
     }
 
     private fun getValueBasedOnId(
-        item: OutputItem,
+        item: String,
         items: List<PatientListViewModel.ObservationItem>
     ): String {
         var response = ""
         items.forEach { outputItem ->
             val matchingObservation = items.find { obs ->
-                obs.code == item.linkId
+                obs.code == item
             }
 
             if (matchingObservation != null) {
@@ -439,6 +447,45 @@ class ContactInformationFragment : Fragment() {
 
         dialog.show()
 
+
+    }
+
+    private fun onPatientItemClicked(patientItem: PatientListViewModel.ContactResults) {
+
+        patientItem.observations.forEach {
+            println("Obs Data ***** ${it.code} ${it.value}")
+        }
+        val dialog = AlertDialog.Builder(requireContext()).create()
+        val view = layoutInflater.inflate(R.layout.dialog_full_screen, null)
+        val lnInfo = view.findViewById<LinearLayout>(R.id.ln_info)
+        val btnClose = view.findViewById<MaterialButton>(R.id.btnClose)
+        dialog.setView(view)
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        groups = parseFromAssets(requireContext())
+        lnInfo.removeAllViews()
+        try {
+            for (group in groups) {
+                val fieldView = createCustomLabel(group.text)
+//                lnInfo.addView(fieldView)
+                for (item in group.items) {
+                    item.value = getValueBasedOnId(item.linkId, patientItem.observations)
+                    val childFieldView = createCustomField(item)
+                    lnInfo.addView(childFieldView)
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        btnClose.apply {
+            setOnClickListener {
+                dialog.dismiss()
+            }
+        }
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
 
     }
 

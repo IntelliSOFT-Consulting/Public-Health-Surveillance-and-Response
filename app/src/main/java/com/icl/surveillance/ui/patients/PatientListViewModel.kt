@@ -528,6 +528,13 @@ class PatientListViewModel(
         val encounterId: String,
         val observations: List<ObservationItem> = emptyList<ObservationItem>()
     )
+    data class ContactResults(
+        val parentIdId: String,
+        val childId: String,
+        val name: String,
+        var epid: String,
+        val observations: List<ObservationItem> = emptyList<ObservationItem>()
+    )
 
     data class CaseLabResultsData(
         val logicalId: String,

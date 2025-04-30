@@ -15,6 +15,7 @@ import com.google.android.fhir.search.revInclude
 import com.google.android.fhir.search.search
 import com.icl.surveillance.R
 import com.icl.surveillance.ui.patients.PatientListViewModel
+import com.icl.surveillance.ui.patients.PatientListViewModel.ContactResults
 import com.icl.surveillance.ui.patients.toPatientItem
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -32,6 +33,7 @@ import org.hl7.fhir.r4.model.Observation
 import org.hl7.fhir.r4.model.Patient
 import org.hl7.fhir.r4.model.Resource
 import org.hl7.fhir.r4.model.ResourceType
+import kotlin.String
 
 class ClientDetailsViewModel(
     application: Application,
@@ -44,6 +46,7 @@ class ClientDetailsViewModel(
     val liveDiseaseData = MutableLiveData<List<PatientListViewModel.CaseDiseaseData>>()
     val liveLabData = MutableLiveData<List<PatientListViewModel.CaseLabResultsData>>()
     val currentLiveLabData = MutableLiveData<List<PatientListViewModel.LabResults>>()
+    val liveLinkedData = MutableLiveData<List<ContactResults>>()
 
     /** Emits list of [PatientDetailData]. */
     fun getPatientDetailData(category: String, parent: String?) {
@@ -583,11 +586,90 @@ class ClientDetailsViewModel(
         }
     }
 
+    fun getLinkedContacts(patientId: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+
+            val patientData = getLinkedContactInformation(patientId)
+            withContext(Dispatchers.Main) { liveLinkedData.value = patientData }
+
+        }
+    }
+
     fun getPatientResultsDiseaseData(reason: String, parent: String) {
         CoroutineScope(Dispatchers.IO).launch {
             val patientData = getPatientLabDataDataInformation(reason, parent)
             withContext(Dispatchers.Main) { currentLiveLabData.value = patientData }
         }
+    }
+
+    private suspend fun getLinkedContactInformation(
+        patientId: String
+    ): List<ContactResults> {
+
+        println("Dealing with Patient With ID $patientId")
+        val patients: MutableList<ContactResults> = mutableListOf()
+        fhirEngine
+            .search<Patient> {
+                filter(Patient.LINK, { value = "Patient/$patientId" })
+            }.map { patient ->
+                var data = ContactResults(
+                    parentIdId = patientId,
+                    childId = patient.resource.logicalId,
+                    observations = emptyList(),
+                    name = if (patient.resource.hasName()) patient.resource.nameFirstRep.nameAsSingleString else "N/A",
+                    epid = "test"
+
+                )
+                fhirEngine
+                    .search<Encounter> {
+                        filter(
+                            Encounter.SUBJECT,
+                            { value = "Patient/${patient.resource.logicalId}" })
+                        filter(
+                            Encounter.REASON_CODE,
+                            {
+                                value = of(Coding().apply {
+                                    code = "afp-contact-case-information"
+                                })
+                            })
+                    }.map { enc ->
+
+                        val observations: MutableList<PatientListViewModel.ObservationItem> =
+                            mutableListOf()
+                        fhirEngine.search<Observation> {
+                            filter(
+                                Observation.ENCOUNTER,
+                                { value = "Encounter/${enc.resource.logicalId}" })
+                        }.take(500)
+                            .map { ob ->
+                                val value =
+                                    if (ob.resource.hasValueQuantity()) {
+                                        ob.resource.valueQuantity.value.toString()
+                                    } else if (ob.resource.hasValueCodeableConcept()) {
+                                        ob.resource.valueCodeableConcept.coding.firstOrNull()?.display
+                                            ?: ""
+                                    } else if (ob.resource.hasValueStringType()) {
+                                        ob.resource.valueStringType.valueAsString
+                                    } else {
+                                        ""
+                                    }
+                                val item = PatientListViewModel.ObservationItem(
+                                    id = ob.resource.logicalId,
+                                    code = ob.resource.code.codingFirstRep.code,
+                                    value = value
+                                )
+                                observations.add(item)
+                            }
+                        data = data.copy(observations = observations)
+
+                    }
+                data
+
+            }.let {
+                patients.addAll(it)
+            }
+
+        return patients
     }
 
     private suspend fun getPatientLabDataInformation(
