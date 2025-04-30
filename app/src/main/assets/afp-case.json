@@ -12,7 +12,7 @@
       "item": [
         {
           "type": "string",
-          "linkId": "a4-country",
+          "linkId": "301322368614",
           "text": "Reporting Country",
           "required": true,
           "item": [
@@ -40,13 +40,13 @@
         },
         {
           "type": "string",
-          "linkId": "a4-county",
+          "linkId": "301322368614121",
           "text": "Reporting County",
           "required": true
         },
         {
           "type": "string",
-          "linkId": "a3-sub-county",
+          "linkId": "885995384353",
           "text": "Reporting Subcounty",
           "item": [
             {
@@ -411,11 +411,15 @@
                 "coding": [
                   {
                     "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
+                    "code": "radio-button",
+                    "display": "Radio Button"
                   }
                 ]
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
             }
           ],
           "linkId": "257830485990",
@@ -659,6 +663,20 @@
                 }
               ]
             }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "phone-number",
+                    "display": "Phone Number"
+                  }
+                ]
+              }
+            }
           ]
         },
         {
@@ -781,7 +799,7 @@
         },
         {
           "type": "string",
-          "linkId": "885995384353",
+          "linkId": "a3-sub-county",
           "text": "Sub County",
           "required": true,
           "item": [
@@ -809,7 +827,7 @@
         },
         {
           "type": "string",
-          "linkId": "301322368614",
+          "linkId": "a4-county",
           "text": "County",
           "required": true,
           "item": [
@@ -1674,11 +1692,15 @@
                 "coding": [
                   {
                     "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
+                    "code": "radio-button",
+                    "display": "Radio Button"
                   }
                 ]
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
             }
           ],
           "linkId": "212304573462",
@@ -2422,11 +2444,15 @@
                 "coding": [
                   {
                     "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
+                    "code": "radio-button",
+                    "display": "Radio Button"
                   }
                 ]
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
             }
           ],
           "linkId": "650080600932",
@@ -2488,11 +2514,15 @@
                 "coding": [
                   {
                     "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
+                    "code": "radio-button",
+                    "display": "Radio Button"
                   }
                 ]
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
             }
           ],
           "linkId": "511517897367",

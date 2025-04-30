@@ -21,9 +21,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.Bundle
+import org.hl7.fhir.r4.model.CodeableConcept
+import org.hl7.fhir.r4.model.Coding
 import org.hl7.fhir.r4.model.Condition
 import org.hl7.fhir.r4.model.Encounter
+import org.hl7.fhir.r4.model.Identifier
 import org.hl7.fhir.r4.model.Observation
+import org.hl7.fhir.r4.model.Patient
 import org.hl7.fhir.r4.model.Questionnaire
 import org.hl7.fhir.r4.model.QuestionnaireResponse
 import org.hl7.fhir.r4.model.Reference
@@ -264,6 +268,97 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         }
     }
 
+    fun completeContactAssessment(
+        questionnaireResponse: QuestionnaireResponse,
+        patientId: String,
+        encounter: String,
+        questionnaireResponseString: String,
+    ) {
+        viewModelScope.launch {
+            val bundle =
+                ResourceMapper.extract(questionnaireResource, questionnaireResponse)
+            val context = FhirContext.forR4()
+            val questionnaire =
+                context.newJsonParser().encodeResourceToString(questionnaireResponse)
+
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val title = "afp-contact-case-information"
+                    val linkReference = Reference("Patient/$patientId")
+                    val encounterId = generateUuid()
+                    val contactId = generateUuid()
+
+                    var contact = Patient()
+                    contact.id = contactId
+                    val identifierSystem0 = Identifier()
+                    val typeCodeableConcept0 = CodeableConcept()
+                    val codingList0 = ArrayList<Coding>()
+                    val coding0 = Coding()
+                    coding0.system = "system-creation"
+                    coding0.code = "system_creation"
+                    coding0.display = "System Creation"
+                    codingList0.add(coding0)
+                    typeCodeableConcept0.coding = codingList0
+                    typeCodeableConcept0.text = FormatterClass().formatCurrentDateTime(Date())
+
+                    identifierSystem0.value = FormatterClass().formatCurrentDateTime(Date())
+                    identifierSystem0.system = "system-creation"
+                    identifierSystem0.type = typeCodeableConcept0
+
+
+                    val identifierSystem = Identifier()
+                    val typeCodeableConcept = CodeableConcept()
+                    val codingList = ArrayList<Coding>()
+                    val coding = Coding()
+                    coding.system = title
+                    coding.code = title
+                    coding.display = title
+                    codingList.add(coding)
+                    typeCodeableConcept.coding = codingList
+                    typeCodeableConcept.text = encounterId
+
+                    identifierSystem.value = encounterId
+                    identifierSystem.system = title
+                    identifierSystem.type = typeCodeableConcept
+
+
+                    contact.identifier.add(identifierSystem0)
+                    contact.identifier.add(identifierSystem)
+                    contact.linkFirstRep.other = linkReference
+
+                    fhirEngine.create(contact)
+
+                    val subjectReference = Reference("Patient/$contactId")
+                    val jsonObject = JSONObject(questionnaireResponseString)
+                    val extractedAnswers = extractStructuredAnswers(jsonObject)
+
+                    val qh = QuestionnaireHelper()
+                    val enc = qh.generalEncounter(encounter, encounterId)
+                    enc.id = encounterId
+                    enc.subject = subjectReference
+                    enc.reasonCodeFirstRep.codingFirstRep.code = title
+                    fhirEngine.create(enc)
+
+                    val encounterReference = Reference("Encounter/$encounterId")
+                    extractedAnswers.forEach {
+
+                        val obs = qh.codingQuestionnaire(
+                            it.linkId, it.text,
+                            it.answer
+                        )
+                        createResource(obs, subjectReference, encounterReference)
+                        println("Data Found LinkId: ${it.linkId}, Text: ${it.text}, Answer: ${it.answer}")
+                    }
+
+                    CoroutineScope(Dispatchers.Main).launch { isResourcesSaved.value = true }
+                } catch (e: Exception) {
+
+                    CoroutineScope(Dispatchers.Main).launch { isResourcesSaved.value = false }
+                }
+            }
+        }
+    }
+
     fun completeLabAssessment(
         questionnaireResponse: QuestionnaireResponse,
         patientId: String,
@@ -300,10 +395,10 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                             it.linkId, it.text,
                             it.answer
                         )
-                        obs.code.addCoding().setSystem("http://snomed.info/sct")
-                            .setCode(it.linkId).display =
-                            it.text
-                        obs.code.text = it.answer
+//                        obs.code.addCoding().setSystem("http://snomed.info/sct")
+//                            .setCode(it.linkId).display =
+//                            it.text
+//                        obs.code.text = it.answer
                         createResource(obs, subjectReference, encounterReference)
                         println("Data Found LinkId: ${it.linkId}, Text: ${it.text}, Answer: ${it.answer}")
                     }

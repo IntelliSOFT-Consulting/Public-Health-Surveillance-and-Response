@@ -105,6 +105,7 @@ class AddParentCaseActivity : AppCompatActivity() {
         val questionnaire =
             FormatterClass().getSharedPref("questionnaire", this@AddParentCaseActivity)
 
+
         viewModel.savePatientData(
             questionnaireResponse,
             questionnaireResponseString,

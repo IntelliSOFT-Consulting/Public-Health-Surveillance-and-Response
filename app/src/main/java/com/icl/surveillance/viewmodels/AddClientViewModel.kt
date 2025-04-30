@@ -298,10 +298,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-$linked"
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
-                    obs.code.addCoding().setSystem("http://snomed.info/sct")
-                        .setCode("EPID").display =
-                        "EPID No"
-                    obs.code.text = epid
+//                    obs.code.addCoding().setSystem("http://snomed.info/sct")
+//                        .setCode("EPID").display =
+//                        "EPID No"
+//                    obs.code.text = epid
                     createResource(obs, subjectReference, encounterReference)
 
 
@@ -352,18 +352,18 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-"
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
-                    obs.code.addCoding().setSystem("http://snomed.info/sct")
-                        .setCode("EPID").display =
-                        "EPID No"
-                    obs.code.text = epid
+//                    obs.code.addCoding().setSystem("http://snomed.info/sct")
+//                        .setCode("EPID").display =
+//                        "EPID No"
+//                    obs.code.text = epid
                     createResource(obs, subjectReference, encounterReference)
                 }
 
                 "social-listening-and-rumor-tracking-tool" -> {
 
 
-                    val subCountyEntry = extractedAnswers.find { it.linkId == "329541932661" }
-                    val countyEntry = extractedAnswers.find { it.linkId == "259363373547" }
+                    val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
+                    val countyEntry = extractedAnswers.find { it.linkId == "a4-county" }
                     var county = ""
                     var subCounty = ""
                     val currentYear = LocalDate.now().year
@@ -382,10 +382,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-"
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
-                    obs.code.addCoding().setSystem("http://snomed.info/sct")
-                        .setCode("EPID").display =
-                        "EPID No"
-                    obs.code.text = epid
+//                    obs.code.addCoding().setSystem("http://snomed.info/sct")
+//                        .setCode("EPID").display =
+//                        "EPID No"
+//                    obs.code.text = epid
                     createResource(obs, subjectReference, encounterReference)
                 }
 
@@ -414,8 +414,8 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         patient.nameFirstRep.addGiven(lNameEntry.answer)
                     }
 
-                    val subCountyEntry = extractedAnswers.find { it.linkId == "990815709263" }
-                    val countyEntry = extractedAnswers.find { it.linkId == "221146691983" }
+                    val subCountyEntry = extractedAnswers.find { it.linkId == "a4-county" }
+                    val countyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
                     var county = ""
                     var subCounty = ""
                     val currentYear = LocalDate.now().year
@@ -434,10 +434,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-"
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
-                    obs.code.addCoding().setSystem("http://snomed.info/sct")
-                        .setCode("EPID").display =
-                        "EPID No"
-                    obs.code.text = epid
+//                    obs.code.addCoding().setSystem("http://snomed.info/sct")
+//                        .setCode("EPID").display =
+//                        "EPID No"
+//                    obs.code.text = epid
                     createResource(obs, subjectReference, encounterReference)
                 }
 
@@ -490,10 +490,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
                             it.linkId, it.text,
                             it.answer
                         )
-                        obs.code.addCoding().setSystem("http://snomed.info/sct")
-                            .setCode(it.linkId).display =
-                            it.text
-                        obs.code.text = it.answer
+//                        obs.code.addCoding().setSystem("http://snomed.info/sct")
+//                            .setCode(it.linkId).display =
+//                            it.text
+//                        obs.code.text = it.answer
                         createResource(obs, subjectReference, encounterReference)
                         println("Data Found LinkId: ${it.linkId}, Text: ${it.text}, Answer: ${it.answer}")
                     }
@@ -890,10 +890,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-"
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
-                    obs.code.addCoding().setSystem("http://snomed.info/sct")
-                        .setCode("EPID").display =
-                        "EPID No"
-                    obs.code.text = epid
+//                    obs.code.addCoding().setSystem("http://snomed.info/sct")
+//                        .setCode("EPID").display =
+//                        "EPID No"
+//                    obs.code.text = epid
                     createResource(obs, subjectReference, encounterReference)
                 }
 

@@ -244,7 +244,6 @@ class PatientListViewModel(
         nameQuery: String,
     ): List<PatientItem> {
 
-        println("Started searching for cases *** $nameQuery")
 
         return fhirEngine
             .search<Patient> {

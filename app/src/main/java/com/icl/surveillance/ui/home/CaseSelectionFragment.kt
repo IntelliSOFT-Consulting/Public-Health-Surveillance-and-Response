@@ -208,7 +208,7 @@ class CaseSelectionFragment : Fragment() {
                         "currentCase", "AFP Case Information", requireContext()
                     )
                     FormatterClass().saveSharedPref(
-                        "listingTitle", "Add $titleName Case", requireContext()
+                        "AddParentTitle", "Add $titleName Case", requireContext()
                     )
                     FormatterClass().saveSharedPref(
                         "questionnaire", "afp-case.json", requireContext()
@@ -225,7 +225,7 @@ class CaseSelectionFragment : Fragment() {
                         "currentCase", "Measles Case Information", requireContext()
                     )
                     FormatterClass().saveSharedPref(
-                        "title", "Add $titleName Case", requireContext()
+                        "AddParentTitle", "Add $titleName Case", requireContext()
                     )
                     FormatterClass().saveSharedPref(
                         "questionnaire", "add-case.json", requireContext()

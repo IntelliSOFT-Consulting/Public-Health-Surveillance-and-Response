@@ -153,14 +153,14 @@ class AddCaseActivity : AppCompatActivity() {
                     questionnaireResponseString
                 )
 
-            "afp-contact-tracing.json" ->
-                viewModel.completeLabAssessment(
+            "afp-contact-tracing.json" -> {
+                viewModel.completeContactAssessment(
                     questionnaireResponse,
                     "$patientId",
                     "$encounter",
-                    "AFP Contact Information",
                     questionnaireResponseString
                 )
+            }
         }
     }
 

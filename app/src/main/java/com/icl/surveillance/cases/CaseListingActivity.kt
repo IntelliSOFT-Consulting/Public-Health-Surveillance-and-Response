@@ -72,7 +72,6 @@ class CaseListingActivity : AppCompatActivity() {
 //            },
 //        )
 
-        println("Started searching for cases *** $currentCase")
         if (currentCase != null) {
             val slug = currentCase.toSlug()
             patientListViewModel.handleCurrentCaseListing(slug)
