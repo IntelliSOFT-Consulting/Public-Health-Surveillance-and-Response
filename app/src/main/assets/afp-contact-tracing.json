@@ -103,7 +103,7 @@
               }
             }
           ],
-          "linkId": "222692546015",
+          "linkId": "a3-sub-county",
           "text": "Sub county",
           "required": true,
           "answerOption": [
@@ -131,7 +131,7 @@
               }
             }
           ],
-          "linkId": "214727365008",
+          "linkId": "a4-county",
           "text": "County",
           "required": true,
           "answerOption": [
@@ -651,11 +651,15 @@
                 "coding": [
                   {
                     "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
+                    "code": "radio-button",
+                    "display": "Radio Button"
                   }
                 ]
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
             }
           ],
           "linkId": "898148732717",

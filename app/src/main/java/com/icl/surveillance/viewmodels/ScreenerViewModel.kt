@@ -25,6 +25,7 @@ import org.hl7.fhir.r4.model.CodeableConcept
 import org.hl7.fhir.r4.model.Coding
 import org.hl7.fhir.r4.model.Condition
 import org.hl7.fhir.r4.model.Encounter
+import org.hl7.fhir.r4.model.Enumerations
 import org.hl7.fhir.r4.model.Identifier
 import org.hl7.fhir.r4.model.Observation
 import org.hl7.fhir.r4.model.Patient
@@ -34,6 +35,7 @@ import org.hl7.fhir.r4.model.Reference
 import org.hl7.fhir.r4.model.Resource
 import org.json.JSONArray
 import org.json.JSONObject
+import java.time.LocalDate
 
 class ScreenerViewModel(application: Application, private val state: SavedStateHandle) :
     AndroidViewModel(application) {
@@ -290,6 +292,8 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
 
                     var contact = Patient()
                     contact.id = contactId
+
+
                     val identifierSystem0 = Identifier()
                     val typeCodeableConcept0 = CodeableConcept()
                     val codingList0 = ArrayList<Coding>()
@@ -326,11 +330,47 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     contact.identifier.add(identifierSystem)
                     contact.linkFirstRep.other = linkReference
 
-                    fhirEngine.create(contact)
-
                     val subjectReference = Reference("Patient/$contactId")
                     val jsonObject = JSONObject(questionnaireResponseString)
                     val extractedAnswers = extractStructuredAnswers(jsonObject)
+
+                    val nameEntry = extractedAnswers.find { it.linkId == "652156781680" }
+                    val dobEntry = extractedAnswers.find { it.linkId == "833589441171" }
+                    val genderEntry = extractedAnswers.find { it.linkId == "952250448507" }
+
+                    val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
+                    val countyEntry = extractedAnswers.find { it.linkId == "a4-county" }
+
+                    nameEntry?.answer?.let { fullName ->
+                        val parts = fullName.trim().split("\\s+".toRegex())
+                        when (parts.size) {
+                            1 -> {
+                                contact.nameFirstRep.family = parts[0]
+                            }
+
+                            2 -> {
+                                contact.nameFirstRep.family = parts[0]
+                                contact.nameFirstRep.addGiven(parts[1])
+                            }
+
+                            else -> {
+                                contact.nameFirstRep.family = parts[0]
+                                contact.nameFirstRep.addGiven(parts[1])
+                                contact.nameFirstRep.addGiven(parts.drop(2).joinToString(" "))
+                            }
+                        }
+                    }
+                    if (genderEntry != null) {
+                        val gender = when (genderEntry.answer.lowercase()) {
+                            "male" -> Enumerations.AdministrativeGender.MALE
+                            "female" -> Enumerations.AdministrativeGender.FEMALE
+                            else -> Enumerations.AdministrativeGender.UNKNOWN
+                        }
+                        contact.gender = gender
+                    }
+
+                    fhirEngine.create(contact)
+
 
                     val qh = QuestionnaireHelper()
                     val enc = qh.generalEncounter(encounter, encounterId)
@@ -340,6 +380,25 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     fhirEngine.create(enc)
 
                     val encounterReference = Reference("Encounter/$encounterId")
+                    var county = ""
+                    var subCounty = ""
+                    val currentYear = LocalDate.now().year
+
+                    if (subCountyEntry != null) {
+                        subCounty = subCountyEntry.answer
+                    }
+                    if (countyEntry != null) {
+                        county = countyEntry.answer
+                    }
+
+                    val countyCode = county.padEnd(3, 'X').take(3).uppercase()
+                    val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
+
+                    val epid = "KEN-$countyCode-$subCountyCode-$currentYear-"
+
+                    val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
+                    createResource(obs, subjectReference, encounterReference)
+
                     extractedAnswers.forEach {
 
                         val obs = qh.codingQuestionnaire(
