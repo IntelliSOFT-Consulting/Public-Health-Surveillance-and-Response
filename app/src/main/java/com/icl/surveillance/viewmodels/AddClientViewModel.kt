@@ -145,12 +145,19 @@ class AddClientViewModel(application: Application, private val state: SavedState
             enc.id = encounterId
             enc.subject = subjectReference
             enc.reasonCodeFirstRep.codingFirstRep.code = "$reasonCode"
-            var case = "case-information"
+
+            var case = "case-info"
             if (reasonCode != null) {
                 case = reasonCode.toSlug()
 
             }
 
+            val codeableConcept = CodeableConcept()
+            codeableConcept.codingFirstRep.code = "case-information"
+            codeableConcept.codingFirstRep.display = "case-information"
+            codeableConcept.codingFirstRep.system = "case-information"
+            codeableConcept.text = "case-information"
+            enc.addReasonCode(codeableConcept)
 
             var pfirstName: String? = null
             var psecondName: String? = null

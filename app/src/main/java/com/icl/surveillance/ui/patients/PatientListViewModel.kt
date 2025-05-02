@@ -256,6 +256,8 @@ class PatientListViewModel(
                 val matchingIdentifier = fhirPatient.resource.identifier.find {
                     it.system == nameQuery
                 }
+                val epidIdenfifier =
+                    fhirPatient.resource.identifier.find { it.type.codingFirstRep.code == "EPID" }
 
                 if (matchingIdentifier != null) {
                     // Convert the FHIR Patient resource to your PatientItem model
@@ -267,7 +269,9 @@ class PatientListViewModel(
                                 Observation.ENCOUNTER,
                                 { value = "Encounter/${logicalId}" })
                         }
-                    val epid =
+
+
+                    val epid = if (epidIdenfifier != null) epidIdenfifier.value else
                         obs.firstOrNull { it.resource.code.codingFirstRep.code == "EPID" }
                             ?.resource
                             ?.value
@@ -528,6 +532,7 @@ class PatientListViewModel(
         val encounterId: String,
         val observations: List<ObservationItem> = emptyList<ObservationItem>()
     )
+
     data class ContactResults(
         val parentIdId: String,
         val childId: String,

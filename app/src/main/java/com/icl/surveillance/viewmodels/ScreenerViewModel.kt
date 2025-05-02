@@ -377,6 +377,14 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     enc.id = encounterId
                     enc.subject = subjectReference
                     enc.reasonCodeFirstRep.codingFirstRep.code = title
+
+                    val codeableConcept = CodeableConcept()
+                    codeableConcept.codingFirstRep.code = "case-information"
+                    codeableConcept.codingFirstRep.display = "case-information"
+                    codeableConcept.codingFirstRep.system = "case-information"
+                    codeableConcept.text = "case-information"
+                    enc.addReasonCode(codeableConcept)
+
                     fhirEngine.create(enc)
 
                     val encounterReference = Reference("Encounter/$encounterId")

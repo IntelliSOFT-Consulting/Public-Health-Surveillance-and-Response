@@ -138,18 +138,19 @@ class ContactInformationFragment : Fragment() {
             },
         )
         patientDetailsViewModel.liveLinkedData.observe(viewLifecycleOwner) {
-            println("Dealing with Patient With ID  as Response ${it.count()}")
             if (it.isEmpty()) {
                 binding.lnEmpty.visibility = View.VISIBLE
             } else {
                 it.forEach { item ->
-                    item.epid = getValueBasedOnId("992818778559", item.observations)
+                    if (item.epid.isEmpty()) {
+                        item.epid = getValueBasedOnId("EPID", item.observations)
+                    }
                 }
 
                 adapter.submitList(it)
 
                 binding.lnEmpty.visibility = View.GONE
-                binding.fab.visibility = View.GONE
+                binding.fab.visibility = View.VISIBLE
             }
         }
         if (currentCase != null) {

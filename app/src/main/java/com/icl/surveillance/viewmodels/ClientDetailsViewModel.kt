@@ -617,7 +617,15 @@ class ClientDetailsViewModel(
                     childId = patient.resource.logicalId,
                     observations = emptyList(),
                     name = if (patient.resource.hasName()) patient.resource.nameFirstRep.nameAsSingleString else "N/A",
-                    epid = "test"
+                    epid = if (patient.resource.hasIdentifier()) {
+                        val identifier =
+                            patient.resource.identifier.find { it.type.codingFirstRep.code == "EPID" }
+                        if (identifier != null) {
+                            identifier.value
+                        } else {
+                            ""
+                        }
+                    } else ""
 
                 )
                 fhirEngine
