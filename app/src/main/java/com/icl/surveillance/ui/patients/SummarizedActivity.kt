@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import com.google.android.fhir.FhirEngine
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
@@ -27,7 +28,6 @@ import com.icl.surveillance.ui.patients.custom.VlFollowupFragment
 import com.icl.surveillance.ui.patients.custom.VlLabFragment
 import com.icl.surveillance.ui.patients.custom.VlTreatmentFragment
 import com.icl.surveillance.utils.FormatterClass
-import com.icl.surveillance.utils.toSlug
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
 
@@ -66,7 +66,10 @@ class SummarizedActivity : AppCompatActivity() {
             for (group in groups) {
                 Log.d("Group", "Group Item: ${group.text} (${group.linkId})")
                 for (item in group.items) {
-                    Log.d("Item", " - Item: ${item.text} (${item.linkId}) Type: ${item.type}")
+                    Log.d(
+                        "Item",
+                        " - Item: ${item.text} (${item.linkId}) Type: ${item.type} ${item.value}"
+                    )
                 }
             }
             val viewPager = binding.viewPager
@@ -106,17 +109,21 @@ class SummarizedActivity : AppCompatActivity() {
                             obs.code == outputItem.linkId
                         }
 
-                        if (matchingObservation != null) {
-                            outputItem.value = matchingObservation.value
+                        // Get EPID No
+                        if (outputItem.linkId == "992818778559") {
+                            outputItem.value = data.epidNo
+                        } else {
+
+                            if (matchingObservation != null) {
+                                outputItem.value = matchingObservation.value
+                            }
                         }
                     }
                 }
-//            viewPager.adapter = GroupPagerAdapter(this, groups,customFragments)
                 val adapter = GroupPagerAdapter(this, groups, customFragments)
                 viewPager.adapter = adapter
 
                 TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-//                tab.text = groups[position].text
                     tab.text = adapter.getTabTitle(position)
                 }.attach()
             }
@@ -125,6 +132,16 @@ class SummarizedActivity : AppCompatActivity() {
             Toast.makeText(this, "Please try again later!!", Toast.LENGTH_SHORT).show()
         }
     }
+
+    fun String.toSlug(): String {
+        return this
+            .trim()
+            .lowercase()
+            .replace("[^a-z0-9\\s-]".toRegex(), "")
+            .replace("\\s+".toRegex(), "-")
+            .replace("-+".toRegex(), "-")
+    }
+
 
 
     fun parseFromAssets(context: Context, latestEncounter: String): List<OutputGroup> {

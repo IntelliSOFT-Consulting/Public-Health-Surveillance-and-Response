@@ -27,7 +27,6 @@ import com.icl.surveillance.models.QuestionnaireItem
 import com.icl.surveillance.ui.patients.AddCaseActivity
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
-import com.icl.surveillance.utils.toSlug
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
 
@@ -74,6 +73,15 @@ class LabResultsFragment : Fragment() {
         return root
     }
 
+    fun String.toSlug(): String {
+        return this
+            .trim()
+            .lowercase()
+            .replace("[^a-z0-9\\s-]".toRegex(), "")
+            .replace("\\s+".toRegex(), "-")
+            .replace("-+".toRegex(), "-")
+    }
+
     override fun onResume() {
         super.onResume()
         try {
@@ -109,7 +117,6 @@ class LabResultsFragment : Fragment() {
         val encounterId = FormatterClass().getSharedPref("encounterId", requireContext())
         val currentCase = FormatterClass().getSharedPref("currentCase", requireContext())
 
-        println("Current Parent Encounter $encounterId")
         fhirEngine = FhirApplication.fhirEngine(requireContext())
         patientDetailsViewModel =
             ViewModelProvider(
@@ -132,23 +139,29 @@ class LabResultsFragment : Fragment() {
 
                 binding.tvNoCase.visibility = View.GONE
                 binding.fab.visibility = View.GONE
-//                adapter.submitList(it)
                 parentLayout.removeAllViews()
                 outputGroups.forEach { group ->
-                    Log.d(
-                        "OutputGroup",
-                        "OutputGroup LinkId: ${group.linkId}, Text: ${group.text}, Type: ${group.type}"
-                    )
+                    if (group.type == "display") {
+                        val fieldView = createCustomLabel(group.text)
+                        parentLayout.addView(fieldView)
+                    } else {
+                        val item = OutputItem(
+                            linkId = group.linkId,
+                            text = group.text,
+                            type = group.text,
+                            value = if (group.linkId == "final-classification") getValueBasedOnIdAndReference(
+                                item = "measles-igm",
+                                it.first().observations
+                            ) else getValueBasedOnId(item = group.linkId, it.first().observations)
 
-                    val item = OutputItem(
-                        linkId = group.linkId,
-                        text = group.text,
-                        type = group.text,
-                        value = getValueBasedOnId(item = group.linkId, it.first().observations)
-
-                    )
-                    val childFieldView = createCustomField(item)
-                    parentLayout.addView(childFieldView)
+                        )
+                        val childFieldView = createCustomField(item)
+                        // Only add if valid
+                        val show = checkIfValidToShow(group.linkId, it.first().observations)
+                        if (show) {
+                            parentLayout.addView(childFieldView)
+                        }
+                    }
                 }
             }
         }
@@ -234,6 +247,24 @@ class LabResultsFragment : Fragment() {
         }
     }
 
+    private fun checkIfValidToShow(
+        currentId: String,
+        items: List<PatientListViewModel.ObservationItem>
+    ): Boolean {
+        var show = true
+        val parent = "measles-igm"
+        val child = "rubella-igm"
+        var parentResponse = getValueBasedOnId(parent, items)
+        var childResponse = getValueBasedOnId(child, items)
+        if (parentResponse.isNotEmpty()) {
+            if (parentResponse == "Positive" && currentId == child) {
+                show = false
+            }
+        }
+        return show
+
+    }
+
     private fun getValueBasedOnId(
         item: String,
         items: List<PatientListViewModel.ObservationItem>
@@ -249,6 +280,77 @@ class LabResultsFragment : Fragment() {
             }
         }
         return response
+    }
+
+    private fun getValueBasedOnIdAndReference(
+        item: String,
+        items: List<PatientListViewModel.ObservationItem>
+    ): String {
+        var response = "Lab results pending"
+        items.forEach { outputItem ->
+            val matchingObservation = items.find { obs ->
+                obs.code == item
+            }
+            if (matchingObservation != null) {
+                response = matchingObservation.value
+            }
+        }
+        if (response.isNotEmpty()) {
+            response = when (response) {
+                "Positive" -> "Confirmed by Lab"
+                "Negative" -> "Discarded"
+                else -> response
+
+            }
+        }
+        return response
+    }
+
+    private fun createCustomLabel(item: String): View {
+        // Create the main LinearLayout to hold the views
+        val layout = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(8, 8, 8, 8)
+        }
+
+        // Create the horizontal LinearLayout for the two TextViews
+        val horizontalLayout = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.HORIZONTAL
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        }
+
+        // First TextView (label)
+        val label = TextView(requireContext()).apply {
+            text = item
+            textSize = 14f
+            setTextColor(android.graphics.Color.BLUE)
+            layoutParams = LinearLayout.LayoutParams(
+                0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f
+            )
+        }
+        horizontalLayout.addView(label)
+
+
+        // Add the horizontal layout with two TextViews to the main layout
+        layout.addView(horizontalLayout)
+
+        // Add a separator View (divider)
+        val divider = View(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                1 // Divider thickness
+            ).apply {
+                topMargin = 8
+                bottomMargin = 8
+            }
+            setBackgroundColor(android.graphics.Color.parseColor("#CCCCCC"))
+        }
+        layout.addView(divider)
+
+        return layout
     }
 
     private fun createCustomField(item: OutputItem): View {
@@ -334,67 +436,6 @@ class LabResultsFragment : Fragment() {
         }
     }
 
-    private fun showLocalOrRegionalLab() {
-        val dialogView =
-            LayoutInflater.from(requireContext()).inflate(R.layout.dialog_lab_info, null)
-
-        val labButton = dialogView.findViewById<MaterialButton>(R.id.btnLabInformation)
-        val regionalLabButton =
-            dialogView.findViewById<MaterialButton>(R.id.btnRegionalLabInformation)
-
-        val dialog = AlertDialog.Builder(requireContext())
-            .setView(dialogView)
-            .setCancelable(true)
-            .create()
-
-        labButton.setOnClickListener {
-            dialog.dismiss()
-            FormatterClass()
-                .saveSharedPref(
-                    "questionnaire",
-                    "measles-lab-results.json",
-                    requireContext()
-                )
-            FormatterClass().saveSharedPref(
-                "title",
-                "Measles Lab Results",
-                requireContext()
-            )
-            val intent = Intent(requireContext(), AddCaseActivity::class.java)
-            intent.putExtra(
-                QUESTIONNAIRE_FILE_PATH_KEY,
-                "measles-lab-results.json"
-            )
-            startActivity(intent)
-        }
-
-        regionalLabButton.setOnClickListener {
-            dialog.dismiss()
-            FormatterClass()
-                .saveSharedPref(
-                    "questionnaire",
-                    "measles-lab-reg-results.json",
-                    requireContext()
-                )
-            FormatterClass().saveSharedPref(
-                "title",
-                "Regional Measles Lab Results",
-                requireContext()
-            )
-            val intent = Intent(requireContext(), AddCaseActivity::class.java)
-            intent.putExtra(
-                QUESTIONNAIRE_FILE_PATH_KEY,
-                "measles-lab-reg-results.json"
-            )
-            startActivity(intent)
-        }
-
-        dialog.show()
-
-
-    }
-
-    private fun onItemClicked(encounterItem: PatientListViewModel.CaseLabResultsData) {}
 
     companion object {
         /**

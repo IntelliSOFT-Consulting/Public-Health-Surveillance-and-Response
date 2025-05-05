@@ -140,29 +140,6 @@ class PatientListViewModel(
                                     ?.value
                                     ?.asStringValue() ?: ""
 
-//                            val finalClassification =
-//                                obs1.firstOrNull {
-//                                    it.resource.code.codingFirstRep.code == "final-classification"
-//                                }
-//                                    ?.resource
-//                                    ?.value
-//                                    ?.asStringValue() ?: ""
-//
-//                            val finalClassification =
-//                                obs1.firstOrNull {
-//                                    it.resource.code.codingFirstRep.code == "final-confirm-classification"
-//                                }
-//                                    ?.resource
-//                                    ?.value
-//                                    ?.asStringValue() ?: ""
-//
-//                            val finalClassification =
-//                                obs1.firstOrNull {
-//                                    it.resource.code.codingFirstRep.code == "final-negative-classification"
-//                                }
-//                                    ?.resource
-//                                    ?.value
-//                                    ?.asStringValue() ?: ""
 
                             val finalClassification = when (measlesIgm.lowercase()) {
                                 "positive" -> obs1.firstOrNull {
@@ -340,144 +317,6 @@ class PatientListViewModel(
             .sortedByDescending { it.lastUpdated }
     }
 
-//
-//    private suspend fun retrieveCasesByDisease(
-//        nameQuery: String,
-//    ): List<PatientItem> {
-//
-//        println("Started searching for cases *** $nameQuery")
-//        val patients: MutableList<PatientItem> = mutableListOf()
-//        fhirEngine
-//            .search<Patient> {
-////                filter(
-////                    Patient.IDENTIFIER,
-////                    {
-////                        value = of(Coding().apply {
-////                            system = nameQuery
-////                            code = nameQuery
-////                        })
-////                    })
-////                filter(
-////                    Patient.IDENTIFIER,
-////                    { value = of("$nameQuery|$nameQuery") }
-////                )
-//                sort(Patient.GIVEN, Order.ASCENDING)
-//                count = 100
-//                from = 0
-//            }
-//            .mapIndexedNotNull { index, fhirPatient ->
-//
-//                val patient = fhirPatient.resource.identifier.find { it.system == nameQuery }
-//                if (patient != null) {
-//                    var item = fhirPatient.resource.toPatientItem(index + 1)
-//
-//
-////                try {
-////
-////                    val encounter = loadEncounter(item.resourceId)
-////                    val caseInfoEncounter =
-////                        encounter.firstOrNull {
-////                            it.reasonCodeFirstRep.codingFirstRep.code == "Measles Case Information"
-////                        }
-////
-////                    caseInfoEncounter?.let {
-////
-////                        val childEncounter = loadChildEncounter(item.resourceId, it.logicalId)
-////                        val childCaseInfoEncounter =
-////                            childEncounter.firstOrNull {
-////                                it.reasonCodeFirstRep.codingFirstRep.code == "Measles Lab Information"
-////                            }
-////
-////                        childCaseInfoEncounter?.let { kk ->
-////                            val obs1 =
-////                                fhirEngine.search<Observation> {
-////                                    filter(
-////                                        Observation.ENCOUNTER,
-////                                        { value = "Encounter/${kk.logicalId}" })
-////                                }
-////
-////                            val measlesIgm =
-////                                obs1.firstOrNull { it.resource.code.codingFirstRep.code == "measles-igm" }
-////                                    ?.resource
-////                                    ?.value
-////                                    ?.asStringValue() ?: ""
-////
-////
-////                            val finalClassification = when (measlesIgm.lowercase()) {
-////                                "positive" -> obs1.firstOrNull {
-////                                    it.resource.code.codingFirstRep.code == "final-confirm-classification"
-////                                }?.resource?.value?.asStringValue() ?: ""
-////
-////                                "negative" -> obs1.firstOrNull {
-////                                    it.resource.code.codingFirstRep.code == "final-negative-classification"
-////                                }?.resource?.value?.asStringValue() ?: ""
-////
-////                                else -> obs1.firstOrNull {
-////                                    it.resource.code.codingFirstRep.code == "final-classification"
-////                                }?.resource?.value?.asStringValue() ?: ""
-////                            }
-////
-////                            println("Found Child Encounter: ${it.id}")
-////
-////                            item = item.copy(labResults = measlesIgm, status = finalClassification)
-////                        }
-////
-////                        // pull all Obs for this Encounter
-////                        val obs =
-////                            fhirEngine.search<Observation> {
-////                                filter(
-////                                    Observation.ENCOUNTER,
-////                                    { value = "Encounter/${it.logicalId}" })
-////                            }
-////
-////                        val epid =
-////                            obs.firstOrNull { it.resource.code.codingFirstRep.code == "EPID" }
-////                                ?.resource
-////                                ?.value
-////                                ?.asStringValue() ?: "still loading"
-////                        val county =
-////                            obs.firstOrNull { it.resource.code.codingFirstRep.code == "a4-county" }
-////                                ?.resource
-////                                ?.value
-////                                ?.asStringValue() ?: ""
-////                        val subCounty =
-////                            obs.firstOrNull { it.resource.code.codingFirstRep.code == "a3-sub-county" }
-////                                ?.resource
-////                                ?.value
-////                                ?.asStringValue() ?: ""
-////                        val onset =
-////                            obs.firstOrNull { it.resource.code.codingFirstRep.code == "728034137219" }
-////                                ?.resource
-////                                ?.value
-////                                ?.asStringValue() ?: ""
-////
-////                        item =
-////                            item.copy(
-////                                encounterId = it.logicalId,
-////                                epid = epid,
-////                                subCounty = subCounty,
-////                                county = county,
-////                                caseOnsetDate = onset
-////                            )
-////                    }
-////
-////
-////                } catch (e: Exception) {
-////                    e.printStackTrace()
-////
-////                    println("Error Loading Page : ${e.message}")
-////                }
-//                    item
-//                }
-//            }
-//            .let {
-//                val sortedCases = it.sortedByDescending { q -> q.lastUpdated }
-//
-//                patients.addAll(sortedCases)
-//            }
-//
-//        return patients
-//    }
 
     /** The Patient's details for display purposes. */
     data class PatientItem(
@@ -555,13 +394,19 @@ class PatientListViewModel(
         val lastInGroup: Boolean
     }
 
+    data class CaseId(
+        val patientId: String,
+        val eNo: String,
+    )
+
     data class CaseDetailSummaryData(
         val name: String,
         val sex: String,
         val dob: String,
         val logicalId: String,
         val encounterId: String,
-        val observations: List<ObservationItem> = emptyList<ObservationItem>()
+        val observations: List<ObservationItem> = emptyList<ObservationItem>(),
+        val epidNo: String
     )
 
     data class ClinicalData(

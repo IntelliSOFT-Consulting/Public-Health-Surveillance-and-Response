@@ -58,8 +58,50 @@ class GroupFragment : Fragment() {
     private fun addChildItems() {
         for (item in group.items) {
             val fieldView = createCustomField(item)
-            parentLayout.addView(fieldView)
+            val show = checkRelatedWorkflows(group.text, item, group.items)
+            if (show) {
+                parentLayout.addView(fieldView)
+            }
         }
+    }
+
+
+    private fun checkRelatedWorkflows(
+        title: String,
+        item: OutputItem,
+        items: List<OutputItem>
+    ): Boolean {
+        var response = true
+        val children = listOf("122072333233", "879612276990", "296206902941")
+
+        if (item.linkId in children) {
+            response = false
+        }
+        when (title.trim()) {
+            "Vaccination History for disease under investigation" -> {
+                response = false
+                val parent = "970455623029"
+                if (item.linkId == parent) {
+                    response = true
+                }
+                val answer = items.find { it.linkId == parent }?.value
+                if (answer == "Yes"){
+                    response = true
+                }
+            }
+        }
+
+        //
+//        val parent = "measles-igm"
+//        val child = "rubella-igm"
+//        var parentResponse = getValueBasedOnId(parent, items)
+//        var childResponse = getValueBasedOnId(child, items)
+//        if (parentResponse.isNotEmpty()) {
+//            if (parentResponse == "Positive" && currentId == child) {
+//                show = false
+//            }
+//        }
+        return response
     }
 
     private fun createCustomField(item: OutputItem): View {

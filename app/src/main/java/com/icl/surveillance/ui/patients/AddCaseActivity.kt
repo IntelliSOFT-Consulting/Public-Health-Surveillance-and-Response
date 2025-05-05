@@ -87,8 +87,6 @@ class AddCaseActivity : AppCompatActivity() {
 
         println("Parent Encounter $encounter")
         when (questionnaire) {
-            "measles-case.json" ->
-                viewModel.completeAssessment(questionnaireResponse, "$patientId", "$encounter")
 
             "measles-lab-results.json" ->
                 viewModel.completeLabAssessment(

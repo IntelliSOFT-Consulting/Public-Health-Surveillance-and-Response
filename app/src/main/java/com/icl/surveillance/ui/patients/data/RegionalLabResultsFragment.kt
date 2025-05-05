@@ -30,7 +30,6 @@ import com.icl.surveillance.models.QuestionnaireItem
 import com.icl.surveillance.ui.patients.AddCaseActivity
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
-import com.icl.surveillance.utils.toSlug
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
 
@@ -106,6 +105,14 @@ class RegionalLabResultsFragment : Fragment() {
 
     private lateinit var groups: List<OutputGroup>
     private lateinit var parentLayout: LinearLayout
+    fun String.toSlug(): String {
+        return this
+            .trim()
+            .lowercase()
+            .replace("[^a-z0-9\\s-]".toRegex(), "")
+            .replace("\\s+".toRegex(), "-")
+            .replace("-+".toRegex(), "-")
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -154,7 +161,10 @@ class RegionalLabResultsFragment : Fragment() {
 
                     )
                     val childFieldView = createCustomField(item)
-                    parentLayout.addView(childFieldView)
+                    val show = checkIfValidToShow(group.linkId, results.first().observations)
+                    if (show) {
+                        parentLayout.addView(childFieldView)
+                    }
                 }
             }
         }
@@ -238,6 +248,24 @@ class RegionalLabResultsFragment : Fragment() {
 
             }
         }
+    }
+
+    private fun checkIfValidToShow(
+        currentId: String,
+        items: List<PatientListViewModel.ObservationItem>
+    ): Boolean {
+        var show = true
+        val parent = "measles-igm-result"
+        val children = listOf("rubella-igm-result", "date-rubella-igm-sent")
+
+        var parentResponse = getValueBasedOnId(parent, items)
+        if (parentResponse.isNotEmpty()) {
+            if (parentResponse == "Positive" && currentId in children) {
+                show = false
+            }
+        }
+        return show
+
     }
 
     private fun getValueBasedOnId(
@@ -388,111 +416,6 @@ class RegionalLabResultsFragment : Fragment() {
         }
     }
 
-//    fun parseFromAssets(context: Context): List<OutputGroup> {
-//        var outputGroups: List<OutputGroup> = emptyList()
-//
-//        try {
-//            val jsonContent = context.assets.open("measles-lab-reg-results.json")
-//                .bufferedReader()
-//                .use { it.readText() }
-//
-//            val gson = Gson()
-//            val questionnaire = gson.fromJson(jsonContent, QuestionnaireItem::class.java)
-//
-//            outputGroups = questionnaire.item.map { group ->
-//                OutputGroup(
-//                    linkId = group.linkId,
-//                    text = group.text,
-//                    type = group.type,
-//                    items = group.item?.flatMap { flattenItems(it) } ?: emptyList()
-//                )
-//
-//            }
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            Log.e("TAG", "File Error ${e.message}")
-//        }
-//        return outputGroups
-//
-//    }
-//
-//    fun flattenItems(item: ChildItem): List<OutputItem> {
-//        val children = item.item?.flatMap { flattenItems(it) } ?: emptyList()
-//
-//        // If current item is NOT of type "display", include it
-//        return if (item.type != "display") {
-//            val current = OutputItem(
-//                linkId = item.linkId,
-//                text = item.text,
-//                type = item.type
-//            )
-//            listOf(current) + children
-//        } else {
-//            children
-//        }
-//    }
-
-    private fun showLocalOrRegionalLab() {
-        val dialogView =
-            LayoutInflater.from(requireContext()).inflate(R.layout.dialog_lab_info, null)
-
-        val labButton = dialogView.findViewById<MaterialButton>(R.id.btnLabInformation)
-        val regionalLabButton =
-            dialogView.findViewById<MaterialButton>(R.id.btnRegionalLabInformation)
-
-        val dialog = AlertDialog.Builder(requireContext())
-            .setView(dialogView)
-            .setCancelable(true)
-            .create()
-
-        labButton.setOnClickListener {
-            dialog.dismiss()
-            FormatterClass()
-                .saveSharedPref(
-                    "questionnaire",
-                    "measles-lab-results.json",
-                    requireContext()
-                )
-            FormatterClass().saveSharedPref(
-                "title",
-                "Measles Lab Results",
-                requireContext()
-            )
-            val intent = Intent(requireContext(), AddCaseActivity::class.java)
-            intent.putExtra(
-                QUESTIONNAIRE_FILE_PATH_KEY,
-                "measles-lab-results.json"
-            )
-            startActivity(intent)
-        }
-
-        regionalLabButton.setOnClickListener {
-            dialog.dismiss()
-            FormatterClass()
-                .saveSharedPref(
-                    "questionnaire",
-                    "measles-lab-reg-results.json",
-                    requireContext()
-                )
-            FormatterClass().saveSharedPref(
-                "title",
-                "Regional Measles Lab Results",
-                requireContext()
-            )
-            val intent = Intent(requireContext(), AddCaseActivity::class.java)
-            intent.putExtra(
-                QUESTIONNAIRE_FILE_PATH_KEY,
-                "measles-lab-reg-results.json"
-            )
-            startActivity(intent)
-        }
-
-        dialog.show()
-
-
-    }
-
-    private fun onItemClicked(encounterItem: PatientListViewModel.CaseLabResultsData) {}
 
     companion object {
         /**

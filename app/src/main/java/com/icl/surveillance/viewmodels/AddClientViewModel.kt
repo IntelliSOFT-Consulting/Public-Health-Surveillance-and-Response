@@ -83,6 +83,22 @@ class AddClientViewModel(application: Application, private val state: SavedState
                 return@launch
             }
 
+
+            val identifierSystem0 = Identifier()
+            val typeCodeableConcept0 = CodeableConcept()
+            val codingList0 = ArrayList<Coding>()
+            val coding0 = Coding()
+            coding0.system = "system-creation"
+            coding0.code = "system_creation"
+            coding0.display = "System Creation"
+            codingList0.add(coding0)
+            typeCodeableConcept0.coding = codingList0
+            typeCodeableConcept0.text = FormatterClass().formatCurrentDateTime(Date())
+
+            identifierSystem0.value = FormatterClass().formatCurrentDateTime(Date())
+            identifierSystem0.system = "system-creation"
+            identifierSystem0.type = typeCodeableConcept0
+
             val patientId = generateUuid()
             val subjectReference = Reference("Patient/$patientId")
             val jsonObject = JSONObject(questionnaireResponseString)
@@ -100,6 +116,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
             enc.id = encounterId
             enc.subject = subjectReference
             enc.reasonCodeFirstRep.codingFirstRep.code = "$reasonCode"
+            enc.identifier.add(identifierSystem0)
 
             var case = "case-info"
             if (reasonCode != null) {
@@ -119,6 +136,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
             var potherNames: List<String> = emptyList()
 
             val encounterReference = Reference("Encounter/$encounterId")
+
+            extractedAnswers.forEach {
+                println("Each Response Here ${it.linkId} -> ${it.text} -> ${it.answer}")
+            }
             when (case) {
                 "measles-case-information" -> {
                     val genderEntry = extractedAnswers.find { it.linkId == "929966324957" }
@@ -206,14 +227,6 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     if (pCountyEntry != null) {
                         parentAddress.addLine(pCountyEntry.answer)
                     }
-                    try {
-                        if (dobEntry != null) {
-                            patient.birthDate =
-                                SimpleDateFormat("yyyy-MM-dd").parse(dobEntry.answer)
-                        }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
 
 
                     val parentName = HumanName()
@@ -264,6 +277,15 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
                     createResource(obs, subjectReference, encounterReference)
 
+                    try {
+                        if (dobEntry != null) {
+                            patient.birthDate =
+                                SimpleDateFormat("yyyy-MM-dd").parse(dobEntry.answer)
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+
 
                 }
 
@@ -272,9 +294,11 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val mNameEntry = extractedAnswers.find { it.linkId == "246751846436" }
                     val lNameEntry = extractedAnswers.find { it.linkId == "486402457213" }
                     val genderEntry = extractedAnswers.find { it.linkId == "929966324957" }
-
+                    val dobEntry = extractedAnswers.find { it.linkId == "951993881290" }
                     val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
                     val countyEntry = extractedAnswers.find { it.linkId == "a4-county" }
+
+
 
                     if (genderEntry != null) {
                         val gender = when (genderEntry.answer.lowercase()) {
@@ -293,7 +317,37 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     if (lNameEntry != null) {
                         patient.nameFirstRep.addGiven(lNameEntry.answer)
                     }
+                    val guardianEntry = extractedAnswers.find { it.linkId == "856448027666" }
+                    val fullName = guardianEntry?.answer?.trim().orEmpty()
+                    val parts = fullName.split("\\s+".toRegex()).filter { it.isNotBlank() }
 
+                    val parentName = HumanName()
+                    when {
+                        parts.isEmpty() -> {
+
+                        }
+
+                        parts.size == 1 -> {
+                            parentName.family = parts[0]
+                        }
+
+                        else -> {
+                            parentName.family = parts[0]
+                            parentName.addGiven(parts.drop(1).joinToString(" "))
+                        }
+                    }
+                    patient.contactFirstRep.name = parentName
+                    val phoneEntry = extractedAnswers.find { it.linkId == "576318206363" }
+                    val parentPhone = ContactPoint()
+                    if (phoneEntry != null) {
+
+                        parentPhone.value = phoneEntry.answer
+                        parentPhone.system = ContactPoint.ContactPointSystem.PHONE
+                        parentPhone.use = ContactPoint.ContactPointUse.MOBILE
+                    }
+                    val parentAddress = Address()
+                    patient.contactFirstRep.address = parentAddress
+                    patient.contactFirstRep.addTelecom(parentPhone)
                     var county = ""
                     var subCounty = ""
                     val currentYear = LocalDate.now().year
@@ -315,6 +369,14 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
                     createResource(obs, subjectReference, encounterReference)
+                    try {
+                        if (dobEntry != null) {
+                            patient.birthDate =
+                                SimpleDateFormat("yyyy-MM-dd").parse(dobEntry.answer)
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
                 }
 
                 "social-listening-and-rumor-tracking-tool" -> {
@@ -395,21 +457,6 @@ class AddClientViewModel(application: Application, private val state: SavedState
             withContext(Dispatchers.IO) {
                 try {
 
-                    val identifierSystem0 = Identifier()
-                    val typeCodeableConcept0 = CodeableConcept()
-                    val codingList0 = ArrayList<Coding>()
-                    val coding0 = Coding()
-                    coding0.system = "system-creation"
-                    coding0.code = "system_creation"
-                    coding0.display = "System Creation"
-                    codingList0.add(coding0)
-                    typeCodeableConcept0.coding = codingList0
-                    typeCodeableConcept0.text = FormatterClass().formatCurrentDateTime(Date())
-
-                    identifierSystem0.value = FormatterClass().formatCurrentDateTime(Date())
-                    identifierSystem0.system = "system-creation"
-                    identifierSystem0.type = typeCodeableConcept0
-
 
                     val identifierSystem = Identifier()
                     val typeCodeableConcept = CodeableConcept()
@@ -460,6 +507,54 @@ class AddClientViewModel(application: Application, private val state: SavedState
     }
 
     fun extractStructuredAnswers(response: JSONObject): List<QuestionnaireAnswer> {
+        val results = mutableListOf<QuestionnaireAnswer>()
+
+        fun extractFromItems(items: JSONArray?) {
+            if (items == null) return
+
+            for (i in 0 until items.length()) {
+                val item = items.getJSONObject(i)
+                val linkId = item.optString("linkId", "N/A")
+                val text = item.optString("text", "N/A")
+
+                if (item.has("answer")) {
+                    val answerArray = item.getJSONArray("answer")
+                    for (j in 0 until answerArray.length()) {
+                        val answer = answerArray.getJSONObject(j)
+
+                        val value = when {
+                            answer.has("valueString") -> answer.optString("valueString", "")
+                            answer.has("valueInteger") -> answer.optString("valueInteger", "")
+                            answer.has("valueDate") -> answer.optString("valueDate", "")
+                            answer.has("valueDateTime") -> answer.optString("valueDateTime", "")
+                            answer.has("valueBoolean") -> answer.optString("valueBoolean", "")
+                            answer.has("valueDecimal") -> answer.optString("valueDecimal", "")
+                            answer.has("valueCoding") -> {
+                                val coding = answer.getJSONObject("valueCoding")
+                                coding.optString("display", coding.optString("code", ""))
+                            }
+
+                            else -> null
+                        }
+
+                        if (value != null && value.isNotBlank()) {
+                            results.add(QuestionnaireAnswer(linkId, text, value))
+                        }
+                    }
+                }
+
+                // Recurse only if there are nested questionnaire items
+                if (item.has("item")) {
+                    extractFromItems(item.getJSONArray("item"))
+                }
+            }
+        }
+
+        extractFromItems(response.optJSONArray("item"))
+        return results
+    }
+
+    fun extractStructuredAnswersOld(response: JSONObject): List<QuestionnaireAnswer> {
         val results = mutableListOf<QuestionnaireAnswer>()
 
         fun extractFromItems(items: JSONArray?) {

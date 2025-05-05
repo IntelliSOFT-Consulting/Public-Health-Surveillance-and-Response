@@ -12,164 +12,59 @@
       "item": [
         {
           "type": "string",
-          "linkId": "301322368614",
-          "text": "Reporting Country",
+          "linkId": "992818778559",
+          "text": "EPID No",
+          "readOnly": true
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "185989158723",
+          "text": "Health Facility",
           "required": true,
-          "item": [
-            {
-              "linkId": "396897526438_helpText",
-              "type": "display",
-              "text": "Name of Country",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "help",
-                        "display": "Help-Button"
-                      }
-                    ],
-                    "text": "Help-Button"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "string",
-          "linkId": "301322368614121",
-          "text": "Reporting County",
-          "required": true
-        },
-        {
-          "type": "string",
-          "linkId": "885995384353",
-          "text": "Reporting Subcounty",
-          "item": [
-            {
-              "linkId": "100307486392_helpText",
-              "type": "display",
-              "text": "Name of subcounty",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "help",
-                        "display": "Help-Button"
-                      }
-                    ],
-                    "text": "Help-Button"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "string",
-          "linkId": "709879725075",
-          "text": "Year of reporting",
-          "item": [
-            {
-              "linkId": "709879725075_helpText",
-              "type": "display",
-              "text": "The date that the form was received by program at the national level.",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "help",
-                        "display": "Help-Button"
-                      }
-                    ],
-                    "text": "Help-Button"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "string",
-          "linkId": "819580955243",
-          "text": "Reporting Health facility.",
-          "item": [
-            {
-              "linkId": "819580955243_helpText",
-              "type": "display",
-              "text": "The name of the health facility.",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "help",
-                        "display": "Help-Button"
-                      }
-                    ],
-                    "text": "Help-Button"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ]
-              }
-            }
-          ],
-          "linkId": "234120230670",
-          "text": "Level of Health facility",
           "answerOption": [
             {
               "valueCoding": {
-                "display": "Level"
+                "code": "Kenyatta National Hospital",
+                "display": "Kenyatta National Hospital"
               }
-            }
-          ],
-          "item": [
+            },
             {
-              "linkId": "234120230670_helpText",
-              "type": "display",
-              "text": "The type of health facility",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "help",
-                        "display": "Help-Button"
-                      }
-                    ],
-                    "text": "Help-Button"
-                  }
-                }
-              ]
+              "valueCoding": {
+                "code": "Mama Lucy Kibaki Hospital",
+                "display": "Mama Lucy Kibaki Hospital"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Mbagathi, District Hospital",
+                "display": "Mbagathi District Hospital"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Pumwani Maternity Hospital",
+                "display": "Pumwani Maternity Hospital"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Mathari National Teaching Referral Hospital",
+                "display": "Mathari National Teaching Referral Hospital"
+              }
             }
           ]
         },
@@ -189,42 +84,55 @@
               }
             }
           ],
-          "linkId": "721670459919",
+          "linkId": "438862163919",
+          "text": "Type of health facility",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Private",
+                "display": "Private"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Public",
+                "display": "Public"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Faith Based",
+                "display": "Faith Based"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "819946803642",
           "text": "Subcounty within which the health facility is",
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
-                "code": "nairobi",
+                "code": "Westlands",
                 "display": "Westlands"
               }
-            },
-            {
-              "valueCoding": {
-                "code": "mombasa",
-                "display": "Kasarani"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "721670459919_helpText",
-              "type": "display",
-              "text": "Sub County within which the health facility is.",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "help",
-                        "display": "Help-Button"
-                      }
-                    ],
-                    "text": "Help-Button"
-                  }
-                }
-              ]
             }
           ]
         },
@@ -244,40 +152,15 @@
               }
             }
           ],
-          "linkId": "616270357061",
+          "linkId": "294367770999",
           "text": "County within which the health facility is",
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
+                "code": "Nairobi",
                 "display": "Nairobi"
               }
-            },
-            {
-              "valueCoding": {
-                "display": "Kiambu"
-              }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "616270357061_helpText",
-              "type": "display",
-              "text": "County within which the health facility is.",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "help",
-                        "display": "Help-Button"
-                      }
-                    ],
-                    "text": "Help-Button"
-                  }
-                }
-              ]
             }
           ]
         }
@@ -333,8 +216,7 @@
         {
           "type": "string",
           "linkId": "246751846436",
-          "text": "Middle name",
-          "required": true
+          "text": "Middle name"
         },
         {
           "type": "string",
@@ -363,19 +245,19 @@
             }
           ],
           "linkId": "929966324957",
-          "text": "Sex.",
+          "text": "Sex",
           "required": true,
           "answerOption": [
             {
               "valueCoding": {
-                "display": "Male",
-                "code": "male"
+                "code": "male",
+                "display": "Male"
               }
             },
             {
               "valueCoding": {
-                "display": "Female",
-                "code": "female"
+                "code": "female",
+                "display": "Female"
               }
             }
           ],
@@ -613,77 +495,10 @@
           "type": "string",
           "linkId": "856448027666",
           "text": "Name of Parent/Guardian.",
-          "required": true,
-          "item": [
-            {
-              "linkId": "773563870959_helpText",
-              "type": "display",
-              "text": "Name of the parent or guardian for minors or dependents.",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "help",
-                        "display": "Help-Button"
-                      }
-                    ],
-                    "text": "Help-Button"
-                  }
-                }
-              ]
-            }
-          ]
+          "required": true
         },
         {
           "type": "string",
-          "linkId": "576318206363",
-          "text": "Telephone no. of parent/guardian.",
-          "required": true,
-          "item": [
-            {
-              "linkId": "576318206363_helpText",
-              "type": "display",
-              "text": "Contact information for the affected individual's parent or guardian.",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "help",
-                        "display": "Help-Button"
-                      }
-                    ],
-                    "text": "Help-Button"
-                  }
-                }
-              ]
-            },
-            {
-              "linkId": "2.1",
-              "text": "07xxxxxxxx",
-              "type": "display",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "flyover",
-                        "display": "Fly-over"
-                      }
-                    ],
-                    "text": "Flyover"
-                  }
-                }
-              ]
-            }
-          ],
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -705,18 +520,13 @@
               "url": "http://hl7.org/fhir/StructureDefinition/minLength",
               "valueInteger": 10
             }
-          ]
-        },
-        {
-          "type": "string",
-          "linkId": "242811643559",
-          "text": "Residence (Village/Estate/Hse No).",
+          ],
+          "linkId": "576318206363",
+          "text": "Telephone no. of parent/guardian.",
           "required": true,
           "item": [
             {
-              "linkId": "729518730322_helpText",
               "type": "display",
-              "text": "The specific household number or village where the patient resides.",
               "extension": [
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -724,16 +534,23 @@
                     "coding": [
                       {
                         "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "help",
-                        "display": "Help-Button"
+                        "code": "flyover",
+                        "display": "Fly-over"
                       }
-                    ],
-                    "text": "Help-Button"
+                    ]
                   }
                 }
-              ]
+              ],
+              "linkId": "telephone-hint",
+              "text": "07xxxxxxxx"
             }
           ]
+        },
+        {
+          "type": "string",
+          "linkId": "242811643559",
+          "text": "Residence (Village/Estate/Hse No).",
+          "required": true
         },
         {
           "type": "string",
@@ -826,58 +643,70 @@
           ]
         },
         {
-          "type": "string",
+          "type": "choice",
           "linkId": "a3-sub-county",
           "text": "Sub County",
           "required": true,
-          "item": [
+          "answerOption": [
             {
-              "linkId": "774107085461_helpText",
-              "type": "display",
-              "text": "The administrative sub-county in which the case is located or reported from.",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "help",
-                        "display": "Help-Button"
-                      }
-                    ],
-                    "text": "Help-Button"
+              "valueCoding": {
+                "code": "Westlands",
+                "display": "Westlands"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Kasarani",
+                "display": "Kasarani"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
                   }
-                }
-              ]
+                ]
+              }
             }
           ]
         },
         {
-          "type": "string",
+          "type": "choice",
           "linkId": "a4-county",
           "text": "County",
           "required": true,
-          "item": [
+          "answerOption": [
             {
-              "linkId": "301322368614_helpText",
-              "type": "display",
-              "text": "The county  in which the case is located or reported from.",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "help",
-                        "display": "Help-Button"
-                      }
-                    ],
-                    "text": "Help-Button"
+              "valueCoding": {
+                "code": "Nairobi",
+                "display": "Nairobi"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Kiambu",
+                "display": "Kiambu"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
                   }
-                }
-              ]
+                ]
+              }
             }
           ]
         }
@@ -1209,7 +1038,7 @@
       "item": [
         {
           "type": "date",
-          "linkId": "702432206585",
+          "linkId": "728034137219",
           "text": "Date of onset of paralysis.",
           "extension": [
             {

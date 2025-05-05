@@ -11,6 +11,7 @@ import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.SearchResult
 import com.google.android.fhir.datacapture.extensions.asStringValue
 import com.google.android.fhir.datacapture.extensions.logicalId
+import com.google.android.fhir.search.Order
 import com.google.android.fhir.search.revInclude
 import com.google.android.fhir.search.search
 import com.icl.surveillance.R
@@ -46,6 +47,7 @@ class ClientDetailsViewModel(
     val livecaseData = MutableLiveData<PatientListViewModel.CaseDetailData>()
     val liveIdentificationData = MutableLiveData<PersonDetails>()
     val liveSummaryData = MutableLiveData<PatientListViewModel.CaseDetailSummaryData>()
+    val liveCaseData = MutableLiveData<PatientListViewModel.CaseId>()
     val liveDiseaseData = MutableLiveData<List<PatientListViewModel.CaseDiseaseData>>()
     val liveLabData = MutableLiveData<List<PatientListViewModel.CaseLabResultsData>>()
     val currentLiveLabData = MutableLiveData<List<PatientListViewModel.LabResults>>()
@@ -127,12 +129,56 @@ class ClientDetailsViewModel(
             .map { it.resource }
     }
 
+    private suspend fun epidSummary(slug: String): PatientListViewModel.CaseId {
+        var logicalId = ""
+        var epid = ""
+
+        val searchResult =
+            fhirEngine.search<Patient> { filter(Resource.RES_ID, { value = of(patientId) }) }
+        searchResult.first().let { data ->
+            println("Extracting the EPID Number Patient Found****")
+            val matchingIdentifier = data.resource.identifier.find {
+                it.system == slug
+            }
+            val epidIdenfifier =
+                data.resource.identifier.find { it.type.codingFirstRep.code == "EPID" }
+
+            if (epidIdenfifier != null) {
+                epid = epidIdenfifier.value
+                println("Extracting the EPID Number EPID Attached**** $epid")
+            }
+            if (matchingIdentifier != null) {
+                val logicalId = matchingIdentifier.value
+                val obs =
+                    fhirEngine.search<Observation> {
+                        filter(
+                            Observation.ENCOUNTER,
+                            { value = "Encounter/${logicalId}" })
+                    }.take(500)
+
+
+                if (epid.isEmpty()) {
+                    epid = obs.firstOrNull { it.resource.code.codingFirstRep.code == "EPID" }
+                        ?.resource
+                        ?.value
+                        ?.asStringValue() ?: ""
+                }
+            }
+        }
+        println("Extracting the EPID Number Final EPID $epid****")
+        return PatientListViewModel.CaseId(
+            patientId = logicalId,
+            eNo = epid,
+        )
+    }
+
     private suspend fun getPatientInfoSummary(slug: String): PatientListViewModel.CaseDetailSummaryData {
         var logicalId = ""
         var name = ""
         var sex = ""
         var dob = ""
         var encounterId = ""
+        var epidNo = ""
         var observations = mutableListOf<PatientListViewModel.ObservationItem>()
 
         val searchResult =
@@ -153,8 +199,16 @@ class ClientDetailsViewModel(
             val matchingIdentifier = it.resource.identifier.find {
                 it.system == slug
             }
+            val epidIdenfifier =
+                it.resource.identifier.find { it.type.codingFirstRep.code == "EPID" }
+
+            if (epidIdenfifier != null) {
+                epidNo = epidIdenfifier.value
+            }
             if (matchingIdentifier != null) {
                 encounterId = matchingIdentifier.value
+
+
 
                 fhirEngine.search<Observation> {
                     filter(
@@ -162,16 +216,14 @@ class ClientDetailsViewModel(
                         { value = "Encounter/${matchingIdentifier.value}" })
                 }
                     .map { ob ->
-                        Log.e(
-                            "Observation",
-                            "Observation Parent ***** ${ob.resource.code.codingFirstRep.code} ${ob.resource.valueStringType.asStringValue()}"
-                        )
+
 
                         val value =
                             if (ob.resource.hasValueQuantity()) {
                                 ob.resource.valueQuantity.value.toString()
                             } else if (ob.resource.hasValueCodeableConcept()) {
-                                ob.resource.valueCodeableConcept.coding.firstOrNull()?.display ?: ""
+                                ob.resource.valueCodeableConcept.coding.firstOrNull()?.display
+                                    ?: ""
                             } else if (ob.resource.hasValueStringType()) {
                                 ob.resource.valueStringType.valueAsString
                             } else {
@@ -184,6 +236,19 @@ class ClientDetailsViewModel(
                         )
                         observations.add(item)
                     }
+                val obs =
+                    fhirEngine.search<Observation> {
+                        filter(
+                            Observation.ENCOUNTER,
+                            { value = "Encounter/${matchingIdentifier.value}" })
+                    }.take(500)
+
+                if (epidNo.isEmpty()) {
+                    epidNo = obs.firstOrNull { it.resource.code.codingFirstRep.code == "EPID" }
+                        ?.resource
+                        ?.value
+                        ?.asStringValue() ?: ""
+                }
             }
 
         }
@@ -193,7 +258,8 @@ class ClientDetailsViewModel(
             name = name,
             dob = dob,
             sex = sex,
-            observations = observations
+            observations = observations,
+            epidNo = epidNo
         )
     }
 
@@ -844,6 +910,14 @@ class ClientDetailsViewModel(
         }
     }
 
+    fun getEPIDNo(slug: String) {
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val patientData = epidSummary(slug)
+            withContext(Dispatchers.Main) { liveCaseData.value = patientData }
+        }
+    }
+
     fun getPatientDiseaseData(reason: String, parent: String, isCase: Boolean) {
         CoroutineScope(Dispatchers.IO).launch {
             if (isCase) {
@@ -1043,6 +1117,7 @@ class ClientDetailsViewModel(
                             code = reason
                         })
                     })
+                sort(Encounter.DATE, Order.ASCENDING)
             }
             .take(500)
             .map { enc ->
