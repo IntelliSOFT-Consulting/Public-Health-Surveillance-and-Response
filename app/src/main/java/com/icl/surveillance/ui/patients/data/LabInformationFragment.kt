@@ -11,7 +11,6 @@ import com.icl.surveillance.databinding.FragmentLabInformationBinding
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
-import com.icl.surveillance.utils.toSlug
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
 
@@ -56,6 +55,15 @@ class LabInformationFragment : Fragment() {
         val root: View = binding.root
 
         return root
+    }
+
+    fun String.toSlug(): String {
+        return this
+            .trim()
+            .lowercase()
+            .replace("[^a-z0-9\\s-]".toRegex(), "")
+            .replace("\\s+".toRegex(), "-")
+            .replace("-+".toRegex(), "-")
     }
 
     override fun onResume() {
@@ -111,10 +119,29 @@ class LabInformationFragment : Fragment() {
 
                 if (it.bloodSpecimenCollected.trim() == "Yes") {
                     lnBloodNo.visibility = View.GONE
-                    vnBloodNo.visibility = View.GONE
-                } else {
+                    lnBloodYes.visibility = View.VISIBLE
+                } else if (it.bloodSpecimenCollected.trim() == "No") {
+                    lnBloodNo.visibility = View.VISIBLE
                     lnBloodYes.visibility = View.GONE
-                    vnBloodYes.visibility = View.GONE
+                }
+                if (it.urineSpecimenCollected.trim() == "Yes") {
+                    lnUrineNo.visibility = View.GONE
+                    lnUrineYes.visibility = View.VISIBLE
+                } else if (it.urineSpecimenCollected.trim() == "No") {
+                    lnUrineNo.visibility = View.VISIBLE
+                    lnUrineYes.visibility = View.GONE
+                }
+
+                if (it.respiratorySampleCollected.trim() == "Yes") {
+                    resYes.visibility = View.VISIBLE
+                    resNo.visibility = View.GONE
+                } else if (it.respiratorySampleCollected.trim() == "No") {
+                    resYes.visibility = View.GONE
+                    resNo.visibility = View.VISIBLE
+                }
+                if (it.otherSpecimenCollected.trim() == "Yes") {
+                    otherYes.visibility = View.VISIBLE
+
                 }
             }
         }

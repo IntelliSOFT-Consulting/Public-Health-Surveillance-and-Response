@@ -15,7 +15,9 @@ import com.google.android.fhir.search.revInclude
 import com.google.android.fhir.search.search
 import com.icl.surveillance.R
 import com.icl.surveillance.ui.patients.PatientListViewModel
+import com.icl.surveillance.ui.patients.PatientListViewModel.ClinicalData
 import com.icl.surveillance.ui.patients.PatientListViewModel.ContactResults
+import com.icl.surveillance.ui.patients.PatientListViewModel.PersonDetails
 import com.icl.surveillance.ui.patients.toPatientItem
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -42,11 +44,13 @@ class ClientDetailsViewModel(
 ) : AndroidViewModel(application) {
     val livePatientData = MutableLiveData<List<PatientListViewModel.PatientDetailData>>()
     val livecaseData = MutableLiveData<PatientListViewModel.CaseDetailData>()
+    val liveIdentificationData = MutableLiveData<PersonDetails>()
     val liveSummaryData = MutableLiveData<PatientListViewModel.CaseDetailSummaryData>()
     val liveDiseaseData = MutableLiveData<List<PatientListViewModel.CaseDiseaseData>>()
     val liveLabData = MutableLiveData<List<PatientListViewModel.CaseLabResultsData>>()
     val currentLiveLabData = MutableLiveData<List<PatientListViewModel.LabResults>>()
     val liveLinkedData = MutableLiveData<List<ContactResults>>()
+    val liveClinicalData = MutableLiveData<ClinicalData>()
 
     /** Emits list of [PatientDetailData]. */
     fun getPatientDetailData(category: String, parent: String?) {
@@ -190,6 +194,258 @@ class ClientDetailsViewModel(
             dob = dob,
             sex = sex,
             observations = observations
+        )
+    }
+
+    private suspend fun getClinicalInfoCard(slug: String): ClinicalData {
+        val searchResult =
+            fhirEngine.search<Patient> { filter(Resource.RES_ID, { value = of(patientId) }) }
+        var logicalId = ""
+        var onset = ""
+        var symptoms = mutableListOf<String>()
+        var rashDate = ""
+        var rashType = ""
+        var otherType = ""
+        var vaccinated = ""
+        var doses = ""
+        var thirtyDays = ""
+        var lastVaccination = ""
+        var homeVisit = ""
+        var homeDateVisit = ""
+        var caseEpilinked = ""
+        var epiName = ""
+        var epiEPID = ""
+        searchResult.first().let {
+            logicalId = it.resource.logicalId
+            val matchingIdentifier = it.resource.identifier.find {
+                it.system == slug
+            }
+            if (matchingIdentifier != null) {
+                val obs =
+                    fhirEngine.search<Observation> {
+                        filter(
+                            Observation.ENCOUNTER,
+                            { value = "Encounter/${matchingIdentifier.value}" })
+                    }.take(500)
+
+                obs.forEach {
+                    println("Obs Retrieved: **** ${it.resource.code.codingFirstRep.code} Value ${it.resource.valueStringType}")
+                }
+                vaccinated = generateResponse(obs, "517772812375")
+                doses = generateResponse(obs, "886125589225")
+                thirtyDays = generateResponse(obs, "308128177300")
+                lastVaccination = generateResponse(obs, "544290619304")
+                homeVisit = generateResponse(obs, "207408507040")
+                homeDateVisit = generateResponse(obs, "566661890668")
+                caseEpilinked = generateResponse(obs, "865158268604")
+                epiName = generateResponse(obs, "714692748467")
+                epiEPID = generateResponse(obs, "512392582851")
+                onset =
+                    obs.firstOrNull { it.resource.code.codingFirstRep.code == "728034137219" }
+                        ?.resource
+                        ?.value
+                        ?.asStringValue() ?: ""
+
+
+                rashType = generateResponse(obs, "704922081985")
+                otherType = generateResponse(obs, "679340979918")
+                rashDate =
+                    obs.firstOrNull { it.resource.code.codingFirstRep.code == "576528567552" }
+                        ?.resource
+                        ?.value
+                        ?.asStringValue() ?: ""
+                val par =
+                    obs.firstOrNull { it.resource.code.codingFirstRep.code == "745196148424" }
+                        ?.resource
+                        ?.value
+                        ?.asStringValue() ?: ""
+                if (par.isNotEmpty()) {
+                    symptoms.add(par)
+                }
+                val conju =
+                    obs.firstOrNull { it.resource.code.codingFirstRep.code == "178038943620" }
+                        ?.resource
+                        ?.value
+                        ?.asStringValue() ?: ""
+                if (conju.isNotEmpty()) {
+                    symptoms.add(conju)
+                }
+                val cory =
+                    obs.firstOrNull { it.resource.code.codingFirstRep.code == "317122026276" }
+                        ?.resource
+                        ?.value
+                        ?.asStringValue() ?: ""
+                if (cory.isNotEmpty()) {
+                    symptoms.add(cory)
+                }
+                val cough =
+                    obs.firstOrNull { it.resource.code.codingFirstRep.code == "203174333568" }
+                        ?.resource
+                        ?.value
+                        ?.asStringValue() ?: ""
+                if (cough.isNotEmpty()) {
+                    symptoms.add(cough)
+                }
+                val rash =
+                    obs.firstOrNull { it.resource.code.codingFirstRep.code == "547137374562" }
+                        ?.resource
+                        ?.value
+                        ?.asStringValue() ?: ""
+                if (rash.isNotEmpty()) {
+                    symptoms.add(rash)
+                }
+                val fever =
+                    obs.firstOrNull { it.resource.code.codingFirstRep.code == "848847022926" }
+                        ?.resource
+                        ?.value
+                        ?.asStringValue() ?: ""
+                if (fever.isNotEmpty()) {
+                    symptoms.add(fever)
+                }
+            }
+        }
+        return ClinicalData(
+            onset = onset,
+            symptoms = symptoms,
+            rashDate = rashDate,
+            rashType = rashType,
+            otherType = otherType,
+            vaccinated = vaccinated,
+            doses = doses,
+            thirtyDays = thirtyDays,
+            lastVaccination = lastVaccination,
+            homeVisit = homeVisit,
+            homeDateVisit = homeDateVisit,
+            caseEpilinked = caseEpilinked,
+            epiName = epiName,
+            epiEPID = epiEPID,
+        )
+    }
+
+    private suspend fun getPatientIdentificationCard(slug: String): PersonDetails {
+        val searchResult =
+            fhirEngine.search<Patient> { filter(Resource.RES_ID, { value = of(patientId) }) }
+        var logicalId = ""
+        var name = ""
+        var sex = ""
+        var dob = ""
+        var subCounty = ""
+        var county = ""
+        var residence = ""
+        var parent = ""
+        var houseNo = ""
+        var neighbour = ""
+        var street = ""
+        var town = ""
+        var parentPhone = ""
+        searchResult.first().let {
+            logicalId = it.resource.logicalId
+            name =
+                if (it.resource.hasName()) {
+                    "${it.resource.name[0].givenAsSingleString} ${it.resource.name[0].family} "
+                } else ""
+
+            sex = if (it.resource.hasGenderElement()) it.resource.gender.display else ""
+            dob =
+                if (it.resource.hasBirthDateElement())
+                    if (it.resource.birthDateElement.hasValue())
+                        it.resource.birthDateElement.valueAsString
+                    else ""
+                else ""
+            parentPhone =
+                if (it.resource.hasContact())
+                    if (it.resource.contactFirstRep.hasTelecom())
+                        if (it.resource.contactFirstRep.telecomFirstRep.hasValue())
+                            it.resource.contactFirstRep.telecomFirstRep.value
+                        else ""
+                    else ""
+                else ""
+
+            val cCounty =
+                if (it.resource.hasAddress()) if (it.resource.addressFirstRep.hasCity()) it.resource.addressFirstRep.city else "" else ""
+            val cSubCounty =
+                if (it.resource.hasAddress()) if (it.resource.addressFirstRep.hasState()) it.resource.addressFirstRep.state else "" else ""
+
+            val addressLines = if (
+                it.resource.hasContact() &&
+                it.resource.contactFirstRep.hasAddress() &&
+                it.resource.contactFirstRep.address.hasLine()
+            ) {
+                it.resource.contactFirstRep.address.line
+            } else {
+                emptyList()
+            }
+
+            houseNo = if (addressLines.isNotEmpty()) addressLines[0].value else ""
+            neighbour = if (addressLines.size > 1) addressLines[1].value else ""
+            street = if (addressLines.size > 2) addressLines[2].value else ""
+            town = if (addressLines.size > 3) addressLines[3].value else ""
+
+
+            val matchingIdentifier = it.resource.identifier.find {
+                it.system == slug
+            }
+            if (matchingIdentifier != null) {
+                val obs =
+                    fhirEngine.search<Observation> {
+                        filter(
+                            Observation.ENCOUNTER,
+                            { value = "Encounter/${matchingIdentifier.value}" })
+                    }.take(500)
+
+
+                residence =
+                    obs.firstOrNull { it.resource.code.codingFirstRep.code == "407548372315" }
+                        ?.resource
+                        ?.value
+                        ?.asStringValue() ?: ""
+                parent =
+                    obs.firstOrNull { it.resource.code.codingFirstRep.code == "856448027666" }
+                        ?.resource
+                        ?.value
+                        ?.asStringValue() ?: ""
+                houseNo =
+                    obs.firstOrNull { it.resource.code.codingFirstRep.code == "242811643559" }
+                        ?.resource
+                        ?.value
+                        ?.asStringValue() ?: ""
+
+
+                if (cCounty.isEmpty()) {
+                    county =
+                        obs.firstOrNull { it.resource.code.codingFirstRep.code == "a4-county" }
+                            ?.resource
+                            ?.value
+                            ?.asStringValue() ?: ""
+                } else county = cCounty
+                if (cSubCounty.isEmpty()) {
+                    subCounty =
+                        obs.firstOrNull { it.resource.code.codingFirstRep.code == "a3-sub-county" }
+                            ?.resource
+                            ?.value
+                            ?.asStringValue() ?: ""
+                } else subCounty = cSubCounty
+                if (parentPhone.isEmpty()) {
+                    obs.firstOrNull { it.resource.code.codingFirstRep.code == "754217593839" }
+                        ?.resource
+                        ?.value
+                        ?.asStringValue() ?: ""
+                }
+            }
+        }
+        return PersonDetails(
+            name = name,
+            sex = sex,
+            dob = dob,
+            residence = residence,
+            parent = parent,
+            houseNo = houseNo,
+            neighbour = neighbour,
+            street = street,
+            town = town,
+            subCountyName = subCounty,
+            countyName = county,
+            parentPhone = parentPhone
         )
     }
 
@@ -560,10 +816,24 @@ class ClientDetailsViewModel(
             ?.asStringValue() ?: ""
     }
 
+    fun getClinicalInfo(slug: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val patientData = getClinicalInfoCard(slug)
+            withContext(Dispatchers.Main) { liveClinicalData.value = patientData }
+        }
+    }
+
     fun getPatientInfo(slug: String) {
         CoroutineScope(Dispatchers.IO).launch {
             val patientData = getPatientInfoCard(slug)
             withContext(Dispatchers.Main) { livecaseData.value = patientData }
+        }
+    }
+
+    fun getPatientIdentification(slug: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val patientData = getPatientIdentificationCard(slug)
+            withContext(Dispatchers.Main) { liveIdentificationData.value = patientData }
         }
     }
 
@@ -697,7 +967,9 @@ class ClientDetailsViewModel(
 
                     val obs =
                         fhirEngine.search<Observation> {
-                            filter(Observation.ENCOUNTER, { value = "Encounter/${loop.logicalId}" })
+                            filter(
+                                Observation.ENCOUNTER,
+                                { value = "Encounter/${loop.logicalId}" })
                         }
 
                     val dateSpecimenReceived = generateResponse(obs, "date-specimen-received")
@@ -708,7 +980,8 @@ class ClientDetailsViewModel(
                     val finalClassification = generateResponse(obs, "final-classification")
                     val finalNClassification =
                         generateResponse(obs, "final-negative-classification")
-                    val finalPClassification = generateResponse(obs, "final-confirm-classification")
+                    val finalPClassification =
+                        generateResponse(obs, "final-confirm-classification")
 
                     val subcountyName = generateResponse(obs, "contact-name")
                     val subcountyDesignation = generateResponse(obs, "contact-designation")
@@ -774,7 +1047,10 @@ class ClientDetailsViewModel(
             .take(500)
             .map { enc ->
 
-                Log.e("Lab Results: ", "Lab results coming here Parent ${enc.resource.logicalId}")
+                Log.e(
+                    "Lab Results: ",
+                    "Lab results coming here Parent ${enc.resource.logicalId}"
+                )
                 val observations: MutableList<PatientListViewModel.ObservationItem> =
                     mutableListOf()
                 fhirEngine.search<Observation> {
@@ -828,7 +1104,9 @@ class ClientDetailsViewModel(
 
                     val obs =
                         fhirEngine.search<Observation> {
-                            filter(Observation.ENCOUNTER, { value = "Encounter/${loop.logicalId}" })
+                            filter(
+                                Observation.ENCOUNTER,
+                                { value = "Encounter/${loop.logicalId}" })
                         }
 
                     val fever = generateResponse(obs, "f1")
@@ -889,7 +1167,8 @@ class ClientDetailsViewModel(
         private fun createObservationItem(
             observation: Observation,
         ): PatientListViewModel.ObservationItem {
-            val observationCode = observation.code.text ?: observation.code.codingFirstRep.display
+            val observationCode =
+                observation.code.text ?: observation.code.codingFirstRep.display
 
             // Show nothing if no values available for datetime and value quantity.
             val dateTimeString =
@@ -928,7 +1207,8 @@ class ClientDetailsViewModel(
             condition: Condition,
             resources: Resources,
         ): PatientListViewModel.ConditionItem {
-            val observationCode = condition.code.text ?: condition.code.codingFirstRep.display ?: ""
+            val observationCode =
+                condition.code.text ?: condition.code.codingFirstRep.display ?: ""
 
             // Show nothing if no values available for datetime and value quantity.
             val dateTimeString =

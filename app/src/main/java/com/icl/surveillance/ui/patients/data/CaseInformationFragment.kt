@@ -11,7 +11,6 @@ import com.icl.surveillance.databinding.FragmentCaseInformationBinding
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
-import com.icl.surveillance.utils.toSlug
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
 
@@ -58,6 +57,15 @@ class CaseInformationFragment : Fragment() {
         return root
     }
 
+    fun String.toSlug(): String {
+        return this
+            .trim()
+            .lowercase()
+            .replace("[^a-z0-9\\s-]".toRegex(), "")
+            .replace("\\s+".toRegex(), "-")
+            .replace("-+".toRegex(), "-")
+    }
+
     override fun onResume() {
         super.onResume()
         try {
@@ -86,21 +94,27 @@ class CaseInformationFragment : Fragment() {
         val currentCase = FormatterClass().getSharedPref("currentCase", requireContext())
         if (currentCase != null) {
             val slug = currentCase.toSlug()
-            patientDetailsViewModel.getPatientInfo(slug)
+            patientDetailsViewModel.getClinicalInfo(slug)
         }
-        patientDetailsViewModel.livecaseData.observe(viewLifecycleOwner) {
+        patientDetailsViewModel.liveClinicalData.observe(viewLifecycleOwner) {
+            val symptoms = it.symptoms.distinct().joinToString(", ")
+
             binding.apply {
                 tvOnset.text = it.onset
-                tvClinicalSymptoms.text = it.clinicalSymptoms
+                tvClinicalSymptoms.text = symptoms
                 tvOnsetRashDate.text = it.rashDate
                 tvRashType.text = it.rashType
-                tvVaccinated.text = it.patientVaccinated
-                tvDoses.text = it.patientDoses
-                tvVaccination30Days.text = it.vaccineDateThirtyDays
-                tvLastVaccinationDate.text = it.lastDoseDate
-                tvHomeVisit.text = it.homeVisited
-                tvVisitDate.text = it.homeVisitedDate
-                tvEpiLink.text = it.epiLinked
+                tvVaccinated.text = it.vaccinated
+                tvDoses.text = it.doses
+                tvVaccination30Days.text = it.thirtyDays
+                tvLastVaccinationDate.text = it.lastVaccination
+                tvHomeVisit.text = it.homeVisit
+                tvVisitDate.text = it.homeDateVisit
+                tvEpiLink.text = it.caseEpilinked
+
+                if (it.symptoms.contains("Rash")) {
+                    lnRashSection.visibility = View.VISIBLE
+                }
             }
 
             //    patientDetailsViewModel.getPatientDiseaseData("Measles Case", "$encounterId", true)

@@ -248,7 +248,7 @@ class PatientListViewModel(
         return fhirEngine
             .search<Patient> {
                 sort(Patient.GIVEN, Order.ASCENDING)
-                count = 100
+                count = 500
                 from = 0
             }
             .mapIndexedNotNull { index, fhirPatient ->
@@ -268,7 +268,7 @@ class PatientListViewModel(
                             filter(
                                 Observation.ENCOUNTER,
                                 { value = "Encounter/${logicalId}" })
-                        }
+                        }.take(500)
 
 
                     val epid = if (epidIdenfifier != null) epidIdenfifier.value else
@@ -278,15 +278,17 @@ class PatientListViewModel(
                             ?.asStringValue() ?: ""
 
                     val county =
-                        obs.firstOrNull { it.resource.code.codingFirstRep.code == "a4-county" }
-                            ?.resource
-                            ?.value
-                            ?.asStringValue() ?: ""
+                        if (fhirPatient.resource.hasAddress()) if (fhirPatient.resource.addressFirstRep.hasCity()) fhirPatient.resource.addressFirstRep.city else "" else
+                            obs.firstOrNull { it.resource.code.codingFirstRep.code == "a4-county" }
+                                ?.resource
+                                ?.value
+                                ?.asStringValue() ?: ""
                     val subCounty =
-                        obs.firstOrNull { it.resource.code.codingFirstRep.code == "a3-sub-county" }
-                            ?.resource
-                            ?.value
-                            ?.asStringValue() ?: ""
+                        if (fhirPatient.resource.hasAddress()) if (fhirPatient.resource.addressFirstRep.hasState()) fhirPatient.resource.addressFirstRep.state else "" else
+                            obs.firstOrNull { it.resource.code.codingFirstRep.code == "a3-sub-county" }
+                                ?.resource
+                                ?.value
+                                ?.asStringValue() ?: ""
                     val onset =
                         obs.firstOrNull { it.resource.code.codingFirstRep.code == "728034137219" }
                             ?.resource
@@ -314,27 +316,15 @@ class PatientListViewModel(
                             obs1.firstOrNull { it.resource.code.codingFirstRep.code == "measles-igm" }
                                 ?.resource
                                 ?.value
-                                ?.asStringValue() ?: ""
+                                ?.asStringValue() ?: "Pending"
                         finalClassification =
-                            obs1.firstOrNull { it.resource.code.codingFirstRep.code == "final-classification" }
-                                ?.resource
-                                ?.value
-                                ?.asStringValue() ?: ""
+                            if (measlesIgm.trim() == "Positive") "Confirmed by lab" else
+                                obs1.firstOrNull { it.resource.code.codingFirstRep.code == "final-classification" }
+                                    ?.resource
+                                    ?.value
+                                    ?.asStringValue() ?: "Pending Results"
 
 
-//                        finalClassification = when (measlesIgm.lowercase()) {
-//                            "positive" -> obs1.firstOrNull {
-//                                it.resource.code.codingFirstRep.code == "final-confirm-classification"
-//                            }?.resource?.value?.asStringValue() ?: ""
-//
-//                            "negative" -> obs1.firstOrNull {
-//                                it.resource.code.codingFirstRep.code == "final-negative-classification"
-//                            }?.resource?.value?.asStringValue() ?: ""
-//
-//                            else -> obs1.firstOrNull {
-//                                it.resource.code.codingFirstRep.code == "final-classification"
-//                            }?.resource?.value?.asStringValue() ?: ""
-//                        }
                     }
                     data =
                         data.copy(
@@ -573,6 +563,39 @@ class PatientListViewModel(
         val encounterId: String,
         val observations: List<ObservationItem> = emptyList<ObservationItem>()
     )
+
+    data class ClinicalData(
+        val onset: String,
+        val symptoms: List<String> = emptyList<String>(),
+        val rashDate: String,
+        val rashType: String,
+        val otherType: String,
+        val vaccinated: String,
+        val doses: String,
+        val thirtyDays: String,
+        val lastVaccination: String,
+        val homeVisit: String,
+        val homeDateVisit: String,
+        val caseEpilinked: String,
+        val epiName: String,
+        val epiEPID: String,
+    )
+
+    data class PersonDetails(
+        val name: String,
+        val sex: String,
+        val dob: String,
+        val residence: String,
+        val parent: String,
+        val houseNo: String,
+        val neighbour: String,
+        val street: String,
+        val town: String,
+        val subCountyName: String,
+        val countyName: String,
+        val parentPhone: String
+    )
+
 
     data class CaseDetailData(
         val logicalId: String,

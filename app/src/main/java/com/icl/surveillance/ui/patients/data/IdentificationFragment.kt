@@ -11,7 +11,6 @@ import com.icl.surveillance.databinding.FragmentIdentificationBinding
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
-import com.icl.surveillance.utils.toSlug
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
 
@@ -57,7 +56,14 @@ class IdentificationFragment : Fragment() {
 
         return root
     }
-
+    fun String.toSlug(): String {
+        return this
+            .trim()
+            .lowercase()
+            .replace("[^a-z0-9\\s-]".toRegex(), "")
+            .replace("\\s+".toRegex(), "-")
+            .replace("-+".toRegex(), "-")
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -77,10 +83,10 @@ class IdentificationFragment : Fragment() {
         val currentCase = FormatterClass().getSharedPref("currentCase", requireContext())
         if (currentCase != null) {
             val slug = currentCase.toSlug()
-            patientDetailsViewModel.getPatientInfo(slug)
+            patientDetailsViewModel.getPatientIdentification(slug)
         }
         // getPatientDetailData("Measles Case", null)
-        patientDetailsViewModel.livecaseData.observe(viewLifecycleOwner) {
+        patientDetailsViewModel.liveIdentificationData.observe(viewLifecycleOwner) {
             binding.apply {
                 tvName.text = it.name
                 tvSex.text = it.sex

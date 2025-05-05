@@ -374,7 +374,7 @@
               "valueCode": "horizontal"
             }
           ],
-          "linkId": "407548372315",
+          "linkId": "residence",
           "text": "Residence",
           "required": true,
           "answerOption": [
@@ -399,7 +399,7 @@
         },
         {
           "type": "string",
-          "linkId": "856448027666",
+          "linkId": "parent",
           "text": "Parent / Guardian",
           "required": true
         },
@@ -427,16 +427,72 @@
           "required": true
         },
         {
-          "type": "string",
+          "type": "choice",
           "linkId": "a3-sub-county",
           "text": "Sub County",
-          "required": true
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Westlands",
+                "display": "Westlands"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Kasarani",
+                "display": "Kasarani"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
-          "type": "string",
+          "type": "choice",
           "linkId": "a4-county",
           "text": "County",
-          "required": true
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Nairobi",
+                "display": "Nairobi"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Kiambu",
+                "display": "Kiambu"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
           "type": "string",
@@ -454,6 +510,36 @@
                   }
                 ]
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxLength",
+              "valueInteger": 10
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minLength",
+              "valueInteger": 10
+            }
+          ],
+          "item": [
+            {
+              "linkId": "2.1",
+              "text": "07xxxxxxxx",
+              "type": "display",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "flyover",
+                        "display": "Fly-over"
+                      }
+                    ],
+                    "text": "Flyover"
+                  }
+                }
+              ]
             }
           ]
         }
@@ -583,6 +669,50 @@
           "linkId": "755731625544",
           "text": "IP/ OP No",
           "required": true
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "linkId": "508745697175",
+          "text": "Outcome",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Alive",
+                "display": "Alive"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Dead",
+                "display": "Dead"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Unknown",
+                "display": "Unknown"
+              }
+            }
+          ]
         }
       ],
       "type": "group",
@@ -1220,50 +1350,6 @@
                     }
                   }
                 ]
-              }
-            }
-          ]
-        },
-        {
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "radio-button",
-                    "display": "Radio Button"
-                  }
-                ]
-              }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-              "valueCode": "horizontal"
-            }
-          ],
-          "linkId": "508745697175",
-          "text": "Outcome",
-          "required": true,
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "Alive",
-                "display": "Alive"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Dead",
-                "display": "Dead"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Unknown",
-                "display": "Unknown"
               }
             }
           ]
