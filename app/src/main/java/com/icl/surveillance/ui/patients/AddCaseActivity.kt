@@ -72,18 +72,15 @@ class AddCaseActivity : AppCompatActivity() {
                 jsonParser.encodeResourceToString(questionnaireResponse)
             Log.e("response", questionnaireResponseString)
             println("Response $questionnaireResponseString")
-            saveCase(questionnaireFragment.getQuestionnaireResponse())
+            saveCase(questionnaireFragment.getQuestionnaireResponse(),questionnaireResponseString)
         }
     }
 
-    private fun saveCase(questionnaireResponse: QuestionnaireResponse) {
+    private fun saveCase(questionnaireResponse: QuestionnaireResponse,questionnaireResponseString: String) {
 
         val patientId = FormatterClass().getSharedPref("resourceId", this@AddCaseActivity)
         val questionnaire = FormatterClass().getSharedPref("questionnaire", this@AddCaseActivity)
         val encounter = FormatterClass().getSharedPref("encounterId", this@AddCaseActivity)
-        val context = FhirContext.forR4()
-        val questionnaireResponseString =
-            context.newJsonParser().encodeResourceToString(questionnaireResponse)
 
         println("Parent Encounter $encounter")
         when (questionnaire) {
@@ -188,17 +185,6 @@ class AddCaseActivity : AppCompatActivity() {
             }
 
             showSuccessDialog(this@AddCaseActivity)
-//            val alert = SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-//            alert
-//                .setTitleText("Success!")
-//                .setContentText("Record successfully saved!")
-//                .setConfirmText("OK")
-//                .setConfirmClickListener { dialog ->
-//                    dialog.dismissWithAnimation()
-//                    this@AddCaseActivity.finish()
-//                }
-//                .setCancelable(false)
-//            alert.show()
         }
     }
 

@@ -11,12 +11,6 @@
     {
       "item": [
         {
-          "type": "string",
-          "linkId": "992818778559",
-          "text": "EPID No",
-          "readOnly": true
-        },
-        {
           "type": "choice",
           "extension": [
             {
@@ -163,6 +157,12 @@
               }
             }
           ]
+        },
+        {
+          "type": "string",
+          "linkId": "992818778559",
+          "text": "EPID No",
+          "readOnly": true
         }
       ],
       "type": "group",
@@ -189,29 +189,7 @@
           "type": "string",
           "linkId": "873240407472",
           "text": "First name",
-          "required": true,
-          "item": [
-            {
-              "linkId": "873240407472_helpText",
-              "type": "display",
-              "text": "The patients first, middle and last names.",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "help",
-                        "display": "Help-Button"
-                      }
-                    ],
-                    "text": "Help-Button"
-                  }
-                }
-              ]
-            }
-          ]
+          "required": true
         },
         {
           "type": "string",
@@ -548,7 +526,7 @@
         },
         {
           "type": "string",
-          "linkId": "242811643559",
+          "linkId": "residence-details",
           "text": "Residence (Village/Estate/Hse No).",
           "required": true
         },
@@ -556,29 +534,7 @@
           "type": "string",
           "linkId": "946232932304",
           "text": "Neighborhood major landmark.",
-          "required": true,
-          "item": [
-            {
-              "linkId": "131610314717_helpText",
-              "type": "display",
-              "text": "A well-known nearby location that helps identify the residence.",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "help",
-                        "display": "Help-Button"
-                      }
-                    ],
-                    "text": "Help-Button"
-                  }
-                }
-              ]
-            }
-          ]
+          "required": true
         },
         {
           "type": "string",
@@ -615,7 +571,7 @@
           ]
         },
         {
-          "type": "string",
+          "type": "choice",
           "linkId": "143814017466",
           "text": "Ward",
           "required": true,
@@ -639,6 +595,52 @@
                   }
                 }
               ]
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Kasarani",
+                "display": "Kasarani"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Mwiki",
+                "display": "Mwiki"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Clay City",
+                "display": "Clay City"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Roysambu",
+                "display": "Roysambu"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Njiru",
+                "display": "Njiru"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
             }
           ]
         },

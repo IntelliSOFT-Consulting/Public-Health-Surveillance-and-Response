@@ -670,9 +670,7 @@
           "required": true,
           "item": [
             {
-              "linkId": "205898169162_helpText",
               "type": "display",
-              "text": "Telephone number of investigator at Lab",
               "extension": [
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -680,14 +678,15 @@
                     "coding": [
                       {
                         "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "help",
-                        "display": "Help-Button"
+                        "code": "flyover",
+                        "display": "Fly-over"
                       }
-                    ],
-                    "text": "Help-Button"
+                    ]
                   }
                 }
-              ]
+              ],
+              "linkId": "telephone-hint",
+              "text": "07xxxxxxxx"
             }
           ],
           "extension": [
@@ -702,6 +701,14 @@
                   }
                 ]
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxLength",
+              "valueInteger": 10
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minLength",
+              "valueInteger": 10
             }
           ]
         }

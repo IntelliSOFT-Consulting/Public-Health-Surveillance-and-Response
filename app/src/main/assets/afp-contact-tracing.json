@@ -18,7 +18,8 @@
         {
           "type": "string",
           "linkId": "992818778559",
-          "text": "EPID No. of Contact"
+          "text": "EPID No. of Contact",
+          "readOnly": true
         },
         {
           "type": "choice",

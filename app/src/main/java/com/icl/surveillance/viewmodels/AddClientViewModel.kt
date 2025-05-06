@@ -101,8 +101,16 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
             val patientId = generateUuid()
             val subjectReference = Reference("Patient/$patientId")
+//            val jsonObject = JSONObject(questionnaireResponseString)
+//            val extractedAnswers = extractStructuredAnswers(jsonObject)
+
+
             val jsonObject = JSONObject(questionnaireResponseString)
-            val extractedAnswers = extractStructuredAnswers(jsonObject)
+            val extractedAnswers = extractStructuredAnswersOnlyFromItems(jsonObject)
+            extractedAnswers.forEach {
+                println("Let's review the results → ${it.linkId} | ${it.text} = ${it.answer}")
+            }
+
             val reasonCode = FormatterClass().getSharedPref(
                 "currentCase",
                 context
@@ -497,6 +505,57 @@ class AddClientViewModel(application: Application, private val state: SavedState
         }
     }
 
+
+
+    fun extractStructuredAnswersOnlyFromItems(json: JSONObject): List<QuestionnaireAnswer> {
+        val results = mutableListOf<QuestionnaireAnswer>()
+
+        fun processItems(items: JSONArray) {
+            for (i in 0 until items.length()) {
+                val item = items.getJSONObject(i)
+                val linkId = item.optString("linkId", "")
+                val text = item.optString("text", "")
+
+                // Extract from answer[] if available
+                if (item.has("answer")) {
+                    val answers = item.getJSONArray("answer")
+                    for (j in 0 until answers.length()) {
+                        val answerObj = answers.getJSONObject(j)
+
+                        // Only extract from answer directly — not from answer.item[]
+                        val value = when {
+                            answerObj.has("valueString") -> answerObj.getString("valueString")
+                            answerObj.has("valueInteger") -> answerObj.optString("valueInteger", "")
+                            answerObj.has("valueDate") -> answerObj.optString("valueDate", "")
+                            answerObj.has("valueDateTime") -> answerObj.optString("valueDateTime", "")
+                            answerObj.has("valueBoolean") -> answerObj.optString("valueBoolean", "")
+                            answerObj.has("valueDecimal") -> answerObj.optString("valueDecimal", "")
+                            answerObj.has("valueCoding") -> {
+                                val coding = answerObj.getJSONObject("valueCoding")
+                                coding.optString("display", coding.optString("code", ""))
+                            }
+                            else -> null
+                        }
+
+                        if (!value.isNullOrBlank()) {
+                            results.add(QuestionnaireAnswer(linkId, text, value))
+                        }
+                    }
+                }
+
+                // Recurse only into item.item[] (not answer.item[])
+                if (item.has("item")) {
+                    processItems(item.getJSONArray("item"))
+                }
+            }
+        }
+
+        if (json.has("item")) {
+            processItems(json.getJSONArray("item"))
+        }
+
+        return results
+    }
     private fun String.toSlug(): String {
         return this
             .trim() // remove leading/trailing spaces
@@ -539,6 +598,8 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
                         if (value != null && value.isNotBlank()) {
                             results.add(QuestionnaireAnswer(linkId, text, value))
+                        }else {
+                            println("Skipped: linkId=$linkId, text=$text, value=$value")
                         }
                     }
                 }

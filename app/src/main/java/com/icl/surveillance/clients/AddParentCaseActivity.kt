@@ -79,7 +79,7 @@ class AddParentCaseActivity : AppCompatActivity() {
                 jsonParser.encodeResourceToString(questionnaireResponse)
             Log.e("response", questionnaireResponseString)
             println("Response $questionnaireResponseString")
-            saveCase(questionnaireFragment.getQuestionnaireResponse())
+            saveCase(questionnaireFragment.getQuestionnaireResponse(), questionnaireResponseString)
         }
     }
 
@@ -97,14 +97,10 @@ class AddParentCaseActivity : AppCompatActivity() {
         alertDialog.show()
     }
 
-    private fun saveCase(questionnaireResponse: QuestionnaireResponse) {
-        val context = FhirContext.forR4()
-        val questionnaireResponseString =
-            context.newJsonParser().encodeResourceToString(questionnaireResponse)
-        println("Questionnaire Response: $questionnaireResponseString")
-        val questionnaire =
-            FormatterClass().getSharedPref("questionnaire", this@AddParentCaseActivity)
-
+    private fun saveCase(
+        questionnaireResponse: QuestionnaireResponse,
+        questionnaireResponseString: String
+    ) {
 
         viewModel.savePatientData(
             questionnaireResponse,
