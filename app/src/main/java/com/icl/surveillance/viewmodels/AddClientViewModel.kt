@@ -377,6 +377,8 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
                     createResource(obs, subjectReference, encounterReference)
+
+
                     try {
                         if (dobEntry != null) {
                             patient.birthDate =
@@ -418,7 +420,25 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val mNameEntry = extractedAnswers.find { it.linkId == "164840483828" }
                     val lNameEntry = extractedAnswers.find { it.linkId == "606848143908" }
                     val genderEntry = extractedAnswers.find { it.linkId == "543806612685" }
+                    val dobEntry = extractedAnswers.find { it.linkId == "761800309411" }
+                    val phoneEntry = extractedAnswers.find { it.linkId == "760016167907" }
+                    val contactNameEntry = extractedAnswers.find { it.linkId == "657999955440" }
+                    val contactPhoneEntry = extractedAnswers.find { it.linkId == "354738003178" }
 
+                    val casePhone = ContactPoint()
+                    val parentPhone = ContactPoint()
+                    if (phoneEntry != null) {
+                        casePhone.value = phoneEntry.answer
+                        casePhone.system = ContactPoint.ContactPointSystem.PHONE
+                        casePhone.use = ContactPoint.ContactPointUse.MOBILE
+                        patient.addTelecom(parentPhone)
+                    }
+                    if (contactPhoneEntry != null) {
+                        parentPhone.value = contactPhoneEntry.answer
+                        parentPhone.system = ContactPoint.ContactPointSystem.PHONE
+                        parentPhone.use = ContactPoint.ContactPointUse.MOBILE
+                        patient.contactFirstRep.addTelecom(parentPhone)
+                    }
 
                     if (genderEntry != null) {
                         val gender = when (genderEntry.answer.lowercase()) {
@@ -446,9 +466,11 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
                     if (subCountyEntry != null) {
                         subCounty = subCountyEntry.answer
+                        patient.addressFirstRep.state = subCounty
                     }
                     if (countyEntry != null) {
                         county = countyEntry.answer
+                        patient.addressFirstRep.city = county
                     }
 
                     val countyCode = county.padEnd(3, 'X').take(3).uppercase()
@@ -459,6 +481,34 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
                     createResource(obs, subjectReference, encounterReference)
+                    try {
+                        if (dobEntry != null) {
+                            patient.birthDate =
+                                SimpleDateFormat("yyyy-MM-dd").parse(dobEntry.answer)
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+
+                    val fullName = contactNameEntry?.answer?.trim().orEmpty()
+                    val parts = fullName.split("\\s+".toRegex()).filter { it.isNotBlank() }
+
+                    val parentName = HumanName()
+                    when {
+                        parts.isEmpty() -> {
+
+                        }
+
+                        parts.size == 1 -> {
+                            parentName.family = parts[0]
+                        }
+
+                        else -> {
+                            parentName.family = parts[0]
+                            parentName.addGiven(parts.drop(1).joinToString(" "))
+                        }
+                    }
+                    patient.contactFirstRep.name = parentName
                 }
 
             }
@@ -506,7 +556,6 @@ class AddClientViewModel(application: Application, private val state: SavedState
     }
 
 
-
     fun extractStructuredAnswersOnlyFromItems(json: JSONObject): List<QuestionnaireAnswer> {
         val results = mutableListOf<QuestionnaireAnswer>()
 
@@ -527,13 +576,18 @@ class AddClientViewModel(application: Application, private val state: SavedState
                             answerObj.has("valueString") -> answerObj.getString("valueString")
                             answerObj.has("valueInteger") -> answerObj.optString("valueInteger", "")
                             answerObj.has("valueDate") -> answerObj.optString("valueDate", "")
-                            answerObj.has("valueDateTime") -> answerObj.optString("valueDateTime", "")
+                            answerObj.has("valueDateTime") -> answerObj.optString(
+                                "valueDateTime",
+                                ""
+                            )
+
                             answerObj.has("valueBoolean") -> answerObj.optString("valueBoolean", "")
                             answerObj.has("valueDecimal") -> answerObj.optString("valueDecimal", "")
                             answerObj.has("valueCoding") -> {
                                 val coding = answerObj.getJSONObject("valueCoding")
                                 coding.optString("display", coding.optString("code", ""))
                             }
+
                             else -> null
                         }
 
@@ -556,6 +610,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
         return results
     }
+
     private fun String.toSlug(): String {
         return this
             .trim() // remove leading/trailing spaces
@@ -598,7 +653,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
                         if (value != null && value.isNotBlank()) {
                             results.add(QuestionnaireAnswer(linkId, text, value))
-                        }else {
+                        } else {
                             println("Skipped: linkId=$linkId, text=$text, value=$value")
                         }
                     }

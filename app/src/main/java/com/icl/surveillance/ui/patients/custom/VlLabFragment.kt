@@ -3,6 +3,7 @@ package com.icl.surveillance.ui.patients.custom
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.fhir.FhirEngine
 import com.google.android.material.button.MaterialButton
@@ -28,7 +30,6 @@ import com.icl.surveillance.models.QuestionnaireItem
 import com.icl.surveillance.ui.patients.AddCaseActivity
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
-import com.icl.surveillance.utils.toSlug
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
 import kotlin.collections.forEach
@@ -79,7 +80,6 @@ class VlLabFragment : Fragment() {
             val encounterId = FormatterClass().getSharedPref("encounterId", requireContext())
             val currentCase = FormatterClass().getSharedPref("currentCase", requireContext())
             if (currentCase != null) {
-                val slug = currentCase.toSlug()
                 patientDetailsViewModel.getPatientResultsDiseaseData(
                     "VL Laboratory Examination",
                     "$encounterId",
@@ -132,7 +132,6 @@ class VlLabFragment : Fragment() {
             }
         }
         if (currentCase != null) {
-            val slug = currentCase.toSlug()
             patientDetailsViewModel.getPatientResultsDiseaseData(
                 "VL Laboratory Examination",
                 "$encounterId",
@@ -156,7 +155,6 @@ class VlLabFragment : Fragment() {
     }
 
     private fun handleDataClick(currentCase: String) {
-        val slug = currentCase.toSlug()
         FormatterClass().saveSharedPref(
             "questionnaire", "vl-case-lab-information.json", requireContext()
         )
@@ -305,7 +303,8 @@ class VlLabFragment : Fragment() {
         val label = TextView(requireContext()).apply {
             text = item
             textSize = 14f
-            setTextColor(android.graphics.Color.BLUE)
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.purple_200))
+            typeface = Typeface.DEFAULT_BOLD
             layoutParams = LinearLayout.LayoutParams(
                 0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f
             )

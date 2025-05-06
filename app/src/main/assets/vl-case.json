@@ -31,27 +31,23 @@
               }
             }
           ],
-          "linkId": "784459993798",
-          "text": "Health Facility Name",
+          "linkId": "a4-county",
+          "text": "County",
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
-                "code": "mfl001",
-                "display": "Kenyatta National Hospital"
+                "code": "047",
+                "display": "Nairobi"
               }
             },
             {
               "valueCoding": {
-                "code": "mfl002",
-                "display": "Kenyatta University - placeholder"
+                "code": "001",
+                "display": "Mombasa"
               }
             }
           ]
-        },
-        {
-          "type": "quantity",
-          "linkId": "223713088770",
-          "text": "Ward"
         },
         {
           "type": "choice",
@@ -71,6 +67,7 @@
           ],
           "linkId": "a3-sub-county",
           "text": "Sub-County",
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -82,6 +79,58 @@
               "valueCoding": {
                 "code": "sub-002",
                 "display": "Kisauni"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "223713088770",
+          "text": "Ward",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Kasarani",
+                "display": "Kasarani"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Mwiki",
+                "display": "Mwiki"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Clay City",
+                "display": "Clay City"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Roysambu",
+                "display": "Roysambu"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Njiru",
+                "display": "Njiru"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
               }
             }
           ]
@@ -102,19 +151,20 @@
               }
             }
           ],
-          "linkId": "a4-county",
-          "text": "County",
+          "linkId": "784459993798",
+          "text": "Health Facility Name",
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
-                "code": "047",
-                "display": "Nairobi"
+                "code": "mfl001",
+                "display": "Kenyatta National Hospital"
               }
             },
             {
               "valueCoding": {
-                "code": "001",
-                "display": "Mombasa"
+                "code": "mfl002",
+                "display": "Kenyatta University"
               }
             }
           ]
@@ -122,6 +172,7 @@
         {
           "type": "date",
           "linkId": "185890957847",
+          "required": true,
           "extension": [
             {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
@@ -180,8 +231,7 @@
         {
           "type": "string",
           "linkId": "164840483828",
-          "text": "Patient Middle Name",
-          "required": true
+          "text": "Patient Middle Name"
         },
         {
           "type": "string",
@@ -473,10 +523,56 @@
           "required": true
         },
         {
-          "type": "string",
+          "type": "choice",
           "linkId": "754362784943",
           "text": "Ward",
-          "required": true
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Kasarani",
+                "display": "Kasarani"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Mwiki",
+                "display": "Mwiki"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Clay City",
+                "display": "Clay City"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Roysambu",
+                "display": "Roysambu"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Njiru",
+                "display": "Njiru"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
           "type": "choice",
@@ -630,7 +726,51 @@
           "type": "string",
           "linkId": "354738003178",
           "text": "Mobile Contact (of Contact Person)",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "phone-number",
+                    "display": "Phone Number"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxLength",
+              "valueInteger": 10
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minLength",
+              "valueInteger": 10
+            }
+          ],
+          "item": [
+            {
+              "linkId": "2.1",
+              "text": "07xxxxxxxx",
+              "type": "display",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "flyover",
+                        "display": "Fly-over"
+                      }
+                    ],
+                    "text": "Flyover"
+                  }
+                }
+              ]
+            }
+          ]
         }
       ],
       "type": "group",
@@ -655,7 +795,7 @@
       "item": [
         {
           "type": "date",
-          "linkId": "451005827955",
+          "linkId": "728034137219",
           "text": "Date of Onset of Symptoms",
           "extension": [
             {
