@@ -13,7 +13,27 @@
         {
           "type": "date",
           "linkId": "598716788113",
-          "text": "Date of Follow-up Examination"
+          "text": "Date of Follow-up Examination",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
           "type": "choice",
@@ -141,6 +161,10 @@
                   }
                 ]
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
             }
           ],
           "linkId": "598808996682",
@@ -173,7 +197,27 @@
         {
           "type": "date",
           "linkId": "864740040168",
-          "text": "Clinician's Date (Follow-up)"
+          "text": "Clinician's Date (Follow-up)",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
           "type": "string",

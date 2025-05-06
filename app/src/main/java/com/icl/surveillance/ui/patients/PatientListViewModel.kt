@@ -23,6 +23,7 @@ import org.hl7.fhir.r4.model.Coding
 import org.hl7.fhir.r4.model.Encounter
 import org.hl7.fhir.r4.model.Observation
 import org.hl7.fhir.r4.model.Patient
+import kotlin.String
 
 class PatientListViewModel(
     application: Application,
@@ -31,6 +32,7 @@ class PatientListViewModel(
     AndroidViewModel(application) {
     val liveSearchedPatients = MutableLiveData<List<PatientItem>>()
     val liveSearchedCases = MutableLiveData<List<PatientItem>>()
+    val liveRumorCases = MutableLiveData<List<RumorItem>>()
     val patientCount = MutableLiveData<Long>()
 
 
@@ -49,6 +51,13 @@ class PatientListViewModel(
     fun handleCurrentCaseListing(category: String) {
         viewModelScope.launch {
             liveSearchedCases.value = retrieveCasesByDisease(category)
+//            patientCount.value = count()
+        }
+    }
+
+    fun handleCurrentRumorCaseListing(category: String) {
+        viewModelScope.launch {
+            liveRumorCases.value = retrieveRumorCasesByDisease(category)
 //            patientCount.value = count()
         }
     }
@@ -217,6 +226,72 @@ class PatientListViewModel(
         return patients
     }
 
+    private suspend fun retrieveRumorCasesByDisease(
+        nameQuery: String,
+    ): List<RumorItem> {
+        return fhirEngine
+            .search<Patient> {
+                sort(Patient.GIVEN, Order.ASCENDING)
+                count = 500
+                from = 0
+            }
+            .mapIndexedNotNull { index, fhirPatient ->
+                val matchingIdentifier = fhirPatient.resource.identifier.find {
+                    it.system == nameQuery
+                }
+                if (matchingIdentifier != null) {
+                    // Convert the FHIR Patient resource to your PatientItem model
+                    var data = fhirPatient.resource.toPatientItem(index + 1)
+
+                    val logicalId = matchingIdentifier.value
+                    val obs =
+                        fhirEngine.search<Observation> {
+                            filter(
+                                Observation.ENCOUNTER,
+                                { value = "Encounter/${logicalId}" })
+                        }.take(500)
+
+                    var response = RumorItem(
+                        id = data.id,
+                        resourceId = data.resourceId,
+                        encounterId = matchingIdentifier.value,
+                        mohName = obs.firstOrNull { it.resource.code.codingFirstRep.code == "701496224461" }
+                            ?.resource
+                            ?.value
+                            ?.asStringValue() ?: "",
+                        directorate = obs.firstOrNull { it.resource.code.codingFirstRep.code == "256928760972" }
+                            ?.resource
+                            ?.value
+                            ?.asStringValue() ?: "",
+                        division = obs.firstOrNull { it.resource.code.codingFirstRep.code == "686990243396" }
+                            ?.resource
+                            ?.value
+                            ?.asStringValue() ?: "",
+                        village = obs.firstOrNull { it.resource.code.codingFirstRep.code == "871818396498" }
+                            ?.resource
+                            ?.value
+                            ?.asStringValue() ?: "",
+                        subCounty = obs.firstOrNull { it.resource.code.codingFirstRep.code == "a3-sub-county" }
+                            ?.resource
+                            ?.value
+                            ?.asStringValue() ?: "",
+                        county = obs.firstOrNull { it.resource.code.codingFirstRep.code == "a4-county" }
+                            ?.resource
+                            ?.value
+                            ?.asStringValue() ?: "",
+                        lastUpdated = data.lastUpdated
+                    )
+
+
+                    response
+                } else {
+
+                    null
+                }
+
+            }.sortedByDescending { it.lastUpdated }
+    }
+
     private suspend fun retrieveCasesByDisease(
         nameQuery: String,
     ): List<PatientItem> {
@@ -317,6 +392,18 @@ class PatientListViewModel(
             .sortedByDescending { it.lastUpdated }
     }
 
+    data class RumorItem(
+        val id: String,
+        val resourceId: String,
+        val encounterId: String,
+        val mohName: String,
+        val directorate: String,
+        val division: String,
+        val village: String,
+        val subCounty: String,
+        val county: String,
+        val lastUpdated: String
+    )
 
     /** The Patient's details for display purposes. */
     data class PatientItem(

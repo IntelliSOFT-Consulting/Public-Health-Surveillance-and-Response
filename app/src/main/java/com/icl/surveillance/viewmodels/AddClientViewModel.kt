@@ -400,9 +400,11 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
                     if (subCountyEntry != null) {
                         subCounty = subCountyEntry.answer
+                        patient.addressFirstRep.state = subCounty
                     }
                     if (countyEntry != null) {
                         county = countyEntry.answer
+                        patient.addressFirstRep.city = county
                     }
 
                     val countyCode = county.padEnd(3, 'X').take(3).uppercase()

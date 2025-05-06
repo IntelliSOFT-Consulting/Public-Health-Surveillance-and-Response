@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.fhir.FhirEngine
 import com.icl.surveillance.R
 import com.icl.surveillance.adapters.PatientItemRecyclerViewAdapter
+import com.icl.surveillance.adapters.PatientItemRecyclerViewAdapterRumor
 import com.icl.surveillance.databinding.ActivityCaseListingBinding
 import com.icl.surveillance.databinding.ActivityFullCaseDetailsBinding
 import com.icl.surveillance.fhir.FhirApplication
@@ -24,8 +25,6 @@ import com.icl.surveillance.ui.patients.FullCaseDetailsActivity
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.ui.patients.SummarizedActivity
 import com.icl.surveillance.utils.FormatterClass
-import com.icl.surveillance.utils.toSlug
-import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 
 class CaseListingActivity : AppCompatActivity() {
 
@@ -64,32 +63,120 @@ class CaseListingActivity : AppCompatActivity() {
 
 
         val recyclerView: RecyclerView = binding.patientListContainer.patientList
+
         val adapter = PatientItemRecyclerViewAdapter(this::onPatientItemClicked)
-        recyclerView.adapter = adapter
-//        recyclerView.addItemDecoration(
-//            DividerItemDecoration(this, DividerItemDecoration.VERTICAL).apply {
-//                setDrawable(ColorDrawable(Color.LTGRAY))
-//            },
-//        )
+        val adapterRumor = PatientItemRecyclerViewAdapterRumor(this::onRumorItemClicked)
+
 
         if (currentCase != null) {
             val slug = currentCase.toSlug()
-            patientListViewModel.handleCurrentCaseListing(slug)
+            when (slug) {
+                "social-listening-and-rumor-tracking-tool" -> {
+                    patientListViewModel.handleCurrentRumorCaseListing(slug)
+                    recyclerView.adapter = adapterRumor
+                }
+
+                else -> {
+                    patientListViewModel.handleCurrentCaseListing(slug)
+                    recyclerView.adapter = adapter
+                }
+            }
+
+            when (slug) {
+                "social-listening-and-rumor-tracking-tool" -> {
+                    patientListViewModel.liveRumorCases.observe(this) {
+                        binding.apply {
+                            count.text = "Showing ${it.size} Results"
+                            patientListContainer.pbProgress.visibility = View.GONE
+                        }
+
+                        if (it.isEmpty()) {
+                            binding.apply {
+                                patientListContainer.caseCount.visibility = View.VISIBLE
+                            }
+                        } else {
+                            binding.apply { patientListContainer.caseCount.visibility = View.GONE }
+                        }
+
+                        adapterRumor.submitList(it)
+                    }
+                }
+
+                else -> {
+                    patientListViewModel.liveSearchedCases.observe(this) {
+                        binding.apply {
+                            count.text = "Showing ${it.size} Results"
+                            patientListContainer.pbProgress.visibility = View.GONE
+                        }
+
+                        if (it.isEmpty()) {
+                            binding.apply {
+                                patientListContainer.caseCount.visibility = View.VISIBLE
+                            }
+                        } else {
+                            binding.apply { patientListContainer.caseCount.visibility = View.GONE }
+                        }
+
+                        adapter.submitList(it)
+                    }
+                }
+            }
         }
+    }
 
-        patientListViewModel.liveSearchedCases.observe(this) {
-            binding.apply {
-                count.text = "Showing ${it.size} Results"
-                patientListContainer.pbProgress.visibility = View.GONE
+    private fun onRumorItemClicked(patientItem: PatientListViewModel.RumorItem) {
+
+        val currentCase = FormatterClass().getSharedPref("currentCase", this)
+        println("Going to client details activity with the id as ${patientItem.resourceId} and Encounter ${patientItem.encounterId}")
+        FormatterClass().saveSharedPref("resourceId", patientItem.resourceId, this)
+        FormatterClass().saveSharedPref("encounterId", patientItem.encounterId, this)
+
+        if (currentCase != null) {
+            val slug = currentCase.toSlug()
+            FormatterClass().saveSharedPref("latestEncounter", slug, this)
+            when (slug) {
+                "social-listening-and-rumor-tracking-tool" -> {
+
+                    startActivity(
+                        Intent(
+                            this@CaseListingActivity,
+                            SummarizedActivity::class.java
+                        )
+                    )
+                }
+
+                "vl-case-information" -> {
+
+                    startActivity(
+                        Intent(
+                            this@CaseListingActivity,
+                            SummarizedActivity::class.java
+                        )
+                    )
+                }
+
+                "afp-case-information" -> {
+
+                    startActivity(
+                        Intent(
+                            this@CaseListingActivity,
+                            SummarizedActivity::class.java
+                        )
+                    )
+                }
+
+                else -> {
+
+                    startActivity(
+                        Intent(
+                            this@CaseListingActivity,
+                            FullCaseDetailsActivity::class.java
+                        )
+                    )
+                }
             }
-
-            if (it.isEmpty()) {
-                binding.apply { patientListContainer.caseCount.visibility = View.VISIBLE }
-            } else {
-                binding.apply { patientListContainer.caseCount.visibility = View.GONE }
-            }
-
-            adapter.submitList(it)
+        } else {
+            Toast.makeText(this, "Please try again later ", Toast.LENGTH_SHORT).show()
         }
     }
 

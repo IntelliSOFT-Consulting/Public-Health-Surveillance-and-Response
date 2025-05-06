@@ -26,13 +26,53 @@
           "type": "date",
           "linkId": "885705999856",
           "text": "Date of Admission",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
           "type": "date",
           "linkId": "150613899880",
           "text": "Date Leishmaniasis Treatment Started",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
           "type": "choice",
@@ -179,6 +219,10 @@
                   }
                 ]
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
             }
           ],
           "linkId": "723427815459",
@@ -208,8 +252,8 @@
               "question": "723427815459",
               "operator": "=",
               "answerCoding": {
-                "code": "yes",
-                "display": "Yes"
+                "code": "no",
+                "display": "No"
               }
             }
           ],
@@ -349,6 +393,10 @@
                   }
                 ]
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
             }
           ],
           "linkId": "884379481934",
@@ -415,6 +463,10 @@
                   }
                 ]
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
             }
           ],
           "linkId": "904748389038",
