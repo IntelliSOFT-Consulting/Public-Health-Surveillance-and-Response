@@ -22,6 +22,7 @@ import com.icl.surveillance.models.OutputGroup
 import com.icl.surveillance.models.OutputItem
 import com.icl.surveillance.models.QuestionnaireItem
 import com.icl.surveillance.ui.patients.custom.ContactInformationFragment
+import com.icl.surveillance.ui.patients.custom.ITDLabFragment
 import com.icl.surveillance.ui.patients.custom.LocalLabFragment
 import com.icl.surveillance.ui.patients.custom.RegionalLabFragment
 import com.icl.surveillance.ui.patients.custom.VlFollowupFragment
@@ -84,7 +85,8 @@ class SummarizedActivity : AppCompatActivity() {
                 "afp-case-information" -> {
                     listOf(
                         "Stool Specimen Results" to LocalLabFragment(),
-                        "Final Lab Results" to RegionalLabFragment(),
+                        "ITD Lab Results" to ITDLabFragment(),
+                        "Final Laboratory Results" to RegionalLabFragment(),
                         "Contact Information" to ContactInformationFragment()
                     )
                 }

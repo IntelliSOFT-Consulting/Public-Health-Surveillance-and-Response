@@ -28,7 +28,6 @@ import com.icl.surveillance.models.QuestionnaireItem
 import com.icl.surveillance.ui.patients.AddCaseActivity
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
-import com.icl.surveillance.utils.toSlug
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
 import kotlin.collections.forEach
@@ -73,6 +72,15 @@ class RegionalLabFragment : Fragment() {
         val root: View = binding.root
 
         return root
+    }
+
+    fun String.toSlug(): String {
+        return this
+            .trim()
+            .lowercase()
+            .replace("[^a-z0-9\\s-]".toRegex(), "")
+            .replace("\\s+".toRegex(), "-")
+            .replace("-+".toRegex(), "-")
     }
 
     override fun onResume() {

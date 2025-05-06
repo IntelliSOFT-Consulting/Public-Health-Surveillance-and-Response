@@ -57,4 +57,5 @@
     <string name="social_inv">Social Investigation Form</string>
     <string name="rumor_tool">Rumor Tracking Tool</string>
     <string name="vl_form">Visceral Leishmaniasis Case Management Form</string>
+    <string name="no_itd_laboratory_results_available">No ITD Lab Information available</string>
 </resources>

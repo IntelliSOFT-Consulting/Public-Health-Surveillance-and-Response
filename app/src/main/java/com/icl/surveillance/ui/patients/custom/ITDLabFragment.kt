@@ -3,8 +3,6 @@ package com.icl.surveillance.ui.patients.custom
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,19 +12,13 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.FragmentContainer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.fhir.FhirEngine
 import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
 import com.icl.surveillance.R
-import com.icl.surveillance.adapters.ContactsAdapter
-import com.icl.surveillance.adapters.PatientItemRecyclerViewAdapter
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
-import com.icl.surveillance.databinding.FragmentContactInformationBinding
-import com.icl.surveillance.databinding.FragmentLocalLabBinding
+import com.icl.surveillance.databinding.FragmentItdLabBinding
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.models.ChildItem
 import com.icl.surveillance.models.OutputGroup
@@ -46,10 +38,10 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [ContactInformationFragment.newInstance] factory method to
+ * Use the [ITDLabFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ContactInformationFragment : Fragment() {
+class ITDLabFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -64,7 +56,7 @@ class ContactInformationFragment : Fragment() {
 
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientDetailsViewModel: ClientDetailsViewModel
-    private var _binding: FragmentContactInformationBinding? = null
+    private var _binding: FragmentItdLabBinding? = null
     private lateinit var parentLayout: LinearLayout
     private val binding
         get() = _binding!!
@@ -74,12 +66,11 @@ class ContactInformationFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentContactInformationBinding.inflate(inflater, container, false)
+        _binding = FragmentItdLabBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         return root
     }
-
     fun String.toSlug(): String {
         return this
             .trim()
@@ -88,14 +79,11 @@ class ContactInformationFragment : Fragment() {
             .replace("\\s+".toRegex(), "-")
             .replace("-+".toRegex(), "-")
     }
-
     override fun onResume() {
         super.onResume()
         try {
             val encounterId = FormatterClass().getSharedPref("encounterId", requireContext())
             val currentCase = FormatterClass().getSharedPref("currentCase", requireContext())
-
-            val patientId = FormatterClass().getSharedPref("resourceId", requireContext())
             if (currentCase != null) {
                 val slug = currentCase.toSlug()
                 when (slug) {
@@ -106,8 +94,9 @@ class ContactInformationFragment : Fragment() {
                     }
 
                     "afp-case-information" -> {
-                        patientDetailsViewModel.getLinkedContacts(
-                            "$patientId",
+                        patientDetailsViewModel.getPatientResultsDiseaseData(
+                            "AFP ITD Lab Information",
+                            "$encounterId",
                         )
                     }
                 }
@@ -134,31 +123,29 @@ class ContactInformationFragment : Fragment() {
                 ),
             )
                 .get(ClientDetailsViewModel::class.java)
-//        parentLayout = binding.lnParent
+        parentLayout = binding.lnParent
 
         groups = parseFromAssets(requireContext())
-        val recyclerView: RecyclerView = binding.patientList
-        val adapter = ContactsAdapter(this::onPatientItemClicked)
-        recyclerView.adapter = adapter
-        recyclerView.addItemDecoration(
-            DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {
-                setDrawable(ColorDrawable(Color.LTGRAY))
-            },
-        )
-        patientDetailsViewModel.liveLinkedData.observe(viewLifecycleOwner) {
+        patientDetailsViewModel.currentLiveLabData.observe(viewLifecycleOwner) {
+
             if (it.isEmpty()) {
                 binding.lnEmpty.visibility = View.VISIBLE
             } else {
-                it.forEach { item ->
-                    if (item.epid.isEmpty()) {
-                        item.epid = getValueBasedOnId("EPID", item.observations)
+                // this = Context
+                parentLayout.removeAllViews()
+                for (group in groups) {
+                    val fieldView = createCustomLabel(group.text)
+                    parentLayout.addView(fieldView)
+                    for (item in group.items) {
+                        item.value = getValueBasedOnId(item, it.first().observations)
+                        val childFieldView = createCustomField(item)
+                        parentLayout.addView(childFieldView)
                     }
                 }
 
-                adapter.submitList(it)
-
                 binding.lnEmpty.visibility = View.GONE
-                binding.fab.visibility = View.VISIBLE
+                binding.fab.visibility = View.GONE
+//                adapter.submitList(it)
             }
         }
         if (currentCase != null) {
@@ -173,21 +160,21 @@ class ContactInformationFragment : Fragment() {
                 }
 
                 "afp-case-information" -> {
-                    patientDetailsViewModel.getLinkedContacts(
-                        "$patientId",
+                    patientDetailsViewModel.getPatientResultsDiseaseData(
+                        "AFP ITD Lab Information",
+                        "$encounterId",
                     )
                 }
             }
         }
 
         binding.apply {
-            getStartedButton.setOnClickListener {
-                handleCase(currentCase)
-
-            }
             fab.setOnClickListener {
                 handleCase(currentCase)
 
+            }
+            getStartedButton.setOnClickListener {
+                handleCase(currentCase)
 
             }
         }
@@ -197,23 +184,28 @@ class ContactInformationFragment : Fragment() {
         if (currentCase != null) {
             val slug = currentCase.toSlug()
             when (slug) {
+                "measles-case-information" -> {
+
+                    showLocalOrRegionalLab()
+
+                }
 
                 "afp-case-information" -> {
                     FormatterClass()
                         .saveSharedPref(
                             "questionnaire",
-                            "afp-contact-tracing.json",
+                            "afp-itd-lab.json",
                             requireContext()
                         )
                     FormatterClass().saveSharedPref(
                         "title",
-                        "AFP Contact Information",
+                        "AFP ITD Lab Information",
                         requireContext()
                     )
                     val intent = Intent(requireContext(), AddCaseActivity::class.java)
                     intent.putExtra(
                         QUESTIONNAIRE_FILE_PATH_KEY,
-                        "afp-contact-tracing.json"
+                        "afp-itd-lab.json"
                     )
                     startActivity(intent)
                 }
@@ -228,28 +220,14 @@ class ContactInformationFragment : Fragment() {
 
     }
 
-    private fun handleViews(
-        linkId: String,
-        items: List<PatientListViewModel.ObservationItem>
-    ): Boolean {
-        var show=true
-        val children = listOf("963850812313",)
-        val parent = "724335771065"
-        val answerParent = items.find { it.code == parent }?.value
-        if (linkId in children && answerParent !="index-006") {
-            show = false
-        }
-        return show
-    }
-
     private fun getValueBasedOnId(
-        item: String,
+        item: OutputItem,
         items: List<PatientListViewModel.ObservationItem>
     ): String {
         var response = ""
         items.forEach { outputItem ->
             val matchingObservation = items.find { obs ->
-                obs.code == item
+                obs.code == item.linkId
             }
 
             if (matchingObservation != null) {
@@ -263,7 +241,7 @@ class ContactInformationFragment : Fragment() {
         var outputGroups: List<OutputGroup> = emptyList()
 
         try {
-            val jsonContent = context.assets.open("afp-contact-tracing.json")
+            val jsonContent = context.assets.open("afp-itd-lab.json")
                 .bufferedReader()
                 .use { it.readText() }
 
@@ -412,52 +390,66 @@ class ContactInformationFragment : Fragment() {
     }
 
 
-    private fun onPatientItemClicked(patientItem: PatientListViewModel.ContactResults) {
+    private fun showLocalOrRegionalLab() {
+        val dialogView =
+            LayoutInflater.from(requireContext()).inflate(R.layout.dialog_lab_info, null)
 
-        println("EPID ${patientItem.epid}")
-        patientItem.observations.forEach {
-            println("Obs Data ***** ${it.code} ${it.value}")
+        val labButton = dialogView.findViewById<MaterialButton>(R.id.btnLabInformation)
+        val regionalLabButton =
+            dialogView.findViewById<MaterialButton>(R.id.btnRegionalLabInformation)
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .setCancelable(true)
+            .create()
+
+        labButton.setOnClickListener {
+            dialog.dismiss()
+            FormatterClass()
+                .saveSharedPref(
+                    "questionnaire",
+                    "measles-lab-results.json",
+                    requireContext()
+                )
+            FormatterClass().saveSharedPref(
+                "title",
+                "Measles Lab Results",
+                requireContext()
+            )
+            val intent = Intent(requireContext(), AddCaseActivity::class.java)
+            intent.putExtra(
+                QUESTIONNAIRE_FILE_PATH_KEY,
+                "measles-lab-results.json"
+            )
+            startActivity(intent)
         }
-        val dialog = AlertDialog.Builder(requireContext()).create()
-        val view = layoutInflater.inflate(R.layout.dialog_full_screen, null)
-        val lnInfo = view.findViewById<LinearLayout>(R.id.ln_info)
-        val btnClose = view.findViewById<MaterialButton>(R.id.btnClose)
-        dialog.setView(view)
-        dialog.window?.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        )
-        groups = parseFromAssets(requireContext())
-        lnInfo.removeAllViews()
-        try {
-            for (group in groups) {
-                val fieldView = createCustomLabel(group.text)
-//                lnInfo.addView(fieldView)
-                for (item in group.items) {
-                    if (item.linkId == "992818778559") {
-                        item.value = patientItem.epid
-                    } else {
-                        item.value = getValueBasedOnId(item.linkId, patientItem.observations)
-                    }
-                    val show = handleViews(item.linkId, patientItem.observations)
-                    val childFieldView = createCustomField(item)
-                    if (show) {
-                        lnInfo.addView(childFieldView)
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
+
+        regionalLabButton.setOnClickListener {
+            dialog.dismiss()
+            FormatterClass()
+                .saveSharedPref(
+                    "questionnaire",
+                    "measles-lab-reg-results.json",
+                    requireContext()
+                )
+            FormatterClass().saveSharedPref(
+                "title",
+                "Regional Measles Lab Results",
+                requireContext()
+            )
+            val intent = Intent(requireContext(), AddCaseActivity::class.java)
+            intent.putExtra(
+                QUESTIONNAIRE_FILE_PATH_KEY,
+                "measles-lab-reg-results.json"
+            )
+            startActivity(intent)
         }
-        btnClose.apply {
-            setOnClickListener {
-                dialog.dismiss()
-            }
-        }
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
         dialog.show()
 
+
     }
+
 
     companion object {
         /**
@@ -466,12 +458,12 @@ class ContactInformationFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment ContactInformationFragment.
+         * @return A new instance of fragment ITDLabFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            ContactInformationFragment().apply {
+            ITDLabFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

@@ -892,7 +892,7 @@
             }
           ],
           "linkId": "336643888536",
-          "text": "Hospitalization?",
+          "text": "Was the patient admitted?",
           "required": true,
           "answerOption": [
             {
@@ -1259,7 +1259,7 @@
             }
           ],
           "linkId": "679475123276",
-          "text": "Is the paralysis asymetric?",
+          "text": "Is the paralysis asymmetric?",
           "required": true,
           "answerOption": [
             {
@@ -1285,8 +1285,8 @@
                 "coding": [
                   {
                     "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "radio-button",
-                    "display": "Radio Button"
+                    "code": "check-box",
+                    "display": "Check Box"
                   }
                 ]
               }
@@ -1295,6 +1295,7 @@
           "linkId": "828001350323",
           "text": "Site of paralysis (check all that apply)",
           "required": true,
+          "repeats": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -1429,14 +1430,15 @@
                 "coding": [
                   {
                     "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
+                    "code": "check-box",
+                    "display": "Check Box"
                   }
                 ]
               }
             }
           ],
           "linkId": "701518392602",
+          "repeats": true,
           "text": "Site of injection ( check all that applies).",
           "enableWhen": [
             {
@@ -2527,31 +2529,6 @@
             }
           ],
           "required": true
-        },
-        {
-          "type": "date",
-          "linkId": "400183607168",
-          "extension": [
-            {
-              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-              "valueString": "Cannot be a date in the future"
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueDate": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-                    "valueExpression": {
-                      "language": "text/fhirpath",
-                      "expression": "today()"
-                    }
-                  }
-                ]
-              }
-            }
-          ],
-          "text": "Date specimen sent to the national level."
         }
       ],
       "type": "group",
