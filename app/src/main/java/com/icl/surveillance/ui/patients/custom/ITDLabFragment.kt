@@ -139,11 +139,16 @@ class ITDLabFragment : Fragment() {
                 parentLayout.removeAllViews()
                 for (group in groups) {
                     val fieldView = createCustomLabel(group.text)
-                    parentLayout.addView(fieldView)
+//                    parentLayout.addView(fieldView)
                     for (item in group.items) {
                         item.value = getValueBasedOnId(item, it.first().observations)
-                        val childFieldView = createCustomField(item)
-                        parentLayout.addView(childFieldView)
+                        if (item.type == "group") {
+                            val fieldView1 = createCustomLabel(item.text)
+                            parentLayout.addView(fieldView1)
+                        } else {
+                            val childFieldView = createCustomField(item)
+                            parentLayout.addView(childFieldView)
+                        }
                     }
                 }
 

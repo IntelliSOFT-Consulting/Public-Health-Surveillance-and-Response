@@ -28,6 +28,8 @@ import com.icl.surveillance.ui.patients.custom.RegionalLabFragment
 import com.icl.surveillance.ui.patients.custom.VlFollowupFragment
 import com.icl.surveillance.ui.patients.custom.VlLabFragment
 import com.icl.surveillance.ui.patients.custom.VlTreatmentFragment
+import com.icl.surveillance.ui.patients.data.LabResultsFragment
+import com.icl.surveillance.ui.patients.data.RegionalLabResultsFragment
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
@@ -82,6 +84,14 @@ class SummarizedActivity : AppCompatActivity() {
             }
 
             val customFragments = when (latestEncounter) {
+                "measles-case-information" -> {
+                    listOf(
+                        "Laboratory Information" to LabResultsFragment(),
+                        "Regional Laboratory Information" to RegionalLabResultsFragment()
+                    )
+
+                }
+
                 "afp-case-information" -> {
                     listOf(
                         "Stool Specimen Results" to LocalLabFragment(),
@@ -145,11 +155,11 @@ class SummarizedActivity : AppCompatActivity() {
     }
 
 
-
     fun parseFromAssets(context: Context, latestEncounter: String): List<OutputGroup> {
         var outputGroups: List<OutputGroup> = emptyList()
 
         val assets = when (latestEncounter) {
+            "measles-case-information" -> "add-case.json"
             "afp-case-information" -> "afp-case.json"
             "vl-case-information" -> "vl-case.json"
             "social-listening-and-rumor-tracking-tool" -> "rumor-tracking-case.json"
@@ -186,15 +196,60 @@ class SummarizedActivity : AppCompatActivity() {
         return true
     }
 
-    fun flattenItems(item: ChildItem): List<OutputItem> {
-        val children = item.item?.flatMap { flattenItems(it) } ?: emptyList()
+//    fun flattenItems(item: ChildItem): List<OutputItem> {
+//        val children = item.item?.flatMap { flattenItems(it) } ?: emptyList()
+//
+//        // If current item is NOT of type "display", include it
+//        return if (item.type != "display") {
+//            val current = OutputItem(
+//                linkId = item.linkId,
+//                text = item.text,
+//                type = item.type
+//            )
+//            listOf(current) + children
+//        } else {
+//            children
+//        }
+//    }
 
-        // If current item is NOT of type "display", include it
+    fun flattenItems(
+        item: ChildItem,
+        parentConditions: Map<String, Pair<String, Boolean>> = emptyMap()
+    ): List<OutputItem> {
+        val currentConditions =
+            mutableMapOf<String, Pair<String, Boolean>>().apply { putAll(parentConditions) }
+
+        var enable = true
+        var parentLink: String? = null
+        var parentResponse: String? = null
+
+        item.enableWhen?.firstOrNull()?.let { condition ->
+            parentLink = condition.question
+            val expectedAnswer = when {
+                condition.answerCoding != null -> condition.answerCoding.display
+                    ?: condition.answerCoding.code
+
+                condition.answerString != null -> condition.answerString
+                condition.answerBoolean != null -> condition.answerBoolean.toString()
+                condition.answerDate != null -> condition.answerDate
+                else -> null
+            }
+            parentResponse = expectedAnswer
+            enable = false // assume not enabled unless condition is met at runtime
+        }
+
+        val children = item.item?.flatMap {
+            flattenItems(it, currentConditions)
+        } ?: emptyList()
+
         return if (item.type != "display") {
             val current = OutputItem(
                 linkId = item.linkId,
                 text = item.text,
-                type = item.type
+                type = item.type,
+                enable = enable,
+                parentLink = parentLink,
+                parentResponse = parentResponse
             )
             listOf(current) + children
         } else {

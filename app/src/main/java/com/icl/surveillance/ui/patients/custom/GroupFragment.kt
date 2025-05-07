@@ -57,14 +57,37 @@ class GroupFragment : Fragment() {
 
     private fun addChildItems() {
         for (item in group.items) {
+
             val fieldView = createCustomField(item)
-            val show = checkRelatedWorkflows(group.text, item, group.items)
+            var show = true
+            if (!item.enable) {
+                show = false
+                show = checkIfParentAnswerMatches(item.parentLink, item.parentResponse, group.items)
+            }
+//            val show = checkRelatedWorkflows(group.text, item, group.items)
             if (show) {
                 parentLayout.addView(fieldView)
             }
         }
     }
 
+
+    private fun checkIfParentAnswerMatches(
+        parentLink: String?,
+        parentResponse: String?,
+        items: List<OutputItem>
+    ): Boolean {
+        var response = false
+        if (parentLink != null && parentResponse != null) {
+            val parentAnswer = items.find { it.linkId == parentLink }?.value
+            if (parentAnswer != null) {
+                if (parentAnswer.trim() == parentResponse.trim()) {
+                    response = true
+                }
+            }
+        }
+        return response
+    }
 
     private fun checkRelatedWorkflows(
         title: String,
@@ -85,11 +108,12 @@ class GroupFragment : Fragment() {
                     response = true
                 }
                 val answer = items.find { it.linkId == parent }?.value
-                if (answer == "Yes"){
+                if (answer == "Yes") {
                     response = true
                 }
             }
-            "Clinical Information"->{
+
+            "Clinical Information" -> {
                 val parent = "970455623029"
             }
         }

@@ -1,6 +1,5 @@
 package com.icl.surveillance.ui.patients.data
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -14,21 +13,22 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.fhir.FhirEngine
-import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
 import com.icl.surveillance.R
-import com.icl.surveillance.adapters.LabRecyclerViewAdapter
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.databinding.FragmentLabResultsBinding
 import com.icl.surveillance.fhir.FhirApplication
+import com.icl.surveillance.models.ChildItem
 import com.icl.surveillance.models.OutputGroup
 import com.icl.surveillance.models.OutputItem
-import com.icl.surveillance.models.QuestionnaireItem
+import com.icl.surveillance.models.QuestionnaireItemChild
 import com.icl.surveillance.ui.patients.AddCaseActivity
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
+import kotlin.String
+import kotlin.jvm.java
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -132,6 +132,7 @@ class LabResultsFragment : Fragment() {
         parentLayout = binding.lnParent
 
         val outputGroups = parseFromAssets(requireContext())
+        println("Dealing with Current Lab Case ${outputGroups.size}")
         patientDetailsViewModel.currentLiveLabData.observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
                 binding.tvNoCase.visibility = View.VISIBLE
@@ -140,27 +141,46 @@ class LabResultsFragment : Fragment() {
                 binding.tvNoCase.visibility = View.GONE
                 binding.fab.visibility = View.GONE
                 parentLayout.removeAllViews()
-                outputGroups.forEach { group ->
+                outputGroups.first().items.forEach { group ->
+
+                    println("Dealing with Current Lab Case ${group.linkId} ${group.text} : ${group.enable} -> ${group.parentLink} -> ${group.parentOperator} -> ${group.parentResponse} ")
                     if (group.type == "display") {
                         val fieldView = createCustomLabel(group.text)
                         parentLayout.addView(fieldView)
                     } else {
+
                         val item = OutputItem(
                             linkId = group.linkId,
                             text = group.text,
                             type = group.text,
+                            parentOperator = group.parentOperator,
+                            enable = if (group.linkId == "final-classification") true else group.enable,
+                            parentLink = group.parentLink,
+                            parentResponse = group.parentResponse,
                             value = if (group.linkId == "final-classification") getValueBasedOnIdAndReference(
                                 item = "measles-igm",
                                 it.first().observations
-                            ) else getValueBasedOnId(item = group.linkId, it.first().observations)
+                            ) else getValueBasedOnId(
+                                item = group.linkId,
+                                it.first().observations
+                            )
 
                         )
                         val childFieldView = createCustomField(item)
-                        // Only add if valid
-                        val show = checkIfValidToShow(group.linkId, it.first().observations)
+                        var show = true
+                        if (!item.enable) {
+                            show = false
+                            show = checkIfParentAnswerMatches(
+                                item.parentLink,
+                                item.parentResponse,
+                                item.parentOperator,
+                                it.first().observations
+                            )
+                        }
                         if (show) {
                             parentLayout.addView(childFieldView)
                         }
+
                     }
                 }
             }
@@ -247,23 +267,41 @@ class LabResultsFragment : Fragment() {
         }
     }
 
-    private fun checkIfValidToShow(
-        currentId: String,
-        items: List<PatientListViewModel.ObservationItem>
+    private fun checkIfParentAnswerMatches(
+        parentLink: String?,
+        parentResponse: String?,
+        operator: String?,
+        items: List<PatientListViewModel.ObservationItem>,
     ): Boolean {
-        var show = true
-        val parent = "measles-igm"
-        val child = "rubella-igm"
-        var parentResponse = getValueBasedOnId(parent, items)
-        var childResponse = getValueBasedOnId(child, items)
-        if (parentResponse.isNotEmpty()) {
-            if (parentResponse == "Positive" && currentId == child) {
-                show = false
+        var response = false
+        items.forEach {
+            println("Checking Parent Data Parent $parentLink Response $parentResponse Operator $operator ::::::: ${it.code} -> Value: ${it.value}")
+        }
+        if (parentLink != null && parentResponse != null) {
+            val parentAnswer = items.find { it.code == parentLink }?.value
+            println("Checking Parent Data :::: Answer is $parentAnswer ")
+            if (parentAnswer != null) {
+
+                if (operator != null) {
+                    when (operator) {
+                        "!=" -> {
+                            if (parentAnswer.trim() != parentResponse.trim()) {
+                                response = true
+                            }
+                        }
+
+                        else -> {
+                            if (parentAnswer.trim() == parentResponse.trim()) {
+                                response = true
+                            }
+                        }
+                    }
+                }
             }
         }
-        return show
-
+        return response
     }
+
 
     private fun getValueBasedOnId(
         item: String,
@@ -413,27 +451,72 @@ class LabResultsFragment : Fragment() {
         return layout
     }
 
+    fun flattenItems(item: ChildItem): List<OutputItem> {
+        val children = item.item?.flatMap { flattenItems(it) } ?: emptyList()
+
+        var enable = true
+        var parentLink: String? = null
+        var parentResponse: String? = null
+        var enableOperator: String? = null
+
+        item.enableWhen?.firstOrNull()?.let { condition ->
+            parentLink = condition.question
+            enableOperator = condition.operator
+            parentResponse = when {
+                condition.answerCoding != null -> condition.answerCoding.display
+                    ?: condition.answerCoding.code
+
+                condition.answerString != null -> condition.answerString
+                condition.answerBoolean != null -> condition.answerBoolean.toString()
+                condition.answerDate != null -> condition.answerDate
+                else -> null
+            }
+            enable = false
+        }
+
+        return if (item.type != "display") {
+            val current = OutputItem(
+                linkId = item.linkId,
+                text = item.text,
+                type = item.type,
+                enable = enable,
+                parentLink = parentLink,
+                parentResponse = parentResponse,
+                parentOperator = enableOperator
+            )
+            listOf(current) + children
+        } else {
+            children
+        }
+    }
+
     fun parseFromAssets(context: Context): List<OutputGroup> {
-        return try {
+        var outputGroups: List<OutputGroup> = emptyList()
+
+        try {
             val jsonContent = context.assets.open("measles-lab-results.json")
                 .bufferedReader()
                 .use { it.readText() }
 
             val gson = Gson()
-            val questionnaire = gson.fromJson(jsonContent, QuestionnaireItem::class.java)
+            val questionnaire = gson.fromJson(jsonContent, QuestionnaireItemChild::class.java)
 
-            questionnaire.item.map { item ->
+            val flatItems = questionnaire.item.flatMap { flattenItems(it) }
+
+            outputGroups = listOf(
                 OutputGroup(
-                    linkId = item.linkId,
-                    text = item.text,
-                    type = item.type
+                    linkId = "root",
+                    text = "Top Level",
+                    type = "group",
+                    items = flatItems
                 )
-            }
+            )
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.e("TAG", "File Error: ${e.message}")
-            emptyList()
+            Log.e("TAG", "File Error ${e.message}")
         }
+
+        return outputGroups
     }
 
 

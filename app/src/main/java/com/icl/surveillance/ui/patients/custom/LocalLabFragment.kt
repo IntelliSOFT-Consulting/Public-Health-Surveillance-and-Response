@@ -139,9 +139,11 @@ class LocalLabFragment : Fragment() {
                 // this = Context
                 parentLayout.removeAllViews()
                 for (group in groups) {
+//                    println("Manipulations: ${group.text}")
                     val fieldView = createCustomLabel(group.text)
                     parentLayout.addView(fieldView)
                     for (item in group.items) {
+//                        println("Manipulations: Children Link ${item.linkId} Text ${item.text} is Child ${item.enable} Parent ${item.parentLink} Response ${item.parentResponse}")
                         item.value = getValueBasedOnId(item, it.first().observations)
                         val childFieldView = createCustomField(item)
                         parentLayout.addView(childFieldView)
@@ -271,21 +273,66 @@ class LocalLabFragment : Fragment() {
 
     }
 
-    fun flattenItems(item: ChildItem): List<OutputItem> {
-        val children = item.item?.flatMap { flattenItems(it) } ?: emptyList()
+    fun flattenItems(
+        item: ChildItem,
+        parentConditions: Map<String, Pair<String, Boolean>> = emptyMap()
+    ): List<OutputItem> {
+        val currentConditions =
+            mutableMapOf<String, Pair<String, Boolean>>().apply { putAll(parentConditions) }
 
-        // If current item is NOT of type "display", include it
+        var enable = true
+        var parentLink: String? = null
+        var parentResponse: String? = null
+
+        item.enableWhen?.firstOrNull()?.let { condition ->
+            parentLink = condition.question
+            val expectedAnswer = when {
+                condition.answerCoding != null -> condition.answerCoding.display
+                    ?: condition.answerCoding.code
+
+                condition.answerString != null -> condition.answerString
+                condition.answerBoolean != null -> condition.answerBoolean.toString()
+                condition.answerDate != null -> condition.answerDate
+                else -> null
+            }
+            parentResponse = expectedAnswer
+            enable = false // assume not enabled unless condition is met at runtime
+        }
+
+        val children = item.item?.flatMap {
+            flattenItems(it, currentConditions)
+        } ?: emptyList()
+
         return if (item.type != "display") {
             val current = OutputItem(
                 linkId = item.linkId,
                 text = item.text,
-                type = item.type
+                type = item.type,
+                enable = enable,
+                parentLink = parentLink,
+                parentResponse = parentResponse
             )
             listOf(current) + children
         } else {
             children
         }
     }
+
+//    fun flattenItems(item: ChildItem): List<OutputItem> {
+//        val children = item.item?.flatMap { flattenItems(it) } ?: emptyList()
+//
+//        // If current item is NOT of type "display", include it
+//        return if (item.type != "display") {
+//            val current = OutputItem(
+//                linkId = item.linkId,
+//                text = item.text,
+//                type = item.type
+//            )
+//            listOf(current) + children
+//        } else {
+//            children
+//        }
+//    }
 
     private fun createCustomField(item: OutputItem): View {
         // Create the main LinearLayout to hold the views

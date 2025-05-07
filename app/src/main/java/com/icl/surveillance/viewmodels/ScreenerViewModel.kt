@@ -193,7 +193,7 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     val countyCode = county.padEnd(3, 'X').take(3).uppercase()
                     val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
 
-                    val epid = "KEN-$countyCode-$subCountyCode-$currentYear-"
+                    val epid = "KEN-$countyCode-$subCountyCode-$currentYear-AFP-C"
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
                     createResource(obs, subjectReference, encounterReference)

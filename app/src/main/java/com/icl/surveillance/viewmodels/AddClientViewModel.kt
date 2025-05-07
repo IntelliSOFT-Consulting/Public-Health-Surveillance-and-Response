@@ -271,12 +271,12 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
                     val countyCode = county.padEnd(3, 'X').take(3).uppercase()
                     val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
-                    var linked = "C"
+                    var linked = "MEA-"
 
                     if (linkedEntry != null) {
                         linked = when (linkedEntry.answer.lowercase()) {
-                            "yes" -> "L"
-                            else -> "C"
+                            "yes" -> "MEA-L"
+                            else -> "MEA-"
                         }
                     }
 
@@ -373,7 +373,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
 
 
-                    val epid = "KEN-$countyCode-$subCountyCode-$currentYear-"
+                    val epid = "KEN-$countyCode-$subCountyCode-$currentYear-AFP-"
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
                     createResource(obs, subjectReference, encounterReference)
@@ -411,7 +411,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
 
 
-                    val epid = "KEN-$countyCode-$subCountyCode-$currentYear-"
+                    val epid = "KEN-$countyCode-$subCountyCode-$currentYear-RTT-"
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
                     createResource(obs, subjectReference, encounterReference)
@@ -479,7 +479,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
 
 
-                    val epid = "KEN-$countyCode-$subCountyCode-$currentYear-"
+                    val epid = "KEN-$countyCode-$subCountyCode-$currentYear-VL-"
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
                     createResource(obs, subjectReference, encounterReference)

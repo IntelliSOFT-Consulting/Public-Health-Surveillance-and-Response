@@ -234,11 +234,11 @@ class ContactInformationFragment : Fragment() {
         linkId: String,
         items: List<PatientListViewModel.ObservationItem>
     ): Boolean {
-        var show=true
-        val children = listOf("963850812313",)
+        var show = true
+        val children = listOf("963850812313")
         val parent = "724335771065"
         val answerParent = items.find { it.code == parent }?.value
-        if (linkId in children && answerParent !="index-006") {
+        if (linkId in children && answerParent != "index-006") {
             show = false
         }
         return show
@@ -289,15 +289,44 @@ class ContactInformationFragment : Fragment() {
 
     }
 
-    fun flattenItems(item: ChildItem): List<OutputItem> {
-        val children = item.item?.flatMap { flattenItems(it) } ?: emptyList()
+    fun flattenItems(
+        item: ChildItem,
+        parentConditions: Map<String, Pair<String, Boolean>> = emptyMap()
+    ): List<OutputItem> {
+        val currentConditions =
+            mutableMapOf<String, Pair<String, Boolean>>().apply { putAll(parentConditions) }
 
-        // If current item is NOT of type "display", include it
+        var enable = true
+        var parentLink: String? = null
+        var parentResponse: String? = null
+
+        item.enableWhen?.firstOrNull()?.let { condition ->
+            parentLink = condition.question
+            val expectedAnswer = when {
+                condition.answerCoding != null -> condition.answerCoding.display
+                    ?: condition.answerCoding.code
+
+                condition.answerString != null -> condition.answerString
+                condition.answerBoolean != null -> condition.answerBoolean.toString()
+                condition.answerDate != null -> condition.answerDate
+                else -> null
+            }
+            parentResponse = expectedAnswer
+            enable = false // assume not enabled unless condition is met at runtime
+        }
+
+        val children = item.item?.flatMap {
+            flattenItems(it, currentConditions)
+        } ?: emptyList()
+
         return if (item.type != "display") {
             val current = OutputItem(
                 linkId = item.linkId,
                 text = item.text,
-                type = item.type
+                type = item.type,
+                enable = enable,
+                parentLink = parentLink,
+                parentResponse = parentResponse
             )
             listOf(current) + children
         } else {
@@ -358,7 +387,7 @@ class ContactInformationFragment : Fragment() {
                 topMargin = 8
                 bottomMargin = 8
             }
-            setBackgroundColor(android.graphics.Color.parseColor("#CCCCCC"))
+            setBackgroundColor(Color.parseColor("#CCCCCC"))
         }
         layout.addView(divider)
 
@@ -417,10 +446,7 @@ class ContactInformationFragment : Fragment() {
 
     private fun onPatientItemClicked(patientItem: PatientListViewModel.ContactResults) {
 
-        println("EPID ${patientItem.epid}")
-        patientItem.observations.forEach {
-            println("Obs Data ***** ${it.code} ${it.value}")
-        }
+
         val dialog = AlertDialog.Builder(requireContext()).create()
         val view = layoutInflater.inflate(R.layout.dialog_full_screen, null)
         val lnInfo = view.findViewById<LinearLayout>(R.id.ln_info)
@@ -442,8 +468,17 @@ class ContactInformationFragment : Fragment() {
                     } else {
                         item.value = getValueBasedOnId(item.linkId, patientItem.observations)
                     }
-                    val show = handleViews(item.linkId, patientItem.observations)
+//                    val show = handleViews(item.linkId, patientItem.observations)
                     val childFieldView = createCustomField(item)
+                    var show = true
+                    if (!item.enable) {
+                        show = false
+                        show = checkIfParentAnswerMatches(
+                            item.parentLink,
+                            item.parentResponse,
+                            group.items
+                        )
+                    }
                     if (show) {
                         lnInfo.addView(childFieldView)
                     }
@@ -460,6 +495,23 @@ class ContactInformationFragment : Fragment() {
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.show()
 
+    }
+
+    private fun checkIfParentAnswerMatches(
+        parentLink: String?,
+        parentResponse: String?,
+        items: List<OutputItem>
+    ): Boolean {
+        var response = false
+        if (parentLink != null && parentResponse != null) {
+            val parentAnswer = items.find { it.linkId == parentLink }?.value
+            if (parentAnswer != null) {
+                if (parentAnswer.trim() == parentResponse.trim()) {
+                    response = true
+                }
+            }
+        }
+        return response
     }
 
     companion object {

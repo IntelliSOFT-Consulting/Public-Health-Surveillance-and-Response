@@ -133,6 +133,7 @@ class CaseListingActivity : AppCompatActivity() {
 
         if (currentCase != null) {
             val slug = currentCase.toSlug()
+            println("Current Case Slug $slug")
             FormatterClass().saveSharedPref("latestEncounter", slug, this)
             when (slug) {
                 "social-listening-and-rumor-tracking-tool" -> {
@@ -189,6 +190,8 @@ class CaseListingActivity : AppCompatActivity() {
 
         if (currentCase != null) {
             val slug = currentCase.toSlug()
+
+            println("Current Case Slug $slug")
             FormatterClass().saveSharedPref("latestEncounter", slug, this)
             when (slug) {
                 "social-listening-and-rumor-tracking-tool" -> {
@@ -226,7 +229,7 @@ class CaseListingActivity : AppCompatActivity() {
                     startActivity(
                         Intent(
                             this@CaseListingActivity,
-                            FullCaseDetailsActivity::class.java
+                            SummarizedActivity::class.java
                         )
                     )
                 }

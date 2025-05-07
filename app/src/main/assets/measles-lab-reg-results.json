@@ -70,7 +70,27 @@
       "type": "date",
       "linkId": "date-measles-igm-sent",
       "text": "Date measles IgM results sent by Regional lab",
-      "required": true
+      "required": true,
+      "extension": [
+        {
+          "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+          "valueString": "Cannot be a date in the future"
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+          "valueDate": {
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                "valueExpression": {
+                  "language": "text/fhirpath",
+                  "expression": "today()"
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "type": "choice",
@@ -144,6 +164,26 @@
       "type": "date",
       "linkId": "date-rubella-igm-sent",
       "text": "Date Rubella IgM results sent by Regional lab",
+      "extension": [
+        {
+          "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+          "valueString": "Cannot be a date in the future"
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+          "valueDate": {
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                "valueExpression": {
+                  "language": "text/fhirpath",
+                  "expression": "today()"
+                }
+              }
+            ]
+          }
+        }
+      ],
       "enableWhen": [
         {
           "question": "measles-igm-result",
@@ -160,7 +200,27 @@
       "type": "date",
       "linkId": "date-specimen-sent",
       "text": "Date specimen sent to regional for virus isolation",
-      "required": true
+      "required": true,
+      "extension": [
+        {
+          "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+          "valueString": "Cannot be a date in the future"
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+          "valueDate": {
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                "valueExpression": {
+                  "language": "text/fhirpath",
+                  "expression": "today()"
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "type": "choice",
@@ -224,19 +284,79 @@
       "type": "date",
       "linkId": "isolation-results-sent",
       "text": "Date Isolation results sent by regional lab",
-      "required": true
+      "required": true,
+      "extension": [
+        {
+          "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+          "valueString": "Cannot be a date in the future"
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+          "valueDate": {
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                "valueExpression": {
+                  "language": "text/fhirpath",
+                  "expression": "today()"
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "type": "date",
       "linkId": "isolation-sent-epi",
       "text": "Date Isolation sent to EPI/Surveillance Unit",
-      "required": true
+      "required": true,
+      "extension": [
+        {
+          "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+          "valueString": "Cannot be a date in the future"
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+          "valueDate": {
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                "valueExpression": {
+                  "language": "text/fhirpath",
+                  "expression": "today()"
+                }
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "type": "date",
       "linkId": "igm-results-received",
       "text": "Date IgM Results received at National Lab",
-      "required": true
+      "required": true,
+      "extension": [
+        {
+          "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+          "valueString": "Cannot be a date in the future"
+        },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+          "valueDate": {
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                "valueExpression": {
+                  "language": "text/fhirpath",
+                  "expression": "today()"
+                }
+              }
+            ]
+          }
+        }
+      ]
     }
   ]
 }

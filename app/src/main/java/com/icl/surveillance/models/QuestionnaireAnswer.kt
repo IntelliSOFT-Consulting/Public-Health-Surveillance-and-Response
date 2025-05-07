@@ -22,12 +22,20 @@ data class OutputItem(
     val linkId: String,
     val text: String,
     val type: String,
-    var value: String? = ""
+    var value: String? = "",
+    var parentOperator: String? = "==",
+    val enable: Boolean = true,
+    val parentLink: String? = null,
+    val parentResponse: String? = null,
 )
 
 @Serializable
 data class QuestionnaireItem(
     val item: List<GroupItem>
+)
+@Serializable
+data class QuestionnaireItemChild(
+    val item: List<ChildItem>
 )
 
 @Serializable
@@ -43,7 +51,22 @@ data class ChildItem(
     val linkId: String,
     val text: String,
     val type: String,
-    val item: List<ChildItem>? = null
+    val item: List<ChildItem>? = null,
+    val enableWhen: List<EnableWhen>? = null
+)
+
+data class EnableWhen(
+    val question: String,
+    val operator: String,
+    val answerCoding: AnswerCoding? = null,
+    val answerString: String? = null,
+    val answerBoolean: Boolean? = null,
+    val answerDate: String? = null
+)
+
+data class AnswerCoding(
+    val code: String,
+    val display: String?
 )
 
 enum class UrlData(var message: Int) {
