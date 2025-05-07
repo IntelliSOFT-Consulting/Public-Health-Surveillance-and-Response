@@ -123,12 +123,17 @@ class VlFollowupFragment : Fragment() {
                 for (group in groups) {
                     val fieldView = createCustomLabel(group.text)
                     parentLayout.addView(fieldView)
-                    Log.d("Group", "Group Item Lab Results: ${group.text} (${group.linkId})")
                     for (item in group.items) {
-                        Log.d("Item", " - Item: ${item.text} (${item.linkId}) Type: ${item.type}")
                         item.value = getValueBasedOnId(item, it.first().observations)
                         val childFieldView = createCustomField(item)
-                        parentLayout.addView(childFieldView)
+                        var show = true
+                        if (!item.enable) {
+                            show = false
+                            show = checkIfParentAnswerMatches(item.parentLink, item.parentResponse, group.items)
+                        }
+                        if (show) {
+                            parentLayout.addView(childFieldView)
+                        }
                     }
                 }
 
@@ -159,7 +164,22 @@ class VlFollowupFragment : Fragment() {
             }
         }
     }
-
+    private fun checkIfParentAnswerMatches(
+        parentLink: String?,
+        parentResponse: String?,
+        items: List<OutputItem>
+    ): Boolean {
+        var response = false
+        if (parentLink != null && parentResponse != null) {
+            val parentAnswer = items.find { it.linkId == parentLink }?.value
+            if (parentAnswer != null) {
+                if (parentAnswer.trim() == parentResponse.trim()) {
+                    response = true
+                }
+            }
+        }
+        return response
+    }
     private fun handleDataClick(currentCase: String) {
         val slug = currentCase.toSlug()
         FormatterClass().saveSharedPref(
@@ -218,13 +238,44 @@ class VlFollowupFragment : Fragment() {
 
     }
 
-    fun flattenItems(item: ChildItem): List<OutputItem> {
-        val children = item.item?.flatMap { flattenItems(it) } ?: emptyList()
+    fun flattenItems(
+        item: ChildItem,
+        parentConditions: Map<String, Pair<String, Boolean>> = emptyMap()
+    ): List<OutputItem> {
+        val currentConditions =
+            mutableMapOf<String, Pair<String, Boolean>>().apply { putAll(parentConditions) }
 
-        // If current item is NOT of type "display", include it
+        var enable = true
+        var parentLink: String? = null
+        var parentResponse: String? = null
+
+        item.enableWhen?.firstOrNull()?.let { condition ->
+            parentLink = condition.question
+            val expectedAnswer = when {
+                condition.answerCoding != null -> condition.answerCoding.display
+                    ?: condition.answerCoding.code
+
+                condition.answerString != null -> condition.answerString
+                condition.answerBoolean != null -> condition.answerBoolean.toString()
+                condition.answerDate != null -> condition.answerDate
+                else -> null
+            }
+            parentResponse = expectedAnswer
+            enable = false // assume not enabled unless condition is met at runtime
+        }
+
+        val children = item.item?.flatMap {
+            flattenItems(it, currentConditions)
+        } ?: emptyList()
+
         return if (item.type != "display") {
             val current = OutputItem(
-                linkId = item.linkId, text = item.text, type = item.type
+                linkId = item.linkId,
+                text = item.text,
+                type = item.type,
+                enable = enable,
+                parentLink = parentLink,
+                parentResponse = parentResponse
             )
             listOf(current) + children
         } else {

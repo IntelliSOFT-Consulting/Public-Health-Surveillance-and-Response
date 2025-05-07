@@ -66,15 +66,7 @@ class SummarizedActivity : AppCompatActivity() {
         if (latestEncounter != null) {
 
             groups = parseFromAssets(this, latestEncounter) // this = Context
-            for (group in groups) {
-                Log.d("Group", "Group Item: ${group.text} (${group.linkId})")
-                for (item in group.items) {
-                    Log.d(
-                        "Item",
-                        " - Item: ${item.text} (${item.linkId}) Type: ${item.type} ${item.value}"
-                    )
-                }
-            }
+
             val viewPager = binding.viewPager
             val tabLayout = binding.tabLayout
 
@@ -196,21 +188,7 @@ class SummarizedActivity : AppCompatActivity() {
         return true
     }
 
-//    fun flattenItems(item: ChildItem): List<OutputItem> {
-//        val children = item.item?.flatMap { flattenItems(it) } ?: emptyList()
-//
-//        // If current item is NOT of type "display", include it
-//        return if (item.type != "display") {
-//            val current = OutputItem(
-//                linkId = item.linkId,
-//                text = item.text,
-//                type = item.type
-//            )
-//            listOf(current) + children
-//        } else {
-//            children
-//        }
-//    }
+
 
     fun flattenItems(
         item: ChildItem,

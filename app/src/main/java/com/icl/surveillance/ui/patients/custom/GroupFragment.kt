@@ -64,7 +64,6 @@ class GroupFragment : Fragment() {
                 show = false
                 show = checkIfParentAnswerMatches(item.parentLink, item.parentResponse, group.items)
             }
-//            val show = checkRelatedWorkflows(group.text, item, group.items)
             if (show) {
                 parentLayout.addView(fieldView)
             }
