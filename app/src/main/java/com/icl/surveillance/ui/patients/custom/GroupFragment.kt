@@ -1,5 +1,6 @@
 package com.icl.surveillance.ui.patients.custom
 
+import android.graphics.Typeface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import com.google.gson.Gson
 import com.icl.surveillance.R
 import com.icl.surveillance.models.OutputGroup
@@ -80,14 +82,10 @@ class GroupFragment : Fragment() {
         parentResponse: String?,
         items: List<OutputItem>
     ): Boolean {
-        println("Logic Check $parentLink :: $operator -> $parentResponse")
         var response = false
         if (parentLink != null && parentResponse != null) {
             val parentAnswer = items.find { it.linkId == parentLink }?.value
             if (parentAnswer != null) {
-//                if (parentAnswer.trim() == parentResponse.trim()) {
-//                    response = true
-//                }
                 if (operator != null) {
                     when (operator) {
                         "!=" -> {
@@ -167,11 +165,13 @@ class GroupFragment : Fragment() {
             text = item.text
             textSize = 12f
             setTextColor(android.graphics.Color.BLACK)
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.inter)
             layoutParams = LinearLayout.LayoutParams(
                 0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f
             )
         }
         horizontalLayout.addView(label)
+        val customFont = ResourcesCompat.getFont(requireContext(), R.font.inter)
 
         // Second TextView (dynamic content)
         val tvEpiLink = TextView(requireContext()).apply {
@@ -180,7 +180,7 @@ class GroupFragment : Fragment() {
             textSize = 13f
             textAlignment = TextView.TEXT_ALIGNMENT_TEXT_END
             setTextColor(android.graphics.Color.BLACK)
-            setTypeface(typeface, android.graphics.Typeface.BOLD)
+            setTypeface(customFont, Typeface.BOLD)
             layoutParams = LinearLayout.LayoutParams(
                 0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f
             )

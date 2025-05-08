@@ -150,18 +150,6 @@ class AddParentCaseActivity : AppCompatActivity() {
                 return@observe
             }
             showSuccessDialog(this@AddParentCaseActivity)
-//            val alert = SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-//            alert
-//                .setTitleText("Success!")
-//                .setContentText("You have successfully created a case!")
-//                .setConfirmText("OK")
-//                .setConfirmClickListener { dialog ->
-//                    dialog.dismissWithAnimation()
-//                    this@AddParentCaseActivity.finish()
-//                }
-//                .setCancelable(false)
-//            alert.show()
-
 
         }
     }

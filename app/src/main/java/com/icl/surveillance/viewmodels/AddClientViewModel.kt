@@ -589,6 +589,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
                                 val coding = answerObj.getJSONObject("valueCoding")
                                 coding.optString("display", coding.optString("code", ""))
                             }
+                            answerObj.has("valueReference") -> {
+                                val coding = answerObj.getJSONObject("valueReference")
+                                coding.optString("display", coding.optString("reference", ""))
+                            }
 
                             else -> null
                         }

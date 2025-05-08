@@ -679,38 +679,32 @@
           ]
         },
         {
-          "type": "choice",
-          "linkId": "a4-county",
-          "text": "County",
-          "required": true,
-          "answerOption": [
+          "extension": [
             {
-              "valueCoding": {
-                "code": "Nairobi",
-                "display": "Nairobi"
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Location?partof=Location/0&_sort=name"
               }
             },
             {
-              "valueCoding": {
-                "code": "Kiambu",
-                "display": "Kiambu"
-              }
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-choiceColumn",
+              "extension": [
+                {
+                  "url": "path",
+                  "valueString": "name"
+                },
+                {
+                  "url": "forDisplay",
+                  "valueBoolean": true
+                }
+              ]
             }
           ],
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ]
-              }
-            }
-          ]
+          "linkId": "a4-county",
+          "text": "County",
+          "type": "reference",
+          "required": true
         }
       ],
       "type": "group",
