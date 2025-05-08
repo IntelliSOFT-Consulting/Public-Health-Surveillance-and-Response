@@ -58,4 +58,15 @@
     <string name="rumor_tool">Rumor Tracking Tool</string>
     <string name="vl_form">Visceral Leishmaniasis Case Management Form</string>
     <string name="no_itd_laboratory_results_available">No ITD Lab Information available</string>
+    <string name="title_activity_landing">LandingActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
 </resources>

@@ -8,6 +8,8 @@
     <dimen name="small_text_margin">2dp</dimen>
     <dimen name="component_horizontal_margin">4dp</dimen>
     <dimen name="icon_container_height">128dp</dimen>
-    <dimen name="component_item_height">90dp</dimen>
+    <dimen name="component_item_height">70dp</dimen>
     <dimen name="component_vertical_margin">4dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
 </resources>

@@ -60,10 +60,7 @@ class CaseListingActivity : AppCompatActivity() {
                 ),
             )
                 .get(PatientListViewModel::class.java)
-
-
         val recyclerView: RecyclerView = binding.patientListContainer.patientList
-
         val adapter = PatientItemRecyclerViewAdapter(this::onPatientItemClicked)
         val adapterRumor = PatientItemRecyclerViewAdapterRumor(this::onRumorItemClicked)
 
@@ -125,9 +122,7 @@ class CaseListingActivity : AppCompatActivity() {
     }
 
     private fun onRumorItemClicked(patientItem: PatientListViewModel.RumorItem) {
-
         val currentCase = FormatterClass().getSharedPref("currentCase", this)
-        println("Going to client details activity with the id as ${patientItem.resourceId} and Encounter ${patientItem.encounterId}")
         FormatterClass().saveSharedPref("resourceId", patientItem.resourceId, this)
         FormatterClass().saveSharedPref("encounterId", patientItem.encounterId, this)
 
@@ -182,9 +177,7 @@ class CaseListingActivity : AppCompatActivity() {
     }
 
     private fun onPatientItemClicked(patientItem: PatientListViewModel.PatientItem) {
-
         val currentCase = FormatterClass().getSharedPref("currentCase", this)
-        println("Going to client details activity with the id as ${patientItem.resourceId} and Encounter ${patientItem.encounterId}")
         FormatterClass().saveSharedPref("resourceId", patientItem.resourceId, this)
         FormatterClass().saveSharedPref("encounterId", patientItem.encounterId, this)
 

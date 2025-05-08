@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,29 +67,11 @@ class CaseSelectionFragment : Fragment() {
         return root
     }
 
-    override fun onResume() {
-        super.onResume()
-        val titleName = FormatterClass().getSharedPref("title", requireContext())
-//
-//        try {
-//            if (titleName != null) {
-//                val title = when (titleName) {
-//                    "Visceral Leishmaniasis (Kala-azar) Case Management Form" -> "VL"
-//                    else -> titleName
-//                }
-//
-//                setupRecyclerView()
-//            }
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//        }
-
-
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val titleName = FormatterClass().getSharedPref("grandTitle", requireContext())
+
 
         val activity = requireActivity() as AppCompatActivity
         activity.supportActionBar?.apply {
