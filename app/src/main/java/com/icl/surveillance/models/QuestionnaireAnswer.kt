@@ -33,6 +33,7 @@ data class OutputItem(
 data class QuestionnaireItem(
     val item: List<GroupItem>
 )
+
 @Serializable
 data class QuestionnaireItemChild(
     val item: List<ChildItem>
@@ -61,7 +62,8 @@ data class EnableWhen(
     val answerCoding: AnswerCoding? = null,
     val answerString: String? = null,
     val answerBoolean: Boolean? = null,
-    val answerDate: String? = null
+    val answerDate: String? = null,
+    val answerInteger: Int?
 )
 
 data class AnswerCoding(

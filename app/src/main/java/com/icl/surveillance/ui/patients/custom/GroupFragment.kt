@@ -62,7 +62,10 @@ class GroupFragment : Fragment() {
             var show = true
             if (!item.enable) {
                 show = false
-                show = checkIfParentAnswerMatches(item.parentLink, item.parentResponse, group.items)
+                show = checkIfParentAnswerMatches(
+                    item.parentOperator,
+                    item.parentLink, item.parentResponse, group.items
+                )
             }
             if (show) {
                 parentLayout.addView(fieldView)
@@ -72,16 +75,39 @@ class GroupFragment : Fragment() {
 
 
     private fun checkIfParentAnswerMatches(
+        operator: String?,
         parentLink: String?,
         parentResponse: String?,
         items: List<OutputItem>
     ): Boolean {
+        println("Logic Check $parentLink :: $operator -> $parentResponse")
         var response = false
         if (parentLink != null && parentResponse != null) {
             val parentAnswer = items.find { it.linkId == parentLink }?.value
             if (parentAnswer != null) {
-                if (parentAnswer.trim() == parentResponse.trim()) {
-                    response = true
+//                if (parentAnswer.trim() == parentResponse.trim()) {
+//                    response = true
+//                }
+                if (operator != null) {
+                    when (operator) {
+                        "!=" -> {
+                            if (parentAnswer.trim() != parentResponse.trim()) {
+                                response = true
+                            }
+                        }
+
+                        ">" -> {
+                            if (parentAnswer.trim() > parentResponse.trim()) {
+                                response = true
+                            }
+                        }
+
+                        else -> {
+                            if (parentAnswer.trim() == parentResponse.trim()) {
+                                response = true
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -117,16 +143,6 @@ class GroupFragment : Fragment() {
             }
         }
 
-        //
-//        val parent = "measles-igm"
-//        val child = "rubella-igm"
-//        var parentResponse = getValueBasedOnId(parent, items)
-//        var childResponse = getValueBasedOnId(child, items)
-//        if (parentResponse.isNotEmpty()) {
-//            if (parentResponse == "Positive" && currentId == child) {
-//                show = false
-//            }
-//        }
         return response
     }
 

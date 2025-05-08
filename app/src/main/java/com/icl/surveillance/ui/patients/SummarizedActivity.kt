@@ -200,9 +200,10 @@ class SummarizedActivity : AppCompatActivity() {
         var enable = true
         var parentLink: String? = null
         var parentResponse: String? = null
-
+        var enableOperator: String? = null
         item.enableWhen?.firstOrNull()?.let { condition ->
             parentLink = condition.question
+            enableOperator = condition.operator
             val expectedAnswer = when {
                 condition.answerCoding != null -> condition.answerCoding.display
                     ?: condition.answerCoding.code
@@ -210,6 +211,7 @@ class SummarizedActivity : AppCompatActivity() {
                 condition.answerString != null -> condition.answerString
                 condition.answerBoolean != null -> condition.answerBoolean.toString()
                 condition.answerDate != null -> condition.answerDate
+                condition.answerInteger !=null ->condition.answerInteger.toString()
                 else -> null
             }
             parentResponse = expectedAnswer
@@ -227,7 +229,8 @@ class SummarizedActivity : AppCompatActivity() {
                 type = item.type,
                 enable = enable,
                 parentLink = parentLink,
-                parentResponse = parentResponse
+                parentResponse = parentResponse,
+                parentOperator = enableOperator
             )
             listOf(current) + children
         } else {

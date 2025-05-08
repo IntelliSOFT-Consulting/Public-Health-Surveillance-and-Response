@@ -575,28 +575,6 @@
           "linkId": "143814017466",
           "text": "Ward",
           "required": true,
-          "item": [
-            {
-              "linkId": "143814017466_helpText",
-              "type": "display",
-              "text": "The ward  in which the case is located or reported from.",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "help",
-                        "display": "Help-Button"
-                      }
-                    ],
-                    "text": "Help-Button"
-                  }
-                }
-              ]
-            }
-          ],
           "answerOption": [
             {
               "valueCoding": {
@@ -641,6 +619,28 @@
                   }
                 ]
               }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "143814017466_helpText",
+              "type": "display",
+              "text": "The ward  in which the case is located or reported from.",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "help",
+                        "display": "Help-Button"
+                      }
+                    ],
+                    "text": "Help-Button"
+                  }
+                }
+              ]
             }
           ]
         },
@@ -1804,14 +1804,12 @@
           "text": "Date of 2nd dose.",
           "enableWhen": [
             {
-              "question": "970455623029",
-              "operator": "=",
-              "answerCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
+              "question": "495924992534",
+              "operator": ">",
+              "answerInteger": 1
             }
           ],
+          "enableBehavior": "all",
           "required": true
         },
         {
@@ -1840,14 +1838,12 @@
           "text": "Date of 3rd Dose.",
           "enableWhen": [
             {
-              "question": "970455623029",
-              "operator": "=",
-              "answerCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
+              "question": "495924992534",
+              "operator": ">",
+              "answerInteger": 2
             }
           ],
+          "enableBehavior": "all",
           "required": true
         },
         {
@@ -1876,14 +1872,12 @@
           "text": "Date of 4th Dose.",
           "enableWhen": [
             {
-              "question": "970455623029",
-              "operator": "=",
-              "answerCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
+              "question": "495924992534",
+              "operator": ">",
+              "answerInteger": 3
             }
           ],
+          "enableBehavior": "all",
           "required": true
         },
         {
@@ -1912,14 +1906,12 @@
           "text": "If more than 4 doses, date of last dose.",
           "enableWhen": [
             {
-              "question": "970455623029",
-              "operator": "=",
-              "answerCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
+              "question": "495924992534",
+              "operator": ">",
+              "answerInteger": 4
             }
           ],
+          "enableBehavior": "all",
           "item": [
             {
               "linkId": "597572769623_helpText",

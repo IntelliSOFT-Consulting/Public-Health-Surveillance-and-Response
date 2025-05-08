@@ -274,12 +274,9 @@ class LabResultsFragment : Fragment() {
         items: List<PatientListViewModel.ObservationItem>,
     ): Boolean {
         var response = false
-        items.forEach {
-            println("Checking Parent Data Parent $parentLink Response $parentResponse Operator $operator ::::::: ${it.code} -> Value: ${it.value}")
-        }
+
         if (parentLink != null && parentResponse != null) {
             val parentAnswer = items.find { it.code == parentLink }?.value
-            println("Checking Parent Data :::: Answer is $parentAnswer ")
             if (parentAnswer != null) {
 
                 if (operator != null) {
