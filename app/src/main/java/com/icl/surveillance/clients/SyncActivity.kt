@@ -12,15 +12,21 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.fhir.sync.CurrentSyncJobStatus
 import com.icl.surveillance.R
+import com.icl.surveillance.databinding.ActivityAddParentCaseBinding
+import com.icl.surveillance.databinding.ActivitySyncBinding
 import com.icl.surveillance.utils.launchAndRepeatStarted
 import com.icl.surveillance.viewmodels.SyncFragmentViewModel
 
 class SyncActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySyncBinding
     private val syncFragmentViewModel: SyncFragmentViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_sync)
+        binding = ActivitySyncBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

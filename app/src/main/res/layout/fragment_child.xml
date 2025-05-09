@@ -10,7 +10,7 @@
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="100dp"
         android:background="@color/blue"
         android:orientation="vertical"
         android:paddingTop="30dp">
@@ -24,6 +24,7 @@
             android:layout_marginTop="3dp"
             android:textColor="@color/white"
             android:textSize="16sp"
+            android:fontFamily="@font/montserratbold"
             tools:text="@string/hello" />
 
         <TextView
@@ -34,7 +35,8 @@
             android:layout_marginTop="15dp"
             android:text="@string/select_reported_disease"
             android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:visibility="gone" />
 
     </LinearLayout>
 
@@ -43,8 +45,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginHorizontal="@dimen/component_horizontal_margin"
+        android:layout_marginTop="20dp"
         android:clipToPadding="false"
-        android:padding="40dp"
+        android:padding="10dp"
         android:paddingBottom="100dp"
         tools:listitem="@layout/landing_page_item" />
 

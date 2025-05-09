@@ -11,6 +11,12 @@
     {
       "item": [
         {
+          "type": "string",
+          "linkId": "8732404074721",
+          "text": "Lab ID No",
+          "required": true
+        },
+        {
           "type": "date",
           "linkId": "689825280680",
           "text": "Date specimen received at the national level",
@@ -60,14 +66,30 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "adequate",
-                "display": "Adequate"
+                "code": "Good",
+                "display": "Good"
               }
             },
             {
               "valueCoding": {
-                "code": "inadequate",
-                "display": "Inadequate"
+                "code": "Bad",
+                "display": "Bad"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "87324040799",
+          "text": "Reasons",
+          "required": true,
+          "enableWhen": [
+            {
+              "question": "482422649078",
+              "operator": "=",
+              "answerCoding": {
+                "code": "Bad",
+                "display": "Bad"
               }
             }
           ]

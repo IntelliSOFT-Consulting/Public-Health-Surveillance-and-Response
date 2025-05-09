@@ -23,7 +23,9 @@ class TimestampBasedDownloadWorkManagerImpl(private val dataStore: DemoDataStore
     private val urls =
         LinkedList(
             listOf(
-                "Patient", "Location", "Observation", "Encounter"
+                "Patient?_sort=_lastUpdated",
+                "Observation?_count=10000", "Encounter?_count=1000",
+                "Location?_count=17000",
             )
         )
 
@@ -98,6 +100,11 @@ class TimestampBasedDownloadWorkManagerImpl(private val dataStore: DemoDataStore
                     val patientUrl = "${entry.fullUrl}"
                     urls.add(patientUrl)
                 }
+
+                if (type == "Location") {
+                    val patientUrl = "${entry.fullUrl}"
+                    urls.add(patientUrl)
+                }
             }
 
             val nextUrl =
@@ -148,18 +155,52 @@ private fun affixLastUpdatedTimestamp(url: String, lastUpdated: String): String 
     if (downloadUrl.contains("\$everything")) {
         downloadUrl = "$downloadUrl?_since=$lastUpdated"
     }
-
-    // Affix lastUpdate to non-$everything queries as per:
-    // https://hl7.org/fhir/operation-patient-everything.html
-    if (!downloadUrl.contains("\$everything")) {
-        downloadUrl = "$downloadUrl?_lastUpdated=gt$lastUpdated"
-    }
+//    if (!downloadUrl.contains("\$everything") && downloadUrl.contains("Location")) {
+//        downloadUrl = url
+//    }
+//    else if (!downloadUrl.contains("\$everything")) {
+//        downloadUrl = "$downloadUrl?_lastUpdated=gt$lastUpdated"
+//    }
 
     // Do not modify any URL set by a server that specifies the token of the page to return.
     if (downloadUrl.contains("&page_token")) {
         downloadUrl = url
     }
     return downloadUrl
+}
+
+fun correctFhirUrl(url: String): String {
+    // Check if the URL contains "ImmunizationRecommendation"
+    if (!url.contains("ImmunizationRecommendation")) {
+        return url // If not, return the original URL
+    }
+
+    // Split the URL to get the base and query parts
+    val urlParts = url.split("?")
+    val baseUrl = urlParts[0]
+
+    // Remove redundant query parameters and fix the timestamp
+    val queryParams = urlParts.drop(1)
+        .flatMap { it.split("&") }
+        .mapNotNull {
+            val paramParts = it.split("=")
+            if (paramParts.size == 2 && paramParts[0] == "_lastUpdated") {
+                // Correct the _lastUpdated parameter by removing any extra "?" character
+                val timestamp = paramParts[1].removeSuffix("?")
+                "${paramParts[0]}=${timestamp}"
+            } else {
+                it
+            }
+        }
+        .distinct()
+        .joinToString("&")
+
+    // Reconstruct the corrected URL
+    return if (queryParams.isNotEmpty()) {
+        "$baseUrl?$queryParams"
+    } else {
+        baseUrl
+    }
 }
 
 private fun Date.toTimeZoneString(): String {

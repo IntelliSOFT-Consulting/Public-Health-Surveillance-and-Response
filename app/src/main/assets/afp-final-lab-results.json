@@ -554,8 +554,8 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "confirmed",
-                "display": "Confirmed"
+                "code": "WPV",
+                "display": "WPV"
               }
             },
             {

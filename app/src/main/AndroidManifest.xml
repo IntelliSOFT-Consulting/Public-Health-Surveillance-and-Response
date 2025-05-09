@@ -18,7 +18,8 @@
         <activity
             android:name=".clients.SyncActivity"
             android:exported="false"
-            android:label="Data Sync" />
+            android:label="Data Sync"
+            android:theme="@style/Theme.Surveillance.NoActionBar" />
         <activity
             android:name=".ui.patients.SummarizedActivity"
             android:exported="false"

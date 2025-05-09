@@ -1037,14 +1037,14 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "yes",
-                "display": "Yes"
+                "code": "Case",
+                "display": "Case"
               }
             },
             {
               "valueCoding": {
-                "code": "no",
-                "display": "No"
+                "code": "Line List",
+                "display": "Line List"
               }
             }
           ]
@@ -1618,8 +1618,8 @@
           "question": "865158268604",
           "operator": "=",
           "answerCoding": {
-            "code": "yes",
-            "display": "Yes"
+            "code": "Case",
+            "display": "Case"
           }
         }
       ]

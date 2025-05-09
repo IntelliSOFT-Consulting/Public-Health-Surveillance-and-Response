@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/component_item_height"
+    android:layout_margin="10dp"
     android:layout_marginHorizontal="@dimen/component_horizontal_margin"
     android:layout_marginVertical="@dimen/component_vertical_margin"
     android:orientation="vertical"
-    android:padding="15dp"
+    android:padding="20dp"
     app:cardBackgroundColor="@color/blue"
-    app:cardCornerRadius="20dp"
+    app:cardCornerRadius="5dp"
     app:cardElevation="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,6 +42,7 @@
             android:id="@+id/componentLayoutTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/montserratsemi"
             android:textAlignment="textStart"
             android:textAppearance="?textAppearanceBody2"
             android:textColor="@color/white"

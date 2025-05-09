@@ -49,9 +49,9 @@
     <string name="case_management">Case Management</string>
     <string name="social">Social Mobilization</string>
     <string name="surveys">Assessments/Surveys</string>
-    <string name="monthly_reported">Monthly Reportable Diseases</string>
-    <string name="weekly_reported">Weekly Reportable Diseases</string>
-    <string name="immediate_reportable">Immediate Reportable Diseases</string>
+    <string name="monthly_reported">Monthly Reportable\nDiseases</string>
+    <string name="weekly_reported">Weekly Reportable\nDiseases</string>
+    <string name="immediate_reportable">Immediate\nReportable Diseases</string>
     <string name="polio">Polio Immunization (OPV)</string>
     <string name="measles_imm">Measles Immunization</string>
     <string name="cholera">Cholera Immunization</string>
