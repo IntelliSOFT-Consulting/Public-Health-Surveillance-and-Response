@@ -131,32 +131,32 @@
           ]
         },
         {
-          "type": "choice",
           "extension": [
             {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ]
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Location?partof=Location/0&_sort=name"
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-choiceColumn",
+              "extension": [
+                {
+                  "url": "path",
+                  "valueString": "name"
+                },
+                {
+                  "url": "forDisplay",
+                  "valueBoolean": true
+                }
+              ]
             }
           ],
           "linkId": "294367770999",
           "text": "County within which the health facility is",
-          "required": true,
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "Nairobi",
-                "display": "Nairobi"
-              }
-            }
-          ]
+          "type": "reference",
+          "required": true
         }
       ],
       "type": "group",
@@ -1003,7 +1003,7 @@
             }
           ],
           "linkId": "865158268604",
-          "text": "Is the case epi linked to lab confirmed case",
+          "text": "Is the case EPI linked or line list?",
           "required": true,
           "answerOption": [
             {
@@ -1019,38 +1019,6 @@
               }
             }
           ]
-        },
-        {
-          "type": "string",
-          "linkId": "714692748467",
-          "text": "Name ",
-          "enableWhen": [
-            {
-              "question": "865158268604",
-              "operator": "=",
-              "answerCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
-            }
-          ],
-          "required": true
-        },
-        {
-          "type": "string",
-          "linkId": "512392582851",
-          "text": "EPID No",
-          "enableWhen": [
-            {
-              "question": "865158268604",
-              "operator": "=",
-              "answerCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
-            }
-          ],
-          "required": true
         }
       ],
       "type": "group",
@@ -1186,16 +1154,6 @@
           "type": "date",
           "linkId": "544290619304",
           "text": "Date of last vaccination",
-          "enableWhen": [
-            {
-              "question": "308128177300",
-              "operator": "=",
-              "answerCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
-            }
-          ],
           "required": true,
           "extension": [
             {
