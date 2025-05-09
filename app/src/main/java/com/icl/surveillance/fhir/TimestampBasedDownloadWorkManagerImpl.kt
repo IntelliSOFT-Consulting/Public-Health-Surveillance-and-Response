@@ -22,7 +22,7 @@ class TimestampBasedDownloadWorkManagerImpl(private val dataStore: DemoDataStore
     private val urls =
         LinkedList(
             listOf(
-                "Patient?_sort=_lastUpdated", "Location?_count=1000", "Observation", "Encounter"
+                "Patient", "Location", "Observation", "Encounter"
             )
         )
 
@@ -69,10 +69,7 @@ class TimestampBasedDownloadWorkManagerImpl(private val dataStore: DemoDataStore
                     val patientUrl = "${entry.item.reference}/\$everything"
                     urls.add(patientUrl)
                 }
-                if (reference.referenceElement.resourceType.equals("Location")) {
-                    val patientUrl = "${entry.item.reference}/\$everything"
-                    urls.add(patientUrl)
-                }
+
             }
         }
 
@@ -133,16 +130,6 @@ private fun affixLastUpdatedTimestamp(url: String, lastUpdated: String): String 
     if (!downloadUrl.contains("\$everything")) {
         downloadUrl = "$downloadUrl?_lastUpdated=gt$lastUpdated"
     }
-//    if (!downloadUrl.contains("\$everything") && downloadUrl.contains("Observation")) {
-//        downloadUrl = "$downloadUrl?_lastUpdated=gt$lastUpdated"
-//    }
-//    if (!downloadUrl.contains("\$everything") && downloadUrl.contains("Encounter")) {
-//        downloadUrl = "$downloadUrl?_lastUpdated=gt$lastUpdated"
-//    }
-//
-//    if (!downloadUrl.contains("\$everything") && downloadUrl.contains("Location")) {
-//        downloadUrl = "$downloadUrl?&_lastUpdated=gt$lastUpdated"
-//    }
 
     // Do not modify any URL set by a server that specifies the token of the page to return.
     if (downloadUrl.contains("&page_token")) {

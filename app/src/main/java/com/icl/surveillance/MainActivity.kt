@@ -13,6 +13,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
+import com.icl.surveillance.clients.SyncActivity
 import com.icl.surveillance.databinding.ActivityMainBinding
 import com.icl.surveillance.fhir.MainActivityViewModel
 import com.icl.surveillance.ui.patients.AddCaseActivity
@@ -77,8 +78,9 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_refresh -> {
-                viewModel.triggerOneTimeSync()
-                Toast.makeText(this@MainActivity, "Syncing ...", Toast.LENGTH_SHORT).show()
+//                viewModel.triggerOneTimeSync()
+//                Toast.makeText(this@MainActivity, "Syncing ...", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this@MainActivity, SyncActivity::class.java))
                 true
             }
 

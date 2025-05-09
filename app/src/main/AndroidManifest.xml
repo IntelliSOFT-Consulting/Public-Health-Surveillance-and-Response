@@ -15,7 +15,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Surveillance"
         tools:targetApi="31">
-
+        <activity
+            android:name=".clients.SyncActivity"
+            android:exported="false"
+            android:label="Data Sync" />
         <activity
             android:name=".ui.patients.SummarizedActivity"
             android:exported="false"

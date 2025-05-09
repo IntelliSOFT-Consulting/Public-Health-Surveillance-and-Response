@@ -311,7 +311,7 @@
         {
           "type": "integer",
           "linkId": "492731638700",
-          "text": "Years",
+          "text": "Age in Years",
           "enableWhen": [
             {
               "question": "442636360588",
@@ -327,7 +327,7 @@
         {
           "type": "integer",
           "linkId": "185726989867",
-          "text": "Months",
+          "text": "Age in Months",
           "enableWhen": [
             {
               "question": "442636360588",
@@ -342,7 +342,7 @@
         {
           "type": "integer",
           "linkId": "828303331247",
-          "text": "Days",
+          "text": "Age in Days",
           "enableWhen": [
             {
               "question": "442636360588",
@@ -1003,7 +1003,7 @@
             }
           ],
           "linkId": "865158268604",
-          "text": "Is the case EPI linked or line list?",
+          "text": "Is this a Case or a Line List?",
           "required": true,
           "answerOption": [
             {
@@ -1589,8 +1589,8 @@
           "question": "865158268604",
           "operator": "=",
           "answerCoding": {
-            "code": "no",
-            "display": "No"
+            "code": "yes",
+            "display": "Yes"
           }
         }
       ]
