@@ -11,6 +11,7 @@
     android:orientation="vertical"
     android:paddingVertical="@dimen/fab_margin"
     app:cardBackgroundColor="@color/white"
+    app:strokeColor="@color/gr"
     app:cardCornerRadius="20dp">
 
     <LinearLayout

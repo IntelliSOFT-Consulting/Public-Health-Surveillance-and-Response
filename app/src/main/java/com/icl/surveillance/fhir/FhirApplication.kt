@@ -31,14 +31,14 @@ class FhirApplication : Application(), DataCaptureConfig.Provider {
 
         FhirEngineProvider.init(
             FhirEngineConfiguration(
-                enableEncryptionIfSupported = true,
+                enableEncryptionIfSupported = false,
                 DatabaseErrorStrategy.RECREATE_AT_OPEN,
                 ServerConfiguration(
                     "https://dsrfhir.intellisoftkenya.com/hapi/fhir/",
                     httpLogger =
                         HttpLogger(
                             HttpLogger.Configuration(
-                                HttpLogger.Level.BASIC,
+                                HttpLogger.Level.BODY,
                             ),
                         ) {
                             Log.e("App-HttpLog", it)

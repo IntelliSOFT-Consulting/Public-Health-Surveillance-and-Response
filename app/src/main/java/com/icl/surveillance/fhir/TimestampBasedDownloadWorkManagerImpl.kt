@@ -10,6 +10,7 @@ import java.util.LinkedList
 import java.util.Locale
 import org.hl7.fhir.exceptions.FHIRException
 import org.hl7.fhir.r4.model.Bundle
+import org.hl7.fhir.r4.model.Encounter
 import org.hl7.fhir.r4.model.ListResource
 import org.hl7.fhir.r4.model.OperationOutcome
 import org.hl7.fhir.r4.model.Reference
@@ -76,6 +77,29 @@ class TimestampBasedDownloadWorkManagerImpl(private val dataStore: DemoDataStore
         // If the resource returned is a Bundle, check to see if there is a "next" relation referenced
         // in the Bundle.link component, if so, append the URL referenced to list of URLs to download.
         if (response is Bundle) {
+            for (entry in response.entry) {
+                val type = entry.resource.resourceType.toString()
+                if (type == "Patient") {
+                    val patientUrl = "${entry.fullUrl}/\$everything"
+                    urls.add(patientUrl)
+                }
+                if (type == "Encounter") {
+                    val patientUrl = "${entry.fullUrl}/\$everything"
+                    urls.add(patientUrl)
+
+                    val no = entry.resource as Encounter
+                    if (no.hasPartOf()) {
+                        val patientUrl = "${entry.fullUrl}/\$everything"
+                        urls.add(patientUrl)
+                    }
+                }
+
+                if (type == "Observation") {
+                    val patientUrl = "${entry.fullUrl}"
+                    urls.add(patientUrl)
+                }
+            }
+
             val nextUrl =
                 response.link.firstOrNull { component -> component.relation == "next" }?.url
             if (nextUrl != null) {
