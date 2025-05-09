@@ -38,7 +38,7 @@
             android:name=".clients.AddParentCaseActivity"
             android:exported="false"
             android:label="New Case"
-            android:theme="@style/Theme.Surveillance" />
+            android:theme="@style/Theme.Surveillance.NoActionBar" />
         <activity
             android:name=".ui.patients.FullCaseDetailsActivity"
             android:exported="false"
@@ -50,7 +50,8 @@
         <activity
             android:name=".ui.patients.AddCaseActivity"
             android:exported="false"
-            android:label="New Case" />
+            android:label="New Case"
+            android:theme="@style/Theme.Surveillance.NoActionBar" />
         <activity
             android:name=".ui.patients.ClientDetailsActivity"
             android:exported="false"

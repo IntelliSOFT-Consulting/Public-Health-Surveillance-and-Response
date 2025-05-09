@@ -38,7 +38,7 @@ class AddParentCaseActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityAddParentCaseBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//    setSupportActionBar(binding.toolbar)
+        setSupportActionBar(binding.toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val titleName = FormatterClass().getSharedPref("AddParentTitle", this@AddParentCaseActivity)

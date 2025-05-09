@@ -101,7 +101,10 @@ class GroupFragment : Fragment() {
                         }
 
                         else -> {
-                            if (parentAnswer.trim() == parentResponse.trim()) {
+                            if (parentAnswer.trim() == parentResponse.trim() || parentAnswer.contains(
+                                    parentResponse
+                                )
+                            ) {
                                 response = true
                             }
                         }

@@ -808,32 +808,6 @@
           ]
         },
         {
-          "type": "string",
-          "linkId": "178038943620",
-          "text": "Conjunctivitis",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-              "valueBoolean": true
-            }
-          ],
-          "enableWhen": [
-            {
-              "question": "745196148424",
-              "operator": "=",
-              "answerCoding": {
-                "code": "Conjunctivitis",
-                "display": "Conjunctivitis"
-              }
-            }
-          ],
-          "initial": [
-            {
-              "valueString": "Conjunctivitis"
-            }
-          ]
-        },
-        {
           "type": "date",
           "extension": [
             {

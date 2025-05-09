@@ -19,59 +19,57 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class FhirApplication : Application(), DataCaptureConfig.Provider {
-  // Only initiate the FhirEngine when used for the first time, not when the app is created.
-  private val fhirEngine: FhirEngine by lazy { constructFhirEngine() }
+    // Only initiate the FhirEngine when used for the first time, not when the app is created.
+    private val fhirEngine: FhirEngine by lazy { constructFhirEngine() }
 
-  private var dataCaptureConfig: DataCaptureConfig? = null
+    private var dataCaptureConfig: DataCaptureConfig? = null
 
-  private val dataStore by lazy { DemoDataStore(this) }
+    private val dataStore by lazy { DemoDataStore(this) }
 
-  override fun onCreate() {
-    super.onCreate()
+    override fun onCreate() {
+        super.onCreate()
 
-    FhirEngineProvider.init(
-        FhirEngineConfiguration(
-            enableEncryptionIfSupported = false,
-            DatabaseErrorStrategy.RECREATE_AT_OPEN,
-            ServerConfiguration(
-                //                "https://hapi.fhir.org/baseR4/",
-                "https://dsrfhir.intellisoftkenya.com/hapi/fhir/",
-                httpLogger =
-                    HttpLogger(
-                        HttpLogger.Configuration(
-//                                                        if (BuildConfig.DEBUG)
-                            // HttpLogger.Level.BODY
-                            //                            else
-                            HttpLogger.Level.BASIC,
-                        ),
-                    ) {
-                      Log.e("App-HttpLog", it)
-                    },
-                networkConfiguration = NetworkConfiguration(uploadWithGzip = false),
+        FhirEngineProvider.init(
+            FhirEngineConfiguration(
+                enableEncryptionIfSupported = true,
+                DatabaseErrorStrategy.RECREATE_AT_OPEN,
+                ServerConfiguration(
+                    "https://dsrfhir.intellisoftkenya.com/hapi/fhir/",
+                    httpLogger =
+                        HttpLogger(
+                            HttpLogger.Configuration(
+                                HttpLogger.Level.BASIC,
+                            ),
+                        ) {
+                            Log.e("App-HttpLog", it)
+                        },
+                    networkConfiguration = NetworkConfiguration(uploadWithGzip = false),
+                ),
             ),
-        ),
-    )
+        )
 
-    dataCaptureConfig =
-        DataCaptureConfig().apply {
-          urlResolver = ReferenceUrlResolver(this@FhirApplication as Context)
-          xFhirQueryResolver = XFhirQueryResolver { it ->
-            fhirEngine.search(it).map { it.resource }
-          }
-        }
+        dataCaptureConfig =
+            DataCaptureConfig().apply {
+                urlResolver = ReferenceUrlResolver(this@FhirApplication as Context)
+                xFhirQueryResolver = XFhirQueryResolver { it ->
+                    fhirEngine.search(it).map { it.resource }
+                }
+            }
 
-    CoroutineScope(Dispatchers.IO).launch { Sync.oneTimeSync<FhirSyncWorker>(this@FhirApplication) }
-  }
+        CoroutineScope(Dispatchers.IO).launch { Sync.oneTimeSync<FhirSyncWorker>(this@FhirApplication) }
+    }
 
-  private fun constructFhirEngine(): FhirEngine {
-    return FhirEngineProvider.getInstance(this)
-  }
+    private fun constructFhirEngine(): FhirEngine {
+        return FhirEngineProvider.getInstance(this)
+    }
 
-  companion object {
-    fun fhirEngine(context: Context) = (context.applicationContext as FhirApplication).fhirEngine
+    companion object {
+        fun fhirEngine(context: Context) =
+            (context.applicationContext as FhirApplication).fhirEngine
 
-    fun dataStore(context: Context) = (context.applicationContext as FhirApplication).dataStore
-  }
+        fun dataStore(context: Context) = (context.applicationContext as FhirApplication).dataStore
+    }
 
-  override fun getDataCaptureConfig(): DataCaptureConfig = dataCaptureConfig ?: DataCaptureConfig()
+    override fun getDataCaptureConfig(): DataCaptureConfig =
+        dataCaptureConfig ?: DataCaptureConfig()
 }

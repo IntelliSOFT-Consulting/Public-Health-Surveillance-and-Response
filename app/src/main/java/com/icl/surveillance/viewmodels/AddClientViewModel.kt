@@ -556,9 +556,66 @@ class AddClientViewModel(application: Application, private val state: SavedState
             }
         }
     }
-
-
     fun extractStructuredAnswersOnlyFromItems(json: JSONObject): List<QuestionnaireAnswer> {
+        val results = mutableListOf<QuestionnaireAnswer>()
+
+        fun processItems(items: JSONArray) {
+            for (i in 0 until items.length()) {
+                val item = items.getJSONObject(i)
+                val linkId = item.optString("linkId", "")
+                val text = item.optString("text", "")
+
+                if (item.has("answer")) {
+                    val answers = item.getJSONArray("answer")
+                    val valueList = mutableListOf<String>()
+
+                    for (j in 0 until answers.length()) {
+                        val answerObj = answers.getJSONObject(j)
+
+                        val value = when {
+                            answerObj.has("valueString") -> answerObj.getString("valueString")
+                            answerObj.has("valueInteger") -> answerObj.optString("valueInteger", "")
+                            answerObj.has("valueDate") -> answerObj.optString("valueDate", "")
+                            answerObj.has("valueDateTime") -> answerObj.optString("valueDateTime", "")
+                            answerObj.has("valueBoolean") -> answerObj.optString("valueBoolean", "")
+                            answerObj.has("valueDecimal") -> answerObj.optString("valueDecimal", "")
+                            answerObj.has("valueCoding") -> {
+                                val coding = answerObj.getJSONObject("valueCoding")
+                                coding.optString("display", coding.optString("code", ""))
+                            }
+                            answerObj.has("valueReference") -> {
+                                val ref = answerObj.getJSONObject("valueReference")
+                                ref.optString("display", ref.optString("reference", ""))
+                            }
+                            else -> null
+                        }
+
+                        if (!value.isNullOrBlank()) {
+                            valueList.add(value)
+                        }
+                    }
+
+                    if (valueList.isNotEmpty()) {
+                        // Join multiple values with comma
+                        results.add(QuestionnaireAnswer(linkId, text, valueList.joinToString(", ")))
+                    }
+                }
+
+                if (item.has("item")) {
+                    processItems(item.getJSONArray("item"))
+                }
+            }
+        }
+
+        if (json.has("item")) {
+            processItems(json.getJSONArray("item"))
+        }
+
+        return results
+    }
+
+
+    fun extractStructuredAnswersOnlyFromItemsold(json: JSONObject): List<QuestionnaireAnswer> {
         val results = mutableListOf<QuestionnaireAnswer>()
 
         fun processItems(items: JSONArray) {
