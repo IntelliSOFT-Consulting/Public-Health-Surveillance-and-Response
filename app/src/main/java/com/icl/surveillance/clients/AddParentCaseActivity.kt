@@ -133,7 +133,6 @@ class AddParentCaseActivity : AppCompatActivity() {
                 QuestionnaireFragment.builder()
                     .setQuestionnaire(viewModel.questionnaireJson)
                     .setShowCancelButton(true)
-//                    .showReviewPageBeforeSubmit(true)
                     .setSubmitButtonText("Submit")
                     .build(),
                 QUESTIONNAIRE_FRAGMENT_TAG,

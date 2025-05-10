@@ -91,7 +91,7 @@ class SingleCaseFragment : Fragment() {
                 "Immediate Notifiable Diseases Reporting Tool" -> "Integrated Case Based Surveillance form"
                 else -> titleName
             }
-            greeting.text = titleName
+            greeting.text = titleName?.replace("\n"," ")
         }
         val adapter =
             DiseasesRecyclerViewAdapter(::onItemClick).apply {

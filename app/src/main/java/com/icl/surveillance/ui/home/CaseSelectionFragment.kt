@@ -151,7 +151,7 @@ class CaseSelectionFragment : Fragment() {
                     )
                     FormatterClass().saveSharedPref(
                         "AddParentTitle",
-                        "Visceral Leishmaniasis (Kala-azar) Case Management Form",
+                        "Visceral Leishmaniasis Case Management Form",
                         requireContext()
                     )
                     FormatterClass().saveSharedPref(

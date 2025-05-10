@@ -231,7 +231,7 @@
           "type": "string",
           "linkId": "606848143908",
           "text": "Patient Family Name",
-          "required": false
+          "required": true
         },
         {
           "type": "string",
@@ -483,32 +483,10 @@
           "text": "Patient Location"
         },
         {
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ]
-              }
-            }
-          ],
+          "type": "string",
           "linkId": "845666899224",
           "text": "Nearest Health Facility",
-          "required": true,
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "knh",
-                "display": "KNH"
-              }
-            }
-          ]
+          "required": true
         },
         {
           "type": "string",
@@ -1260,42 +1238,9 @@
           ]
         },
         {
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "radio-button",
-                    "display": "Radio Button"
-                  }
-                ]
-              }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-              "valueCode": "horizontal"
-            }
-          ],
+          "type": "display",
           "linkId": "788908031336",
-          "text": "Organ Enlargement?",
-          "required": true,
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "no",
-                "display": "No"
-              }
-            }
-          ]
+          "text": "Organ Enlargement"
         },
         {
           "type": "choice",

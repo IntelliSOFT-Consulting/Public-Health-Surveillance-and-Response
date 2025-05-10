@@ -158,14 +158,13 @@
           "type": "reference",
           "required": true
         },
-
         {
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
               "valueExpression": {
                 "language": "application/x-fhir-query",
-                "expression": "Location?partof=%resource.descendants().where(linkId='294367770999').answer.value.reference+'&_sort=name'+"
+                "expression": "Location?partof={{%COUNTY}}"
               }
             },
             {
@@ -182,7 +181,7 @@
               ]
             }
           ],
-          "linkId": "294367770999qqq",
+          "linkId": "29436777099977",
           "text": "Subcounty within which the health facility is",
           "type": "reference",
           "required": true

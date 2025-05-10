@@ -11,174 +11,6 @@
     {
       "item": [
         {
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ]
-              }
-            }
-          ],
-          "linkId": "701496224461",
-          "text": "Name of Ministry",
-          "required": true,
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "moh",
-                "display": "MoH"
-              }
-            }
-          ]
-        },
-        {
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ]
-              }
-            }
-          ],
-          "linkId": "256928760972",
-          "text": "Name of Directorate",
-          "required": true,
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "drc-ph",
-                "display": "Directorate of Public Health"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "drc-ms",
-                "display": "Directorate of Medical Services"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "drc-dhir",
-                "display": "Directorate of Digital Health, Informatics & Research"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "drc-pol-res-plan",
-                "display": "Directorate of Health Policy, Research and Planning"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "drc-pre-pro-health",
-                "display": "Directorate of Preventive and Promotive Health"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "drc-fam-health",
-                "display": "Directorate of Family Health"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "drc-dhsqar",
-                "display": "Directorate of Health Standards, Quality Assurance and Regulation"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "drc-pharms",
-                "display": "Directorate of Pharmaceutical Services"
-              }
-            }
-          ]
-        },
-        {
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ]
-              }
-            }
-          ],
-          "linkId": "686990243396",
-          "text": "Name of Division",
-          "required": true,
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "dvs-001",
-                "display": "Division of Disease Surveillance and Response"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "dvs-002",
-                "display": "Division of Vector-Borne and Neglected Tropical Diseases"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "dvs-003",
-                "display": "Division of Environmental Health"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "dvs-004",
-                "display": "Division of Community Health"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "dvs-005",
-                "display": "Division of Port Health"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "dvs-006",
-                "display": "Division of Non-Communicable Diseases"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "dvs-007",
-                "display": "Division of Tobacco Control"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "dvs-008",
-                "display": "Division of Health Promotion"
-              }
-            }
-          ]
-        },
-        {
           "type": "string",
           "linkId": "871818396498",
           "text": "Village/Community Health unit",
@@ -430,6 +262,62 @@
               "answerCoding": {
                 "code": "otherReportingCdre",
                 "display": "Others (Specify)"
+              }
+            }
+          ],
+          "required": true
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "683805917111",
+          "text": "Agency",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "GOK",
+                "display": "GOK"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Kenya Red Cross",
+                "display": "Kenya Red Cross"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Other(specify)",
+                "display": "Other(specify)"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "22311605110",
+          "text": "Specify Agency",
+          "enableWhen": [
+            {
+              "question": "683805917111",
+              "operator": "=",
+              "answerCoding": {
+                "code": "Other(specify)",
+                "display": "Other(specify)"
               }
             }
           ],
