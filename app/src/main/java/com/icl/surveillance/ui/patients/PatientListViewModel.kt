@@ -346,6 +346,11 @@ class PatientListViewModel(
                             ?.resource
                             ?.value
                             ?.asStringValue() ?: ""
+                    val caseList =
+                        obs.firstOrNull { it.resource.code.codingFirstRep.code == "865158268604" }
+                            ?.resource
+                            ?.value
+                            ?.asStringValue() ?: "Case"
 
                     // Loading Lab Results
                     val childEncounter = loadChildEncounter(data.resourceId, logicalId)
@@ -380,6 +385,7 @@ class PatientListViewModel(
                     }
                     data =
                         data.copy(
+                            caseList = caseList,
                             encounterId = logicalId,
                             epid = epid, labResults = measlesIgm, status = finalClassification,
                             county = county, subCounty = subCounty, caseOnsetDate = onset
@@ -423,7 +429,8 @@ class PatientListViewModel(
         val caseOnsetDate: String,
         val status: String = "Pending Results",
         val labResults: String = "Pending",
-        val lastUpdated: String
+        val lastUpdated: String,
+        val caseList: String = "Case"
     ) {
         override fun toString(): String = name
     }
@@ -783,23 +790,24 @@ internal fun Patient.toPatientItem(
         lastUpdated = ""
     }
 
-    val encounterId =
 
-        return PatientListViewModel.PatientItem(
-            id = position.toString(),
-            encounterId = "encounterId",
-            resourceId = patientId,
-            name = " $name",
-            gender = gender ?: "",
-            dob = dob,
-            phone = phone ?: "",
-            city = city ?: "",
-            country = country ?: "",
-            isActive = isActive,
-            epid = epid,
-            county = county,
-            subCounty = subCounty,
-            caseOnsetDate = caseOnsetDate,
-            lastUpdated = lastUpdated
+
+    return PatientListViewModel.PatientItem(
+        id = position.toString(),
+        encounterId = "encounterId",
+        resourceId = patientId,
+        name = " $name",
+        gender = gender ?: "",
+        dob = dob,
+        phone = phone ?: "",
+        city = city ?: "",
+        country = country ?: "",
+        isActive = isActive,
+        epid = epid,
+        county = county,
+        subCounty = subCounty,
+        caseOnsetDate = caseOnsetDate,
+        lastUpdated = lastUpdated,
+
         )
 }

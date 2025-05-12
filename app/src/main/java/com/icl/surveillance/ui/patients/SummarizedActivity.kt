@@ -35,7 +35,7 @@ import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
 
 class SummarizedActivity : AppCompatActivity() {
-    private lateinit var groups: List<OutputGroup>
+    private lateinit var groups: MutableList<OutputGroup>
     private lateinit var binding: ActivitySummarizedBinding
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientDetailsViewModel: ClientDetailsViewModel
@@ -48,6 +48,7 @@ class SummarizedActivity : AppCompatActivity() {
         val patientId = FormatterClass().getSharedPref("resourceId", this@SummarizedActivity)
         val currentCase = FormatterClass().getSharedPref("currentCase", this)
         val latestEncounter = FormatterClass().getSharedPref("latestEncounter", this)
+        val isCase = FormatterClass().getSharedPref("isCase", this)
 
         fhirEngine = FhirApplication.fhirEngine(this@SummarizedActivity)
         patientDetailsViewModel =
@@ -65,7 +66,8 @@ class SummarizedActivity : AppCompatActivity() {
         }
         if (latestEncounter != null) {
 
-            groups = parseFromAssets(this, latestEncounter) // this = Context
+            groups = parseFromAssets(this, latestEncounter).toMutableList()// this = Context
+
 
             val viewPager = binding.viewPager
             val tabLayout = binding.tabLayout
@@ -75,7 +77,7 @@ class SummarizedActivity : AppCompatActivity() {
                 patientDetailsViewModel.getPatientInfoSummaryData(slug)
             }
 
-            val customFragments = when (latestEncounter) {
+            var customFragments = when (latestEncounter) {
                 "measles-case-information" -> {
                     listOf(
                         "Laboratory Information" to LabResultsFragment(),
@@ -102,6 +104,17 @@ class SummarizedActivity : AppCompatActivity() {
                 }
 
                 else -> emptyList()
+            }
+
+            if (isCase != null) {
+                if (isCase != "Case") {
+                    val itemToRemove = groups.find { it.linkId == "271053545237" }
+                    if (itemToRemove != null) {
+                        groups.remove(itemToRemove)
+                        customFragments = emptyList()
+
+                    }
+                }
             }
             patientDetailsViewModel.liveSummaryData.observe(this) { data ->
 
@@ -189,7 +202,6 @@ class SummarizedActivity : AppCompatActivity() {
     }
 
 
-
     fun flattenItems(
         item: ChildItem,
         parentConditions: Map<String, Pair<String, Boolean>> = emptyMap()
@@ -211,7 +223,7 @@ class SummarizedActivity : AppCompatActivity() {
                 condition.answerString != null -> condition.answerString
                 condition.answerBoolean != null -> condition.answerBoolean.toString()
                 condition.answerDate != null -> condition.answerDate
-                condition.answerInteger !=null ->condition.answerInteger.toString()
+                condition.answerInteger != null -> condition.answerInteger.toString()
                 else -> null
             }
             parentResponse = expectedAnswer

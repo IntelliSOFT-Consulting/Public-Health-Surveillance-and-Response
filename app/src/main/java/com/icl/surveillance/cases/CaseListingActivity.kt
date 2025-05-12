@@ -125,7 +125,7 @@ class CaseListingActivity : AppCompatActivity() {
         val currentCase = FormatterClass().getSharedPref("currentCase", this)
         FormatterClass().saveSharedPref("resourceId", patientItem.resourceId, this)
         FormatterClass().saveSharedPref("encounterId", patientItem.encounterId, this)
-
+        FormatterClass().deleteSharedPref("isCase", this)
         if (currentCase != null) {
             val slug = currentCase.toSlug()
             println("Current Case Slug $slug")
@@ -180,7 +180,7 @@ class CaseListingActivity : AppCompatActivity() {
         val currentCase = FormatterClass().getSharedPref("currentCase", this)
         FormatterClass().saveSharedPref("resourceId", patientItem.resourceId, this)
         FormatterClass().saveSharedPref("encounterId", patientItem.encounterId, this)
-
+        FormatterClass().deleteSharedPref("isCase", this)
         if (currentCase != null) {
             val slug = currentCase.toSlug()
 
@@ -218,7 +218,7 @@ class CaseListingActivity : AppCompatActivity() {
                 }
 
                 else -> {
-
+                    FormatterClass().saveSharedPref("isCase", patientItem.caseList, this)
                     startActivity(
                         Intent(
                             this@CaseListingActivity,
