@@ -68,6 +68,21 @@
           ]
         },
         {
+          "type": "string",
+          "linkId": "8894691255323",
+          "text": "Please specify reason",
+          "enableWhen": [
+            {
+              "question": "889469125501",
+              "operator": "=",
+              "answerCoding": {
+                "code": "reason-004",
+                "display": "Others (specify)"
+              }
+            }
+          ]
+        },
+        {
           "type": "display",
           "linkId": "764162052253",
           "text": "Residence"
@@ -556,7 +571,7 @@
               "question": "801022289284",
               "operator": "=",
               "answerCoding": {
-                "code": "unknow",
+                "code": "unknown",
                 "display": "Unknown"
               }
             }
@@ -572,12 +587,11 @@
               "question": "801022289284",
               "operator": "=",
               "answerCoding": {
-                "code": "unknow",
+                "code": "unknown",
                 "display": "Unknown"
               }
             }
-          ],
-          "required": true
+          ]
         },
         {
           "type": "choice",

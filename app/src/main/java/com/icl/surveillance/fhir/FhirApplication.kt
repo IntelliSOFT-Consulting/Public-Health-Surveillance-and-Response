@@ -38,7 +38,7 @@ class FhirApplication : Application(), DataCaptureConfig.Provider {
                     httpLogger =
                         HttpLogger(
                             HttpLogger.Configuration(
-                                HttpLogger.Level.BODY,
+                                HttpLogger.Level.BASIC,
                             ),
                         ) {
                             Log.e("App-HttpLog", it)
