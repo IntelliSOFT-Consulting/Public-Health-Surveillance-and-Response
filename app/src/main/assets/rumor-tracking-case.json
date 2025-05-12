@@ -115,32 +115,309 @@
           ]
         },
         {
+          "linkId": "a4-county",
+          "text": "County",
+          "type": "choice",
+          "required": true,
           "extension": [
             {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Location?partof=Location/0&_sort=name"
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop Down"
+                  }
+                ],
+                "text": "Drop Down"
+              }
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Baringo",
+                "display": "Baringo"
               }
             },
             {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-choiceColumn",
-              "extension": [
-                {
-                  "url": "path",
-                  "valueString": "name"
-                },
-                {
-                  "url": "forDisplay",
-                  "valueBoolean": true
-                }
-              ]
+              "valueCoding": {
+                "code": "Bomet",
+                "display": "Bomet"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Bungoma",
+                "display": "Bungoma"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Busia",
+                "display": "Busia"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Elgeyo-Marakwet",
+                "display": "Elgeyo-Marakwet"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Embu",
+                "display": "Embu"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Garissa",
+                "display": "Garissa"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Homa Bay",
+                "display": "Homa Bay"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Isiolo",
+                "display": "Isiolo"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Kajiado",
+                "display": "Kajiado"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Kakamega",
+                "display": "Kakamega"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Kericho",
+                "display": "Kericho"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Kiambu",
+                "display": "Kiambu"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Kilifi",
+                "display": "Kilifi"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Kirinyaga",
+                "display": "Kirinyaga"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Kisii",
+                "display": "Kisii"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Kisumu",
+                "display": "Kisumu"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Kitui",
+                "display": "Kitui"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Kwale",
+                "display": "Kwale"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Laikipia",
+                "display": "Laikipia"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Lamu",
+                "display": "Lamu"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Machakos",
+                "display": "Machakos"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Makueni",
+                "display": "Makueni"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Mandera",
+                "display": "Mandera"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Marsabit",
+                "display": "Marsabit"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Meru",
+                "display": "Meru"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Migori",
+                "display": "Migori"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Mombasa",
+                "display": "Mombasa"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Murang’a",
+                "display": "Murang’a"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Nairobi",
+                "display": "Nairobi"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Nakuru",
+                "display": "Nakuru"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Nandi",
+                "display": "Nandi"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Narok",
+                "display": "Narok"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Nyamira",
+                "display": "Nyamira"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Nyandarua",
+                "display": "Nyandarua"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Nyeri",
+                "display": "Nyeri"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Samburu",
+                "display": "Samburu"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Siaya",
+                "display": "Siaya"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Taita-Taveta",
+                "display": "Taita-Taveta"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Tana River",
+                "display": "Tana River"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Tharaka-Nithi",
+                "display": "Tharaka-Nithi"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Trans Nzoia",
+                "display": "Trans Nzoia"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Turkana",
+                "display": "Turkana"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Uasin Gishu",
+                "display": "Uasin Gishu"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Vihiga",
+                "display": "Vihiga"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Wajir",
+                "display": "Wajir"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "West Pokot",
+                "display": "West Pokot"
+              }
             }
-          ],
-          "linkId": "a4-county",
-          "text": "County",
-          "type": "reference",
-          "required": true
+          ]
         }
       ],
       "type": "group",
