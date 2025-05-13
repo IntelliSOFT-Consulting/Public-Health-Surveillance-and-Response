@@ -157,7 +157,7 @@ private fun affixLastUpdatedTimestamp(url: String, lastUpdated: String): String 
     if (downloadUrl.contains("\$everything")) {
         downloadUrl = "$downloadUrl?_since=$lastUpdated"
     }
-    if (!downloadUrl.contains("\$everything") && downloadUrl.contains("Location?_count")) {
+    if (!downloadUrl.contains("\$everything") && downloadUrl.contains("?_count=")) {
         downloadUrl = "$downloadUrl&_lastUpdated=gt$lastUpdated"
     }
     if (!downloadUrl.contains("\$everything")) {

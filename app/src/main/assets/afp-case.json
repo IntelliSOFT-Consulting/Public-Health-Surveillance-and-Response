@@ -2857,7 +2857,7 @@
             }
           ],
           "linkId": "650080600932",
-          "text": "Source of RI vaccination Information.   ",
+          "text": "Source of RI vaccination Information.",
           "enableWhen": [
             {
               "question": "970455623029",

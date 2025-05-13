@@ -149,9 +149,6 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
             val encounterReference = Reference("Encounter/$encounterId")
 
-            extractedAnswers.forEach {
-                println("Each Response Here ${it.linkId} -> ${it.text} -> ${it.answer}")
-            }
             when (case) {
                 "measles-case-information" -> {
                     val genderEntry = extractedAnswers.find { it.linkId == "929966324957" }
@@ -267,10 +264,12 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     if (subCountyEntry != null) {
                         subCounty = subCountyEntry.answer
                         patient.addressFirstRep.state = subCounty
+                        patient.addressFirstRep.addLine(subCounty)
                     }
                     if (countyEntry != null) {
                         county = countyEntry.answer
                         patient.addressFirstRep.city = county
+                        patient.addressFirstRep.addLine(county)
                     }
 
                     val countyCode = county.padEnd(3, 'X').take(3).uppercase()
@@ -299,13 +298,33 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     }
 
                     // Define specimen types and their corresponding linkIds
-                    val specimenConfigs = listOf(
+                    val specimenConfigs = mutableListOf<SpecimenConfig>(
                         SpecimenConfig("Blood", "918495737998", "8962468583341"),
                         SpecimenConfig("Urine", "433195098993", "915783129731"),
                         SpecimenConfig("Respiratory Sample", "270749570400", "183705125522"),
-//                        SpecimenConfig("Other", "258912872921", "183705125522")
-
                     )
+
+                    val otherSpecimenEntry = extractedAnswers.find { it.linkId == "258912872921" }
+                    if (otherSpecimenEntry != null) {
+
+                        if (otherSpecimenEntry.answer.lowercase() == "yes") {
+                            val otherSpecifyEntry =
+                                extractedAnswers.find { it.linkId == "340507649387" }
+                            if (otherSpecifyEntry != null) {
+                                val otherDateEntry =
+                                    extractedAnswers.find { it.linkId == "699353598445" }
+                                if (otherDateEntry != null) {
+                                    createSpecimenResource(
+                                        otherSpecifyEntry.linkId,
+                                        otherDateEntry.answer,
+                                        otherSpecifyEntry.answer,
+                                        subjectReference
+                                    )
+                                }
+                            }
+                        }
+                    }
+
                     for (config in specimenConfigs) {
                         val specimenEntry =
                             extractedAnswers.find { it.linkId == config.entryLinkId }
@@ -313,8 +332,8 @@ class AddClientViewModel(application: Application, private val state: SavedState
                             val dateEntry = extractedAnswers.find { it.linkId == config.dateLinkId }
                             if (dateEntry != null) {
                                 createSpecimenResource(
-                                    specimenEntry,
-                                    dateEntry,
+                                    specimenEntry.linkId,
+                                    dateEntry.answer,
                                     config.type,
                                     subjectReference
                                 )
@@ -333,7 +352,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val dobEntry = extractedAnswers.find { it.linkId == "951993881290" }
                     val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
                     val countyEntry = extractedAnswers.find { it.linkId == "a4-county" }
-
+                    val specimenDateEntry = extractedAnswers.find { it.linkId == "737703942433" }
 
 
                     if (genderEntry != null) {
@@ -391,10 +410,12 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     if (subCountyEntry != null) {
                         subCounty = subCountyEntry.answer
                         patient.addressFirstRep.state = subCounty
+                        patient.addressFirstRep.addLine(subCounty)
                     }
                     if (countyEntry != null) {
                         county = countyEntry.answer
                         patient.addressFirstRep.city = county
+                        patient.addressFirstRep.addLine(county)
                     }
 
                     val countyCode = county.padEnd(3, 'X').take(3).uppercase()
@@ -407,7 +428,15 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     createResource(obs, subjectReference, encounterReference)
 
 
+                    if (specimenDateEntry != null) {
 
+                        createSpecimenResource(
+                            specimenDateEntry.linkId,
+                            specimenDateEntry.answer,
+                            "Stool",
+                            subjectReference
+                        )
+                    }
 
 
                     try {
@@ -434,10 +463,12 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     if (subCountyEntry != null) {
                         subCounty = subCountyEntry.answer
                         patient.addressFirstRep.state = subCounty
+                        patient.addressFirstRep.addLine(subCounty)
                     }
                     if (countyEntry != null) {
                         county = countyEntry.answer
                         patient.addressFirstRep.city = county
+                        patient.addressFirstRep.addLine(county)
                     }
 
                     val countyCode = county.padEnd(3, 'X').take(3).uppercase()
@@ -502,10 +533,12 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     if (subCountyEntry != null) {
                         subCounty = subCountyEntry.answer
                         patient.addressFirstRep.state = subCounty
+                        patient.addressFirstRep.addLine(subCounty)
                     }
                     if (countyEntry != null) {
                         county = countyEntry.answer
                         patient.addressFirstRep.city = county
+                        patient.addressFirstRep.addLine(county)
                     }
 
                     val countyCode = county.padEnd(3, 'X').take(3).uppercase()
@@ -580,7 +613,6 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         )
 
                         createResource(obs, subjectReference, encounterReference)
-                        println("Data Found LinkId: ${it.linkId}, Text: ${it.text}, Answer: ${it.answer}")
                     }
                 } catch (e: Exception) {
                     Log.e("TAG", "Error experienced ${e.message}}")
@@ -592,13 +624,13 @@ class AddClientViewModel(application: Application, private val state: SavedState
     }
 
     private suspend fun createSpecimenResource(
-        bloodEntry: QuestionnaireAnswer,
-        bloodDateEntry: QuestionnaireAnswer,
+        linkId: String,
+        dateAnswer: String,
         string: String,
         subjectReference: Reference
     ) {
         val specimenCoding = Coding()
-        specimenCoding.code = bloodEntry.linkId
+        specimenCoding.code = linkId
         specimenCoding.system = "specimen-details"
         specimenCoding.display = string
 
@@ -609,7 +641,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
         try {
             val dateOnly =
                 SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(
-                    bloodDateEntry.answer
+                    dateAnswer
                 )
 
             val calendar = Calendar.getInstance()
