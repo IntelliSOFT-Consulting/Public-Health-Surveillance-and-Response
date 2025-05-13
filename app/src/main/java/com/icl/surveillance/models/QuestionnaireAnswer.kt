@@ -122,3 +122,8 @@ data class CaseOption(
     val showCount: Boolean = false,
     val count: Int = 0
 )
+data class SpecimenConfig(
+    val type: String,
+    val entryLinkId: String,
+    val dateLinkId: String
+)

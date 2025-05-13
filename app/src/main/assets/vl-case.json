@@ -450,6 +450,10 @@
               "valueString": "Cannot be a date in the future"
             },
             {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "yyyy-mm-dd"
+            },
+            {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueDate": {
                 "extension": [
@@ -604,6 +608,10 @@
             {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
               "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "yyyy-mm-dd"
             },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",

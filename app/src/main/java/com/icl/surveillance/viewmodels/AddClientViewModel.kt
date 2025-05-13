@@ -10,13 +10,13 @@ import androidx.lifecycle.viewModelScope
 import ca.uhn.fhir.context.FhirContext
 import ca.uhn.fhir.context.FhirVersionEnum
 import com.google.android.fhir.FhirEngine
-import com.google.android.fhir.datacapture.mapping.ResourceMapper
 import com.google.android.fhir.datacapture.validation.Invalid
 import com.google.android.fhir.datacapture.validation.QuestionnaireResponseValidator
 import com.ibm.icu.text.SimpleDateFormat
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.models.QuestionnaireAnswer
+import com.icl.surveillance.models.SpecimenConfig
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.utils.QuestionnaireHelper
 import java.time.LocalDate
@@ -29,6 +29,7 @@ import org.hl7.fhir.r4.model.Address
 import org.hl7.fhir.r4.model.CodeableConcept
 import org.hl7.fhir.r4.model.Coding
 import org.hl7.fhir.r4.model.ContactPoint
+import org.hl7.fhir.r4.model.DateTimeType
 import org.hl7.fhir.r4.model.Enumerations
 import org.hl7.fhir.r4.model.HumanName
 import org.hl7.fhir.r4.model.Identifier
@@ -37,8 +38,11 @@ import org.hl7.fhir.r4.model.Patient
 import org.hl7.fhir.r4.model.Questionnaire
 import org.hl7.fhir.r4.model.QuestionnaireResponse
 import org.hl7.fhir.r4.model.Reference
+import org.hl7.fhir.r4.model.Specimen
 import org.json.JSONArray
 import org.json.JSONObject
+import java.util.Calendar
+import java.util.Locale
 
 class AddClientViewModel(application: Application, private val state: SavedStateHandle) :
     AndroidViewModel(application) {
@@ -294,6 +298,30 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         e.printStackTrace()
                     }
 
+                    // Define specimen types and their corresponding linkIds
+                    val specimenConfigs = listOf(
+                        SpecimenConfig("Blood", "918495737998", "8962468583341"),
+                        SpecimenConfig("Urine", "433195098993", "915783129731"),
+                        SpecimenConfig("Respiratory Sample", "270749570400", "183705125522"),
+//                        SpecimenConfig("Other", "258912872921", "183705125522")
+
+                    )
+                    for (config in specimenConfigs) {
+                        val specimenEntry =
+                            extractedAnswers.find { it.linkId == config.entryLinkId }
+                        if (specimenEntry?.answer?.lowercase() == "yes") {
+                            val dateEntry = extractedAnswers.find { it.linkId == config.dateLinkId }
+                            if (dateEntry != null) {
+                                createSpecimenResource(
+                                    specimenEntry,
+                                    dateEntry,
+                                    config.type,
+                                    subjectReference
+                                )
+                            }
+                        }
+                    }
+
 
                 }
 
@@ -379,6 +407,9 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     createResource(obs, subjectReference, encounterReference)
 
 
+
+
+
                     try {
                         if (dobEntry != null) {
                             patient.birthDate =
@@ -387,6 +418,8 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
+
+
                 }
 
                 "social-listening-and-rumor-tracking-tool" -> {
@@ -545,6 +578,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                             it.linkId, it.text,
                             it.answer
                         )
+
                         createResource(obs, subjectReference, encounterReference)
                         println("Data Found LinkId: ${it.linkId}, Text: ${it.text}, Answer: ${it.answer}")
                     }
@@ -556,6 +590,60 @@ class AddClientViewModel(application: Application, private val state: SavedState
             }
         }
     }
+
+    private suspend fun createSpecimenResource(
+        bloodEntry: QuestionnaireAnswer,
+        bloodDateEntry: QuestionnaireAnswer,
+        string: String,
+        subjectReference: Reference
+    ) {
+        val specimenCoding = Coding()
+        specimenCoding.code = bloodEntry.linkId
+        specimenCoding.system = "specimen-details"
+        specimenCoding.display = string
+
+        val specimenType = CodeableConcept()
+        specimenType.text = string
+        specimenType.addCoding(specimenCoding)
+
+        try {
+            val dateOnly =
+                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(
+                    bloodDateEntry.answer
+                )
+
+            val calendar = Calendar.getInstance()
+            calendar.time = dateOnly!!
+            val now = Calendar.getInstance()
+            calendar.set(
+                Calendar.HOUR_OF_DAY,
+                now.get(Calendar.HOUR_OF_DAY)
+            )
+            calendar.set(Calendar.MINUTE, now.get(Calendar.MINUTE))
+            calendar.set(Calendar.SECOND, now.get(Calendar.SECOND))
+            calendar.set(
+                Calendar.MILLISECOND,
+                now.get(Calendar.MILLISECOND)
+            )
+
+
+            val dateTime = DateTimeType()
+            dateTime.value = calendar.time
+
+            val collection = Specimen.SpecimenCollectionComponent()
+            collection.setCollected(dateTime)
+
+            val specimen = Specimen()
+            specimen.subject = subjectReference
+            specimen.type = specimenType
+            specimen.collection = collection
+            fhirEngine.create(specimen)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     fun extractStructuredAnswersOnlyFromItems(json: JSONObject): List<QuestionnaireAnswer> {
         val results = mutableListOf<QuestionnaireAnswer>()
 
@@ -576,17 +664,23 @@ class AddClientViewModel(application: Application, private val state: SavedState
                             answerObj.has("valueString") -> answerObj.getString("valueString")
                             answerObj.has("valueInteger") -> answerObj.optString("valueInteger", "")
                             answerObj.has("valueDate") -> answerObj.optString("valueDate", "")
-                            answerObj.has("valueDateTime") -> answerObj.optString("valueDateTime", "")
+                            answerObj.has("valueDateTime") -> answerObj.optString(
+                                "valueDateTime",
+                                ""
+                            )
+
                             answerObj.has("valueBoolean") -> answerObj.optString("valueBoolean", "")
                             answerObj.has("valueDecimal") -> answerObj.optString("valueDecimal", "")
                             answerObj.has("valueCoding") -> {
                                 val coding = answerObj.getJSONObject("valueCoding")
                                 coding.optString("display", coding.optString("code", ""))
                             }
+
                             answerObj.has("valueReference") -> {
                                 val ref = answerObj.getJSONObject("valueReference")
                                 ref.optString("display", ref.optString("reference", ""))
                             }
+
                             else -> null
                         }
 
@@ -646,6 +740,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                                 val coding = answerObj.getJSONObject("valueCoding")
                                 coding.optString("display", coding.optString("code", ""))
                             }
+
                             answerObj.has("valueReference") -> {
                                 val coding = answerObj.getJSONObject("valueReference")
                                 coding.optString("display", coding.optString("reference", ""))

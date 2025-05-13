@@ -27,6 +27,7 @@ class TimestampBasedDownloadWorkManagerImpl(private val dataStore: DemoDataStore
                 "Observation?_count=10000",
                 "Encounter?_count=1000",
                 "Location?_count=17000",
+                "Specimen?_count=1000",
             )
         )
 

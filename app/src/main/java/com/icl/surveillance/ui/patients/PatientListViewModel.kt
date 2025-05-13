@@ -250,19 +250,40 @@ class PatientListViewModel(
                                 Observation.ENCOUNTER,
                                 { value = "Encounter/${logicalId}" })
                         }.take(500)
+                    var mohName =
+                        obs.firstOrNull { it.resource.code.codingFirstRep.code == "683805917262" }
+                            ?.resource
+                            ?.value
+                            ?.asStringValue() ?: ""
+                    val otherCadreName =
+                        obs.firstOrNull { it.resource.code.codingFirstRep.code == "223529605110" }
+                            ?.resource
+                            ?.value
+                            ?.asStringValue() ?: ""
+                    if (mohName.contains("Other")) {
+                        mohName = otherCadreName
+                    }
+                    var agency =
+                        obs.firstOrNull { it.resource.code.codingFirstRep.code == "683805917111" }
+                            ?.resource
+                            ?.value
+                            ?.asStringValue() ?: ""
+                    var agencyOther =
+                        obs.firstOrNull { it.resource.code.codingFirstRep.code == "22311605110" }
+                            ?.resource
+                            ?.value
+                            ?.asStringValue() ?: ""
+                    if (agency.contains("Other")) {
+                        agency = agencyOther
+                    }
 
                     var response = RumorItem(
                         id = data.id,
                         resourceId = data.resourceId,
                         encounterId = matchingIdentifier.value,
-                        mohName = obs.firstOrNull { it.resource.code.codingFirstRep.code == "701496224461" }
-                            ?.resource
-                            ?.value
-                            ?.asStringValue() ?: "",
-                        directorate = obs.firstOrNull { it.resource.code.codingFirstRep.code == "256928760972" }
-                            ?.resource
-                            ?.value
-                            ?.asStringValue() ?: "",
+                        mohName = mohName,
+
+                        directorate = agency,
                         division = obs.firstOrNull { it.resource.code.codingFirstRep.code == "686990243396" }
                             ?.resource
                             ?.value

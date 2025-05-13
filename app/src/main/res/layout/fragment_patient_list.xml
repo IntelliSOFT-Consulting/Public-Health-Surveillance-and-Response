@@ -21,6 +21,7 @@
             android:layout_marginHorizontal="20dp"
             android:text="@string/search_patient_by"
             android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+            android:textColor="@color/black"
             android:visibility="visible" />
 
         <!-- Horizontal layout for Given Name and Family Name -->
@@ -40,8 +41,12 @@
                 android:layout_marginEnd="10dp"
                 android:layout_weight="1"
                 android:hint="@string/epid"
+                android:textColor="@color/black"
                 app:boxBackgroundMode="outline"
-                app:hintEnabled="true">
+                app:boxStrokeColor="@color/black"
+                app:boxStrokeWidth="1dp"
+                app:hintEnabled="true"
+                app:hintTextColor="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tv_epid_no"
@@ -49,7 +54,8 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:padding="12dp"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
                     android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -62,8 +68,12 @@
                 android:layout_marginEnd="10dp"
                 android:layout_weight="1"
                 android:hint="@string/patient_name"
+                android:textColor="@color/black"
                 app:boxBackgroundMode="outline"
-                app:hintEnabled="true">
+                app:boxStrokeColor="@color/black"
+                app:boxStrokeWidth="1dp"
+                app:hintEnabled="true"
+                app:hintTextColor="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/family_name_edit_text"
@@ -71,7 +81,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:padding="12dp"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/black"
                     android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
