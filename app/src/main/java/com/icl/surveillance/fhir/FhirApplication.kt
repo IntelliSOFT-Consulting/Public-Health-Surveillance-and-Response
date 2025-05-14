@@ -47,14 +47,17 @@ class FhirApplication : Application(), DataCaptureConfig.Provider {
                 ),
             ),
         )
-
-        dataCaptureConfig =
-            DataCaptureConfig().apply {
-                urlResolver = ReferenceUrlResolver(this@FhirApplication as Context)
-                xFhirQueryResolver = XFhirQueryResolver { it ->
-                    fhirEngine.search(it).map { it.resource }
+        try {
+            dataCaptureConfig =
+                DataCaptureConfig().apply {
+                    urlResolver = ReferenceUrlResolver(this@FhirApplication as Context)
+                    xFhirQueryResolver = XFhirQueryResolver { it ->
+                        fhirEngine.search(it).map { it.resource }
+                    }
                 }
-            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
         CoroutineScope(Dispatchers.IO).launch { Sync.oneTimeSync<FhirSyncWorker>(this@FhirApplication) }
     }

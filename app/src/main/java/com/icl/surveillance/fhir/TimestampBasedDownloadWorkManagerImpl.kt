@@ -24,9 +24,9 @@ class TimestampBasedDownloadWorkManagerImpl(private val dataStore: DemoDataStore
         LinkedList(
             listOf(
                 "Patient?_sort=_lastUpdated",
-                "Observation?_count=10000",
-                "Encounter?_count=1000",
-                "Location?_count=16750",
+//                "Observation?_count=10000",
+//                "Encounter?_count=1000",
+                "Location?_count=1000",
                 "Specimen?_count=1000",
             )
         )
@@ -87,26 +87,26 @@ class TimestampBasedDownloadWorkManagerImpl(private val dataStore: DemoDataStore
                     val patientUrl = "${entry.fullUrl}/\$everything"
                     urls.add(patientUrl)
                 }
-                if (type == "Encounter") {
-                    val patientUrl = "${entry.fullUrl}/\$everything"
-                    urls.add(patientUrl)
+//                if (type == "Encounter") {
+//                    val patientUrl = "${entry.fullUrl}/\$everything"
+//                    urls.add(patientUrl)
+//
+//                    val no = entry.resource as Encounter
+//                    if (no.hasPartOf()) {
+//                        val patientUrl = "${entry.fullUrl}/\$everything"
+//                        urls.add(patientUrl)
+//                    }
+//                }
+//
+//                if (type == "Observation") {
+//                    val patientUrl = "${entry.fullUrl}"
+//                    urls.add(patientUrl)
+//                }
 
-                    val no = entry.resource as Encounter
-                    if (no.hasPartOf()) {
-                        val patientUrl = "${entry.fullUrl}/\$everything"
-                        urls.add(patientUrl)
-                    }
-                }
-
-                if (type == "Observation") {
-                    val patientUrl = "${entry.fullUrl}"
-                    urls.add(patientUrl)
-                }
-
-                if (type == "Location") {
-                    val patientUrl = "${entry.fullUrl}"
-                    urls.add(patientUrl)
-                }
+//                if (type == "Location") {
+//                    val patientUrl = "${entry.fullUrl}"
+//                    urls.add(patientUrl)
+//                }
             }
 
             val nextUrl =

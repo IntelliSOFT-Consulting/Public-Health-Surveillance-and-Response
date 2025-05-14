@@ -84,6 +84,15 @@ class SyncActivity : AppCompatActivity() {
         visibleButton.visibility = View.VISIBLE
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        try {
+            periodicSyncViewModel.cancelPeriodicSyncJob()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     private fun refreshPeriodicSynUi() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -107,7 +116,7 @@ class SyncActivity : AppCompatActivity() {
                         syncIndicator.progress = uiState.progress
                         syncIndicator.visibility = View.VISIBLE
 
-                        progressLabel.text = "${uiState.progress}%"
+                        progressLabel.text = "${uiState.progress}"
                         progressLabel.visibility = View.VISIBLE
                     } else {
                         syncIndicator.progress = 0
