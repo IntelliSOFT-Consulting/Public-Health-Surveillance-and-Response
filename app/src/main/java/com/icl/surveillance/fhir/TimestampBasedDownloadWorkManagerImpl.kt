@@ -26,7 +26,7 @@ class TimestampBasedDownloadWorkManagerImpl(private val dataStore: DemoDataStore
                 "Patient?_sort=_lastUpdated",
                 "Observation?_count=10000",
                 "Encounter?_count=1000",
-                "Location?_count=17000",
+                "Location?_count=16750",
                 "Specimen?_count=1000",
             )
         )
@@ -157,12 +157,20 @@ private fun affixLastUpdatedTimestamp(url: String, lastUpdated: String): String 
     if (downloadUrl.contains("\$everything")) {
         downloadUrl = "$downloadUrl?_since=$lastUpdated"
     }
-    if (!downloadUrl.contains("\$everything") && downloadUrl.contains("?_count=")) {
-        downloadUrl = "$downloadUrl&_lastUpdated=gt$lastUpdated"
-    }
     if (!downloadUrl.contains("\$everything")) {
-        downloadUrl = "$downloadUrl?_lastUpdated=gt$lastUpdated"
+        downloadUrl = if (downloadUrl.contains("?_count=")) {
+            url
+        } else if (downloadUrl.contains("&_lastUpdated")) {
+            url
+        } else if (downloadUrl.contains("sort")) {
+            "$downloadUrl&_lastUpdated=gt$lastUpdated"
+        } else {
+            "$downloadUrl?_lastUpdated=gt$lastUpdated"
+        }
     }
+//    if (!downloadUrl.contains("\$everything")) {
+//        downloadUrl = "$downloadUrl?_lastUpdated=gt$lastUpdated"
+//    }
 
 
     // Do not modify any URL set by a server that specifies the token of the page to return.

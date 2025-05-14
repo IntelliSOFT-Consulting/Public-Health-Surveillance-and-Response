@@ -13,7 +13,7 @@
       "valueExpression": {
         "name": "countyName",
         "language": "text/fhirpath",
-        "expression": "%resource.descendants().where(linkId='8199468031111').answer.value.reference"
+        "expression": "%resource.descendants().where(linkId='294367770999').answer.value.reference"
       }
     },
     {
@@ -53,7 +53,7 @@
     {
       "item": [
         {
-          "linkId": "8199468031111",
+          "linkId": "294367770999",
           "text": "County within which the health facility is",
           "type": "reference",
           "required": true,
@@ -450,27 +450,32 @@
           "required": true
         },
         {
-          "type": "string",
-          "linkId": "242811643559",
-          "text": "Residence (Village/Hse No)"
-        },
-        {
-          "type": "string",
-          "linkId": "946232932304",
-          "text": "Neighborhood major landmark:",
-          "required": true
-        },
-        {
-          "type": "string",
-          "linkId": "424111786438",
-          "text": "Street/Plot/Estate/S. location",
-          "required": true
-        },
-        {
-          "type": "string",
-          "linkId": "110761799063",
-          "text": "Town/City/Location",
-          "required": true
+          "linkId": "a4-county",
+          "text": "County",
+          "type": "reference",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Location?partof=Location/0&_sort=name"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-choiceColumn",
+              "extension": [
+                {
+                  "url": "path",
+                  "valueString": "name"
+                },
+                {
+                  "url": "forDisplay",
+                  "valueBoolean": true
+                }
+              ]
+            }
+          ]
         },
         {
           "type": "reference",
@@ -501,32 +506,27 @@
           ]
         },
         {
-          "linkId": "a4-county",
-          "text": "County",
-          "type": "reference",
-          "required": true,
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
-              "valueExpression": {
-                "language": "application/x-fhir-query",
-                "expression": "Location?partof=Location/0&_sort=name"
-              }
-            },
-            {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-choiceColumn",
-              "extension": [
-                {
-                  "url": "path",
-                  "valueString": "name"
-                },
-                {
-                  "url": "forDisplay",
-                  "valueBoolean": true
-                }
-              ]
-            }
-          ]
+          "type": "string",
+          "linkId": "242811643559",
+          "text": "Residence (Village/Hse No)"
+        },
+        {
+          "type": "string",
+          "linkId": "946232932304",
+          "text": "Neighborhood major landmark:",
+          "required": true
+        },
+        {
+          "type": "string",
+          "linkId": "424111786438",
+          "text": "Street/Plot/Estate/S. location",
+          "required": true
+        },
+        {
+          "type": "string",
+          "linkId": "110761799063",
+          "text": "Town/City/Location",
+          "required": true
         },
         {
           "type": "string",

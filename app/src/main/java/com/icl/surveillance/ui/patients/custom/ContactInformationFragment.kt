@@ -126,7 +126,16 @@ class ContactInformationFragment : Fragment() {
         val patientId = FormatterClass().getSharedPref("resourceId", requireContext())
         val encounterId = FormatterClass().getSharedPref("encounterId", requireContext())
         val currentCase = FormatterClass().getSharedPref("currentCase", requireContext())
-
+        binding.apply {
+            getStartedButton.setOnClickListener {
+                println("Click button here ")
+                    handleCase(currentCase)
+            }
+            fab.setOnClickListener {
+                println("Click button here fab")
+                handleCase(currentCase)
+            }
+        }
         fhirEngine = FhirApplication.fhirEngine(requireContext())
         patientDetailsViewModel =
             ViewModelProvider(
@@ -136,7 +145,6 @@ class ContactInformationFragment : Fragment() {
                 ),
             )
                 .get(ClientDetailsViewModel::class.java)
-//        parentLayout = binding.lnParent
 
         groups = parseFromAssets(requireContext())
         val recyclerView: RecyclerView = binding.patientList
@@ -182,17 +190,7 @@ class ContactInformationFragment : Fragment() {
             }
         }
 
-        binding.apply {
-            getStartedButton.setOnClickListener {
-                handleCase(currentCase)
 
-            }
-            fab.setOnClickListener {
-                handleCase(currentCase)
-
-
-            }
-        }
     }
 
     private fun handleCase(currentCase: String?) {
@@ -226,6 +224,8 @@ class ContactInformationFragment : Fragment() {
                 }
 
             }
+        } else {
+            Toast.makeText(requireContext(), "please try again", Toast.LENGTH_SHORT).show()
         }
 
     }
