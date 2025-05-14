@@ -10,16 +10,24 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.fhir.sync.CurrentSyncJobStatus
+import com.google.android.fhir.sync.LastSyncJobStatus
 import com.icl.surveillance.R
 import com.icl.surveillance.databinding.ActivityAddParentCaseBinding
 import com.icl.surveillance.databinding.ActivitySyncBinding
+import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.utils.launchAndRepeatStarted
+import com.icl.surveillance.viewmodels.PeriodicSyncViewModel
 import com.icl.surveillance.viewmodels.SyncFragmentViewModel
+import kotlinx.coroutines.launch
+import kotlin.jvm.java
 
 class SyncActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySyncBinding
-    private val syncFragmentViewModel: SyncFragmentViewModel by viewModels()
+    private val periodicSyncViewModel: PeriodicSyncViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -33,16 +41,8 @@ class SyncActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        findViewById<Button>(R.id.sync_now_button).setOnClickListener {
-            syncFragmentViewModel.triggerOneTimeSync()
-        }
-        findViewById<Button>(R.id.cancel_sync_button).setOnClickListener {
-            syncFragmentViewModel.cancelOneTimeSyncWork()
-        }
-        observeLastSyncTime()
-        launchAndRepeatStarted(
-            { syncFragmentViewModel.pollState.collect(::currentSyncJobStatus) },
-        )
+        refreshPeriodicSynUi()
+        setUpSyncButtons()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -54,55 +54,67 @@ class SyncActivity : AppCompatActivity() {
         super.onBackPressed()
     }
 
-    private fun currentSyncJobStatus(currentSyncJobStatus: CurrentSyncJobStatus) {
-        println("currentSyncJobStatus: $currentSyncJobStatus")
-        // Update status text
-        val statusTextView = findViewById<TextView>(R.id.current_sync_status)
-        statusTextView.text =
-            getString(R.string.current_status, currentSyncJobStatus::class.java.simpleName)
-
-        // Get views once to avoid repeated lookups
-        val syncIndicator = findViewById<ProgressBar>(R.id.sync_indicator)
+    private fun setUpSyncButtons() {
         val syncNowButton = findViewById<Button>(R.id.sync_now_button)
         val cancelSyncButton = findViewById<Button>(R.id.cancel_sync_button)
-
-        // Update view states based on sync status
-        when (currentSyncJobStatus) {
-            is CurrentSyncJobStatus.Running -> {
-                syncIndicator.visibility = View.VISIBLE
-                syncNowButton.visibility = View.GONE
-                cancelSyncButton.visibility = View.VISIBLE
+        syncNowButton.apply {
+            setOnClickListener {
+                periodicSyncViewModel.collectPeriodicSyncJobStatus()
+                toggleButtonVisibility(
+                    hiddenButton = syncNowButton,
+                    visibleButton = cancelSyncButton
+                )
+                visibility = View.GONE
             }
-
-            is CurrentSyncJobStatus.Succeeded -> {
-                syncIndicator.visibility = View.GONE
-                syncFragmentViewModel.updateLastSyncTimestamp(currentSyncJobStatus.timestamp)
-                syncNowButton.visibility = View.VISIBLE
-                cancelSyncButton.visibility = View.GONE
-            }
-
-            is CurrentSyncJobStatus.Failed,
-            is CurrentSyncJobStatus.Cancelled,
-                -> {
-                syncIndicator.visibility = View.GONE
-                syncNowButton.visibility = View.VISIBLE
-                cancelSyncButton.visibility = View.GONE
-            }
-
-            is CurrentSyncJobStatus.Enqueued,
-            is CurrentSyncJobStatus.Blocked,
-                -> {
-                syncIndicator.visibility = View.GONE
-                syncNowButton.visibility = View.GONE
-                cancelSyncButton.visibility = View.VISIBLE
+        }
+        cancelSyncButton.apply {
+            setOnClickListener {
+                periodicSyncViewModel.cancelPeriodicSyncJob()
+                toggleButtonVisibility(
+                    hiddenButton = cancelSyncButton,
+                    visibleButton = syncNowButton
+                )
+                visibility = View.GONE
             }
         }
     }
 
-    private fun observeLastSyncTime() {
-        syncFragmentViewModel.lastSyncTimestampLiveData.observe(this) {
-            findViewById<TextView>(R.id.last_sync_time).text =
-                getString(R.string.last_sync_timestamp, it)
+    private fun toggleButtonVisibility(hiddenButton: View, visibleButton: View) {
+        hiddenButton.visibility = View.GONE
+        visibleButton.visibility = View.VISIBLE
+    }
+
+    private fun refreshPeriodicSynUi() {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                periodicSyncViewModel.uiStateFlow.collect { uiState ->
+                    uiState.lastSyncStatus?.let {
+                        findViewById<TextView>(R.id.last_sync_status).text = it
+                    }
+
+                    uiState.lastSyncTime?.let {
+                        findViewById<TextView>(R.id.last_sync_time).text = it
+                    }
+
+                    uiState.currentSyncStatus?.let {
+                        findViewById<TextView>(R.id.current_sync_status).text = it
+                    }
+
+                    val syncIndicator = findViewById<ProgressBar>(R.id.sync_indicator)
+                    val progressLabel = findViewById<TextView>(R.id.progress_percentage_label)
+
+                    if (uiState.progress != null) {
+                        syncIndicator.progress = uiState.progress
+                        syncIndicator.visibility = View.VISIBLE
+
+                        progressLabel.text = "${uiState.progress}%"
+                        progressLabel.visibility = View.VISIBLE
+                    } else {
+                        syncIndicator.progress = 0
+                        progressLabel.visibility = View.GONE
+                    }
+                }
+            }
         }
     }
 }
