@@ -11,6 +11,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.fhir.sync.CurrentSyncJobStatus
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.clients.SyncActivity
@@ -18,11 +19,13 @@ import com.icl.surveillance.databinding.ActivityMainBinding
 import com.icl.surveillance.fhir.MainActivityViewModel
 import com.icl.surveillance.ui.patients.AddCaseActivity
 import com.icl.surveillance.utils.FormatterClass
+import com.icl.surveillance.utils.launchAndRepeatStarted
+import com.icl.surveillance.viewmodels.SyncFragmentViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val viewModel: MainActivityViewModel by viewModels()
+    private val viewModel: SyncFragmentViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -78,13 +81,40 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_refresh -> {
-//                viewModel.triggerOneTimeSync()
+                viewModel.triggerOneTimeSync()
+                try {
+                    launchAndRepeatStarted(
+                        { viewModel.pollState.collect(::currentSyncJobStatus) },
+                    )
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
 //                Toast.makeText(this@MainActivity, "Syncing ...", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this@MainActivity, SyncActivity::class.java))
                 true
             }
 
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+    private fun currentSyncJobStatus(currentSyncJobStatus: CurrentSyncJobStatus) {
+
+        // Update view states based on sync status
+        when (currentSyncJobStatus) {
+            is CurrentSyncJobStatus.Running -> {
+               println("Sync Running ")
+            }
+            is CurrentSyncJobStatus.Succeeded -> {
+                println("Sync Succeeded ")
+            }
+            is CurrentSyncJobStatus.Failed,
+            is CurrentSyncJobStatus.Cancelled, -> {
+                println("Sync Failed vs Cancelled")
+            }
+            is CurrentSyncJobStatus.Enqueued,
+            is CurrentSyncJobStatus.Blocked, -> {
+                println("Sync Enqueued vs Blocked")
+            }
         }
     }
 }

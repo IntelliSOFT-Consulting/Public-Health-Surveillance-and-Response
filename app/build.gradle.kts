@@ -13,7 +13,7 @@ android {
     applicationId = "com.icl.surveillance"
     minSdk = 26
     targetSdk = 35
-    versionCode = 5
+    versionCode = 6
     versionName = "1.0"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
