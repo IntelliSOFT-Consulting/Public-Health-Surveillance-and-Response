@@ -395,12 +395,21 @@ class PatientListViewModel(
                                 ?.resource
                                 ?.value
                                 ?.asStringValue() ?: "Pending"
-                        finalClassification =
-                            if (measlesIgm.trim() == "Positive") "Confirmed by lab" else
-                                obs1.firstOrNull { it.resource.code.codingFirstRep.code == "final-classification" }
-                                    ?.resource
-                                    ?.value
-                                    ?.asStringValue() ?: "Pending Results"
+
+
+                        finalClassification = when (measlesIgm) {
+                            "Positive" -> "Confirmed by lab"
+                            "Negative" -> "Discarded"
+                            "Indeterminate" -> "Compatible/Clinical/Probable"
+                            else -> "Pending Results"
+
+                        }
+
+//                        if (measlesIgm.trim() == "Positive") "Confirmed by lab" else
+//                            obs1.firstOrNull { it.resource.code.codingFirstRep.code == "final-classification" }
+//                                ?.resource
+//                                ?.value
+//                                ?.asStringValue() ?: "Pending Results"
 
 
                     }

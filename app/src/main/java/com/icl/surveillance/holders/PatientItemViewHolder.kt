@@ -1,5 +1,6 @@
 package com.icl.surveillance.holders
 
+import android.graphics.Color
 import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
@@ -39,8 +40,27 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
             final = "Confirmed by EPI Linkage"
         }
         this.status.text = final
+        this.status.setTextColor(Color.BLACK)
+        this.labResults.setTextColor(Color.BLACK)
+        when (final.trim()) {
+            "Confirmed by lab" -> {
+                this.status.setTextColor(this.status.context.getColor(R.color.red))
+            }
+
+            "Discarded" -> {
+                this.status.setTextColor(this.status.context.getColor(R.color.discarded))
+            }
+
+            "Compatible/Clinical/Probable" -> {
+                this.status.setTextColor(this.status.context.getColor(R.color.compatible))
+            }
+
+            else -> {
+                this.status.setTextColor(this.status.context.getColor(R.color.pending))
+            }
+        }
         if (final.trim() == "Confirmed by lab") {
-            this.status.setTextColor(this.status.context.getColor(R.color.red))
+
         }
         if (patientItem.labResults.trim() == "Positive") {
             this.labResults.setTextColor(this.labResults.context.getColor(R.color.red))

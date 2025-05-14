@@ -9,5 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#BDBDBD</color>
     <color name="red">#FA0C0C</color>
+    <color name="discarded">#8DFF8D</color>
+    <color name="compatible">#A64D79</color>
+    <color name="pending">#C1BCAE</color>
     <color name="blue">#007AFF</color>
 </resources>

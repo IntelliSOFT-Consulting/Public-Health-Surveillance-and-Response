@@ -139,9 +139,6 @@ class GroupFragment : Fragment() {
                 }
             }
 
-            "Clinical Information" -> {
-                val parent = "970455623029"
-            }
         }
 
         return response

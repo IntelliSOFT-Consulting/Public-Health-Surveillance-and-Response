@@ -1214,6 +1214,16 @@
                 ]
               }
             }
+          ],
+          "enableWhen": [
+            {
+              "question": "517772812375",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
           ]
         }
       ]

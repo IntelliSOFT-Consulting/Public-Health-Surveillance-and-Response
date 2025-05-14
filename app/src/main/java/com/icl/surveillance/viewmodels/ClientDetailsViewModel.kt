@@ -136,7 +136,6 @@ class ClientDetailsViewModel(
         val searchResult =
             fhirEngine.search<Patient> { filter(Resource.RES_ID, { value = of(patientId) }) }
         searchResult.first().let { data ->
-            println("Extracting the EPID Number Patient Found****")
             val matchingIdentifier = data.resource.identifier.find {
                 it.system == slug
             }
@@ -145,7 +144,6 @@ class ClientDetailsViewModel(
 
             if (epidIdenfifier != null) {
                 epid = epidIdenfifier.value
-                println("Extracting the EPID Number EPID Attached**** $epid")
             }
             if (matchingIdentifier != null) {
                 val logicalId = matchingIdentifier.value
@@ -165,7 +163,6 @@ class ClientDetailsViewModel(
                 }
             }
         }
-        println("Extracting the EPID Number Final EPID $epid****")
         return PatientListViewModel.CaseId(
             patientId = logicalId,
             eNo = epid,
@@ -207,7 +204,6 @@ class ClientDetailsViewModel(
             }
             if (matchingIdentifier != null) {
                 encounterId = matchingIdentifier.value
-
 
 
                 fhirEngine.search<Observation> {

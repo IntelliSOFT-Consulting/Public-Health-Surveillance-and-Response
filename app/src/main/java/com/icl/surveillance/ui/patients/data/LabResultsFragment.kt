@@ -127,8 +127,6 @@ class LabResultsFragment : Fragment() {
             )
                 .get(ClientDetailsViewModel::class.java)
 
-//        val adapter = LabRecyclerViewAdapter(this::onItemClicked)
-//        binding.patientList.adapter = adapter
         parentLayout = binding.lnParent
 
         val outputGroups = parseFromAssets(requireContext())
@@ -143,7 +141,6 @@ class LabResultsFragment : Fragment() {
                 parentLayout.removeAllViews()
                 outputGroups.first().items.forEach { group ->
 
-                    println("Dealing with Current Lab Case ${group.linkId} ${group.text} : ${group.enable} -> ${group.parentLink} -> ${group.parentOperator} -> ${group.parentResponse} ")
                     if (group.type == "display") {
                         val fieldView = createCustomLabel(group.text)
                         parentLayout.addView(fieldView)
@@ -332,9 +329,10 @@ class LabResultsFragment : Fragment() {
         }
         if (response.isNotEmpty()) {
             response = when (response) {
-                "Positive" -> "Confirmed by Lab"
+                "Positive" -> "Confirmed by lab"
                 "Negative" -> "Discarded"
-                else -> response
+                "Indeterminate" -> "Compatible/Clinical/Probable"
+                else -> "Pending Results"
 
             }
         }
