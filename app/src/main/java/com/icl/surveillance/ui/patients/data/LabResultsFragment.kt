@@ -130,7 +130,6 @@ class LabResultsFragment : Fragment() {
         parentLayout = binding.lnParent
 
         val outputGroups = parseFromAssets(requireContext())
-        println("Dealing with Current Lab Case ${outputGroups.size}")
         patientDetailsViewModel.currentLiveLabData.observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
                 binding.tvNoCase.visibility = View.VISIBLE
@@ -319,6 +318,7 @@ class LabResultsFragment : Fragment() {
         items: List<PatientListViewModel.ObservationItem>
     ): String {
         var response = "Lab results pending"
+        val isVaccinated = FormatterClass().getSharedPref("isVaccinated", requireContext())
         items.forEach { outputItem ->
             val matchingObservation = items.find { obs ->
                 obs.code == item
@@ -329,7 +329,13 @@ class LabResultsFragment : Fragment() {
         }
         if (response.isNotEmpty()) {
             response = when (response.lowercase()) {
-                "positive" -> "Confirmed by lab"
+                "positive" -> {
+                    when (isVaccinated?.lowercase()) {
+                        "yes" -> "Pending"
+                        else -> "Confirmed by lab"
+                    }
+                }
+
                 "negative" -> "Discarded"
                 "indeterminate" -> "Compatible/Clinical/Probable"
                 else -> "Pending Results"

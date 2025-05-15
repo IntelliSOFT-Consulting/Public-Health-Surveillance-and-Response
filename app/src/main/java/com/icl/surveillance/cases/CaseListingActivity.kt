@@ -181,10 +181,10 @@ class CaseListingActivity : AppCompatActivity() {
         FormatterClass().saveSharedPref("resourceId", patientItem.resourceId, this)
         FormatterClass().saveSharedPref("encounterId", patientItem.encounterId, this)
         FormatterClass().deleteSharedPref("isCase", this)
+        FormatterClass().deleteSharedPref("isVaccinated", this)
         if (currentCase != null) {
             val slug = currentCase.toSlug()
 
-            println("Current Case Slug $slug")
             FormatterClass().saveSharedPref("latestEncounter", slug, this)
             when (slug) {
                 "social-listening-and-rumor-tracking-tool" -> {
@@ -219,6 +219,7 @@ class CaseListingActivity : AppCompatActivity() {
 
                 else -> {
                     FormatterClass().saveSharedPref("isCase", patientItem.caseList, this)
+                    FormatterClass().saveSharedPref("isVaccinated", patientItem.vaccinated, this)
                     startActivity(
                         Intent(
                             this@CaseListingActivity,

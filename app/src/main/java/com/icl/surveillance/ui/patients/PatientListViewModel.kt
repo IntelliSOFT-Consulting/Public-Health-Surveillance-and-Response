@@ -382,6 +382,7 @@ class PatientListViewModel(
                         }
                     var measlesIgm = "Pending"
                     var finalClassification = "Pending Results"
+                    var maxDays = "No"
                     childCaseInfoEncounter?.let { kk ->
                         val obs1 =
                             fhirEngine.search<Observation> {
@@ -396,25 +397,32 @@ class PatientListViewModel(
                                 ?.value
                                 ?.asStringValue() ?: "Pending"
 
+                        maxDays =
+                            obs.firstOrNull { it.resource.code.codingFirstRep.code == "308128177300" }
+                                ?.resource
+                                ?.value
+                                ?.asStringValue() ?: ""
+
 
                         finalClassification = when (measlesIgm.lowercase()) {
-                            "positive" -> "Confirmed by lab"
+                            "positive" -> {
+                                when (maxDays.lowercase()) {
+                                    "yes" -> "Pending"
+                                    else -> "Confirmed by lab"
+                                }
+                            }
+
                             "negative" -> "Discarded"
                             "indeterminate" -> "Compatible/Clinical/Probable"
                             else -> "Pending Results"
 
                         }
 
-//                        if (measlesIgm.trim() == "Positive") "Confirmed by lab" else
-//                            obs1.firstOrNull { it.resource.code.codingFirstRep.code == "final-classification" }
-//                                ?.resource
-//                                ?.value
-//                                ?.asStringValue() ?: "Pending Results"
-
 
                     }
                     data =
                         data.copy(
+                            vaccinated = maxDays,
                             caseList = caseList,
                             encounterId = logicalId,
                             epid = epid, labResults = measlesIgm, status = finalClassification,
@@ -460,7 +468,8 @@ class PatientListViewModel(
         val status: String = "Pending Results",
         val labResults: String = "Pending",
         val lastUpdated: String,
-        val caseList: String = "Case"
+        val caseList: String = "Case",
+        val vaccinated: String = "No"
     ) {
         override fun toString(): String = name
     }
