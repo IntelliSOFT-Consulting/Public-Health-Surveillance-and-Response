@@ -105,15 +105,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
             val patientId = generateUuid()
             val subjectReference = Reference("Patient/$patientId")
-//            val jsonObject = JSONObject(questionnaireResponseString)
-//            val extractedAnswers = extractStructuredAnswers(jsonObject)
-
 
             val jsonObject = JSONObject(questionnaireResponseString)
             val extractedAnswers = extractStructuredAnswersOnlyFromItems(jsonObject)
-            extractedAnswers.forEach {
-                println("Let's review the results → ${it.linkId} | ${it.text} = ${it.answer}")
-            }
+
 
             val reasonCode = FormatterClass().getSharedPref(
                 "currentCase",
@@ -129,6 +124,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
             enc.subject = subjectReference
             enc.reasonCodeFirstRep.codingFirstRep.code = "$reasonCode"
             enc.identifier.add(identifierSystem0)
+
 
             var case = "case-info"
             if (reasonCode != null) {

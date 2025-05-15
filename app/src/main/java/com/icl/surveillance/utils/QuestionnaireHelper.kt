@@ -29,6 +29,7 @@ class QuestionnaireHelper {
     fun generalEncounter(basedOn: String?, encounter: String): Encounter {
         val enc = Encounter()
         enc.id = encounter
+
         if (basedOn != null) {
             val reference = Reference("Encounter/$basedOn")
             enc.partOf = reference

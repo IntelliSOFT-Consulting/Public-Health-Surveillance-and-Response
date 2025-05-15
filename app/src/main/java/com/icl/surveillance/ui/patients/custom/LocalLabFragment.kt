@@ -143,16 +143,28 @@ class LocalLabFragment : Fragment() {
                     val fieldView = createCustomLabel(group.text)
                     parentLayout.addView(fieldView)
                     for (item in group.items) {
-//                        println("Manipulations: Children Link ${item.linkId} Text ${item.text} is Child ${item.enable} Parent ${item.parentLink} Response ${item.parentResponse}")
+
                         item.value = getValueBasedOnId(item, it.first().observations)
                         val childFieldView = createCustomField(item)
-                        parentLayout.addView(childFieldView)
+
+                        var show = true
+                        if (!item.enable) {
+                            show = false
+                            show = checkIfParentAnswerMatches(
+                                item.parentLink,
+                                item.parentResponse,
+                                item.parentOperator,
+                                it.first().observations
+                            )
+                        }
+                        if (show) {
+                            parentLayout.addView(childFieldView)
+                        }
                     }
                 }
 
                 binding.lnEmpty.visibility = View.GONE
                 binding.fab.visibility = View.GONE
-//                adapter.submitList(it)
             }
         }
         if (currentCase != null) {
@@ -187,6 +199,39 @@ class LocalLabFragment : Fragment() {
             }
         }
     }
+
+    private fun checkIfParentAnswerMatches(
+        parentLink: String?,
+        parentResponse: String?,
+        operator: String?,
+        items: List<PatientListViewModel.ObservationItem>,
+    ): Boolean {
+        var response = false
+
+        if (parentLink != null && parentResponse != null) {
+            val parentAnswer = items.find { it.code == parentLink }?.value
+            if (parentAnswer != null) {
+
+                if (operator != null) {
+                    when (operator) {
+                        "!=" -> {
+                            if (parentAnswer.trim() != parentResponse.trim()) {
+                                response = true
+                            }
+                        }
+
+                        else -> {
+                            if (parentAnswer.trim() == parentResponse.trim()) {
+                                response = true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return response
+    }
+
 
     private fun handleCase(currentCase: String?) {
         if (currentCase != null) {
@@ -273,7 +318,7 @@ class LocalLabFragment : Fragment() {
 
     }
 
-    fun flattenItems(
+    fun flattenItemsOld(
         item: ChildItem,
         parentConditions: Map<String, Pair<String, Boolean>> = emptyMap()
     ): List<OutputItem> {
@@ -300,7 +345,7 @@ class LocalLabFragment : Fragment() {
         }
 
         val children = item.item?.flatMap {
-            flattenItems(it, currentConditions)
+            flattenItemsOld(it, currentConditions)
         } ?: emptyList()
 
         return if (item.type != "display") {
@@ -318,21 +363,45 @@ class LocalLabFragment : Fragment() {
         }
     }
 
-//    fun flattenItems(item: ChildItem): List<OutputItem> {
-//        val children = item.item?.flatMap { flattenItems(it) } ?: emptyList()
-//
-//        // If current item is NOT of type "display", include it
-//        return if (item.type != "display") {
-//            val current = OutputItem(
-//                linkId = item.linkId,
-//                text = item.text,
-//                type = item.type
-//            )
-//            listOf(current) + children
-//        } else {
-//            children
-//        }
-//    }
+    fun flattenItems(item: ChildItem): List<OutputItem> {
+        val children = item.item?.flatMap { flattenItems(it) } ?: emptyList()
+
+        var enable = true
+        var parentLink: String? = null
+        var parentResponse: String? = null
+        var enableOperator: String? = null
+
+        item.enableWhen?.firstOrNull()?.let { condition ->
+            parentLink = condition.question
+            enableOperator = condition.operator
+            parentResponse = when {
+                condition.answerCoding != null -> condition.answerCoding.display
+                    ?: condition.answerCoding.code
+
+                condition.answerString != null -> condition.answerString
+                condition.answerBoolean != null -> condition.answerBoolean.toString()
+                condition.answerDate != null -> condition.answerDate
+                else -> null
+            }
+            enable = false
+        }
+
+        return if (item.type != "display") {
+            val current = OutputItem(
+                linkId = item.linkId,
+                text = item.text,
+                type = item.type,
+                enable = enable,
+                parentLink = parentLink,
+                parentResponse = parentResponse,
+                parentOperator = enableOperator
+            )
+            listOf(current) + children
+        } else {
+            children
+        }
+    }
+
 
     private fun createCustomField(item: OutputItem): View {
         // Create the main LinearLayout to hold the views
