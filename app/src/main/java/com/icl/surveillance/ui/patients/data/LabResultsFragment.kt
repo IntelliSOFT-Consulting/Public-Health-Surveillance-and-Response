@@ -328,10 +328,10 @@ class LabResultsFragment : Fragment() {
             }
         }
         if (response.isNotEmpty()) {
-            response = when (response) {
-                "Positive" -> "Confirmed by lab"
-                "Negative" -> "Discarded"
-                "Indeterminate" -> "Compatible/Clinical/Probable"
+            response = when (response.lowercase()) {
+                "positive" -> "Confirmed by lab"
+                "negative" -> "Discarded"
+                "indeterminate" -> "Compatible/Clinical/Probable"
                 else -> "Pending Results"
 
             }

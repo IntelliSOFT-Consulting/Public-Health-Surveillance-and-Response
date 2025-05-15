@@ -55,13 +55,15 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
                 this.status.setTextColor(this.status.context.getColor(R.color.compatible))
             }
 
+            "Confirmed by EPI Linkage" -> {
+                this.status.setTextColor(this.status.context.getColor(R.color.blue))
+            }
+
             else -> {
                 this.status.setTextColor(this.status.context.getColor(R.color.pending))
             }
         }
-        if (final.trim() == "Confirmed by lab") {
 
-        }
         if (patientItem.labResults.trim() == "Positive") {
             this.labResults.setTextColor(this.labResults.context.getColor(R.color.red))
         }

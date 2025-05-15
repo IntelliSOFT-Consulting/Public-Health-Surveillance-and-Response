@@ -397,10 +397,10 @@ class PatientListViewModel(
                                 ?.asStringValue() ?: "Pending"
 
 
-                        finalClassification = when (measlesIgm) {
-                            "Positive" -> "Confirmed by lab"
-                            "Negative" -> "Discarded"
-                            "Indeterminate" -> "Compatible/Clinical/Probable"
+                        finalClassification = when (measlesIgm.lowercase()) {
+                            "positive" -> "Confirmed by lab"
+                            "negative" -> "Discarded"
+                            "indeterminate" -> "Compatible/Clinical/Probable"
                             else -> "Pending Results"
 
                         }
