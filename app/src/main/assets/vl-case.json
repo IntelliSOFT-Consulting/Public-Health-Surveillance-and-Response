@@ -5,8 +5,6 @@
       "http://hl7.org/fhir/4.0/StructureDefinition/Questionnaire"
     ]
   },
-  "title": "VL Surveillance",
-  "status": "draft",
   "extension": [
     {
       "url": "http://hl7.org/fhir/StructureDefinition/variable",
@@ -22,6 +20,14 @@
         "name": "patientCountyName",
         "language": "text/fhirpath",
         "expression": "%resource.descendants().where(linkId='a4-county').answer.value.reference"
+      }
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
+        "name": "patientSubCountyName",
+        "language": "text/fhirpath",
+        "expression": "%resource.descendants().where(linkId='a3-sub-county').answer.value.reference"
       }
     },
     {
@@ -43,20 +49,27 @@
     {
       "url": "http://hl7.org/fhir/StructureDefinition/variable",
       "valueExpression": {
-        "name": "selectedFacilityName",
+        "name": "historyCountyName",
         "language": "text/fhirpath",
-        "expression": "%resource.descendants().where(linkId='819943434').answer.value.reference"
+        "expression": "%resource.descendants().where(linkId='751649865991').answer.value.reference"
+      }
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
+        "name": "historySubCountyName",
+        "language": "text/fhirpath",
+        "expression": "%resource.descendants().where(linkId='751649866545').answer.value.reference"
       }
     }
   ],
+  "title": "VL Surveillance",
+  "status": "draft",
   "item": [
     {
       "item": [
         {
-          "linkId": "294367770999",
-          "text": "County within which the health facility is",
           "type": "reference",
-          "required": true,
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
@@ -78,13 +91,13 @@
                 }
               ]
             }
-          ]
+          ],
+          "linkId": "294367770999",
+          "text": "County within which the health facility is",
+          "required": true
         },
         {
           "type": "reference",
-          "linkId": "819946803642",
-          "text": "Subcounty within which the health facility is",
-          "required": true,
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
@@ -106,7 +119,10 @@
                 }
               ]
             }
-          ]
+          ],
+          "linkId": "819946803642",
+          "text": "Subcounty within which the health facility is",
+          "required": true
         },
         {
           "type": "reference",
@@ -279,9 +295,28 @@
           "required": true
         },
         {
+          "item": [
+            {
+              "type": "display",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "flyover",
+                        "display": "Fly-over"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "linkId": "123456678",
+              "text": "07xxxxxxxx"
+            }
+          ],
           "type": "string",
-          "linkId": "760016167907",
-          "text": "Patient Mobile Contact ",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -304,28 +339,8 @@
               "valueInteger": 10
             }
           ],
-          "item": [
-            {
-              "linkId": "2.1",
-              "text": "07xxxxxxxx",
-              "type": "display",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "flyover",
-                        "display": "Fly-over"
-                      }
-                    ],
-                    "text": "Flyover"
-                  }
-                }
-              ]
-            }
-          ]
+          "linkId": "760016167922",
+          "text": "Patient Mobile Contact "
         },
         {
           "type": "choice",
@@ -532,9 +547,87 @@
           "text": "Patient Location"
         },
         {
-          "type": "string",
-          "linkId": "845666899224",
-          "text": "Nearest Health Facility",
+          "type": "reference",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Location?partof=Location/0&_sort=name"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-choiceColumn",
+              "extension": [
+                {
+                  "url": "path",
+                  "valueString": "name"
+                },
+                {
+                  "url": "forDisplay",
+                  "valueBoolean": true
+                }
+              ]
+            }
+          ],
+          "linkId": "a4-county",
+          "text": "County",
+          "required": true
+        },
+        {
+          "type": "reference",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Location?partof={{%patientCountyName}}&_sort=name"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-choiceColumn",
+              "extension": [
+                {
+                  "url": "path",
+                  "valueString": "name"
+                },
+                {
+                  "url": "forDisplay",
+                  "valueBoolean": true
+                }
+              ]
+            }
+          ],
+          "linkId": "a3-sub-county",
+          "text": "Sub County",
+          "required": true
+        },
+        {
+          "type": "reference",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Location?partof={{%patientSubCountyName}}&_sort=name"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-choiceColumn",
+              "extension": [
+                {
+                  "url": "path",
+                  "valueString": "name"
+                },
+                {
+                  "url": "forDisplay",
+                  "valueBoolean": true
+                }
+              ]
+            }
+          ],
+          "linkId": "754362784943",
+          "text": "Ward",
           "required": true
         },
         {
@@ -544,56 +637,10 @@
           "required": true
         },
         {
-          "type": "choice",
-          "linkId": "754362784943",
-          "text": "Ward",
-          "required": true,
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "Kasarani",
-                "display": "Kasarani"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Mwiki",
-                "display": "Mwiki"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Clay City",
-                "display": "Clay City"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Roysambu",
-                "display": "Roysambu"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Njiru",
-                "display": "Njiru"
-              }
-            }
-          ],
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ]
-              }
-            }
-          ]
+          "type": "string",
+          "linkId": "845666899224",
+          "text": "Nearest Health Facility",
+          "required": true
         },
         {
           "type": "choice",
@@ -772,8 +819,6 @@
           ],
           "item": [
             {
-              "linkId": "2.1",
-              "text": "07xxxxxxxx",
               "type": "display",
               "extension": [
                 {
@@ -785,11 +830,12 @@
                         "code": "flyover",
                         "display": "Fly-over"
                       }
-                    ],
-                    "text": "Flyover"
+                    ]
                   }
                 }
-              ]
+              ],
+              "linkId": "984586235",
+              "text": "07xxxxxxxx"
             }
           ]
         }
@@ -922,13 +968,13 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "Ken",
+                "code": "Kenya",
                 "display": "Kenya"
               }
             },
             {
               "valueCoding": {
-                "code": "ug",
+                "code": "Uganda",
                 "display": "Uganda"
               }
             }
@@ -988,6 +1034,119 @@
           ]
         },
         {
+          "type": "reference",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Location?partof=Location/0&_sort=name"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-choiceColumn",
+              "extension": [
+                {
+                  "url": "path",
+                  "valueString": "name"
+                },
+                {
+                  "url": "forDisplay",
+                  "valueBoolean": true
+                }
+              ]
+            }
+          ],
+          "linkId": "751649865991",
+          "text": "County",
+          "enableWhen": [
+            {
+              "question": "241783748776",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "required": true
+        },
+        {
+          "type": "reference",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Location?partof={{%historyCountyName}}&_sort=name"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-choiceColumn",
+              "extension": [
+                {
+                  "url": "path",
+                  "valueString": "name"
+                },
+                {
+                  "url": "forDisplay",
+                  "valueBoolean": true
+                }
+              ]
+            }
+          ],
+          "linkId": "751649866545",
+          "text": "Sub-county",
+          "enableWhen": [
+            {
+              "question": "241783748776",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "required": true
+        },
+        {
+          "type": "reference",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Location?partof={{%historySubCountyName}}&_sort=name"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-choiceColumn",
+              "extension": [
+                {
+                  "url": "path",
+                  "valueString": "name"
+                },
+                {
+                  "url": "forDisplay",
+                  "valueBoolean": true
+                }
+              ]
+            }
+          ],
+          "linkId": "683913433621",
+          "text": "Ward",
+          "enableWhen": [
+            {
+              "question": "241783748776",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ]
+        },
+        {
           "type": "string",
           "linkId": "304570397907",
           "text": "Village",
@@ -1018,44 +1177,6 @@
             }
           ],
           "required": true
-        },
-        {
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ]
-              }
-            }
-          ],
-          "linkId": "563886181043",
-          "text": "Sub-county",
-          "enableWhen": [
-            {
-              "question": "241783748776",
-              "operator": "=",
-              "answerCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
-            }
-          ],
-          "required": true,
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "sub-002",
-                "display": "Westlands"
-              }
-            }
-          ]
         },
         {
           "type": "choice",
