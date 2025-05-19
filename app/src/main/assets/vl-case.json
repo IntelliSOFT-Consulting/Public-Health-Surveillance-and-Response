@@ -362,7 +362,7 @@
               "valueCode": "horizontal"
             }
           ],
-          "linkId": "795662352924",
+          "linkId": "442636360588",
           "text": "Date of Birth known or unknown?",
           "answerOption": [
             {
@@ -381,7 +381,7 @@
         },
         {
           "type": "date",
-          "linkId": "761800309411",
+          "linkId": "257830485990",
           "text": "Date of Birth",
           "extension": [
             {
@@ -409,7 +409,7 @@
           ],
           "enableWhen": [
             {
-              "question": "795662352924",
+              "question": "442636360588",
               "operator": "=",
               "answerCoding": {
                 "code": "known",
@@ -420,12 +420,28 @@
           "required": true
         },
         {
+          "linkId": "age-at-onset",
+          "type": "string",
+          "text": "Age at Onset",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueString": "0"
+            }
+          ]
+        },
+        {
           "type": "integer",
-          "linkId": "985553481852",
-          "text": "Age in Years",
+          "linkId": "122072333233",
+          "text": "Age in Years.",
           "enableWhen": [
             {
-              "question": "795662352924",
+              "question": "442636360588",
               "operator": "=",
               "answerCoding": {
                 "code": "unknown",
@@ -433,7 +449,102 @@
               }
             }
           ],
-          "required": true
+          "item": [
+            {
+              "linkId": "122072333233_helpText",
+              "type": "display",
+              "text": "What is the age of the patient in years?",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "help",
+                        "display": "Help-Button"
+                      }
+                    ],
+                    "text": "Help-Button"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "879612276990",
+          "text": "Age in Months.",
+          "enableWhen": [
+            {
+              "question": "442636360588",
+              "operator": "=",
+              "answerCoding": {
+                "code": "unknown",
+                "display": "Unknown"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "879612276990_helpText",
+              "type": "display",
+              "text": "What is the age of the patient in months?",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "help",
+                        "display": "Help-Button"
+                      }
+                    ],
+                    "text": "Help-Button"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "296206902941",
+          "text": "Age in Days.",
+          "enableWhen": [
+            {
+              "question": "442636360588",
+              "operator": "=",
+              "answerCoding": {
+                "code": "unknown",
+                "display": "Unknown"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "296206902941_helpText",
+              "type": "display",
+              "text": "What is the age of the patient in days?",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "help",
+                        "display": "Help-Button"
+                      }
+                    ],
+                    "text": "Help-Button"
+                  }
+                }
+              ]
+            }
+          ]
         },
         {
           "type": "choice",
@@ -887,10 +998,20 @@
           "required": true
         },
         {
-          "type": "integer",
+          "type": "string",
           "linkId": "920645761660",
           "text": "Days Since Onset of Symptoms",
-          "required": true
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueString": "0"
+            }
+          ]
         },
         {
           "type": "string",

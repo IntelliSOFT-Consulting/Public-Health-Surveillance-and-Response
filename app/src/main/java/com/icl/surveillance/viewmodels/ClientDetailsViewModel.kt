@@ -225,10 +225,14 @@ class ClientDetailsViewModel(
                             } else {
                                 ""
                             }
+
+                        val created =
+                            if (ob.resource.hasIssued()) ob.resource.issuedElement.value.toString() else ""
                         val item = PatientListViewModel.ObservationItem(
                             id = ob.resource.logicalId,
                             code = ob.resource.code.codingFirstRep.code,
-                            value = value
+                            value = value,
+                            created = created
                         )
                         observations.add(item)
                     }
@@ -1001,10 +1005,14 @@ class ClientDetailsViewModel(
                                     } else {
                                         ""
                                     }
+
+                                val created =
+                                    if (ob.resource.hasIssued()) ob.resource.issuedElement.value.toString() else ""
                                 val item = PatientListViewModel.ObservationItem(
                                     id = ob.resource.logicalId,
                                     code = ob.resource.code.codingFirstRep.code,
-                                    value = value
+                                    value = value,
+                                    created = created
                                 )
                                 observations.add(item)
                             }
@@ -1139,10 +1147,13 @@ class ClientDetailsViewModel(
                         } else {
                             ""
                         }
+                    val created =
+                        if (ob.resource.hasIssued()) ob.resource.issuedElement.value.toString() else ""
                     val item = PatientListViewModel.ObservationItem(
                         id = ob.resource.logicalId,
                         code = ob.resource.code.codingFirstRep.code,
-                        value = value
+                        value = value,
+                        created = created
                     )
                     observations.add(item)
                 }
@@ -1265,11 +1276,13 @@ class ClientDetailsViewModel(
                     ""
                 }
             val valueString = "$value $valueUnit"
+            val created = ""
 
             return PatientListViewModel.ObservationItem(
                 observation.logicalId,
                 observationCode,
                 valueString,
+                created = created
             )
         }
 

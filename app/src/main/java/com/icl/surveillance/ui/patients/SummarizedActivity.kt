@@ -34,7 +34,9 @@ import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
 import java.time.LocalDate
 import java.time.Period
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 class SummarizedActivity : AppCompatActivity() {
     private lateinit var groups: MutableList<OutputGroup>
@@ -122,22 +124,31 @@ class SummarizedActivity : AppCompatActivity() {
 
                 groups.forEach { group ->
                     // For each item inside the group
+
                     group.items.forEach { outputItem ->
                         // Try to find a matching observation
+
                         val matchingObservation = data.observations.find { obs ->
                             obs.code == outputItem.linkId
                         }
+                        when (outputItem.linkId) {
 
-                        // Get EPID No
-                        if (outputItem.linkId == "992818778559") {
-                            outputItem.value = data.epidNo
-                        } else if (outputItem.linkId == "age-at-onset") {
-                            outputItem.value = calculateAgeAtOnset(data.observations)
-                        } else {
-
-                            if (matchingObservation != null) {
-                                outputItem.value = matchingObservation.value
+                            "992818778559" -> { // Retrieve EPID No.
+                                outputItem.value = data.epidNo
                             }
+
+                            "920645761660" -> { // Calculate Days since onset
+                                outputItem.value = calculateDaysSinceOnset(data.observations)
+                            }
+
+                            "age-at-onset" -> {  // Calculate Age at Onset
+                                outputItem.value = calculateAgeAtOnset(data.observations)
+                            }
+
+                            else ->
+                                if (matchingObservation != null) {
+                                    outputItem.value = matchingObservation.value
+                                }
                         }
                     }
                 }
@@ -161,6 +172,36 @@ class SummarizedActivity : AppCompatActivity() {
             .replace("[^a-z0-9\\s-]".toRegex(), "")
             .replace("\\s+".toRegex(), "-")
             .replace("-+".toRegex(), "-")
+    }
+
+    fun calculateDaysSinceOnset(observations: List<PatientListViewModel.ObservationItem>): String {
+        var age = "0"
+        val date = observations.find { obs ->
+            obs.code == "728034137219"
+        }?.value
+        val created = observations.find { obs ->
+            obs.code == "728034137219"
+        }?.created
+        if (date == null || created == null) age = "0"
+        try {
+
+            // Parse the onset date (simple ISO format)
+            val onsetDate = LocalDate.parse(date)
+            // Parse the created date using a formatter
+            val createdFormatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy")
+            val createdDate = ZonedDateTime.parse(created, createdFormatter).toLocalDate()
+
+            // Calculate the days between
+            val daysBetween = ChronoUnit.DAYS.between(onsetDate, createdDate)
+
+            println(" Date of Onset of Symptoms Days between: $daysBetween")
+            age = "$daysBetween"
+        } catch (e: Exception) {
+            age = "0"
+        }
+
+        println("Date of Onset of Symptoms $date created $created")
+        return age
     }
 
     fun calculateAgeAtOnset(observations: List<PatientListViewModel.ObservationItem>): String {

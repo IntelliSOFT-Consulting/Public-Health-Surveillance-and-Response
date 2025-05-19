@@ -345,7 +345,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val mNameEntry = extractedAnswers.find { it.linkId == "246751846436" }
                     val lNameEntry = extractedAnswers.find { it.linkId == "486402457213" }
                     val genderEntry = extractedAnswers.find { it.linkId == "929966324957" }
-                    val dobEntry = extractedAnswers.find { it.linkId == "951993881290" }
+                    val dobEntry = extractedAnswers.find { it.linkId == "257830485990" }
                     val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
                     val countyEntry = extractedAnswers.find { it.linkId == "a4-county" }
                     val specimenDateEntry = extractedAnswers.find { it.linkId == "737703942433" }
@@ -482,7 +482,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val mNameEntry = extractedAnswers.find { it.linkId == "164840483828" }
                     val lNameEntry = extractedAnswers.find { it.linkId == "606848143908" }
                     val genderEntry = extractedAnswers.find { it.linkId == "543806612685" }
-                    val dobEntry = extractedAnswers.find { it.linkId == "761800309411" }
+                    val dobEntry = extractedAnswers.find { it.linkId == "257830485990" }
                     val phoneEntry = extractedAnswers.find { it.linkId == "760016167907" }
                     val contactNameEntry = extractedAnswers.find { it.linkId == "657999955440" }
                     val contactPhoneEntry = extractedAnswers.find { it.linkId == "354738003178" }

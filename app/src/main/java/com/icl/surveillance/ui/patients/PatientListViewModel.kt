@@ -515,6 +515,7 @@ class PatientListViewModel(
         val id: String,
         val code: String,
         val value: String,
+        val created: String
     ) {
         override fun toString(): String = code
     }
