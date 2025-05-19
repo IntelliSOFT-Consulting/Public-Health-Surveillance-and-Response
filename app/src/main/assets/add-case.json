@@ -355,6 +355,22 @@
           "required": true
         },
         {
+          "linkId": "age-at-onset",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "type": "string",
+          "text": "Age at Onset",
+          "initial": [
+            {
+              "valueString": "0"
+            }
+          ]
+        },
+        {
           "type": "integer",
           "linkId": "492731638700",
           "text": "Age in Years",

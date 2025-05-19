@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import com.google.android.fhir.FhirEngine
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
@@ -33,6 +32,9 @@ import com.icl.surveillance.ui.patients.data.RegionalLabResultsFragment
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 
 class SummarizedActivity : AppCompatActivity() {
     private lateinit var groups: MutableList<OutputGroup>
@@ -129,6 +131,8 @@ class SummarizedActivity : AppCompatActivity() {
                         // Get EPID No
                         if (outputItem.linkId == "992818778559") {
                             outputItem.value = data.epidNo
+                        } else if (outputItem.linkId == "age-at-onset") {
+                            outputItem.value = calculateAgeAtOnset(data.observations)
                         } else {
 
                             if (matchingObservation != null) {
@@ -159,6 +163,30 @@ class SummarizedActivity : AppCompatActivity() {
             .replace("-+".toRegex(), "-")
     }
 
+    fun calculateAgeAtOnset(observations: List<PatientListViewModel.ObservationItem>): String {
+        var age = "0"
+        val formatter = DateTimeFormatter.ISO_DATE // assumes date format is "yyyy-MM-dd"
+
+        val dob = observations.find { obs ->
+            obs.code == "257830485990"
+        }?.value
+        val onset = observations.find { obs ->
+            obs.code == "728034137219"
+        }?.value
+
+        if (dob == null || onset == null) age = "0"
+        try {
+            val dobDate = LocalDate.parse(dob, formatter)
+            val onsetDate = LocalDate.parse(onset, formatter)
+
+            val period = Period.between(dobDate, onsetDate)
+
+            age = "${period.years} years, ${period.months} months, ${period.days} days"
+        } catch (e: Exception) {
+            age = "0"
+        }
+        return age
+    }
 
     fun parseFromAssets(context: Context, latestEncounter: String): List<OutputGroup> {
         var outputGroups: List<OutputGroup> = emptyList()
@@ -251,3 +279,4 @@ class SummarizedActivity : AppCompatActivity() {
     }
 
 }
+
