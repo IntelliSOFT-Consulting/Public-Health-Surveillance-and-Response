@@ -69,6 +69,11 @@
     {
       "item": [
         {
+          "type": "display",
+          "linkId": "546255966914",
+          "text": "Hospital/Facility Location"
+        },
+        {
           "type": "reference",
           "extension": [
             {
@@ -267,7 +272,7 @@
         }
       ],
       "linkId": "306799299376",
-      "text": "Presentation Phase"
+      "text": "PRESENTATION PHASE "
     },
     {
       "item": [
@@ -1058,21 +1063,7 @@
           ]
         },
         {
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ]
-              }
-            }
-          ],
+          "type": "string",
           "linkId": "405254523776",
           "text": "If Yes, Indicate Name of Country",
           "enableWhen": [
@@ -1085,21 +1076,7 @@
               }
             }
           ],
-          "required": true,
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "Kenya",
-                "display": "Kenya"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Uganda",
-                "display": "Uganda"
-              }
-            }
-          ]
+          "required": true
         },
         {
           "type": "choice",
@@ -1122,7 +1099,7 @@
             }
           ],
           "linkId": "241783748776",
-          "text": "Did Patient Travel to Endemic Area in Last 6 Months?",
+          "text": "Did Patient Travel to Endemic Area in Last 6 Months? (In country)",
           "required": true,
           "answerOption": [
             {
@@ -1486,6 +1463,21 @@
               "valueCoding": {
                 "code": "no",
                 "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "display",
+          "linkId": "clinician-action",
+          "text": "Clinician should perform spleen and liver palpation",
+          "enableWhen": [
+            {
+              "question": "699010843343",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
               }
             }
           ]

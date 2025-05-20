@@ -118,12 +118,21 @@ class VlLabFragment : Fragment() {
                 for (group in groups) {
                     val fieldView = createCustomLabel(group.text)
                     parentLayout.addView(fieldView)
-                    Log.d("Group", "Group Item Lab Results: ${group.text} (${group.linkId})")
                     for (item in group.items) {
-                        Log.d("Item", " - Item: ${item.text} (${item.linkId}) Type: ${item.type}")
                         item.value = getValueBasedOnId(item, it.first().observations)
                         val childFieldView = createCustomField(item)
-                        parentLayout.addView(childFieldView)
+
+                        var show = true
+                        if (!item.enable) {
+                            show = false
+                            show = checkIfParentAnswerMatches(
+                                item.parentOperator,
+                                item.parentLink, item.parentResponse, group.items
+                            )
+                        }
+                        if (show) {
+                            parentLayout.addView(childFieldView)
+                        }
                     }
                 }
 
@@ -152,6 +161,45 @@ class VlLabFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun checkIfParentAnswerMatches(
+        operator: String?,
+        parentLink: String?,
+        parentResponse: String?,
+        items: List<OutputItem>
+    ): Boolean {
+        var response = false
+        if (parentLink != null && parentResponse != null) {
+            val parentAnswer = items.find { it.linkId == parentLink }?.value
+            if (parentAnswer != null) {
+                if (operator != null) {
+                    when (operator) {
+                        "!=" -> {
+                            if (parentAnswer.trim() != parentResponse.trim()) {
+                                response = true
+                            }
+                        }
+
+                        ">" -> {
+                            if (parentAnswer.trim() > parentResponse.trim()) {
+                                response = true
+                            }
+                        }
+
+                        else -> {
+                            if (parentAnswer.trim() == parentResponse.trim() || parentAnswer.contains(
+                                    parentResponse
+                                )
+                            ) {
+                                response = true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return response
     }
 
     private fun handleDataClick(currentCase: String) {
@@ -211,13 +259,48 @@ class VlLabFragment : Fragment() {
 
     }
 
-    fun flattenItems(item: ChildItem): List<OutputItem> {
-        val children = item.item?.flatMap { flattenItems(it) } ?: emptyList()
 
-        // If current item is NOT of type "display", include it
+    fun flattenItems(
+        item: ChildItem,
+        parentConditions: Map<String, Pair<String, Boolean>> = emptyMap()
+    ): List<OutputItem> {
+        val currentConditions =
+            mutableMapOf<String, Pair<String, Boolean>>().apply { putAll(parentConditions) }
+
+        var enable = true
+        var parentLink: String? = null
+        var parentResponse: String? = null
+        var enableOperator: String? = null
+        item.enableWhen?.firstOrNull()?.let { condition ->
+            parentLink = condition.question
+            enableOperator = condition.operator
+            val expectedAnswer = when {
+                condition.answerCoding != null -> condition.answerCoding.display
+                    ?: condition.answerCoding.code
+
+                condition.answerString != null -> condition.answerString
+                condition.answerBoolean != null -> condition.answerBoolean.toString()
+                condition.answerDate != null -> condition.answerDate
+                condition.answerInteger != null -> condition.answerInteger.toString()
+                else -> null
+            }
+            parentResponse = expectedAnswer
+            enable = false // assume not enabled unless condition is met at runtime
+        }
+
+        val children = item.item?.flatMap {
+            flattenItems(it, currentConditions)
+        } ?: emptyList()
+
         return if (item.type != "display") {
             val current = OutputItem(
-                linkId = item.linkId, text = item.text, type = item.type
+                linkId = item.linkId,
+                text = item.text,
+                type = item.type,
+                enable = enable,
+                parentLink = parentLink,
+                parentResponse = parentResponse,
+                parentOperator = enableOperator
             )
             listOf(current) + children
         } else {

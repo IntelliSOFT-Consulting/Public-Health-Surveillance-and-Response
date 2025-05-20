@@ -144,6 +144,12 @@
           "required": true
         },
         {
+          "type": "decimal",
+          "linkId": "regimen-dosage",
+          "text": "Treatment Regimen Dosage",
+          "required": true
+        },
+        {
           "type": "choice",
           "extension": [
             {
@@ -184,7 +190,7 @@
             {
               "valueCoding": {
                 "code": "trtemnt-004",
-                "display": "Other Specify "
+                "display": "Other (Specify)"
               }
             }
           ]
@@ -199,7 +205,7 @@
               "operator": "=",
               "answerCoding": {
                 "code": "trtemnt-004",
-                "display": "Other Specify "
+                "display": "Other (Specify)"
               }
             }
           ],

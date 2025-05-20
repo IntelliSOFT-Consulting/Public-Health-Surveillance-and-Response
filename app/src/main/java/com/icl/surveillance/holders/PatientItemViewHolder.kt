@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.icl.surveillance.R
 import com.icl.surveillance.databinding.PatientListItemViewBinding
 import com.icl.surveillance.ui.patients.PatientListViewModel
+import com.icl.surveillance.utils.FormatterClass
 
 class PatientItemViewHolder(binding: PatientListItemViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
@@ -19,10 +20,12 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
     private val status: TextView = binding.tvFinal
     private val labResults: TextView = binding.labResults
     private val tvLabLabel: TextView = binding.tvLabLabel
+    private val tvFinalClassificationLabel: TextView = binding.tvFinalClassificationLabel
 
     fun bindTo(
         patientItem: PatientListViewModel.PatientItem,
         onItemClicked: (PatientListViewModel.PatientItem) -> Unit,
+        listingTitle: String
     ) {
         this.nameView.text = patientItem.name
         this.epid.text = patientItem.epid
@@ -31,7 +34,17 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
         this.dateReported.text = patientItem.caseOnsetDate
         this.labResults.text = patientItem.labResults
 
-        println("Case Information type ${patientItem.caseList}")
+        println("Case Information type $listingTitle")
+        try {
+            if (listingTitle.isNotEmpty()) {
+                if (listingTitle.contains("VL Case List")) {
+                    this.tvFinalClassificationLabel.text = "Final Diagnosis"
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
         var final = patientItem.status
 
         if (patientItem.caseList.trim() != "Case") {

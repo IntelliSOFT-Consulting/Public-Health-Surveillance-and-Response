@@ -47,6 +47,12 @@
                 "code": "unknown",
                 "display": "Unknown"
               }
+            },
+            {
+              "valueCoding": {
+                "code": "Not Done",
+                "display": "Not Done"
+              }
             }
           ]
         },
@@ -131,22 +137,55 @@
             {
               "valueCoding": {
                 "code": "dt-results-002",
-                "display": "Positive (titre)"
+                "display": "Positive"
               }
             },
             {
               "valueCoding": {
                 "code": "dt-results-003",
-                "display": "Negative (titre)"
+                "display": "Negative"
               }
             },
             {
               "valueCoding": {
                 "code": "dt-results-004",
-                "display": "Borderline (titre)"
+                "display": "Borderline"
               }
             }
           ]
+        },
+        {
+          "type": "decimal",
+          "linkId": "521591954015",
+          "text": "Titre",
+          "enableWhen": [
+            {
+              "question": "839711142610",
+              "operator": "=",
+              "answerCoding": {
+                "code": "dt-results-002",
+                "display": "Positive"
+              }
+            },
+            {
+              "question": "839711142610",
+              "operator": "=",
+              "answerCoding": {
+                "code": "dt-results-003",
+                "display": "Negative"
+              }
+            },
+            {
+              "question": "839711142610",
+              "operator": "=",
+              "answerCoding": {
+                "code": "dt-results-004",
+                "display": "Borderline"
+              }
+            }
+          ],
+          "enableBehavior": "any",
+          "required": true
         },
         {
           "type": "choice",
@@ -416,25 +455,25 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "diag-meth-001",
+                "code": "RDT",
                 "display": "RDT"
               }
             },
             {
               "valueCoding": {
-                "code": "diag-meth-002",
+                "code": "DAT",
                 "display": "DAT"
               }
             },
             {
               "valueCoding": {
-                "code": "diag-meth-003",
+                "code": "Microscopy",
                 "display": "Microscopy"
               }
             },
             {
               "valueCoding": {
-                "code": "diag-meth-004",
+                "code": "Clinical Examination",
                 "display": "Clinical Examination"
               }
             }

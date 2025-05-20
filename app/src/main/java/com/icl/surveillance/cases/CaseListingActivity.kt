@@ -61,7 +61,7 @@ class CaseListingActivity : AppCompatActivity() {
             )
                 .get(PatientListViewModel::class.java)
         val recyclerView: RecyclerView = binding.patientListContainer.patientList
-        val adapter = PatientItemRecyclerViewAdapter(this::onPatientItemClicked)
+        val adapter = PatientItemRecyclerViewAdapter(this::onPatientItemClicked,"$titleName")
         val adapterRumor = PatientItemRecyclerViewAdapterRumor(this::onRumorItemClicked)
 
 

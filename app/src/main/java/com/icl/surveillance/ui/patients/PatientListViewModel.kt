@@ -371,6 +371,80 @@ class PatientListViewModel(
                     val childEncounter = loadChildEncounter(data.resourceId, logicalId)
 
                     when (nameQuery) {
+                        "vl-case-information" -> {
+
+                            val childCaseInfoEncounter =
+                                childEncounter.firstOrNull {
+                                    it.reasonCode == "VL Laboratory Examination"
+                                }
+
+                            childCaseInfoEncounter?.let { kk ->
+                                val obs1 =
+                                    fhirEngine.search<Observation> {
+                                        filter(
+                                            Observation.ENCOUNTER,
+                                            { value = "Encounter/${kk.id}" })
+                                    }
+                                var results = "Pending Results"
+                                val rapidResults =
+                                    obs1.firstOrNull { it.resource.code.codingFirstRep.code == "286501145394" }
+                                        ?.resource
+                                        ?.value
+                                        ?.asStringValue() ?: "Pending"
+                                val datResult =
+                                    obs1.firstOrNull { it.resource.code.codingFirstRep.code == "839711142610" }
+                                        ?.resource
+                                        ?.value
+                                        ?.asStringValue() ?: "Pending"
+
+                                val aResult =
+                                    obs1.firstOrNull { it.resource.code.codingFirstRep.code == "108406555539" }
+                                        ?.resource
+                                        ?.value
+                                        ?.asStringValue() ?: "Pending"
+                                val mResult =
+
+                                    obs1.firstOrNull { it.resource.code.codingFirstRep.code == "320819009291" }
+                                        ?.resource
+                                        ?.value
+                                        ?.asStringValue() ?: "Pending"
+
+                                var status =
+                                    obs1.firstOrNull { it.resource.code.codingFirstRep.code == "655245793432" }
+                                        ?.resource
+                                        ?.value
+                                        ?.asStringValue() ?: "Pending"
+                                val otherStatus =
+                                    obs1.firstOrNull { it.resource.code.codingFirstRep.code == "843481153132" }
+                                        ?.resource
+                                        ?.value
+                                        ?.asStringValue() ?: "Pending"
+
+                                if (status == "Other (specify)") {
+                                    status = otherStatus
+                                }
+                                // Normalize to lowercase for easier comparison
+                                val allResults = listOf(
+                                    rapidResults,
+                                    datResult,
+                                    aResult,
+                                    mResult
+                                ).map { it.lowercase() }
+
+                                results = when {
+                                    allResults.any { it == "positive" } -> "Positive"
+                                    allResults.all { it == "negative" } -> "Negative"
+                                    allResults.all { it == "not done" } -> "Not Done"
+                                    else -> "Pending Results"
+                                }
+
+                                data = data.copy(
+                                    labResults = results,
+                                    status = status
+                                )
+                            }
+                        }
+
                         "afp-case-information" -> {
                             // CLASSIFICATION FOR A AFP CASE
                             val childCaseInfoEncounter =
