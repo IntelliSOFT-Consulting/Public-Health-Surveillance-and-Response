@@ -1,6 +1,9 @@
 package com.icl.surveillance.adapters
 
+import android.content.Context
+import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -9,7 +12,10 @@ import com.icl.surveillance.databinding.LandingPageItemBinding
 import com.icl.surveillance.ui.home.HomeViewModel
 
 
-class DiseasesRecyclerViewAdapter(private val onItemClick: (HomeViewModel.Diseases) -> Unit) :
+class DiseasesRecyclerViewAdapter(
+    private val onItemClick: (HomeViewModel.Diseases) -> Unit,
+
+    ) :
     ListAdapter<HomeViewModel.Diseases, DiseaseViewHolder>(DiseaseDiffUtil()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DiseaseViewHolder {
         return DiseaseViewHolder(
@@ -28,10 +34,35 @@ class DiseaseViewHolder(
     private val onItemClick: (HomeViewModel.Diseases) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(layout: HomeViewModel.Diseases) {
-        binding.componentLayoutIconImageview.setImageResource(layout.iconId)
-        binding.componentLayoutTextView.text =
-            binding.componentLayoutTextView.context.getString(layout.textId)
+        try {
+            val desiredHeightInDp = 90f
+            // Use your helper function
+            val desiredHeightInPixels = dpToPx(desiredHeightInDp, binding.root.context)
+
+            val layoutParams = binding.cardHolder.layoutParams
+            layoutParams.height = desiredHeightInPixels // Your dpToPx already returns Int
+            binding.cardHolder.layoutParams = layoutParams
+            // I also need to align the textview to center
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        binding.iconView.apply {
+            setImageResource(layout.iconId)
+            visibility = View.GONE
+        }
+
+        binding.textView.text =
+            binding.textView.context.getString(layout.textId)
         binding.root.setOnClickListener { onItemClick(layout) }
+    }
+
+    private fun dpToPx(dp: Float, context: Context): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            dp,
+            context.resources.displayMetrics
+        ).toInt()
     }
 }
 

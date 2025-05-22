@@ -114,37 +114,25 @@ class HomeViewModel(application: Application, private val state: SavedStateHandl
         val count: Int,
     ) {
 
-        //        MOH502FORM(
-//            R.drawable.searching,
-//            R.string.moh502, 0
-//        ),
-//        CONTACTTRACINGFORM(
-//            R.drawable.searching,
-//            R.string.contact_tracing, 1
-//        ),
-//        MONTHLYFORM(R.drawable.searching, R.string.monthly, 5),
-//        MOH505FORM(R.drawable.searching, R.string.moh505, 2),
-//        SOCIALFORM(R.drawable.searching, R.string.social_form, 3),
-//        RUMORTOOL(R.drawable.searching, R.string.rumor_tracking, 4),
         NOTIFIABLE(
-            R.drawable.searching,
+            R.drawable.virus,
             R.string.notifiable,
             0
         ),
         MASS(
-            R.drawable.searching,
+            R.drawable.syringe,
             R.string.mass, 1
         ),
         CASE(
-            R.drawable.searching,
+            R.drawable.clipboard,
             R.string.case_management, 2
         ),
         SOCIAL(
-            R.drawable.searching,
+            R.drawable.people,
             R.string.social, 3
         ),
         SURVEY(
-            R.drawable.searching,
+            R.drawable.presentation,
             R.string.surveys, 4
         )
     }

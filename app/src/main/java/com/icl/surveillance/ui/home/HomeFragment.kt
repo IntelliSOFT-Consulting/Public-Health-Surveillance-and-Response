@@ -50,12 +50,14 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-
         val adapter =
-            HomeRecyclerViewAdapter(::onItemClick).apply { submitList(viewModel.getLayoutList()) }
+            HomeRecyclerViewAdapter(
+                ::onItemClick,
+                true
+            ).apply { submitList(viewModel.getLayoutList()) }
         val recyclerView = requireView().findViewById<RecyclerView>(R.id.sdcLayoutsRecyclerView)
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = GridLayoutManager(context, 1)
+        recyclerView.layoutManager = GridLayoutManager(context, 2)
 
         handleUser()
 

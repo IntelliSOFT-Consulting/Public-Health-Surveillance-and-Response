@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_holder"
     android:layout_width="match_parent"
     android:layout_height="@dimen/component_item_height"
     android:layout_margin="10dp"
@@ -13,42 +13,30 @@
     app:cardCornerRadius="5dp"
     app:cardElevation="10dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="15dp">
+        android:gravity="start"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <LinearLayout
-            android:id="@+id/iconContainer"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/icon_container_height"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/componentLayoutIconImageview"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:contentDescription="components"
-                android:scaleType="centerCrop"
-                android:src="@drawable/eye" />
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/icon_view"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/virus"
+            app:tint="@android:color/white" />
 
         <TextView
-            android:id="@+id/componentLayoutTextView"
-            android:layout_width="match_parent"
+            android:id="@+id/text_view"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/montserratsemi"
-            android:textAlignment="textStart"
-            android:textAppearance="?textAppearanceBody2"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iconContainer" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="16dp"
+            android:text="Notifiable Diseases"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
 </com.google.android.material.card.MaterialCardView>
