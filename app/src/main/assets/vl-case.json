@@ -1566,7 +1566,7 @@
         {
           "type": "decimal",
           "linkId": "754134389540",
-          "text": "Liver Measurement (cm)",
+          "text": "Liver Measurement below Costal Margin (cm)",
           "enableWhen": [
             {
               "question": "594158306957",
@@ -1577,7 +1577,17 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueDecimal": 0.0
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDecimal": 20.0
+            }
+          ]
         },
         {
           "type": "choice",
@@ -1620,7 +1630,7 @@
         {
           "type": "decimal",
           "linkId": "808046746150",
-          "text": "Spleen Measurement (cm)",
+          "text": "Spleen Measurement below Costal Margin (cm)",
           "enableWhen": [
             {
               "question": "433410405758",
@@ -1631,7 +1641,17 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueDecimal": 0.0
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDecimal": 20.0
+            }
+          ]
         },
         {
           "type": "choice",

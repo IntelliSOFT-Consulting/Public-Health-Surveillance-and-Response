@@ -110,7 +110,7 @@ class CaseSelectionFragment : Fragment() {
             else -> titleName
         }
         val add = when (title) {
-            "SLR" -> "Add New case"
+            "SLR" -> "Add New Report"
             else -> "Add New $title Case"
         }
         val view = when (title) {
@@ -127,7 +127,7 @@ class CaseSelectionFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = CaseOptionsAdapter(caseOptions) { option ->
             when (option.title) {
-                "Add New case" -> {
+                "Add New Report" -> {
                     FormatterClass().saveSharedPref(
                         "currentCase", "Social Listening and Rumor Tracking Tool", requireContext()
                     )

@@ -19,6 +19,14 @@
     {
       "url": "http://hl7.org/fhir/StructureDefinition/variable",
       "valueExpression": {
+        "name": "patientSubCountyName",
+        "language": "text/fhirpath",
+        "expression": "%resource.descendants().where(linkId='a3-sub-county').answer.value.reference"
+      }
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
         "name": "patientCountyName",
         "language": "text/fhirpath",
         "expression": "%resource.descendants().where(linkId='a4-county').answer.value.reference"
@@ -52,415 +60,107 @@
   "item": [
     {
       "item": [
-
+        {
+          "linkId": "a4-county",
+          "text": "County",
+          "type": "reference",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Location?partof=Location/0&_sort=name"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-choiceColumn",
+              "extension": [
+                {
+                  "url": "path",
+                  "valueString": "name"
+                },
+                {
+                  "url": "forDisplay",
+                  "valueBoolean": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "a3-sub-county",
+          "type": "reference",
+          "text": "Sub County",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Location?partof={{%patientCountyName}}"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-choiceColumn",
+              "extension": [
+                {
+                  "url": "path",
+                  "valueString": "name"
+                },
+                {
+                  "url": "forDisplay",
+                  "valueBoolean": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "a2-ward",
+          "type": "reference",
+          "text": "Ward",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Location?partof={{%patientSubCountyName}}&_sort=name"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-choiceColumn",
+              "extension": [
+                {
+                  "url": "path",
+                  "valueString": "name"
+                },
+                {
+                  "url": "forDisplay",
+                  "valueBoolean": true
+                }
+              ]
+            }
+          ]
+        },
         {
           "type": "string",
-          "linkId": "871818396498",
-          "text": "Village/Community Health unit",
+          "linkId": "161645846607",
+          "text": "Location",
           "required": true
         },
         {
           "type": "string",
           "linkId": "767958314742",
-          "text": "Sub-location",
+          "text": "Sub Location",
           "required": true
         },
         {
           "type": "string",
-          "linkId": "161645846607",
-          "text": "location",
+          "linkId": "871818396498",
+          "text": "Village/Community Health unit",
           "required": true
-        },
-        {
-          "type": "choice",
-          "linkId": "124372068729",
-          "text": "Ward",
-          "required": true,
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "Kasarani",
-                "display": "Kasarani"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Mwiki",
-                "display": "Mwiki"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Clay City",
-                "display": "Clay City"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Roysambu",
-                "display": "Roysambu"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Njiru",
-                "display": "Njiru"
-              }
-            }
-          ],
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop down"
-                  }
-                ]
-              }
-            }
-          ],
-          "linkId": "a3-sub-county",
-          "text": "Sub-county",
-          "required": true,
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "kasarani",
-                "display": "Kasarani"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "kisauni",
-                "display": "Kisauni"
-              }
-            }
-          ]
-        },
-        {
-          "linkId": "a4-county",
-          "text": "County",
-          "type": "choice",
-          "required": true,
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "drop-down",
-                    "display": "Drop Down"
-                  }
-                ],
-                "text": "Drop Down"
-              }
-            }
-          ],
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "Baringo",
-                "display": "Baringo"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Bomet",
-                "display": "Bomet"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Bungoma",
-                "display": "Bungoma"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Busia",
-                "display": "Busia"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Elgeyo-Marakwet",
-                "display": "Elgeyo-Marakwet"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Embu",
-                "display": "Embu"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Garissa",
-                "display": "Garissa"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Homa Bay",
-                "display": "Homa Bay"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Isiolo",
-                "display": "Isiolo"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Kajiado",
-                "display": "Kajiado"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Kakamega",
-                "display": "Kakamega"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Kericho",
-                "display": "Kericho"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Kiambu",
-                "display": "Kiambu"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Kilifi",
-                "display": "Kilifi"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Kirinyaga",
-                "display": "Kirinyaga"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Kisii",
-                "display": "Kisii"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Kisumu",
-                "display": "Kisumu"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Kitui",
-                "display": "Kitui"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Kwale",
-                "display": "Kwale"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Laikipia",
-                "display": "Laikipia"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Lamu",
-                "display": "Lamu"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Machakos",
-                "display": "Machakos"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Makueni",
-                "display": "Makueni"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Mandera",
-                "display": "Mandera"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Marsabit",
-                "display": "Marsabit"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Meru",
-                "display": "Meru"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Migori",
-                "display": "Migori"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Mombasa",
-                "display": "Mombasa"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Murang’a",
-                "display": "Murang’a"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Nairobi",
-                "display": "Nairobi"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Nakuru",
-                "display": "Nakuru"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Nandi",
-                "display": "Nandi"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Narok",
-                "display": "Narok"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Nyamira",
-                "display": "Nyamira"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Nyandarua",
-                "display": "Nyandarua"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Nyeri",
-                "display": "Nyeri"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Samburu",
-                "display": "Samburu"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Siaya",
-                "display": "Siaya"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Taita-Taveta",
-                "display": "Taita-Taveta"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Tana River",
-                "display": "Tana River"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Tharaka-Nithi",
-                "display": "Tharaka-Nithi"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Trans Nzoia",
-                "display": "Trans Nzoia"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Turkana",
-                "display": "Turkana"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Uasin Gishu",
-                "display": "Uasin Gishu"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Vihiga",
-                "display": "Vihiga"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "Wajir",
-                "display": "Wajir"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "West Pokot",
-                "display": "West Pokot"
-              }
-            }
-          ]
         }
       ],
       "type": "group",
@@ -531,6 +231,12 @@
               "valueCoding": {
                 "code": "traditionalhealer",
                 "display": "Traditional Healer"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "JournalistNewsReporter",
+                "display": "Journalist/News Reporter"
               }
             },
             {
@@ -885,6 +591,12 @@
           "answerOption": [
             {
               "valueCoding": {
+                "code": "frwd-authorities",
+                "display": "Forwarded to authorities (National, County, Sub County)"
+              }
+            },
+            {
+              "valueCoding": {
                 "code": "frwd-rlves",
                 "display": "Forwarded to Friends and Relatives"
               }
@@ -991,6 +703,22 @@
               "answerCoding": {
                 "code": "yes",
                 "display": "Yes"
+              }
+            }
+          ],
+          "required": true
+        },
+        {
+          "type": "string",
+          "linkId": "reason-no",
+          "text": "if no, why?",
+          "enableWhen": [
+            {
+              "question": "808764633907",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
               }
             }
           ],
