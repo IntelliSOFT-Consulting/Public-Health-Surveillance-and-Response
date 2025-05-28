@@ -119,7 +119,7 @@ class ChildFragment : Fragment() {
             }
         val recyclerView = requireView().findViewById<RecyclerView>(R.id.sdcLayoutsRecyclerView)
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = GridLayoutManager(context, 1)
+        recyclerView.layoutManager = GridLayoutManager(context, 2)
     }
 
     private fun onItemClick(layout: HomeViewModel.Diseases) {

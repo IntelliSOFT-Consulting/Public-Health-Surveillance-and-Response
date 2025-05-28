@@ -35,7 +35,7 @@ class DiseaseViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(layout: HomeViewModel.Diseases) {
         try {
-            val desiredHeightInDp = 90f
+            val desiredHeightInDp = 140f
             // Use your helper function
             val desiredHeightInPixels = dpToPx(desiredHeightInDp, binding.root.context)
 

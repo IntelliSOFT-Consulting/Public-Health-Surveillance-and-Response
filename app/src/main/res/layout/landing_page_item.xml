@@ -35,7 +35,7 @@
             android:layout_marginTop="16dp"
             android:text="Notifiable Diseases"
             android:textColor="@android:color/white"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold" />
     </RelativeLayout>
 
