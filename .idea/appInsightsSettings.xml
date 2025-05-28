@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.icl.surveillance" />
+                  <option name="mobileSdkAppId" value="1:134117203565:android:5fed7afed610d4d9e1a964" />
+                  <option name="projectId" value="chanjo-ke-655ac" />
+                  <option name="projectNumber" value="134117203565" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
