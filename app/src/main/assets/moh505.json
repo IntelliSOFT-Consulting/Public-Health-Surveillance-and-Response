@@ -382,7 +382,7 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "acute-jaundice",
+                "code": "Acute Jaundice",
                 "display": "Acute Jaundice"
               }
             }
@@ -403,7 +403,7 @@
               "question": "acute-jaundice",
               "operator": "=",
               "answerCoding": {
-                "code": "acute-jaundice"
+                "code": "Acute Jaundice"
               }
             }
           ]
@@ -423,7 +423,7 @@
               "question": "acute-jaundice",
               "operator": "=",
               "answerCoding": {
-                "code": "acute-jaundice"
+                "code": "Acute Jaundice"
               }
             }
           ]
@@ -443,7 +443,7 @@
               "question": "acute-jaundice",
               "operator": "=",
               "answerCoding": {
-                "code": "acute-jaundice"
+                "code": "Acute Jaundice"
               }
             }
           ]
@@ -463,7 +463,7 @@
               "question": "acute-jaundice",
               "operator": "=",
               "answerCoding": {
-                "code": "acute-jaundice"
+                "code": "Acute Jaundice"
               }
             }
           ]
@@ -490,7 +490,7 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "acute-malnutrition",
+                "code": "Acute Malnutrition",
                 "display": "Acute Malnutrition"
               }
             }
@@ -511,7 +511,7 @@
               "question": "acute-malnutrition",
               "operator": "=",
               "answerCoding": {
-                "code": "acute-malnutrition"
+                "code": "Acute Malnutrition"
               }
             }
           ]
@@ -531,7 +531,7 @@
               "question": "acute-malnutrition",
               "operator": "=",
               "answerCoding": {
-                "code": "acute-malnutrition"
+                "code": "Acute Malnutrition"
               }
             }
           ]
@@ -551,7 +551,7 @@
               "question": "acute-malnutrition",
               "operator": "=",
               "answerCoding": {
-                "code": "acute-malnutrition"
+                "code": "Acute Malnutrition"
               }
             }
           ]
@@ -571,7 +571,7 @@
               "question": "acute-malnutrition",
               "operator": "=",
               "answerCoding": {
-                "code": "acute-malnutrition"
+                "code": "Acute Malnutrition"
               }
             }
           ]
@@ -598,7 +598,7 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "afp-poliomyelitis",
+                "code": "AFP (Poliomyelitis)",
                 "display": "AFP (Poliomyelitis)"
               }
             }
@@ -619,7 +619,7 @@
               "question": "afp-poliomyelitis",
               "operator": "=",
               "answerCoding": {
-                "code": "afp-poliomyelitis"
+                "code": "AFP (Poliomyelitis)"
               }
             }
           ]
@@ -639,7 +639,7 @@
               "question": "afp-poliomyelitis",
               "operator": "=",
               "answerCoding": {
-                "code": "afp-poliomyelitis"
+                "code": "AFP (Poliomyelitis)"
               }
             }
           ]
@@ -659,7 +659,7 @@
               "question": "afp-poliomyelitis",
               "operator": "=",
               "answerCoding": {
-                "code": "afp-poliomyelitis"
+                "code": "AFP (Poliomyelitis)"
               }
             }
           ]
@@ -679,7 +679,7 @@
               "question": "afp-poliomyelitis",
               "operator": "=",
               "answerCoding": {
-                "code": "afp-poliomyelitis"
+                "code": "AFP (Poliomyelitis)"
               }
             }
           ]
@@ -706,7 +706,7 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "anthrax",
+                "code": "Anthrax",
                 "display": "Anthrax"
               }
             }
@@ -727,7 +727,7 @@
               "question": "anthrax",
               "operator": "=",
               "answerCoding": {
-                "code": "anthrax"
+                "code": "Anthrax"
               }
             }
           ]
@@ -747,7 +747,7 @@
               "question": "anthrax",
               "operator": "=",
               "answerCoding": {
-                "code": "anthrax"
+                "code": "Anthrax"
               }
             }
           ]
@@ -767,7 +767,7 @@
               "question": "anthrax",
               "operator": "=",
               "answerCoding": {
-                "code": "anthrax"
+                "code": "Anthrax"
               }
             }
           ]
@@ -787,7 +787,7 @@
               "question": "anthrax",
               "operator": "=",
               "answerCoding": {
-                "code": "anthrax"
+                "code": "Anthrax"
               }
             }
           ]
@@ -814,7 +814,7 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "cholera",
+                "code": "Cholera",
                 "display": "Cholera"
               }
             }
@@ -835,7 +835,7 @@
               "question": "cholera",
               "operator": "=",
               "answerCoding": {
-                "code": "cholera"
+                "code": "Cholera"
               }
             }
           ]
@@ -855,7 +855,7 @@
               "question": "cholera",
               "operator": "=",
               "answerCoding": {
-                "code": "cholera"
+                "code": "Cholera"
               }
             }
           ]
@@ -875,7 +875,7 @@
               "question": "cholera",
               "operator": "=",
               "answerCoding": {
-                "code": "cholera"
+                "code": "Cholera"
               }
             }
           ]
@@ -895,7 +895,7 @@
               "question": "cholera",
               "operator": "=",
               "answerCoding": {
-                "code": "cholera"
+                "code": "Cholera"
               }
             }
           ]
@@ -922,7 +922,7 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "chikungunya",
+                "code": "Chikungunya",
                 "display": "Chikungunya"
               }
             }
@@ -943,7 +943,7 @@
               "question": "chikungunya",
               "operator": "=",
               "answerCoding": {
-                "code": "chikungunya"
+                "code": "Chikungunya"
               }
             }
           ]
@@ -963,7 +963,7 @@
               "question": "chikungunya",
               "operator": "=",
               "answerCoding": {
-                "code": "chikungunya"
+                "code": "Chikungunya"
               }
             }
           ]
@@ -983,7 +983,7 @@
               "question": "chikungunya",
               "operator": "=",
               "answerCoding": {
-                "code": "chikungunya"
+                "code": "Chikungunya"
               }
             }
           ]
@@ -1003,7 +1003,7 @@
               "question": "chikungunya",
               "operator": "=",
               "answerCoding": {
-                "code": "chikungunya"
+                "code": "Chikungunya"
               }
             }
           ]
@@ -1030,7 +1030,7 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "covid-19",
+                "code": "COVID-19",
                 "display": "COVID-19"
               }
             }
@@ -1051,7 +1051,7 @@
               "question": "covid-19",
               "operator": "=",
               "answerCoding": {
-                "code": "covid-19"
+                "code": "COVID-19"
               }
             }
           ]
@@ -1071,7 +1071,7 @@
               "question": "covid-19",
               "operator": "=",
               "answerCoding": {
-                "code": "covid-19"
+                "code": "COVID-19"
               }
             }
           ]
@@ -1091,7 +1091,7 @@
               "question": "covid-19",
               "operator": "=",
               "answerCoding": {
-                "code": "covid-19"
+                "code": "COVID-19"
               }
             }
           ]
@@ -1111,7 +1111,7 @@
               "question": "covid-19",
               "operator": "=",
               "answerCoding": {
-                "code": "covid-19"
+                "code": "COVID-19"
               }
             }
           ]
@@ -1138,7 +1138,7 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "dengue",
+                "code": "Dengue",
                 "display": "Dengue"
               }
             }
@@ -1159,7 +1159,7 @@
               "question": "dengue",
               "operator": "=",
               "answerCoding": {
-                "code": "dengue"
+                "code": "Dengue"
               }
             }
           ]
@@ -1179,7 +1179,7 @@
               "question": "dengue",
               "operator": "=",
               "answerCoding": {
-                "code": "dengue"
+                "code": "Dengue"
               }
             }
           ]
@@ -1199,7 +1199,7 @@
               "question": "dengue",
               "operator": "=",
               "answerCoding": {
-                "code": "dengue"
+                "code": "Dengue"
               }
             }
           ]
@@ -1219,7 +1219,7 @@
               "question": "dengue",
               "operator": "=",
               "answerCoding": {
-                "code": "dengue"
+                "code": "Dengue"
               }
             }
           ]
@@ -1246,7 +1246,7 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "dysentery-bacillary",
+                "code": "Dysentery (Bacillary)",
                 "display": "Dysentery (Bacillary)"
               }
             }
@@ -1267,7 +1267,7 @@
               "question": "dysentery-bacillary",
               "operator": "=",
               "answerCoding": {
-                "code": "dysentery-bacillary"
+                "code": "Dysentery (Bacillary)"
               }
             }
           ]
@@ -1287,7 +1287,7 @@
               "question": "dysentery-bacillary",
               "operator": "=",
               "answerCoding": {
-                "code": "dysentery-bacillary"
+                "code": "Dysentery (Bacillary)"
               }
             }
           ]
@@ -1307,7 +1307,7 @@
               "question": "dysentery-bacillary",
               "operator": "=",
               "answerCoding": {
-                "code": "dysentery-bacillary"
+                "code": "Dysentery (Bacillary)"
               }
             }
           ]
@@ -1327,7 +1327,7 @@
               "question": "dysentery-bacillary",
               "operator": "=",
               "answerCoding": {
-                "code": "dysentery-bacillary"
+                "code": "Dysentery (Bacillary)"
               }
             }
           ]
@@ -1354,7 +1354,7 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "guinea-worm-disease",
+                "code": "Guinea Worm Disease",
                 "display": "Guinea Worm Disease"
               }
             }
@@ -1375,7 +1375,7 @@
               "question": "guinea-worm-disease",
               "operator": "=",
               "answerCoding": {
-                "code": "guinea-worm-disease"
+                "code": "Guinea Worm Disease"
               }
             }
           ]
@@ -1395,7 +1395,7 @@
               "question": "guinea-worm-disease",
               "operator": "=",
               "answerCoding": {
-                "code": "guinea-worm-disease"
+                "code": "Guinea Worm Disease"
               }
             }
           ]
@@ -1415,7 +1415,7 @@
               "question": "guinea-worm-disease",
               "operator": "=",
               "answerCoding": {
-                "code": "guinea-worm-disease"
+                "code": "Guinea Worm Disease"
               }
             }
           ]
@@ -1435,7 +1435,7 @@
               "question": "guinea-worm-disease",
               "operator": "=",
               "answerCoding": {
-                "code": "guinea-worm-disease"
+                "code": "Guinea Worm Disease"
               }
             }
           ]
@@ -1462,7 +1462,7 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "measles",
+                "code": "Measles",
                 "display": "Measles"
               }
             }
@@ -1483,7 +1483,7 @@
               "question": "measles",
               "operator": "=",
               "answerCoding": {
-                "code": "measles"
+                "code": "Measles"
               }
             }
           ]
@@ -1503,7 +1503,7 @@
               "question": "measles",
               "operator": "=",
               "answerCoding": {
-                "code": "measles"
+                "code": "Measles"
               }
             }
           ]
@@ -1523,7 +1523,7 @@
               "question": "measles",
               "operator": "=",
               "answerCoding": {
-                "code": "measles"
+                "code": "Measles"
               }
             }
           ]
@@ -1543,7 +1543,7 @@
               "question": "measles",
               "operator": "=",
               "answerCoding": {
-                "code": "measles"
+                "code": "Measles"
               }
             }
           ]
@@ -1570,7 +1570,7 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "suspected-malaria",
+                "code": "Suspected Malaria",
                 "display": "Suspected Malaria"
               }
             }
@@ -1591,7 +1591,7 @@
               "question": "suspected-malaria",
               "operator": "=",
               "answerCoding": {
-                "code": "suspected-malaria"
+                "code": "Suspected Malaria"
               }
             }
           ]
@@ -1611,7 +1611,7 @@
               "question": "suspected-malaria",
               "operator": "=",
               "answerCoding": {
-                "code": "suspected-malaria"
+                "code": "Suspected Malaria"
               }
             }
           ]
@@ -1631,7 +1631,7 @@
               "question": "suspected-malaria",
               "operator": "=",
               "answerCoding": {
-                "code": "suspected-malaria"
+                "code": "Suspected Malaria"
               }
             }
           ]
@@ -1651,7 +1651,7 @@
               "question": "suspected-malaria",
               "operator": "=",
               "answerCoding": {
-                "code": "suspected-malaria"
+                "code": "Suspected Malaria"
               }
             }
           ]
@@ -1678,7 +1678,7 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "deaths-due-to-malaria",
+                "code": "Deaths due to Malaria",
                 "display": "Deaths due to Malaria"
               }
             }
@@ -1699,7 +1699,7 @@
               "question": "deaths-due-to-malaria",
               "operator": "=",
               "answerCoding": {
-                "code": "deaths-due-to-malaria"
+                "code": "Deaths due to Malaria"
               }
             }
           ]
@@ -1719,7 +1719,7 @@
               "question": "deaths-due-to-malaria",
               "operator": "=",
               "answerCoding": {
-                "code": "deaths-due-to-malaria"
+                "code": "Deaths due to Malaria"
               }
             }
           ]

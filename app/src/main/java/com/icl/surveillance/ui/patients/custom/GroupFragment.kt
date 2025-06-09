@@ -60,6 +60,8 @@ class GroupFragment : Fragment() {
     private fun addChildItems() {
         for (item in group.items) {
 
+            println("Displaying item: ${item.text} with value: ${item.value} with linkId: ${item.linkId} and enable: ${item.enable} and parentLink: ${item.parentLink} and parentResponse: ${item.parentResponse} and parentOperator: ${item.parentOperator}")
+
             val fieldView = createCustomField(item)
             var show = true
             if (!item.enable) {
