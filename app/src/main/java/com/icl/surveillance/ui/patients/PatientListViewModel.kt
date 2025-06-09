@@ -374,6 +374,9 @@ class PatientListViewModel(
                     val childEncounter = loadChildEncounter(data.resourceId, logicalId)
 
                     when (nameQuery) {
+                        "moh-505-reporting-form" -> {
+
+                        }
                         "vl-case-information" -> {
 
                             val childCaseInfoEncounter =
@@ -478,10 +481,6 @@ class PatientListViewModel(
                                     }
                                 )
                             }
-                        }
-
-                        "moh-505-reporting-form" -> {
-
                         }
 
                         else -> {

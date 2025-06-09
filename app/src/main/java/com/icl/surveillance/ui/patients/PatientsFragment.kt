@@ -101,7 +101,7 @@ class PatientsFragment : Fragment() {
             )
                 .get(PatientListViewModel::class.java)
         val recyclerView: RecyclerView = binding.patientListContainer.patientList
-        val adapter = PatientItemRecyclerViewAdapter(this::onPatientItemClicked,"$titleName")
+        val adapter = PatientItemRecyclerViewAdapter(this::onPatientItemClicked, "$titleName", requireContext())
         recyclerView.adapter = adapter
         recyclerView.addItemDecoration(
             DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL).apply {

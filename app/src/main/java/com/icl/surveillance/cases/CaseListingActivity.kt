@@ -1,8 +1,6 @@
 package com.icl.surveillance.cases
 
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -11,15 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.fhir.FhirEngine
 import com.icl.surveillance.R
 import com.icl.surveillance.adapters.PatientItemRecyclerViewAdapter
 import com.icl.surveillance.adapters.PatientItemRecyclerViewAdapterRumor
 import com.icl.surveillance.databinding.ActivityCaseListingBinding
-import com.icl.surveillance.databinding.ActivityFullCaseDetailsBinding
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.ui.patients.FullCaseDetailsActivity
 import com.icl.surveillance.ui.patients.PatientListViewModel
@@ -61,7 +56,7 @@ class CaseListingActivity : AppCompatActivity() {
             )
                 .get(PatientListViewModel::class.java)
         val recyclerView: RecyclerView = binding.patientListContainer.patientList
-        val adapter = PatientItemRecyclerViewAdapter(this::onPatientItemClicked, "$titleName")
+        val adapter = PatientItemRecyclerViewAdapter(this::onPatientItemClicked, "$titleName", this)
         val adapterRumor = PatientItemRecyclerViewAdapterRumor(this::onRumorItemClicked)
 
         if (currentCase != null) {

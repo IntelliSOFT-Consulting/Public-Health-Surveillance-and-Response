@@ -1,16 +1,19 @@
 package com.icl.surveillance.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import com.icl.surveillance.cases.CaseListingActivity
 import com.icl.surveillance.databinding.PatientListItemViewBinding
 import com.icl.surveillance.holders.PatientItemViewHolder
 import com.icl.surveillance.ui.patients.PatientListViewModel
 
 class PatientItemRecyclerViewAdapter(
     private val onItemClicked: (PatientListViewModel.PatientItem) -> Unit,
-    private val listingTitle: String
+    private val listingTitle: String,
+    private val context: Context
 ) :
     ListAdapter<PatientListViewModel.PatientItem, PatientItemViewHolder>(
         PatientItemDiffCallback()
@@ -36,6 +39,6 @@ class PatientItemRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: PatientItemViewHolder, position: Int) {
         val item = currentList[position]
-        holder.bindTo(item, onItemClicked, listingTitle)
+        holder.bindTo(item, onItemClicked, listingTitle, context)
     }
 }

@@ -1,7 +1,9 @@
 package com.icl.surveillance.holders
 
+import android.content.Context
 import android.graphics.Color
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
 import androidx.recyclerview.widget.RecyclerView
@@ -9,6 +11,7 @@ import com.icl.surveillance.R
 import com.icl.surveillance.databinding.PatientListItemViewBinding
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
+import com.icl.surveillance.utils.toSlug
 
 class PatientItemViewHolder(binding: PatientListItemViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
@@ -21,11 +24,16 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
     private val labResults: TextView = binding.labResults
     private val tvLabLabel: TextView = binding.tvLabLabel
     private val tvFinalClassificationLabel: TextView = binding.tvFinalClassificationLabel
+    private val tvPatientNameLabel: TextView = binding.tvPatientNameLabel
+    private val tvDateLabel: TextView = binding.tvDateLabel
+    private val lnNameAndEpid: LinearLayout = binding.lnNameAndEpid
+    private val lnFinalClassification: LinearLayout = binding.lnFinalClassification
 
     fun bindTo(
         patientItem: PatientListViewModel.PatientItem,
         onItemClicked: (PatientListViewModel.PatientItem) -> Unit,
-        listingTitle: String
+        listingTitle: String,
+        context: Context
     ) {
         this.nameView.text = patientItem.name
         this.epid.text = patientItem.epid
@@ -34,7 +42,6 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
         this.dateReported.text = patientItem.caseOnsetDate
         this.labResults.text = patientItem.labResults
 
-        println("Case Information type $listingTitle")
         try {
             if (listingTitle.isNotEmpty()) {
                 if (listingTitle.contains("VL Case List")) {
@@ -43,6 +50,21 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+
+        // what is the current case we are dealing with?
+        val current = FormatterClass().getSharedPref("currentCase", context)
+        if (current != null) {
+            val slug = current.toSlug()
+            when (slug) {
+                "moh-505-reporting-form" -> {
+                    this.lnFinalClassification.visibility = View.GONE
+                    this.lnNameAndEpid.visibility = View.GONE
+                    this.tvDateLabel.text = "Week Ending Date"
+                    this.tvLabLabel.visibility = View.INVISIBLE
+                    this.labResults.visibility = View.INVISIBLE
+                }
+            }
         }
 
         var final = patientItem.status

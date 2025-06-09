@@ -580,8 +580,8 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     patient.nameFirstRep.family = "MOH-505"
                     patient.nameFirstRep.addGiven("MOH-505")
 
-                    val subCountyEntry = extractedAnswers.find { it.linkId == "819946803642" }
-                    val countyEntry = extractedAnswers.find { it.linkId == "294367770999" }
+                    val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
+                    val countyEntry = extractedAnswers.find { it.linkId == "a4-county" }
 
                     var county = ""
                     var subCounty = ""
