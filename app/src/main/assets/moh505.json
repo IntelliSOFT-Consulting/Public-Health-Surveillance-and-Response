@@ -102,7 +102,7 @@
             }
           ],
           "linkId": "a3-sub-county",
-          "text": "Subcounty within which the health facility is",
+          "text": "Sub County within which the health facility is",
           "required": true
         },
         {
@@ -255,7 +255,7 @@
         {
           "type": "choice",
           "linkId": "aefi-summary",
-          "text": "Enter Summary for AEFI",
+          "text": "Were any Aefi cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -293,6 +293,12 @@
           "type": "integer",
           "linkId": "aefi-cases-under-5",
           "text": "AEFI Cases < 5 years",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ],
           "enableWhen": [
             {
               "question": "aefi-summary",
@@ -319,7 +325,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -335,7 +347,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -351,12 +369,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "bacterial-meningitis-summary",
-          "text": "Enter Summary for Bacterial Meningitis",
+          "text": "Were any Bacterial Meningitis cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -404,7 +428,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -420,7 +450,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -436,7 +472,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -452,12 +494,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "acute-jaundice-summary",
-          "text": "Enter Summary for Acute Jaundice",
+          "text": "Were any Acute Jaundice cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -505,7 +553,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -521,7 +575,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -537,7 +597,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -553,12 +619,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "neonatal-deaths-summary",
-          "text": "Enter Summary for Neonatal deaths",
+          "text": "Were any Neonatal Deaths cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -606,7 +678,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -622,7 +700,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -638,7 +722,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -654,12 +744,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "acute-malnutrition-summary",
-          "text": "Enter Summary for Acute Malnutrition",
+          "text": "Were any Acute Malnutrition cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -707,7 +803,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -723,7 +825,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -739,7 +847,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -755,12 +869,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "neonatal-tetanus-summary",
-          "text": "Enter Summary for Neonatal Tetanus",
+          "text": "Were any Neonatal Tetanus cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -808,7 +928,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -824,7 +950,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -840,7 +972,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -856,12 +994,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "afp-poliomyelitis-summary",
-          "text": "Enter Summary for AFP (Poliomyelitis)",
+          "text": "Were any Afp Poliomyelitis cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -909,7 +1053,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -925,7 +1075,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -941,7 +1097,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -957,12 +1119,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "onchocerciasis-summary",
-          "text": "Enter Summary for Onchocerciasis",
+          "text": "Were any Onchocerciasis cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -1010,7 +1178,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1026,7 +1200,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1042,7 +1222,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1058,12 +1244,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "plague-summary",
-          "text": "Enter Summary for Plague",
+          "text": "Were any Plague cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -1111,7 +1303,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1127,7 +1325,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1143,7 +1347,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1159,12 +1369,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "anthrax-summary",
-          "text": "Enter Summary for Anthrax",
+          "text": "Were any Anthrax cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -1212,7 +1428,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1228,7 +1450,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1244,7 +1472,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1260,12 +1494,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "rabies-summary",
-          "text": "Enter Summary for Rabies",
+          "text": "Were any Rabies cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -1313,7 +1553,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1329,7 +1575,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1345,7 +1597,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1361,12 +1619,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "cholera-summary",
-          "text": "Enter Summary for Cholera",
+          "text": "Were any Cholera cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -1414,7 +1678,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1430,7 +1700,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1446,7 +1722,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1462,12 +1744,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "rift-valley-fever-summary",
-          "text": "Enter Summary for Rift Valley Fever",
+          "text": "Were any Rift Valley Fever cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -1515,7 +1803,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1531,7 +1825,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1547,7 +1847,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1563,12 +1869,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "chikungunya-summary",
-          "text": "Enter Summary for Chikungunya",
+          "text": "Were any Chikungunya cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -1616,7 +1928,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1632,7 +1950,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1648,7 +1972,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1664,12 +1994,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "covid--19-summary",
-          "text": "Enter Summary for COVID -19",
+          "text": "Were any Covid  19 cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -1717,7 +2053,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1733,7 +2075,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1749,7 +2097,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1765,12 +2119,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "sari-cluster-ge3-cases-summary",
-          "text": "Enter Summary for SARI (Cluster \u22653 cases)",
+          "text": "Were any Sari Cluster Ge3 Cases cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -1818,7 +2178,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1834,7 +2200,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1850,7 +2222,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1866,12 +2244,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "dengue-summary",
-          "text": "Enter Summary for Dengue",
+          "text": "Were any Dengue cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -1919,7 +2303,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1935,7 +2325,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1951,7 +2347,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -1967,12 +2369,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "dysentery-bacillary-summary",
-          "text": "Enter Summary for Dysentery (Bacillary)",
+          "text": "Were any Dysentery Bacillary cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -2020,7 +2428,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2036,7 +2450,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2052,7 +2472,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2068,12 +2494,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "suspected-mdr-xdr-tb-summary",
-          "text": "Enter Summary for Suspected MDR/XDR TB",
+          "text": "Were any Suspected Mdr Xdr Tb cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -2121,7 +2553,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2137,7 +2575,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2153,7 +2597,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2169,12 +2619,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "guinea-worm-disease-summary",
-          "text": "Enter Summary for Guinea Worm Disease",
+          "text": "Were any Guinea Worm Disease cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -2222,7 +2678,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2238,7 +2700,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2254,7 +2722,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2270,12 +2744,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "typhoid-summary",
-          "text": "Enter Summary for Typhoid",
+          "text": "Were any Typhoid cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -2323,7 +2803,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2339,7 +2825,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2355,7 +2847,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2371,12 +2869,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "measles-summary",
-          "text": "Enter Summary for Measles",
+          "text": "Were any Measles cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -2424,7 +2928,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2440,7 +2950,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2456,7 +2972,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2472,12 +2994,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "vhf-summary",
-          "text": "Enter Summary for VHF",
+          "text": "Were any Vhf cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -2525,7 +3053,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2541,7 +3075,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2557,7 +3097,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2573,12 +3119,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "suspected-malaria-summary",
-          "text": "Enter Summary for Suspected Malaria",
+          "text": "Were any Suspected Malaria cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -2626,7 +3178,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2642,7 +3200,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2658,7 +3222,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2674,12 +3244,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "yellow-fever-summary",
-          "text": "Enter Summary for Yellow Fever",
+          "text": "Were any Yellow Fever cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -2727,7 +3303,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2743,7 +3325,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2759,7 +3347,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2775,12 +3369,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "deaths-due-to-malaria-summary",
-          "text": "Enter Summary for Deaths due to Malaria",
+          "text": "Were any Deaths Due To Malaria cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -2828,7 +3428,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2844,7 +3450,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2860,7 +3472,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2876,12 +3494,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "zika-virus-summary",
-          "text": "Enter Summary for Zika Virus",
+          "text": "Were any Zika Virus cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -2929,7 +3553,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2945,7 +3575,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2961,7 +3597,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -2977,12 +3619,18 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "choice",
           "linkId": "others-specify-summary",
-          "text": "Enter Summary for Others (Specify)",
+          "text": "Were any Others Specify cases reported?",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -3030,7 +3678,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -3046,7 +3700,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -3062,7 +3722,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
@@ -3078,7 +3744,13 @@
               }
             }
           ],
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         }
       ],
       "type": "group",
@@ -3105,175 +3777,399 @@
           "type": "integer",
           "linkId": "malaria-tested-under-5",
           "text": "Malaria Microscopy Tested < 5 years",
-          "required": true
+          "enableWhen": [
+            {
+              "question": "suspected-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "malaria-tested-over-5",
           "text": "Malaria Microscopy Tested \u2265 5 years",
-          "required": true
+          "enableWhen": [
+            {
+              "question": "suspected-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "malaria-positive-under-5",
           "text": "Malaria Microscopy Positive < 5 years",
-          "required": true
+          "enableWhen": [
+            {
+              "question": "suspected-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "malaria-positive-over-5",
           "text": "Malaria Microscopy Positive \u2265 5 years",
-          "required": true
+          "enableWhen": [
+            {
+              "question": "suspected-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "malaria-total-tested",
           "text": "Malaria Microscopy Total Tested",
-          "required": true
+          "enableWhen": [
+            {
+              "question": "suspected-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "malaria-mrdt-under-5",
           "text": "Malaria mRDT < 5 years",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "malaria-mrdt-over-5",
           "text": "Malaria mRDT \u2265 5 years",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "dysentery-tested-under-5",
           "text": "Dysentery Tested < 5 years",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "dysentery-tested-over-5",
           "text": "Dysentery Tested \u2265 5 years",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "dysentery-positive-shigella",
           "text": "Dysentery Positive (S. dysenteriae)",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-csf-no",
           "text": "Bacterial Meningitis No CSF",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-csf-contaminated",
           "text": "Bacterial Meningitis No contaminated",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-tested-positive",
           "text": "Bacterial Meningitis Tested +ve",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-positive-nm",
           "text": "Bacterial Meningitis +ve Nm",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-positive-spneum",
           "text": "Bacterial Meningitis +ve S. Pneum",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-positive-hib",
           "text": "Bacterial Meningitis +ve Hib",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-positive-sagalactiae",
           "text": "Bacterial Meningitis +ve S. agalactiae",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-csf-subtyped",
           "text": "Bacterial Meningitis No of CSF Sub-Typed",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-positive-nma",
           "text": "Bacterial Meningitis +ve Nm A",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-positive-nmb",
           "text": "Bacterial Meningitis +ve Nm B",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-positive-nmc",
           "text": "Bacterial Meningitis +ve Nm C",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-positive-nmw",
           "text": "Bacterial Meningitis +ve Nm W",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-positive-nmx",
           "text": "Bacterial Meningitis +ve Nm X",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-positive-nmy",
           "text": "Bacterial Meningitis +ve Nm Y",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "tuberculosis-mdr-xdr-tested-under-5",
           "text": "Tuberculosis (MDR/XDR) Tested < 5 years",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "tuberculosis-mdr-xdr-tested-over-5",
           "text": "Tuberculosis (MDR/XDR) Tested \u2265 5 years",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "tuberculosis-mdr-xdr-positive",
           "text": "Tuberculosis (MDR/XDR) Positive",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "typhoid-tested-under-5",
           "text": "Typhoid Tested < 5 years",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         },
         {
           "type": "integer",
           "linkId": "typhoid-tested-over-5",
           "text": "Typhoid Tested \u2265 5 years",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 99
+            }
+          ]
         }
       ],
       "type": "group",
