@@ -144,6 +144,18 @@ class CaseSelectionFragment : Fragment() {
                     intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "moh505.json")
                     startActivity(intent)
                 }
+
+                "MOH 505 Case List" -> {
+                    FormatterClass().saveSharedPref(
+                        "listingTitle", "MOH 505 Reporting Form", requireContext()
+                    )
+                    FormatterClass().saveSharedPref(
+                        "currentCase", "MOH 505 Reporting Form", requireContext()
+                    )
+                    val intent = Intent(requireContext(), CaseListingActivity::class.java)
+                    startActivity(intent)
+                }
+
                 "Add New Report" -> {
                     FormatterClass().saveSharedPref(
                         "currentCase", "Social Listening and Rumor Tracking Tool", requireContext()
@@ -265,14 +277,16 @@ class CaseSelectionFragment : Fragment() {
 
 
         }
-
+        println("Case Type: $title")
         val caseType = when (title?.trim()) {
             "Measles" -> "measles-case-information"
             "AFP" -> "afp-case-information"
             "VL" -> "vl-case-information"
             "SLR" -> "social-listening-and-rumor-tracking-tool"
+            "MOH 505" -> "moh-505-reporting-form"
             else -> null
         }
+        println("Case Type: $caseType")
 
         caseType?.let {
             try {

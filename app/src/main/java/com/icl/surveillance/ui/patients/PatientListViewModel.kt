@@ -313,6 +313,7 @@ class PatientListViewModel(
         nameQuery: String,
     ): List<PatientItem> {
 
+        println("Displaying Cases for $nameQuery")
         return fhirEngine
             .search<Patient> {
                 sort(Patient.GIVEN, Order.ASCENDING)
@@ -326,6 +327,8 @@ class PatientListViewModel(
                 }
                 val epidIdenfifier =
                     fhirPatient.resource.identifier.find { it.type.codingFirstRep.code == "EPID" }
+
+                println("Displaying Cases for ->   matchingIdentifier ${matchingIdentifier?.value}")
 
                 if (matchingIdentifier != null) {
                     // Convert the FHIR Patient resource to your PatientItem model
@@ -475,6 +478,10 @@ class PatientListViewModel(
                                     }
                                 )
                             }
+                        }
+
+                        "moh-505-reporting-form" -> {
+
                         }
 
                         else -> {

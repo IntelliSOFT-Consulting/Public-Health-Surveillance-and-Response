@@ -61,12 +61,12 @@ class CaseListingActivity : AppCompatActivity() {
             )
                 .get(PatientListViewModel::class.java)
         val recyclerView: RecyclerView = binding.patientListContainer.patientList
-        val adapter = PatientItemRecyclerViewAdapter(this::onPatientItemClicked,"$titleName")
+        val adapter = PatientItemRecyclerViewAdapter(this::onPatientItemClicked, "$titleName")
         val adapterRumor = PatientItemRecyclerViewAdapterRumor(this::onRumorItemClicked)
-
 
         if (currentCase != null) {
             val slug = currentCase.toSlug()
+
             when (slug) {
                 "social-listening-and-rumor-tracking-tool" -> {
                     patientListViewModel.handleCurrentRumorCaseListing(slug)
@@ -128,37 +128,14 @@ class CaseListingActivity : AppCompatActivity() {
         FormatterClass().deleteSharedPref("isCase", this)
         if (currentCase != null) {
             val slug = currentCase.toSlug()
-            println("Current Case Slug $slug")
+
             FormatterClass().saveSharedPref("latestEncounter", slug, this)
             when (slug) {
-                "social-listening-and-rumor-tracking-tool" -> {
-
-                    startActivity(
-                        Intent(
-                            this@CaseListingActivity,
-                            SummarizedActivity::class.java
-                        )
-                    )
-                }
-
-                "vl-case-information" -> {
-
-                    startActivity(
-                        Intent(
-                            this@CaseListingActivity,
-                            SummarizedActivity::class.java
-                        )
-                    )
-                }
-
+                "social-listening-and-rumor-tracking-tool",
+                "vl-case-information",
+                "moh-505-reporting-form",
                 "afp-case-information" -> {
-
-                    startActivity(
-                        Intent(
-                            this@CaseListingActivity,
-                            SummarizedActivity::class.java
-                        )
-                    )
+                    startActivity(Intent(this@CaseListingActivity, SummarizedActivity::class.java))
                 }
 
                 else -> {

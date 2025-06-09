@@ -575,11 +575,42 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     patient.contactFirstRep.name = parentName
                 }
 
+                "moh-505-reporting-form" -> {
+
+                    patient.nameFirstRep.family = "MOH-505"
+                    patient.nameFirstRep.addGiven("MOH-505")
+
+                    val subCountyEntry = extractedAnswers.find { it.linkId == "819946803642" }
+                    val countyEntry = extractedAnswers.find { it.linkId == "294367770999" }
+
+                    var county = ""
+                    var subCounty = ""
+                    val currentYear = LocalDate.now().year
+
+                    if (subCountyEntry != null) {
+                        subCounty = subCountyEntry.answer
+                        patient.addressFirstRep.state = subCounty
+                        patient.addressFirstRep.addLine(subCounty)
+                    }
+                    if (countyEntry != null) {
+                        county = countyEntry.answer
+                        patient.addressFirstRep.city = county
+                        patient.addressFirstRep.addLine(county)
+                    }
+
+                    val countyCode = county.padEnd(3, 'X').take(3).uppercase()
+                    val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
+                    var linked = "MOH-505-"
+                    val epid = "KEN-$countyCode-$subCountyCode-$currentYear-$linked"
+
+                    val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
+                    createResource(obs, subjectReference, encounterReference)
+
+                }
+
             }
             withContext(Dispatchers.IO) {
                 try {
-
-
                     val identifierSystem = Identifier()
                     val typeCodeableConcept = CodeableConcept()
                     val codingList = ArrayList<Coding>()

@@ -236,6 +236,7 @@ class SummarizedActivity : AppCompatActivity() {
             "measles-case-information" -> "add-case.json"
             "afp-case-information" -> "afp-case.json"
             "vl-case-information" -> "vl-case.json"
+            "moh-505-reporting-form" -> "moh505.json"
             "social-listening-and-rumor-tracking-tool" -> "rumor-tracking-case.json"
             else -> ""
         }
