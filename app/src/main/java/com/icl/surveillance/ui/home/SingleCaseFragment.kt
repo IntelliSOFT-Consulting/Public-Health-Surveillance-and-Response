@@ -91,7 +91,7 @@ class SingleCaseFragment : Fragment() {
                 "Immediate Notifiable Diseases Reporting Tool" -> "Integrated Case Based Surveillance form"
                 else -> titleName
             }
-            greeting.text = titleName?.replace("\n"," ")
+            greeting.text = titleName?.replace("\n", " ")
         }
         val adapter =
             DiseasesRecyclerViewAdapter(::onItemClick).apply {
@@ -99,6 +99,10 @@ class SingleCaseFragment : Fragment() {
                     when (stage) {
                         "6" -> {
                             submitList(viewModel.getDiseasesList(6))
+                        }
+
+                        "100" -> {
+                            submitList(viewModel.getMOHList())
                         }
 
                         else -> {

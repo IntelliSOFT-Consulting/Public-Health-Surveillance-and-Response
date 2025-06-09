@@ -39,6 +39,10 @@ class HomeViewModel(application: Application, private val state: SavedStateHandl
         return Diseases.values().filter { it.count == 3 }.toList()
     }
 
+    fun getMOHList(): List<Diseases> {
+        return Diseases.values().filter { it.count == 100 }.toList()
+    }
+
     fun getAssessmentList(): List<Diseases> {
         return Diseases.values().filter { it.count == 4 }.toList()
     }
@@ -77,6 +81,15 @@ class HomeViewModel(application: Application, private val state: SavedStateHandl
             R.drawable.searching,
             R.string.cholera, 1, 12
         ),
+
+
+        // Weekly Reportable Diseases
+        MOH_505(
+            R.drawable.searching,
+            R.string.moh505_form, 100, 100
+        ),
+
+
         // Top Layer
 
         IMMEDIATE(

@@ -68,7 +68,6 @@ class ChildFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         var titleName = FormatterClass().getSharedPref("title", requireContext())
         var stage = FormatterClass().getSharedPref("stage", requireContext())
 
@@ -109,6 +108,11 @@ class ChildFragment : Fragment() {
                             submitList(viewModel.getSocialList())
                         }
 
+
+                        "100" -> {
+                            submitList(viewModel.getMOHList())
+                        }
+
                         else -> {
                             println("Coming soon ....")
                         }
@@ -138,6 +142,27 @@ class ChildFragment : Fragment() {
                 FormatterClass()
                     .saveSharedPref(
                         "childStage", "6",
+                        requireContext()
+                    )
+
+                findNavController().navigate(
+                    R.id.action_childFragment_to_singleCaseFragment,
+                    bundle
+                )
+            }
+
+            1 -> {
+                val bundle =
+                    Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "moh505.json") }
+
+                FormatterClass()
+                    .saveSharedPref(
+                        "childTitle", title,
+                        requireContext()
+                    )
+                FormatterClass()
+                    .saveSharedPref(
+                        "childStage", "100",
                         requireContext()
                     )
 

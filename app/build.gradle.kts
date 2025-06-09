@@ -13,7 +13,7 @@ android {
         applicationId = "com.icl.surveillance"
         minSdk = 26
         targetSdk = 35
-        versionCode = 13
+        versionCode = 14
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -54,18 +54,18 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation("com.google.android.fhir:engine:1.2.0")
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
-    implementation("com.google.android.fhir:data-capture:1.3.0")
-    implementation("androidx.fragment:fragment-ktx:1.8.6")
-    implementation("androidx.datastore:datastore-preferences:1.1.4")
-    implementation("androidx.work:work-runtime-ktx:2.10.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
-    implementation("com.squareup.retrofit2:converter-moshi:2.6.0")
-    implementation("de.hdodenhof:circleimageview:3.1.0")
-    implementation("com.github.f0ris.sweetalert:library:1.6.2")
+    implementation(libs.engine)
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
+    implementation(libs.data.capture)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
+    implementation(libs.converter.moshi)
+    implementation(libs.circleimageview)
+    implementation(libs.library)
 
 }

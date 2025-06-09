@@ -72,4 +72,5 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="last_sync_status">Last sync status: %1$s</string>
     <string name="last_sync_status_na">Last sync status: Not available</string>
+    <string name="moh505_form">MOH 505</string>
 </resources>
