@@ -127,6 +127,23 @@ class CaseSelectionFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = CaseOptionsAdapter(caseOptions) { option ->
             when (option.title) {
+                "Add New MOH 505 Case" -> {
+                    FormatterClass().saveSharedPref(
+                        "currentCase", "MOH 505 Reporting Form", requireContext()
+                    )
+                    FormatterClass().saveSharedPref(
+                        "AddParentTitle",
+                        "MOH 505 Reporting Form",
+                        requireContext()
+                    )
+                    FormatterClass().saveSharedPref(
+                        "questionnaire", "moh505.json", requireContext()
+                    )
+                    val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
+                    intent.putExtra("AddParentTitle", " $titleName")
+                    intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "moh505.json")
+                    startActivity(intent)
+                }
                 "Add New Report" -> {
                     FormatterClass().saveSharedPref(
                         "currentCase", "Social Listening and Rumor Tracking Tool", requireContext()
