@@ -305,6 +305,7 @@ class SummarizedActivity : AppCompatActivity() {
         } ?: emptyList()
 
         return if (item.type != "display") {
+
             val current = OutputItem(
                 linkId = item.linkId,
                 text = item.text,
@@ -314,7 +315,9 @@ class SummarizedActivity : AppCompatActivity() {
                 parentResponse = parentResponse,
                 parentOperator = enableOperator
             )
+
             listOf(current) + children
+
         } else {
             children
         }

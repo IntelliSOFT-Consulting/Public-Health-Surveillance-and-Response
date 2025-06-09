@@ -70,7 +70,15 @@ class GroupFragment : Fragment() {
                 )
             }
             if (show) {
-                parentLayout.addView(fieldView)
+                if (item.text.isEmpty() && item.value?.isEmpty() == true) {
+                    // If both text and value are empty, skip this item
+                    continue
+                } else if (item.text.isEmpty() && item.value != null) {
+                    val answerFieldView = createAnswerCustomField(item)
+                    parentLayout.addView(answerFieldView)
+                } else {
+                    parentLayout.addView(fieldView)
+                }
             }
         }
     }
@@ -115,34 +123,6 @@ class GroupFragment : Fragment() {
         return response
     }
 
-    private fun checkRelatedWorkflows(
-        title: String,
-        item: OutputItem,
-        items: List<OutputItem>
-    ): Boolean {
-        var response = true
-        val children = listOf("122072333233", "879612276990", "296206902941")
-
-        if (item.linkId in children) {
-            response = false
-        }
-        when (title.trim()) {
-            "Vaccination History for disease under investigation" -> {
-                response = false
-                val parent = "970455623029"
-                if (item.linkId == parent) {
-                    response = true
-                }
-                val answer = items.find { it.linkId == parent }?.value
-                if (answer == "Yes") {
-                    response = true
-                }
-            }
-
-        }
-
-        return response
-    }
 
     private fun createCustomField(item: OutputItem): View {
         // Create the main LinearLayout to hold the views
@@ -186,6 +166,55 @@ class GroupFragment : Fragment() {
             )
         }
         horizontalLayout.addView(tvEpiLink)
+
+        // Add the horizontal layout with two TextViews to the main layout
+        layout.addView(horizontalLayout)
+
+        // Add a separator View (divider)
+        val divider = View(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                1 // Divider thickness
+            ).apply {
+                topMargin = 8
+                bottomMargin = 8
+            }
+            setBackgroundColor(android.graphics.Color.parseColor("#CCCCCC"))
+        }
+        layout.addView(divider)
+
+        return layout
+    }
+
+    private fun createAnswerCustomField(item: OutputItem): View {
+        // Create the main LinearLayout to hold the views
+        val layout = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(8, 8, 8, 8)
+        }
+
+        // Create the horizontal LinearLayout for the two TextViews
+        val horizontalLayout = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.HORIZONTAL
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        }
+
+        // First TextView (label)
+        val label = TextView(requireContext()).apply {
+            text = item.value
+            textSize = 12f
+            setTextColor(android.graphics.Color.BLACK)
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.inter)
+            layoutParams = LinearLayout.LayoutParams(
+                0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f
+            )
+        }
+        horizontalLayout.addView(label)
+        val customFont = ResourcesCompat.getFont(requireContext(), R.font.inter)
+
 
         // Add the horizontal layout with two TextViews to the main layout
         layout.addView(horizontalLayout)
