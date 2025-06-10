@@ -12,6 +12,11 @@ import com.icl.surveillance.databinding.PatientListItemViewBinding
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.utils.toSlug
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
+import java.time.temporal.WeekFields
+import java.util.Locale
 
 class PatientItemViewHolder(binding: PatientListItemViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
@@ -61,8 +66,10 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
                     this.lnFinalClassification.visibility = View.GONE
                     this.lnNameAndEpid.visibility = View.GONE
                     this.tvDateLabel.text = "Week Ending Date"
-                    this.tvLabLabel.visibility = View.INVISIBLE
-                    this.labResults.visibility = View.INVISIBLE
+                    this.tvLabLabel.text = "Epi Week"
+
+                    val weekOfYear = getWeekOfYear(patientItem.caseOnsetDate)
+                    this.labResults.text = "$weekOfYear"
                 }
             }
         }
@@ -104,6 +111,20 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
         }
 
         this.itemView.setOnClickListener { onItemClicked(patientItem) }
+    }
+
+    private fun getWeekOfYear(dateString: String, pattern: String = "yyyy-MM-dd"): String {
+        return try {
+            val formatter = DateTimeFormatter.ofPattern(pattern)
+            val date = LocalDate.parse(dateString, formatter)
+            val weekFields = WeekFields.of(Locale.getDefault())
+            date.get(weekFields.weekOfWeekBasedYear())
+                .toString()
+                .padStart(2, '0') // Ensure two digits for week number
+        } catch (e: DateTimeParseException) {
+            println("Invalid date format: ${e.message}")
+            ""
+        }
     }
 
     /** The new ui just shows shortened id with just last 3 characters. */
