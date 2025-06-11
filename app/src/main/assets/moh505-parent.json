@@ -74,7 +74,7 @@
             }
           ],
           "linkId": "a4-county",
-          "text": "County within which the health facility is",
+          "text": "County ",
           "required": true
         },
         {
@@ -102,13 +102,13 @@
             }
           ],
           "linkId": "a3-sub-county",
-          "text": "Sub County within which the health facility is",
+          "text": "Sub County ",
           "required": true
         },
         {
           "type": "reference",
           "linkId": "819943434",
-          "text": "Ward within which the health facility is",
+          "text": "Ward ",
           "required": true,
           "extension": [
             {

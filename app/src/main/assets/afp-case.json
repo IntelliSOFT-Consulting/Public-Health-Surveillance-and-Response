@@ -62,7 +62,7 @@
       "item": [
         {
           "linkId": "294367770999",
-          "text": "County within which the health facility is",
+          "text": "County ",
           "type": "reference",
           "required": true,
           "extension": [
@@ -91,7 +91,7 @@
         {
           "type": "reference",
           "linkId": "819946803642",
-          "text": "Subcounty within which the health facility is",
+          "text": "Subcounty ",
           "required": true,
           "extension": [
             {
@@ -119,7 +119,7 @@
         {
           "type": "reference",
           "linkId": "819943434",
-          "text": "Ward within which the health facility is",
+          "text": "Ward ",
           "required": true,
           "extension": [
             {
