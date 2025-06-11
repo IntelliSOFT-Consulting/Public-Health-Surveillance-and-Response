@@ -15,6 +15,7 @@ import ca.uhn.fhir.context.FhirContext
 import ca.uhn.fhir.context.FhirVersionEnum
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.datacapture.QuestionnaireFragment
+import com.google.android.fhir.datacapture.mapping.ResourceMapper
 import com.google.android.material.button.MaterialButton
 import com.icl.surveillance.R
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
@@ -25,13 +26,17 @@ import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.utils.ProgressDialogManager
 import com.icl.surveillance.viewmodels.AddClientViewModel
 import kotlinx.coroutines.launch
+import org.hl7.fhir.r4.model.Questionnaire
 import org.hl7.fhir.r4.model.QuestionnaireResponse
 
 class AddParentCaseActivity : AppCompatActivity() {
-
     private val viewModel: AddClientViewModel by viewModels()
     private lateinit var binding:
             ActivityAddParentCaseBinding // Binding class name is based on layout file name
+
+    private fun getStringFromAssets(fileName: String): String {
+        return assets.open(fileName).bufferedReader().use { it.readText() }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +44,6 @@ class AddParentCaseActivity : AppCompatActivity() {
         binding = ActivityAddParentCaseBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val titleName = FormatterClass().getSharedPref("AddParentTitle", this@AddParentCaseActivity)
         supportActionBar.apply { title = titleName }
@@ -65,6 +69,27 @@ class AddParentCaseActivity : AppCompatActivity() {
         }
     }
 
+    private fun onSubmitActionSubmit() {
+        lifecycleScope.launch {
+            val fragment = supportFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG)
+                    as QuestionnaireFragment
+            val questionnaireResponse = fragment.getQuestionnaireResponse()
+
+            val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
+            val questionnaireResponseString =
+                jsonParser.encodeResourceToString(questionnaireResponse)
+            Log.d("extraction response", questionnaireResponseString)
+
+            val questionnaire =
+                jsonParser.parseResource(viewModel.questionnaireJson) as Questionnaire
+
+            Log.d("Questionnaire Response::::", "$questionnaire")
+            Log.d("Questionnaire Response::::: ", "$questionnaireResponse")
+            val bundle = ResourceMapper.extract(questionnaire, questionnaireResponse)
+            Log.d("Questionnaire Response::::", jsonParser.encodeResourceToString(bundle))
+        }
+    }
+
     private fun onSubmitAction() {
         ProgressDialogManager.show(this, "Please Wait.....")
         lifecycleScope.launch {
@@ -77,7 +102,7 @@ class AddParentCaseActivity : AppCompatActivity() {
             val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
             val questionnaireResponseString =
                 jsonParser.encodeResourceToString(questionnaireResponse)
-            println("Questionnaire Response:::: $questionnaireResponseString")
+
             saveCase(questionnaireFragment.getQuestionnaireResponse(), questionnaireResponseString)
         }
     }

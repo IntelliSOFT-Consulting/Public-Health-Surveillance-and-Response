@@ -41,6 +41,9 @@
   ],
   "title": "MOH 505 - Health Facility Weekly Reporting Form",
   "status": "draft",
+  "subjectType": [
+    "Encounter"
+  ],
   "item": [
     {
       "item": [
@@ -75,7 +78,8 @@
           ],
           "linkId": "a4-county",
           "text": "County ",
-          "required": true
+          "required": true,
+          "definition": "http://example.org/sdh/dtr/aslp/StructureDefinition/aslp-bmi#Observation.value[x]"
         },
         {
           "type": "reference",
@@ -103,7 +107,8 @@
           ],
           "linkId": "a3-sub-county",
           "text": "Sub County ",
-          "required": true
+          "required": true,
+          "definition": "http://example.org/sdh/dtr/aslp/StructureDefinition/aslp-bmi#Observation.value[x]"
         },
         {
           "type": "reference",
@@ -131,7 +136,8 @@
                 }
               ]
             }
-          ]
+          ],
+          "definition": "http://example.org/sdh/dtr/aslp/StructureDefinition/aslp-bmi#Observation.value[x]"
         },
         {
           "type": "reference",
@@ -159,7 +165,8 @@
                 }
               ]
             }
-          ]
+          ],
+          "definition": "http://example.org/sdh/dtr/aslp/StructureDefinition/aslp-bmi#Observation.value[x]"
         },
         {
           "type": "choice",
@@ -199,7 +206,8 @@
                 "display": "Faith Based"
               }
             }
-          ]
+          ],
+          "definition": "http://example.org/sdh/dtr/aslp/StructureDefinition/aslp-bmi#Observation.value[x]"
         },
         {
           "type": "date",
@@ -229,7 +237,8 @@
               }
             }
           ],
-          "text": "Week Ending Date"
+          "text": "Week Ending Date",
+          "definition": "http://example.org/sdh/dtr/aslp/StructureDefinition/aslp-bmi#Observation.value[x]"
         }
       ],
       "type": "group",
@@ -378,6 +387,86 @@
           ]
         },
         {
+          "type": "integer",
+          "linkId": "aefi-summary-cases-under-5-if-no",
+          "text": "AEFI Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "aefi-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "aefi-summary-cases-over-5-if-no",
+          "text": "AEFI Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "aefi-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "aefi-summary-deaths-under-5-if-no",
+          "text": "AEFI Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "aefi-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "aefi-summary-deaths-over-5-if-no",
+          "text": "AEFI Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "aefi-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
           "type": "choice",
           "linkId": "bacterial-meningitis-summary",
           "text": "Were any Bacterial Meningitis cases reported?",
@@ -499,6 +588,86 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "bacterial-meningitis-summary-cases-under-5-if-no",
+          "text": "BACTERIAL MENINGITIS Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "bacterial-meningitis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "bacterial-meningitis-summary-cases-over-5-if-no",
+          "text": "BACTERIAL MENINGITIS Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "bacterial-meningitis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "bacterial-meningitis-summary-deaths-under-5-if-no",
+          "text": "BACTERIAL MENINGITIS Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "bacterial-meningitis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "bacterial-meningitis-summary-deaths-over-5-if-no",
+          "text": "BACTERIAL MENINGITIS Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "bacterial-meningitis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
             }
           ]
         },
@@ -628,6 +797,86 @@
           ]
         },
         {
+          "type": "integer",
+          "linkId": "acute-jaundice-summary-cases-under-5-if-no",
+          "text": "ACUTE JAUNDICE Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "acute-jaundice-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "acute-jaundice-summary-cases-over-5-if-no",
+          "text": "ACUTE JAUNDICE Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "acute-jaundice-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "acute-jaundice-summary-deaths-under-5-if-no",
+          "text": "ACUTE JAUNDICE Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "acute-jaundice-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "acute-jaundice-summary-deaths-over-5-if-no",
+          "text": "ACUTE JAUNDICE Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "acute-jaundice-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
           "type": "choice",
           "linkId": "neonatal-deaths-summary",
           "text": "Were any Neonatal Deaths cases reported?",
@@ -749,6 +998,86 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "neonatal-deaths-summary-cases-under-5-if-no",
+          "text": "NEONATAL DEATHS Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "neonatal-deaths-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "neonatal-deaths-summary-cases-over-5-if-no",
+          "text": "NEONATAL DEATHS Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "neonatal-deaths-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "neonatal-deaths-summary-deaths-under-5-if-no",
+          "text": "NEONATAL DEATHS Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "neonatal-deaths-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "neonatal-deaths-summary-deaths-over-5-if-no",
+          "text": "NEONATAL DEATHS Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "neonatal-deaths-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
             }
           ]
         },
@@ -878,6 +1207,86 @@
           ]
         },
         {
+          "type": "integer",
+          "linkId": "acute-malnutrition-summary-cases-under-5-if-no",
+          "text": "ACUTE MALNUTRITION Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "acute-malnutrition-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "acute-malnutrition-summary-cases-over-5-if-no",
+          "text": "ACUTE MALNUTRITION Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "acute-malnutrition-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "acute-malnutrition-summary-deaths-under-5-if-no",
+          "text": "ACUTE MALNUTRITION Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "acute-malnutrition-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "acute-malnutrition-summary-deaths-over-5-if-no",
+          "text": "ACUTE MALNUTRITION Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "acute-malnutrition-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
           "type": "choice",
           "linkId": "neonatal-tetanus-summary",
           "text": "Were any Neonatal Tetanus cases reported?",
@@ -999,6 +1408,86 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "neonatal-tetanus-summary-cases-under-5-if-no",
+          "text": "NEONATAL TETANUS Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "neonatal-tetanus-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "neonatal-tetanus-summary-cases-over-5-if-no",
+          "text": "NEONATAL TETANUS Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "neonatal-tetanus-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "neonatal-tetanus-summary-deaths-under-5-if-no",
+          "text": "NEONATAL TETANUS Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "neonatal-tetanus-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "neonatal-tetanus-summary-deaths-over-5-if-no",
+          "text": "NEONATAL TETANUS Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "neonatal-tetanus-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
             }
           ]
         },
@@ -1128,6 +1617,86 @@
           ]
         },
         {
+          "type": "integer",
+          "linkId": "afp-poliomyelitis-summary-cases-under-5-if-no",
+          "text": "AFP POLIOMYELITIS Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "afp-poliomyelitis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "afp-poliomyelitis-summary-cases-over-5-if-no",
+          "text": "AFP POLIOMYELITIS Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "afp-poliomyelitis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "afp-poliomyelitis-summary-deaths-under-5-if-no",
+          "text": "AFP POLIOMYELITIS Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "afp-poliomyelitis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "afp-poliomyelitis-summary-deaths-over-5-if-no",
+          "text": "AFP POLIOMYELITIS Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "afp-poliomyelitis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
           "type": "choice",
           "linkId": "onchocerciasis-summary",
           "text": "Were any Onchocerciasis cases reported?",
@@ -1249,6 +1818,86 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "onchocerciasis-summary-cases-under-5-if-no",
+          "text": "ONCHOCERCIASIS Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "onchocerciasis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "onchocerciasis-summary-cases-over-5-if-no",
+          "text": "ONCHOCERCIASIS Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "onchocerciasis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "onchocerciasis-summary-deaths-under-5-if-no",
+          "text": "ONCHOCERCIASIS Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "onchocerciasis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "onchocerciasis-summary-deaths-over-5-if-no",
+          "text": "ONCHOCERCIASIS Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "onchocerciasis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
             }
           ]
         },
@@ -1378,6 +2027,86 @@
           ]
         },
         {
+          "type": "integer",
+          "linkId": "plague-summary-cases-under-5-if-no",
+          "text": "PLAGUE Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "plague-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "plague-summary-cases-over-5-if-no",
+          "text": "PLAGUE Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "plague-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "plague-summary-deaths-under-5-if-no",
+          "text": "PLAGUE Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "plague-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "plague-summary-deaths-over-5-if-no",
+          "text": "PLAGUE Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "plague-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
           "type": "choice",
           "linkId": "anthrax-summary",
           "text": "Were any Anthrax cases reported?",
@@ -1499,6 +2228,86 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "anthrax-summary-cases-under-5-if-no",
+          "text": "ANTHRAX Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "anthrax-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "anthrax-summary-cases-over-5-if-no",
+          "text": "ANTHRAX Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "anthrax-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "anthrax-summary-deaths-under-5-if-no",
+          "text": "ANTHRAX Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "anthrax-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "anthrax-summary-deaths-over-5-if-no",
+          "text": "ANTHRAX Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "anthrax-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
             }
           ]
         },
@@ -1628,6 +2437,86 @@
           ]
         },
         {
+          "type": "integer",
+          "linkId": "rabies-summary-cases-under-5-if-no",
+          "text": "RABIES Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "rabies-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "rabies-summary-cases-over-5-if-no",
+          "text": "RABIES Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "rabies-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "rabies-summary-deaths-under-5-if-no",
+          "text": "RABIES Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "rabies-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "rabies-summary-deaths-over-5-if-no",
+          "text": "RABIES Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "rabies-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
           "type": "choice",
           "linkId": "cholera-summary",
           "text": "Were any Cholera cases reported?",
@@ -1749,6 +2638,86 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "cholera-summary-cases-under-5-if-no",
+          "text": "CHOLERA Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "cholera-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "cholera-summary-cases-over-5-if-no",
+          "text": "CHOLERA Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "cholera-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "cholera-summary-deaths-under-5-if-no",
+          "text": "CHOLERA Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "cholera-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "cholera-summary-deaths-over-5-if-no",
+          "text": "CHOLERA Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "cholera-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
             }
           ]
         },
@@ -1878,6 +2847,86 @@
           ]
         },
         {
+          "type": "integer",
+          "linkId": "rift-valley-fever-summary-cases-under-5-if-no",
+          "text": "RIFT VALLEY FEVER Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "rift-valley-fever-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "rift-valley-fever-summary-cases-over-5-if-no",
+          "text": "RIFT VALLEY FEVER Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "rift-valley-fever-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "rift-valley-fever-summary-deaths-under-5-if-no",
+          "text": "RIFT VALLEY FEVER Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "rift-valley-fever-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "rift-valley-fever-summary-deaths-over-5-if-no",
+          "text": "RIFT VALLEY FEVER Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "rift-valley-fever-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
           "type": "choice",
           "linkId": "chikungunya-summary",
           "text": "Were any Chikungunya cases reported?",
@@ -1999,6 +3048,86 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "chikungunya-summary-cases-under-5-if-no",
+          "text": "CHIKUNGUNYA Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "chikungunya-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "chikungunya-summary-cases-over-5-if-no",
+          "text": "CHIKUNGUNYA Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "chikungunya-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "chikungunya-summary-deaths-under-5-if-no",
+          "text": "CHIKUNGUNYA Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "chikungunya-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "chikungunya-summary-deaths-over-5-if-no",
+          "text": "CHIKUNGUNYA Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "chikungunya-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
             }
           ]
         },
@@ -2128,6 +3257,86 @@
           ]
         },
         {
+          "type": "integer",
+          "linkId": "covid--19-summary-cases-under-5-if-no",
+          "text": "COVID 19 Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "covid--19-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "covid--19-summary-cases-over-5-if-no",
+          "text": "COVID 19 Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "covid--19-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "covid--19-summary-deaths-under-5-if-no",
+          "text": "COVID 19 Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "covid--19-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "covid--19-summary-deaths-over-5-if-no",
+          "text": "COVID 19 Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "covid--19-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
           "type": "choice",
           "linkId": "sari-cluster-ge3-cases-summary",
           "text": "Were any Sari Cluster Ge3 Cases cases reported?",
@@ -2249,6 +3458,86 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "sari-cluster-ge3-cases-summary-cases-under-5-if-no",
+          "text": "SARI CLUSTER GE3 CASES Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "sari-cluster-ge3-cases-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "sari-cluster-ge3-cases-summary-cases-over-5-if-no",
+          "text": "SARI CLUSTER GE3 CASES Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "sari-cluster-ge3-cases-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "sari-cluster-ge3-cases-summary-deaths-under-5-if-no",
+          "text": "SARI CLUSTER GE3 CASES Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "sari-cluster-ge3-cases-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "sari-cluster-ge3-cases-summary-deaths-over-5-if-no",
+          "text": "SARI CLUSTER GE3 CASES Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "sari-cluster-ge3-cases-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
             }
           ]
         },
@@ -2378,6 +3667,86 @@
           ]
         },
         {
+          "type": "integer",
+          "linkId": "dengue-summary-cases-under-5-if-no",
+          "text": "DENGUE Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "dengue-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "dengue-summary-cases-over-5-if-no",
+          "text": "DENGUE Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "dengue-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "dengue-summary-deaths-under-5-if-no",
+          "text": "DENGUE Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "dengue-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "dengue-summary-deaths-over-5-if-no",
+          "text": "DENGUE Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "dengue-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
           "type": "choice",
           "linkId": "dysentery-bacillary-summary",
           "text": "Were any Dysentery Bacillary cases reported?",
@@ -2499,6 +3868,86 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "dysentery-bacillary-summary-cases-under-5-if-no",
+          "text": "DYSENTERY BACILLARY Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "dysentery-bacillary-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "dysentery-bacillary-summary-cases-over-5-if-no",
+          "text": "DYSENTERY BACILLARY Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "dysentery-bacillary-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "dysentery-bacillary-summary-deaths-under-5-if-no",
+          "text": "DYSENTERY BACILLARY Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "dysentery-bacillary-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "dysentery-bacillary-summary-deaths-over-5-if-no",
+          "text": "DYSENTERY BACILLARY Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "dysentery-bacillary-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
             }
           ]
         },
@@ -2628,6 +4077,86 @@
           ]
         },
         {
+          "type": "integer",
+          "linkId": "suspected-mdr-xdr-tb-summary-cases-under-5-if-no",
+          "text": "SUSPECTED MDR XDR TB Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "suspected-mdr-xdr-tb-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "suspected-mdr-xdr-tb-summary-cases-over-5-if-no",
+          "text": "SUSPECTED MDR XDR TB Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "suspected-mdr-xdr-tb-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "suspected-mdr-xdr-tb-summary-deaths-under-5-if-no",
+          "text": "SUSPECTED MDR XDR TB Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "suspected-mdr-xdr-tb-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "suspected-mdr-xdr-tb-summary-deaths-over-5-if-no",
+          "text": "SUSPECTED MDR XDR TB Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "suspected-mdr-xdr-tb-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
           "type": "choice",
           "linkId": "guinea-worm-disease-summary",
           "text": "Were any Guinea Worm Disease cases reported?",
@@ -2749,6 +4278,86 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "guinea-worm-disease-summary-cases-under-5-if-no",
+          "text": "GUINEA WORM DISEASE Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "guinea-worm-disease-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "guinea-worm-disease-summary-cases-over-5-if-no",
+          "text": "GUINEA WORM DISEASE Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "guinea-worm-disease-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "guinea-worm-disease-summary-deaths-under-5-if-no",
+          "text": "GUINEA WORM DISEASE Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "guinea-worm-disease-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "guinea-worm-disease-summary-deaths-over-5-if-no",
+          "text": "GUINEA WORM DISEASE Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "guinea-worm-disease-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
             }
           ]
         },
@@ -2878,6 +4487,86 @@
           ]
         },
         {
+          "type": "integer",
+          "linkId": "typhoid-summary-cases-under-5-if-no",
+          "text": "TYPHOID Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "typhoid-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "typhoid-summary-cases-over-5-if-no",
+          "text": "TYPHOID Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "typhoid-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "typhoid-summary-deaths-under-5-if-no",
+          "text": "TYPHOID Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "typhoid-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "typhoid-summary-deaths-over-5-if-no",
+          "text": "TYPHOID Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "typhoid-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
           "type": "choice",
           "linkId": "measles-summary",
           "text": "Were any Measles cases reported?",
@@ -2999,6 +4688,86 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "measles-summary-cases-under-5-if-no",
+          "text": "MEASLES Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "measles-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "measles-summary-cases-over-5-if-no",
+          "text": "MEASLES Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "measles-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "measles-summary-deaths-under-5-if-no",
+          "text": "MEASLES Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "measles-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "measles-summary-deaths-over-5-if-no",
+          "text": "MEASLES Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "measles-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
             }
           ]
         },
@@ -3128,6 +4897,86 @@
           ]
         },
         {
+          "type": "integer",
+          "linkId": "vhf-summary-cases-under-5-if-no",
+          "text": "VHF Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "vhf-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "vhf-summary-cases-over-5-if-no",
+          "text": "VHF Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "vhf-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "vhf-summary-deaths-under-5-if-no",
+          "text": "VHF Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "vhf-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "vhf-summary-deaths-over-5-if-no",
+          "text": "VHF Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "vhf-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
           "type": "choice",
           "linkId": "suspected-malaria-summary",
           "text": "Were any Suspected Malaria cases reported?",
@@ -3169,6 +5018,16 @@
           "linkId": "suspected-malaria-cases-under-5",
           "text": "Suspected Malaria Cases < 5 years",
           "required": true,
+          "enableWhen": [
+            {
+              "question": "suspected-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
@@ -3181,6 +5040,16 @@
           "linkId": "suspected-malaria-cases-over-5",
           "text": "Suspected Malaria Cases > 5 years",
           "required": true,
+          "enableWhen": [
+            {
+              "question": "suspected-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
@@ -3193,6 +5062,16 @@
           "linkId": "suspected-malaria-deaths-under-5",
           "text": "Suspected Malaria Deaths < 5 years",
           "required": true,
+          "enableWhen": [
+            {
+              "question": "suspected-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
@@ -3205,10 +5084,100 @@
           "linkId": "suspected-malaria-deaths-over-5",
           "text": "Suspected Malaria Deaths > 5 years",
           "required": true,
+          "enableWhen": [
+            {
+              "question": "suspected-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "suspected-malaria-summary-cases-under-5-if-no",
+          "text": "SUSPECTED MALARIA Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "suspected-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "suspected-malaria-summary-cases-over-5-if-no",
+          "text": "SUSPECTED MALARIA Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "suspected-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "suspected-malaria-summary-deaths-under-5-if-no",
+          "text": "SUSPECTED MALARIA Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "suspected-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "suspected-malaria-summary-deaths-over-5-if-no",
+          "text": "SUSPECTED MALARIA Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "suspected-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
             }
           ]
         },
@@ -3338,6 +5307,86 @@
           ]
         },
         {
+          "type": "integer",
+          "linkId": "yellow-fever-summary-cases-under-5-if-no",
+          "text": "YELLOW FEVER Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "yellow-fever-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "yellow-fever-summary-cases-over-5-if-no",
+          "text": "YELLOW FEVER Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "yellow-fever-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "yellow-fever-summary-deaths-under-5-if-no",
+          "text": "YELLOW FEVER Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "yellow-fever-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "yellow-fever-summary-deaths-over-5-if-no",
+          "text": "YELLOW FEVER Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "yellow-fever-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
           "type": "choice",
           "linkId": "deaths-due-to-malaria-summary",
           "text": "Were any Deaths Due To Malaria cases reported?",
@@ -3459,6 +5508,86 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "deaths-due-to-malaria-summary-cases-under-5-if-no",
+          "text": "DEATHS DUE TO MALARIA Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "deaths-due-to-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "deaths-due-to-malaria-summary-cases-over-5-if-no",
+          "text": "DEATHS DUE TO MALARIA Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "deaths-due-to-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "deaths-due-to-malaria-summary-deaths-under-5-if-no",
+          "text": "DEATHS DUE TO MALARIA Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "deaths-due-to-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "deaths-due-to-malaria-summary-deaths-over-5-if-no",
+          "text": "DEATHS DUE TO MALARIA Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "deaths-due-to-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
             }
           ]
         },
@@ -3588,6 +5717,86 @@
           ]
         },
         {
+          "type": "integer",
+          "linkId": "zika-virus-summary-cases-under-5-if-no",
+          "text": "ZIKA VIRUS Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "zika-virus-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "zika-virus-summary-cases-over-5-if-no",
+          "text": "ZIKA VIRUS Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "zika-virus-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "zika-virus-summary-deaths-under-5-if-no",
+          "text": "ZIKA VIRUS Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "zika-virus-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "zika-virus-summary-deaths-over-5-if-no",
+          "text": "ZIKA VIRUS Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "zika-virus-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
           "type": "choice",
           "linkId": "others-specify-summary",
           "text": "Were any Others Specify cases reported?",
@@ -3623,6 +5832,22 @@
               }
             }
           ]
+        },
+        {
+          "type": "string",
+          "linkId": "others-specify-cases-name",
+          "text": "Others (Specify) ",
+          "enableWhen": [
+            {
+              "question": "others-specify-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "required": true
         },
         {
           "type": "integer",
@@ -3711,6 +5936,86 @@
               "valueInteger": 999
             }
           ]
+        },
+        {
+          "type": "integer",
+          "linkId": "others-specify-summary-cases-under-5-if-no",
+          "text": "OTHERS SPECIFY Under 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "others-specify-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "others-specify-summary-cases-over-5-if-no",
+          "text": "OTHERS SPECIFY Over 5 Cases",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "others-specify-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "others-specify-summary-deaths-under-5-if-no",
+          "text": "OTHERS SPECIFY Under 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "others-specify-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "type": "integer",
+          "linkId": "others-specify-summary-deaths-over-5-if-no",
+          "text": "OTHERS SPECIFY Over 5 Deaths",
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "others-specify-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
         }
       ],
       "type": "group",
@@ -3738,6 +6043,16 @@
           "linkId": "malaria-tested-under-5",
           "text": "Malaria Microscopy Tested < 5 years",
           "required": true,
+          "enableWhen": [
+            {
+              "question": "suspected-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
@@ -3750,6 +6065,16 @@
           "linkId": "malaria-tested-over-5",
           "text": "Malaria Microscopy Tested \u2265 5 years",
           "required": true,
+          "enableWhen": [
+            {
+              "question": "suspected-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
@@ -3762,6 +6087,16 @@
           "linkId": "malaria-positive-under-5",
           "text": "Malaria Microscopy Positive < 5 years",
           "required": true,
+          "enableWhen": [
+            {
+              "question": "suspected-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
@@ -3774,6 +6109,16 @@
           "linkId": "malaria-positive-over-5",
           "text": "Malaria Microscopy Positive \u2265 5 years",
           "required": true,
+          "enableWhen": [
+            {
+              "question": "suspected-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
@@ -3786,6 +6131,16 @@
           "linkId": "malaria-total-tested",
           "text": "Malaria Microscopy Total Tested",
           "required": true,
+          "enableWhen": [
+            {
+              "question": "suspected-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
@@ -3798,6 +6153,16 @@
           "linkId": "malaria-mrdt-under-5",
           "text": "Malaria mRDT < 5 years",
           "required": true,
+          "enableWhen": [
+            {
+              "question": "suspected-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
@@ -3810,6 +6175,16 @@
           "linkId": "malaria-mrdt-over-5",
           "text": "Malaria mRDT \u2265 5 years",
           "required": true,
+          "enableWhen": [
+            {
+              "question": "suspected-malaria-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
