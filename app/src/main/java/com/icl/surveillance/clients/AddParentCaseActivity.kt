@@ -77,7 +77,7 @@ class AddParentCaseActivity : AppCompatActivity() {
             val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
             val questionnaireResponseString =
                 jsonParser.encodeResourceToString(questionnaireResponse)
-
+            println("Questionnaire Response:::: $questionnaireResponseString")
             saveCase(questionnaireFragment.getQuestionnaireResponse(), questionnaireResponseString)
         }
     }

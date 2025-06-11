@@ -67,5 +67,7 @@ dependencies {
     implementation(libs.converter.moshi)
     implementation(libs.circleimageview)
     implementation(libs.library)
+    implementation("com.google.android.play:app-update:2.1.0")
+    implementation("com.google.android.play:app-update-ktx:2.1.0")
 
 }
