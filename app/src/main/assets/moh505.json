@@ -283,6 +283,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -301,7 +302,7 @@
         {
           "type": "integer",
           "linkId": "aefi-cases-under-5",
-          "text": "AEFI Cases < 5 years",
+          "text": "Under 5 Cases",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
@@ -323,7 +324,7 @@
         {
           "type": "integer",
           "linkId": "aefi-cases-over-5",
-          "text": "AEFI Cases > 5 years",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "aefi-summary",
@@ -345,7 +346,7 @@
         {
           "type": "integer",
           "linkId": "aefi-deaths-under-5",
-          "text": "AEFI Deaths < 5 years",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "aefi-summary",
@@ -367,7 +368,7 @@
         {
           "type": "integer",
           "linkId": "aefi-deaths-over-5",
-          "text": "AEFI Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "aefi-summary",
@@ -389,7 +390,13 @@
         {
           "type": "integer",
           "linkId": "aefi-summary-cases-under-5-if-no",
-          "text": "AEFI Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -409,7 +416,13 @@
         {
           "type": "integer",
           "linkId": "aefi-summary-cases-over-5-if-no",
-          "text": "AEFI Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -429,7 +442,13 @@
         {
           "type": "integer",
           "linkId": "aefi-summary-deaths-under-5-if-no",
-          "text": "AEFI Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -449,7 +468,13 @@
         {
           "type": "integer",
           "linkId": "aefi-summary-deaths-over-5-if-no",
-          "text": "AEFI Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -488,6 +513,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -506,7 +532,7 @@
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-cases-under-5",
-          "text": "Bacterial Meningitis Cases < 5 years",
+          "text": "Cases",
           "enableWhen": [
             {
               "question": "bacterial-meningitis-summary",
@@ -528,7 +554,7 @@
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-cases-over-5",
-          "text": "Bacterial Meningitis Cases > 5 years",
+          "text": "Cases",
           "enableWhen": [
             {
               "question": "bacterial-meningitis-summary",
@@ -550,7 +576,7 @@
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-deaths-under-5",
-          "text": "Bacterial Meningitis Deaths < 5 years",
+          "text": "Deaths",
           "enableWhen": [
             {
               "question": "bacterial-meningitis-summary",
@@ -572,7 +598,7 @@
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-deaths-over-5",
-          "text": "Bacterial Meningitis Deaths > 5 years",
+          "text": "Deaths",
           "enableWhen": [
             {
               "question": "bacterial-meningitis-summary",
@@ -594,7 +620,13 @@
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-summary-cases-under-5-if-no",
-          "text": "BACTERIAL MENINGITIS Under 5 Cases",
+          "text": " Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -614,7 +646,13 @@
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-summary-cases-over-5-if-no",
-          "text": "BACTERIAL MENINGITIS Over 5 Cases",
+          "text": " Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -634,7 +672,13 @@
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-summary-deaths-under-5-if-no",
-          "text": "BACTERIAL MENINGITIS Under 5 Deaths",
+          "text": " Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -654,7 +698,13 @@
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-summary-deaths-over-5-if-no",
-          "text": "BACTERIAL MENINGITIS Over 5 Deaths",
+          "text": " Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -693,6 +743,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -711,7 +762,7 @@
         {
           "type": "integer",
           "linkId": "acute-jaundice-cases-under-5",
-          "text": "Acute Jaundice Cases < 5 years",
+          "text": " Cases",
           "enableWhen": [
             {
               "question": "acute-jaundice-summary",
@@ -733,7 +784,7 @@
         {
           "type": "integer",
           "linkId": "acute-jaundice-cases-over-5",
-          "text": "Acute Jaundice Cases > 5 years",
+          "text": " Cases",
           "enableWhen": [
             {
               "question": "acute-jaundice-summary",
@@ -755,7 +806,7 @@
         {
           "type": "integer",
           "linkId": "acute-jaundice-deaths-under-5",
-          "text": "Acute Jaundice Deaths < 5 years",
+          "text": " Deaths",
           "enableWhen": [
             {
               "question": "acute-jaundice-summary",
@@ -777,7 +828,7 @@
         {
           "type": "integer",
           "linkId": "acute-jaundice-deaths-over-5",
-          "text": "Acute Jaundice Deaths > 5 years",
+          "text": " Deaths",
           "enableWhen": [
             {
               "question": "acute-jaundice-summary",
@@ -799,7 +850,13 @@
         {
           "type": "integer",
           "linkId": "acute-jaundice-summary-cases-under-5-if-no",
-          "text": "ACUTE JAUNDICE Under 5 Cases",
+          "text": " Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -819,7 +876,13 @@
         {
           "type": "integer",
           "linkId": "acute-jaundice-summary-cases-over-5-if-no",
-          "text": "ACUTE JAUNDICE Over 5 Cases",
+          "text": " Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -839,7 +902,13 @@
         {
           "type": "integer",
           "linkId": "acute-jaundice-summary-deaths-under-5-if-no",
-          "text": "ACUTE JAUNDICE Under 5 Deaths",
+          "text": " Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -859,7 +928,13 @@
         {
           "type": "integer",
           "linkId": "acute-jaundice-summary-deaths-over-5-if-no",
-          "text": "ACUTE JAUNDICE Over 5 Deaths",
+          "text": " Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -898,6 +973,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -916,7 +992,7 @@
         {
           "type": "integer",
           "linkId": "neonatal-deaths-cases-under-5",
-          "text": "Neonatal deaths Cases < 5 years",
+          "text": "Cases",
           "enableWhen": [
             {
               "question": "neonatal-deaths-summary",
@@ -938,7 +1014,7 @@
         {
           "type": "integer",
           "linkId": "neonatal-deaths-cases-over-5",
-          "text": "Neonatal deaths Cases > 5 years",
+          "text": "Cases",
           "enableWhen": [
             {
               "question": "neonatal-deaths-summary",
@@ -960,7 +1036,7 @@
         {
           "type": "integer",
           "linkId": "neonatal-deaths-deaths-under-5",
-          "text": "Neonatal deaths Deaths < 5 years",
+          "text": "Deaths",
           "enableWhen": [
             {
               "question": "neonatal-deaths-summary",
@@ -982,7 +1058,7 @@
         {
           "type": "integer",
           "linkId": "neonatal-deaths-deaths-over-5",
-          "text": "Neonatal deaths Deaths > 5 years",
+          "text": "Deaths",
           "enableWhen": [
             {
               "question": "neonatal-deaths-summary",
@@ -1004,7 +1080,13 @@
         {
           "type": "integer",
           "linkId": "neonatal-deaths-summary-cases-under-5-if-no",
-          "text": "NEONATAL DEATHS Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -1024,7 +1106,13 @@
         {
           "type": "integer",
           "linkId": "neonatal-deaths-summary-cases-over-5-if-no",
-          "text": "NEONATAL DEATHS Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -1044,7 +1132,13 @@
         {
           "type": "integer",
           "linkId": "neonatal-deaths-summary-deaths-under-5-if-no",
-          "text": "NEONATAL DEATHS Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -1064,7 +1158,13 @@
         {
           "type": "integer",
           "linkId": "neonatal-deaths-summary-deaths-over-5-if-no",
-          "text": "NEONATAL DEATHS Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -1103,6 +1203,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -1121,7 +1222,7 @@
         {
           "type": "integer",
           "linkId": "acute-malnutrition-cases-under-5",
-          "text": "Acute Malnutrition Cases < 5 years",
+          "text": "Cases",
           "enableWhen": [
             {
               "question": "acute-malnutrition-summary",
@@ -1143,7 +1244,7 @@
         {
           "type": "integer",
           "linkId": "acute-malnutrition-cases-over-5",
-          "text": "Acute Malnutrition Cases > 5 years",
+          "text": "Cases",
           "enableWhen": [
             {
               "question": "acute-malnutrition-summary",
@@ -1165,7 +1266,7 @@
         {
           "type": "integer",
           "linkId": "acute-malnutrition-deaths-under-5",
-          "text": "Acute Malnutrition Deaths < 5 years",
+          "text": "Deaths",
           "enableWhen": [
             {
               "question": "acute-malnutrition-summary",
@@ -1187,7 +1288,7 @@
         {
           "type": "integer",
           "linkId": "acute-malnutrition-deaths-over-5",
-          "text": "Acute Malnutrition Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "acute-malnutrition-summary",
@@ -1209,7 +1310,13 @@
         {
           "type": "integer",
           "linkId": "acute-malnutrition-summary-cases-under-5-if-no",
-          "text": "ACUTE MALNUTRITION Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -1229,7 +1336,13 @@
         {
           "type": "integer",
           "linkId": "acute-malnutrition-summary-cases-over-5-if-no",
-          "text": "ACUTE MALNUTRITION Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -1249,7 +1362,13 @@
         {
           "type": "integer",
           "linkId": "acute-malnutrition-summary-deaths-under-5-if-no",
-          "text": "ACUTE MALNUTRITION Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -1269,7 +1388,13 @@
         {
           "type": "integer",
           "linkId": "acute-malnutrition-summary-deaths-over-5-if-no",
-          "text": "ACUTE MALNUTRITION Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -1308,6 +1433,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -1326,7 +1452,7 @@
         {
           "type": "integer",
           "linkId": "neonatal-tetanus-cases-under-5",
-          "text": "Neonatal Tetanus Cases < 5 years",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "neonatal-tetanus-summary",
@@ -1348,7 +1474,7 @@
         {
           "type": "integer",
           "linkId": "neonatal-tetanus-cases-over-5",
-          "text": "Neonatal Tetanus Cases > 5 years",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "neonatal-tetanus-summary",
@@ -1370,7 +1496,7 @@
         {
           "type": "integer",
           "linkId": "neonatal-tetanus-deaths-under-5",
-          "text": "Neonatal Tetanus Deaths < 5 years",
+          "text": "Under 5 Deaths ",
           "enableWhen": [
             {
               "question": "neonatal-tetanus-summary",
@@ -1392,7 +1518,7 @@
         {
           "type": "integer",
           "linkId": "neonatal-tetanus-deaths-over-5",
-          "text": "Neonatal Tetanus Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "neonatal-tetanus-summary",
@@ -1414,7 +1540,13 @@
         {
           "type": "integer",
           "linkId": "neonatal-tetanus-summary-cases-under-5-if-no",
-          "text": "NEONATAL TETANUS Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -1434,7 +1566,13 @@
         {
           "type": "integer",
           "linkId": "neonatal-tetanus-summary-cases-over-5-if-no",
-          "text": "NEONATAL TETANUS Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -1454,7 +1592,13 @@
         {
           "type": "integer",
           "linkId": "neonatal-tetanus-summary-deaths-under-5-if-no",
-          "text": "NEONATAL TETANUS Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -1474,7 +1618,13 @@
         {
           "type": "integer",
           "linkId": "neonatal-tetanus-summary-deaths-over-5-if-no",
-          "text": "NEONATAL TETANUS Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -1513,6 +1663,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -1531,7 +1682,7 @@
         {
           "type": "integer",
           "linkId": "afp-poliomyelitis-cases-under-5",
-          "text": "AFP (Poliomyelitis) Cases < 5 years",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "afp-poliomyelitis-summary",
@@ -1553,7 +1704,7 @@
         {
           "type": "integer",
           "linkId": "afp-poliomyelitis-cases-over-5",
-          "text": "AFP (Poliomyelitis) Cases > 5 years",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "afp-poliomyelitis-summary",
@@ -1575,7 +1726,7 @@
         {
           "type": "integer",
           "linkId": "afp-poliomyelitis-deaths-under-5",
-          "text": "AFP (Poliomyelitis) Deaths < 5 years",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "afp-poliomyelitis-summary",
@@ -1597,7 +1748,7 @@
         {
           "type": "integer",
           "linkId": "afp-poliomyelitis-deaths-over-5",
-          "text": "AFP (Poliomyelitis) Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "afp-poliomyelitis-summary",
@@ -1619,7 +1770,13 @@
         {
           "type": "integer",
           "linkId": "afp-poliomyelitis-summary-cases-under-5-if-no",
-          "text": "AFP POLIOMYELITIS Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -1639,7 +1796,13 @@
         {
           "type": "integer",
           "linkId": "afp-poliomyelitis-summary-cases-over-5-if-no",
-          "text": "AFP POLIOMYELITIS Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -1659,7 +1822,13 @@
         {
           "type": "integer",
           "linkId": "afp-poliomyelitis-summary-deaths-under-5-if-no",
-          "text": "AFP POLIOMYELITIS Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -1679,7 +1848,13 @@
         {
           "type": "integer",
           "linkId": "afp-poliomyelitis-summary-deaths-over-5-if-no",
-          "text": "AFP POLIOMYELITIS Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -1718,6 +1893,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -1736,7 +1912,7 @@
         {
           "type": "integer",
           "linkId": "onchocerciasis-cases-under-5",
-          "text": "Onchocerciasis Cases < 5 years",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "onchocerciasis-summary",
@@ -1758,7 +1934,7 @@
         {
           "type": "integer",
           "linkId": "onchocerciasis-cases-over-5",
-          "text": "Onchocerciasis Cases > 5 years",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "onchocerciasis-summary",
@@ -1780,7 +1956,7 @@
         {
           "type": "integer",
           "linkId": "onchocerciasis-deaths-under-5",
-          "text": "Onchocerciasis Deaths < 5 years",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "onchocerciasis-summary",
@@ -1802,7 +1978,7 @@
         {
           "type": "integer",
           "linkId": "onchocerciasis-deaths-over-5",
-          "text": "Onchocerciasis Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "onchocerciasis-summary",
@@ -1824,7 +2000,13 @@
         {
           "type": "integer",
           "linkId": "onchocerciasis-summary-cases-under-5-if-no",
-          "text": "ONCHOCERCIASIS Under 5 Cases",
+          "text": " Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -1844,7 +2026,13 @@
         {
           "type": "integer",
           "linkId": "onchocerciasis-summary-cases-over-5-if-no",
-          "text": "ONCHOCERCIASIS Over 5 Cases",
+          "text": " Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -1864,7 +2052,13 @@
         {
           "type": "integer",
           "linkId": "onchocerciasis-summary-deaths-under-5-if-no",
-          "text": "ONCHOCERCIASIS Under 5 Deaths",
+          "text": " Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -1884,7 +2078,13 @@
         {
           "type": "integer",
           "linkId": "onchocerciasis-summary-deaths-over-5-if-no",
-          "text": "ONCHOCERCIASIS Over 5 Deaths",
+          "text": " Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -1923,6 +2123,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -1941,7 +2142,7 @@
         {
           "type": "integer",
           "linkId": "plague-cases-under-5",
-          "text": "Plague Cases < 5 years",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "plague-summary",
@@ -1963,7 +2164,7 @@
         {
           "type": "integer",
           "linkId": "plague-cases-over-5",
-          "text": "Plague Cases > 5 years",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "plague-summary",
@@ -1985,7 +2186,7 @@
         {
           "type": "integer",
           "linkId": "plague-deaths-under-5",
-          "text": "Plague Deaths < 5 years",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "plague-summary",
@@ -2007,7 +2208,7 @@
         {
           "type": "integer",
           "linkId": "plague-deaths-over-5",
-          "text": "Plague Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "plague-summary",
@@ -2029,7 +2230,13 @@
         {
           "type": "integer",
           "linkId": "plague-summary-cases-under-5-if-no",
-          "text": "PLAGUE Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -2049,7 +2256,13 @@
         {
           "type": "integer",
           "linkId": "plague-summary-cases-over-5-if-no",
-          "text": "PLAGUE Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -2069,7 +2282,13 @@
         {
           "type": "integer",
           "linkId": "plague-summary-deaths-under-5-if-no",
-          "text": "PLAGUE Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -2089,7 +2308,13 @@
         {
           "type": "integer",
           "linkId": "plague-summary-deaths-over-5-if-no",
-          "text": "PLAGUE Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -2128,6 +2353,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -2146,7 +2372,7 @@
         {
           "type": "integer",
           "linkId": "anthrax-cases-under-5",
-          "text": "Anthrax Cases < 5 years",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "anthrax-summary",
@@ -2168,7 +2394,7 @@
         {
           "type": "integer",
           "linkId": "anthrax-cases-over-5",
-          "text": "Anthrax Cases > 5 years",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "anthrax-summary",
@@ -2190,7 +2416,7 @@
         {
           "type": "integer",
           "linkId": "anthrax-deaths-under-5",
-          "text": "Anthrax Deaths < 5 years",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "anthrax-summary",
@@ -2212,7 +2438,7 @@
         {
           "type": "integer",
           "linkId": "anthrax-deaths-over-5",
-          "text": "Anthrax Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "anthrax-summary",
@@ -2234,7 +2460,13 @@
         {
           "type": "integer",
           "linkId": "anthrax-summary-cases-under-5-if-no",
-          "text": "ANTHRAX Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -2254,7 +2486,13 @@
         {
           "type": "integer",
           "linkId": "anthrax-summary-cases-over-5-if-no",
-          "text": "ANTHRAX Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -2274,7 +2512,13 @@
         {
           "type": "integer",
           "linkId": "anthrax-summary-deaths-under-5-if-no",
-          "text": "ANTHRAX Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -2294,7 +2538,13 @@
         {
           "type": "integer",
           "linkId": "anthrax-summary-deaths-over-5-if-no",
-          "text": "ANTHRAX Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -2333,6 +2583,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -2351,7 +2602,7 @@
         {
           "type": "integer",
           "linkId": "rabies-cases-under-5",
-          "text": "Rabies Cases < 5 years",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "rabies-summary",
@@ -2373,7 +2624,7 @@
         {
           "type": "integer",
           "linkId": "rabies-cases-over-5",
-          "text": "Rabies Cases > 5 years",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "rabies-summary",
@@ -2395,7 +2646,7 @@
         {
           "type": "integer",
           "linkId": "rabies-deaths-under-5",
-          "text": "Rabies Deaths < 5 years",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "rabies-summary",
@@ -2417,7 +2668,7 @@
         {
           "type": "integer",
           "linkId": "rabies-deaths-over-5",
-          "text": "Rabies Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "rabies-summary",
@@ -2439,7 +2690,13 @@
         {
           "type": "integer",
           "linkId": "rabies-summary-cases-under-5-if-no",
-          "text": "RABIES Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -2459,7 +2716,13 @@
         {
           "type": "integer",
           "linkId": "rabies-summary-cases-over-5-if-no",
-          "text": "RABIES Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -2479,7 +2742,13 @@
         {
           "type": "integer",
           "linkId": "rabies-summary-deaths-under-5-if-no",
-          "text": "RABIES Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -2499,7 +2768,13 @@
         {
           "type": "integer",
           "linkId": "rabies-summary-deaths-over-5-if-no",
-          "text": "RABIES Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -2538,6 +2813,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -2556,7 +2832,7 @@
         {
           "type": "integer",
           "linkId": "cholera-cases-under-5",
-          "text": "Cholera Cases < 5 years",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "cholera-summary",
@@ -2578,7 +2854,7 @@
         {
           "type": "integer",
           "linkId": "cholera-cases-over-5",
-          "text": "Cholera Cases > 5 years",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "cholera-summary",
@@ -2600,7 +2876,7 @@
         {
           "type": "integer",
           "linkId": "cholera-deaths-under-5",
-          "text": "Cholera Deaths < 5 years",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "cholera-summary",
@@ -2622,7 +2898,7 @@
         {
           "type": "integer",
           "linkId": "cholera-deaths-over-5",
-          "text": "Cholera Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "cholera-summary",
@@ -2644,7 +2920,13 @@
         {
           "type": "integer",
           "linkId": "cholera-summary-cases-under-5-if-no",
-          "text": "CHOLERA Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -2664,7 +2946,13 @@
         {
           "type": "integer",
           "linkId": "cholera-summary-cases-over-5-if-no",
-          "text": "CHOLERA Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -2684,7 +2972,13 @@
         {
           "type": "integer",
           "linkId": "cholera-summary-deaths-under-5-if-no",
-          "text": "CHOLERA Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -2704,7 +2998,13 @@
         {
           "type": "integer",
           "linkId": "cholera-summary-deaths-over-5-if-no",
-          "text": "CHOLERA Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -2743,6 +3043,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -2761,7 +3062,7 @@
         {
           "type": "integer",
           "linkId": "rift-valley-fever-cases-under-5",
-          "text": "Rift Valley Fever Cases < 5 years",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "rift-valley-fever-summary",
@@ -2783,7 +3084,7 @@
         {
           "type": "integer",
           "linkId": "rift-valley-fever-cases-over-5",
-          "text": "Rift Valley Fever Cases > 5 years",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "rift-valley-fever-summary",
@@ -2805,7 +3106,7 @@
         {
           "type": "integer",
           "linkId": "rift-valley-fever-deaths-under-5",
-          "text": "Rift Valley Fever Deaths < 5 years",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "rift-valley-fever-summary",
@@ -2827,7 +3128,7 @@
         {
           "type": "integer",
           "linkId": "rift-valley-fever-deaths-over-5",
-          "text": "Rift Valley Fever Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "rift-valley-fever-summary",
@@ -2849,7 +3150,13 @@
         {
           "type": "integer",
           "linkId": "rift-valley-fever-summary-cases-under-5-if-no",
-          "text": "RIFT VALLEY FEVER Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -2869,7 +3176,13 @@
         {
           "type": "integer",
           "linkId": "rift-valley-fever-summary-cases-over-5-if-no",
-          "text": "RIFT VALLEY FEVER Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -2889,7 +3202,13 @@
         {
           "type": "integer",
           "linkId": "rift-valley-fever-summary-deaths-under-5-if-no",
-          "text": "RIFT VALLEY FEVER Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -2909,7 +3228,13 @@
         {
           "type": "integer",
           "linkId": "rift-valley-fever-summary-deaths-over-5-if-no",
-          "text": "RIFT VALLEY FEVER Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -2948,6 +3273,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -2966,7 +3292,7 @@
         {
           "type": "integer",
           "linkId": "chikungunya-cases-under-5",
-          "text": "Chikungunya Cases < 5 years",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "chikungunya-summary",
@@ -2988,7 +3314,7 @@
         {
           "type": "integer",
           "linkId": "chikungunya-cases-over-5",
-          "text": "Chikungunya Cases > 5 years",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "chikungunya-summary",
@@ -3010,7 +3336,7 @@
         {
           "type": "integer",
           "linkId": "chikungunya-deaths-under-5",
-          "text": "Chikungunya Deaths < 5 years",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "chikungunya-summary",
@@ -3032,7 +3358,7 @@
         {
           "type": "integer",
           "linkId": "chikungunya-deaths-over-5",
-          "text": "Chikungunya Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "chikungunya-summary",
@@ -3054,7 +3380,13 @@
         {
           "type": "integer",
           "linkId": "chikungunya-summary-cases-under-5-if-no",
-          "text": "CHIKUNGUNYA Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -3074,7 +3406,13 @@
         {
           "type": "integer",
           "linkId": "chikungunya-summary-cases-over-5-if-no",
-          "text": "CHIKUNGUNYA Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -3094,7 +3432,13 @@
         {
           "type": "integer",
           "linkId": "chikungunya-summary-deaths-under-5-if-no",
-          "text": "CHIKUNGUNYA Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -3114,7 +3458,13 @@
         {
           "type": "integer",
           "linkId": "chikungunya-summary-deaths-over-5-if-no",
-          "text": "CHIKUNGUNYA Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -3153,6 +3503,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -3171,7 +3522,7 @@
         {
           "type": "integer",
           "linkId": "covid--19-cases-under-5",
-          "text": "COVID -19 Cases < 5 years",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "covid--19-summary",
@@ -3193,7 +3544,7 @@
         {
           "type": "integer",
           "linkId": "covid--19-cases-over-5",
-          "text": "COVID -19 Cases > 5 years",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "covid--19-summary",
@@ -3215,7 +3566,7 @@
         {
           "type": "integer",
           "linkId": "covid--19-deaths-under-5",
-          "text": "COVID -19 Deaths < 5 years",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "covid--19-summary",
@@ -3237,7 +3588,7 @@
         {
           "type": "integer",
           "linkId": "covid--19-deaths-over-5",
-          "text": "COVID -19 Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "covid--19-summary",
@@ -3259,7 +3610,13 @@
         {
           "type": "integer",
           "linkId": "covid--19-summary-cases-under-5-if-no",
-          "text": "COVID 19 Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -3279,7 +3636,13 @@
         {
           "type": "integer",
           "linkId": "covid--19-summary-cases-over-5-if-no",
-          "text": "COVID 19 Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -3299,7 +3662,13 @@
         {
           "type": "integer",
           "linkId": "covid--19-summary-deaths-under-5-if-no",
-          "text": "COVID 19 Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -3319,7 +3688,13 @@
         {
           "type": "integer",
           "linkId": "covid--19-summary-deaths-over-5-if-no",
-          "text": "COVID 19 Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -3358,6 +3733,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -3376,7 +3752,7 @@
         {
           "type": "integer",
           "linkId": "sari-cluster-ge3-cases-cases-under-5",
-          "text": "SARI (Cluster \u22653 cases) Cases < 5 years",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "sari-cluster-ge3-cases-summary",
@@ -3398,7 +3774,7 @@
         {
           "type": "integer",
           "linkId": "sari-cluster-ge3-cases-cases-over-5",
-          "text": "SARI (Cluster \u22653 cases) Cases > 5 years",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "sari-cluster-ge3-cases-summary",
@@ -3420,7 +3796,7 @@
         {
           "type": "integer",
           "linkId": "sari-cluster-ge3-cases-deaths-under-5",
-          "text": "SARI (Cluster \u22653 cases) Deaths < 5 years",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "sari-cluster-ge3-cases-summary",
@@ -3442,7 +3818,7 @@
         {
           "type": "integer",
           "linkId": "sari-cluster-ge3-cases-deaths-over-5",
-          "text": "SARI (Cluster \u22653 cases) Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "sari-cluster-ge3-cases-summary",
@@ -3464,7 +3840,13 @@
         {
           "type": "integer",
           "linkId": "sari-cluster-ge3-cases-summary-cases-under-5-if-no",
-          "text": "SARI CLUSTER GE3 CASES Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -3484,7 +3866,13 @@
         {
           "type": "integer",
           "linkId": "sari-cluster-ge3-cases-summary-cases-over-5-if-no",
-          "text": "SARI CLUSTER GE3 CASES Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -3504,7 +3892,13 @@
         {
           "type": "integer",
           "linkId": "sari-cluster-ge3-cases-summary-deaths-under-5-if-no",
-          "text": "SARI CLUSTER GE3 CASES Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -3524,7 +3918,13 @@
         {
           "type": "integer",
           "linkId": "sari-cluster-ge3-cases-summary-deaths-over-5-if-no",
-          "text": "SARI CLUSTER GE3 CASES Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -3563,6 +3963,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -3581,7 +3982,7 @@
         {
           "type": "integer",
           "linkId": "dengue-cases-under-5",
-          "text": "Dengue Cases < 5 years",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "dengue-summary",
@@ -3603,7 +4004,7 @@
         {
           "type": "integer",
           "linkId": "dengue-cases-over-5",
-          "text": "Dengue Cases > 5 years",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "dengue-summary",
@@ -3625,7 +4026,7 @@
         {
           "type": "integer",
           "linkId": "dengue-deaths-under-5",
-          "text": "Dengue Deaths < 5 years",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "dengue-summary",
@@ -3647,7 +4048,7 @@
         {
           "type": "integer",
           "linkId": "dengue-deaths-over-5",
-          "text": "Dengue Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "dengue-summary",
@@ -3669,7 +4070,13 @@
         {
           "type": "integer",
           "linkId": "dengue-summary-cases-under-5-if-no",
-          "text": "DENGUE Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -3689,7 +4096,13 @@
         {
           "type": "integer",
           "linkId": "dengue-summary-cases-over-5-if-no",
-          "text": "DENGUE Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -3709,7 +4122,13 @@
         {
           "type": "integer",
           "linkId": "dengue-summary-deaths-under-5-if-no",
-          "text": "DENGUE Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -3729,7 +4148,13 @@
         {
           "type": "integer",
           "linkId": "dengue-summary-deaths-over-5-if-no",
-          "text": "DENGUE Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -3768,6 +4193,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -3786,7 +4212,7 @@
         {
           "type": "integer",
           "linkId": "dysentery-bacillary-cases-under-5",
-          "text": "Dysentery (Bacillary) Cases < 5 years",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "dysentery-bacillary-summary",
@@ -3808,7 +4234,7 @@
         {
           "type": "integer",
           "linkId": "dysentery-bacillary-cases-over-5",
-          "text": "Dysentery (Bacillary) Cases > 5 years",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "dysentery-bacillary-summary",
@@ -3830,7 +4256,7 @@
         {
           "type": "integer",
           "linkId": "dysentery-bacillary-deaths-under-5",
-          "text": "Dysentery (Bacillary) Deaths < 5 years",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "dysentery-bacillary-summary",
@@ -3852,7 +4278,7 @@
         {
           "type": "integer",
           "linkId": "dysentery-bacillary-deaths-over-5",
-          "text": "Dysentery (Bacillary) Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "dysentery-bacillary-summary",
@@ -3874,7 +4300,13 @@
         {
           "type": "integer",
           "linkId": "dysentery-bacillary-summary-cases-under-5-if-no",
-          "text": "DYSENTERY BACILLARY Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -3894,7 +4326,13 @@
         {
           "type": "integer",
           "linkId": "dysentery-bacillary-summary-cases-over-5-if-no",
-          "text": "DYSENTERY BACILLARY Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -3914,7 +4352,13 @@
         {
           "type": "integer",
           "linkId": "dysentery-bacillary-summary-deaths-under-5-if-no",
-          "text": "DYSENTERY BACILLARY Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -3934,7 +4378,13 @@
         {
           "type": "integer",
           "linkId": "dysentery-bacillary-summary-deaths-over-5-if-no",
-          "text": "DYSENTERY BACILLARY Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -3973,6 +4423,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -3991,7 +4442,7 @@
         {
           "type": "integer",
           "linkId": "suspected-mdr-xdr-tb-cases-under-5",
-          "text": "Suspected MDR/XDR TB Cases < 5 years",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "suspected-mdr-xdr-tb-summary",
@@ -4013,7 +4464,7 @@
         {
           "type": "integer",
           "linkId": "suspected-mdr-xdr-tb-cases-over-5",
-          "text": "Suspected MDR/XDR TB Cases > 5 years",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "suspected-mdr-xdr-tb-summary",
@@ -4035,7 +4486,7 @@
         {
           "type": "integer",
           "linkId": "suspected-mdr-xdr-tb-deaths-under-5",
-          "text": "Suspected MDR/XDR TB Deaths < 5 years",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "suspected-mdr-xdr-tb-summary",
@@ -4057,7 +4508,7 @@
         {
           "type": "integer",
           "linkId": "suspected-mdr-xdr-tb-deaths-over-5",
-          "text": "Suspected MDR/XDR TB Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "suspected-mdr-xdr-tb-summary",
@@ -4079,7 +4530,13 @@
         {
           "type": "integer",
           "linkId": "suspected-mdr-xdr-tb-summary-cases-under-5-if-no",
-          "text": "SUSPECTED MDR XDR TB Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -4099,7 +4556,13 @@
         {
           "type": "integer",
           "linkId": "suspected-mdr-xdr-tb-summary-cases-over-5-if-no",
-          "text": "SUSPECTED MDR XDR TB Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -4119,7 +4582,13 @@
         {
           "type": "integer",
           "linkId": "suspected-mdr-xdr-tb-summary-deaths-under-5-if-no",
-          "text": "SUSPECTED MDR XDR TB Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -4139,7 +4608,13 @@
         {
           "type": "integer",
           "linkId": "suspected-mdr-xdr-tb-summary-deaths-over-5-if-no",
-          "text": "SUSPECTED MDR XDR TB Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -4178,6 +4653,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -4196,7 +4672,7 @@
         {
           "type": "integer",
           "linkId": "guinea-worm-disease-cases-under-5",
-          "text": "Guinea Worm Disease Cases < 5 years",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "guinea-worm-disease-summary",
@@ -4218,7 +4694,7 @@
         {
           "type": "integer",
           "linkId": "guinea-worm-disease-cases-over-5",
-          "text": "Guinea Worm Disease Cases > 5 years",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "guinea-worm-disease-summary",
@@ -4240,7 +4716,7 @@
         {
           "type": "integer",
           "linkId": "guinea-worm-disease-deaths-under-5",
-          "text": "Guinea Worm Disease Deaths < 5 years",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "guinea-worm-disease-summary",
@@ -4262,7 +4738,7 @@
         {
           "type": "integer",
           "linkId": "guinea-worm-disease-deaths-over-5",
-          "text": "Guinea Worm Disease Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "guinea-worm-disease-summary",
@@ -4284,7 +4760,13 @@
         {
           "type": "integer",
           "linkId": "guinea-worm-disease-summary-cases-under-5-if-no",
-          "text": "GUINEA WORM DISEASE Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -4304,7 +4786,13 @@
         {
           "type": "integer",
           "linkId": "guinea-worm-disease-summary-cases-over-5-if-no",
-          "text": "GUINEA WORM DISEASE Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -4324,7 +4812,13 @@
         {
           "type": "integer",
           "linkId": "guinea-worm-disease-summary-deaths-under-5-if-no",
-          "text": "GUINEA WORM DISEASE Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -4344,7 +4838,13 @@
         {
           "type": "integer",
           "linkId": "guinea-worm-disease-summary-deaths-over-5-if-no",
-          "text": "GUINEA WORM DISEASE Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -4383,6 +4883,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -4401,7 +4902,7 @@
         {
           "type": "integer",
           "linkId": "typhoid-cases-under-5",
-          "text": "Typhoid Cases < 5 years",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "typhoid-summary",
@@ -4423,7 +4924,7 @@
         {
           "type": "integer",
           "linkId": "typhoid-cases-over-5",
-          "text": "Typhoid Cases > 5 years",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "typhoid-summary",
@@ -4445,7 +4946,7 @@
         {
           "type": "integer",
           "linkId": "typhoid-deaths-under-5",
-          "text": "Typhoid Deaths < 5 years",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "typhoid-summary",
@@ -4467,7 +4968,7 @@
         {
           "type": "integer",
           "linkId": "typhoid-deaths-over-5",
-          "text": "Typhoid Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "typhoid-summary",
@@ -4489,7 +4990,13 @@
         {
           "type": "integer",
           "linkId": "typhoid-summary-cases-under-5-if-no",
-          "text": "TYPHOID Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -4509,7 +5016,13 @@
         {
           "type": "integer",
           "linkId": "typhoid-summary-cases-over-5-if-no",
-          "text": "TYPHOID Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -4529,7 +5042,13 @@
         {
           "type": "integer",
           "linkId": "typhoid-summary-deaths-under-5-if-no",
-          "text": "TYPHOID Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -4549,7 +5068,13 @@
         {
           "type": "integer",
           "linkId": "typhoid-summary-deaths-over-5-if-no",
-          "text": "TYPHOID Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -4588,6 +5113,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -4606,7 +5132,7 @@
         {
           "type": "integer",
           "linkId": "measles-cases-under-5",
-          "text": "Measles Cases < 5 years",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "measles-summary",
@@ -4628,7 +5154,7 @@
         {
           "type": "integer",
           "linkId": "measles-cases-over-5",
-          "text": "Measles Cases > 5 years",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "measles-summary",
@@ -4650,7 +5176,7 @@
         {
           "type": "integer",
           "linkId": "measles-deaths-under-5",
-          "text": "Measles Deaths < 5 years",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "measles-summary",
@@ -4672,7 +5198,7 @@
         {
           "type": "integer",
           "linkId": "measles-deaths-over-5",
-          "text": "Measles Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "measles-summary",
@@ -4694,7 +5220,13 @@
         {
           "type": "integer",
           "linkId": "measles-summary-cases-under-5-if-no",
-          "text": "MEASLES Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -4714,7 +5246,13 @@
         {
           "type": "integer",
           "linkId": "measles-summary-cases-over-5-if-no",
-          "text": "MEASLES Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -4734,7 +5272,13 @@
         {
           "type": "integer",
           "linkId": "measles-summary-deaths-under-5-if-no",
-          "text": "MEASLES Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -4754,7 +5298,13 @@
         {
           "type": "integer",
           "linkId": "measles-summary-deaths-over-5-if-no",
-          "text": "MEASLES Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -4793,6 +5343,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -4811,7 +5362,7 @@
         {
           "type": "integer",
           "linkId": "vhf-cases-under-5",
-          "text": "VHF Cases < 5 years",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "vhf-summary",
@@ -4833,7 +5384,7 @@
         {
           "type": "integer",
           "linkId": "vhf-cases-over-5",
-          "text": "VHF Cases > 5 years",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "vhf-summary",
@@ -4855,7 +5406,7 @@
         {
           "type": "integer",
           "linkId": "vhf-deaths-under-5",
-          "text": "VHF Deaths < 5 years",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "vhf-summary",
@@ -4877,7 +5428,7 @@
         {
           "type": "integer",
           "linkId": "vhf-deaths-over-5",
-          "text": "VHF Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "vhf-summary",
@@ -4899,7 +5450,13 @@
         {
           "type": "integer",
           "linkId": "vhf-summary-cases-under-5-if-no",
-          "text": "VHF Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -4919,7 +5476,13 @@
         {
           "type": "integer",
           "linkId": "vhf-summary-cases-over-5-if-no",
-          "text": "VHF Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -4939,7 +5502,13 @@
         {
           "type": "integer",
           "linkId": "vhf-summary-deaths-under-5-if-no",
-          "text": "VHF Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -4959,7 +5528,13 @@
         {
           "type": "integer",
           "linkId": "vhf-summary-deaths-over-5-if-no",
-          "text": "VHF Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -4998,6 +5573,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -5016,7 +5592,7 @@
         {
           "type": "integer",
           "linkId": "suspected-malaria-cases-under-5",
-          "text": "Suspected Malaria Cases < 5 years",
+          "text": "Under 5 Cases",
           "required": true,
           "enableWhen": [
             {
@@ -5038,7 +5614,7 @@
         {
           "type": "integer",
           "linkId": "suspected-malaria-cases-over-5",
-          "text": "Suspected Malaria Cases > 5 years",
+          "text": "Over 5 Cases",
           "required": true,
           "enableWhen": [
             {
@@ -5060,7 +5636,7 @@
         {
           "type": "integer",
           "linkId": "suspected-malaria-deaths-under-5",
-          "text": "Suspected Malaria Deaths < 5 years",
+          "text": "Under 5 Deaths",
           "required": true,
           "enableWhen": [
             {
@@ -5082,7 +5658,7 @@
         {
           "type": "integer",
           "linkId": "suspected-malaria-deaths-over-5",
-          "text": "Suspected Malaria Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "required": true,
           "enableWhen": [
             {
@@ -5104,7 +5680,13 @@
         {
           "type": "integer",
           "linkId": "suspected-malaria-summary-cases-under-5-if-no",
-          "text": "SUSPECTED MALARIA Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -5124,7 +5706,13 @@
         {
           "type": "integer",
           "linkId": "suspected-malaria-summary-cases-over-5-if-no",
-          "text": "SUSPECTED MALARIA Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -5144,7 +5732,13 @@
         {
           "type": "integer",
           "linkId": "suspected-malaria-summary-deaths-under-5-if-no",
-          "text": "SUSPECTED MALARIA Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -5164,7 +5758,13 @@
         {
           "type": "integer",
           "linkId": "suspected-malaria-summary-deaths-over-5-if-no",
-          "text": "SUSPECTED MALARIA Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -5203,6 +5803,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -5221,7 +5822,7 @@
         {
           "type": "integer",
           "linkId": "yellow-fever-cases-under-5",
-          "text": "Yellow Fever Cases < 5 years",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "yellow-fever-summary",
@@ -5243,7 +5844,7 @@
         {
           "type": "integer",
           "linkId": "yellow-fever-cases-over-5",
-          "text": "Yellow Fever Cases > 5 years",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "yellow-fever-summary",
@@ -5265,7 +5866,7 @@
         {
           "type": "integer",
           "linkId": "yellow-fever-deaths-under-5",
-          "text": "Yellow Fever Deaths < 5 years",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "yellow-fever-summary",
@@ -5287,7 +5888,7 @@
         {
           "type": "integer",
           "linkId": "yellow-fever-deaths-over-5",
-          "text": "Yellow Fever Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "yellow-fever-summary",
@@ -5309,7 +5910,13 @@
         {
           "type": "integer",
           "linkId": "yellow-fever-summary-cases-under-5-if-no",
-          "text": "YELLOW FEVER Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -5329,7 +5936,13 @@
         {
           "type": "integer",
           "linkId": "yellow-fever-summary-cases-over-5-if-no",
-          "text": "YELLOW FEVER Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -5349,7 +5962,13 @@
         {
           "type": "integer",
           "linkId": "yellow-fever-summary-deaths-under-5-if-no",
-          "text": "YELLOW FEVER Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -5369,7 +5988,13 @@
         {
           "type": "integer",
           "linkId": "yellow-fever-summary-deaths-over-5-if-no",
-          "text": "YELLOW FEVER Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -5408,6 +6033,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -5426,7 +6052,7 @@
         {
           "type": "integer",
           "linkId": "deaths-due-to-malaria-cases-under-5",
-          "text": "Deaths due to Malaria Cases < 5 years",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "deaths-due-to-malaria-summary",
@@ -5448,7 +6074,7 @@
         {
           "type": "integer",
           "linkId": "deaths-due-to-malaria-cases-over-5",
-          "text": "Deaths due to Malaria Cases > 5 years",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "deaths-due-to-malaria-summary",
@@ -5470,7 +6096,7 @@
         {
           "type": "integer",
           "linkId": "deaths-due-to-malaria-deaths-under-5",
-          "text": "Deaths due to Malaria Deaths < 5 years",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "deaths-due-to-malaria-summary",
@@ -5492,7 +6118,7 @@
         {
           "type": "integer",
           "linkId": "deaths-due-to-malaria-deaths-over-5",
-          "text": "Deaths due to Malaria Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "deaths-due-to-malaria-summary",
@@ -5514,7 +6140,13 @@
         {
           "type": "integer",
           "linkId": "deaths-due-to-malaria-summary-cases-under-5-if-no",
-          "text": "DEATHS DUE TO MALARIA Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -5534,7 +6166,13 @@
         {
           "type": "integer",
           "linkId": "deaths-due-to-malaria-summary-cases-over-5-if-no",
-          "text": "DEATHS DUE TO MALARIA Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -5554,7 +6192,13 @@
         {
           "type": "integer",
           "linkId": "deaths-due-to-malaria-summary-deaths-under-5-if-no",
-          "text": "DEATHS DUE TO MALARIA Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -5574,7 +6218,13 @@
         {
           "type": "integer",
           "linkId": "deaths-due-to-malaria-summary-deaths-over-5-if-no",
-          "text": "DEATHS DUE TO MALARIA Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -5613,6 +6263,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -5631,7 +6282,7 @@
         {
           "type": "integer",
           "linkId": "zika-virus-cases-under-5",
-          "text": "Zika Virus Cases < 5 years",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "zika-virus-summary",
@@ -5653,7 +6304,7 @@
         {
           "type": "integer",
           "linkId": "zika-virus-cases-over-5",
-          "text": "Zika Virus Cases > 5 years",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "zika-virus-summary",
@@ -5675,7 +6326,7 @@
         {
           "type": "integer",
           "linkId": "zika-virus-deaths-under-5",
-          "text": "Zika Virus Deaths < 5 years",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "zika-virus-summary",
@@ -5697,7 +6348,7 @@
         {
           "type": "integer",
           "linkId": "zika-virus-deaths-over-5",
-          "text": "Zika Virus Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "zika-virus-summary",
@@ -5719,7 +6370,13 @@
         {
           "type": "integer",
           "linkId": "zika-virus-summary-cases-under-5-if-no",
-          "text": "ZIKA VIRUS Under 5 Cases",
+          "text": "Under 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -5739,7 +6396,13 @@
         {
           "type": "integer",
           "linkId": "zika-virus-summary-cases-over-5-if-no",
-          "text": "ZIKA VIRUS Over 5 Cases",
+          "text": "Over 5 Cases",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -5759,7 +6422,13 @@
         {
           "type": "integer",
           "linkId": "zika-virus-summary-deaths-under-5-if-no",
-          "text": "ZIKA VIRUS Under 5 Deaths",
+          "text": "Under 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -5779,7 +6448,13 @@
         {
           "type": "integer",
           "linkId": "zika-virus-summary-deaths-over-5-if-no",
-          "text": "ZIKA VIRUS Over 5 Deaths",
+          "text": "Over 5 Deaths",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
           "initial": [
             {
               "valueInteger": 0
@@ -5818,6 +6493,7 @@
               "valueCode": "horizontal"
             }
           ],
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -5852,7 +6528,7 @@
         {
           "type": "integer",
           "linkId": "others-specify-cases-under-5",
-          "text": "Others (Specify) Cases < 5 years",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "others-specify-summary",
@@ -5874,7 +6550,7 @@
         {
           "type": "integer",
           "linkId": "others-specify-cases-over-5",
-          "text": "Others (Specify) Cases > 5 years",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "others-specify-summary",
@@ -5896,7 +6572,7 @@
         {
           "type": "integer",
           "linkId": "others-specify-deaths-under-5",
-          "text": "Others (Specify) Deaths < 5 years",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "others-specify-summary",
@@ -5918,7 +6594,7 @@
         {
           "type": "integer",
           "linkId": "others-specify-deaths-over-5",
-          "text": "Others (Specify) Deaths > 5 years",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "others-specify-summary",
@@ -5934,86 +6610,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            }
-          ]
-        },
-        {
-          "type": "integer",
-          "linkId": "others-specify-summary-cases-under-5-if-no",
-          "text": "OTHERS SPECIFY Under 5 Cases",
-          "initial": [
-            {
-              "valueInteger": 0
-            }
-          ],
-          "enableWhen": [
-            {
-              "question": "others-specify-summary",
-              "operator": "=",
-              "answerCoding": {
-                "code": "no",
-                "display": "No"
-              }
-            }
-          ]
-        },
-        {
-          "type": "integer",
-          "linkId": "others-specify-summary-cases-over-5-if-no",
-          "text": "OTHERS SPECIFY Over 5 Cases",
-          "initial": [
-            {
-              "valueInteger": 0
-            }
-          ],
-          "enableWhen": [
-            {
-              "question": "others-specify-summary",
-              "operator": "=",
-              "answerCoding": {
-                "code": "no",
-                "display": "No"
-              }
-            }
-          ]
-        },
-        {
-          "type": "integer",
-          "linkId": "others-specify-summary-deaths-under-5-if-no",
-          "text": "OTHERS SPECIFY Under 5 Deaths",
-          "initial": [
-            {
-              "valueInteger": 0
-            }
-          ],
-          "enableWhen": [
-            {
-              "question": "others-specify-summary",
-              "operator": "=",
-              "answerCoding": {
-                "code": "no",
-                "display": "No"
-              }
-            }
-          ]
-        },
-        {
-          "type": "integer",
-          "linkId": "others-specify-summary-deaths-over-5-if-no",
-          "text": "OTHERS SPECIFY Over 5 Deaths",
-          "initial": [
-            {
-              "valueInteger": 0
-            }
-          ],
-          "enableWhen": [
-            {
-              "question": "others-specify-summary",
-              "operator": "=",
-              "answerCoding": {
-                "code": "no",
-                "display": "No"
-              }
             }
           ]
         }
@@ -6041,7 +6637,7 @@
         {
           "type": "integer",
           "linkId": "malaria-tested-under-5",
-          "text": "Malaria Microscopy Tested < 5 years",
+          "text": "Malaria Microscopy Tested",
           "required": true,
           "enableWhen": [
             {
@@ -6085,7 +6681,7 @@
         {
           "type": "integer",
           "linkId": "malaria-positive-under-5",
-          "text": "Malaria Microscopy Positive < 5 years",
+          "text": "Malaria Microscopy Positive",
           "required": true,
           "enableWhen": [
             {
@@ -6151,7 +6747,7 @@
         {
           "type": "integer",
           "linkId": "malaria-mrdt-under-5",
-          "text": "Malaria mRDT < 5 years",
+          "text": "Malaria mRDT",
           "required": true,
           "enableWhen": [
             {
@@ -6195,7 +6791,7 @@
         {
           "type": "integer",
           "linkId": "dysentery-tested-under-5",
-          "text": "Dysentery Tested < 5 years",
+          "text": "Dysentery Tested",
           "required": true,
           "extension": [
             {
@@ -6399,7 +6995,7 @@
         {
           "type": "integer",
           "linkId": "tuberculosis-mdr-xdr-tested-under-5",
-          "text": "Tuberculosis (MDR/XDR) Tested < 5 years",
+          "text": "Tuberculosis (MDR/XDR) Tested",
           "required": true,
           "extension": [
             {
@@ -6435,7 +7031,7 @@
         {
           "type": "integer",
           "linkId": "typhoid-tested-under-5",
-          "text": "Typhoid Tested < 5 years",
+          "text": "Typhoid Tested",
           "required": true,
           "extension": [
             {
