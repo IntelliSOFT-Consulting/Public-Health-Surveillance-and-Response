@@ -532,7 +532,7 @@
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-cases-under-5",
-          "text": "Cases",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "bacterial-meningitis-summary",
@@ -554,7 +554,7 @@
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-cases-over-5",
-          "text": "Cases",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "bacterial-meningitis-summary",
@@ -576,7 +576,7 @@
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-deaths-under-5",
-          "text": "Deaths",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "bacterial-meningitis-summary",
@@ -598,7 +598,7 @@
         {
           "type": "integer",
           "linkId": "bacterial-meningitis-deaths-over-5",
-          "text": "Deaths",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "bacterial-meningitis-summary",
@@ -762,7 +762,7 @@
         {
           "type": "integer",
           "linkId": "acute-jaundice-cases-under-5",
-          "text": " Cases",
+          "text": " Under Cases",
           "enableWhen": [
             {
               "question": "acute-jaundice-summary",
@@ -784,7 +784,7 @@
         {
           "type": "integer",
           "linkId": "acute-jaundice-cases-over-5",
-          "text": " Cases",
+          "text": " Over Cases",
           "enableWhen": [
             {
               "question": "acute-jaundice-summary",
@@ -806,7 +806,7 @@
         {
           "type": "integer",
           "linkId": "acute-jaundice-deaths-under-5",
-          "text": " Deaths",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "acute-jaundice-summary",
@@ -828,7 +828,7 @@
         {
           "type": "integer",
           "linkId": "acute-jaundice-deaths-over-5",
-          "text": " Deaths",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "acute-jaundice-summary",

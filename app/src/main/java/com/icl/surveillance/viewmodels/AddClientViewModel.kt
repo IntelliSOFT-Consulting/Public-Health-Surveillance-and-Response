@@ -33,6 +33,8 @@ import org.hl7.fhir.r4.model.DateTimeType
 import org.hl7.fhir.r4.model.Enumerations
 import org.hl7.fhir.r4.model.HumanName
 import org.hl7.fhir.r4.model.Identifier
+import org.hl7.fhir.r4.model.MeasureReport
+import org.hl7.fhir.r4.model.MeasureReport.MeasureReportGroupPopulationComponent
 import org.hl7.fhir.r4.model.Observation
 import org.hl7.fhir.r4.model.Patient
 import org.hl7.fhir.r4.model.Questionnaire
@@ -144,6 +146,8 @@ class AddClientViewModel(application: Application, private val state: SavedState
             var potherNames: List<String> = emptyList()
 
             val encounterReference = Reference("Encounter/$encounterId")
+
+            val measure = MeasureReport()
 
             when (case) {
                 "measles-case-information" -> {
@@ -583,6 +587,12 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
                     val countyEntry = extractedAnswers.find { it.linkId == "a4-county" }
 
+                    measure.id = generateUuid()
+                    measure.subject = subjectReference
+                    measure.status = MeasureReport.MeasureReportStatus.COMPLETE
+                    measure.type = MeasureReport.MeasureReportType.SUMMARY
+
+
                     var county = ""
                     var subCounty = ""
                     val currentYear = LocalDate.now().year
@@ -634,12 +644,34 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
                     extractedAnswers.forEach {
 
+                        val measureCodeableConcept = CodeableConcept()
+                        measureCodeableConcept.codingFirstRep.code = it.linkId
+                        measureCodeableConcept.codingFirstRep.display = it.text
+                        measureCodeableConcept.codingFirstRep.system = "questionnaire-answers"
+                        measureCodeableConcept.text = it.text
+
+                        val compo = MeasureReportGroupPopulationComponent()
+                        compo.code = measureCodeableConcept
+                        try {
+                            compo.count = it.answer.toInt()
+                        } catch (e: Exception) {
+                            compo.count = 0
+                        }
+                        compo.id = it.linkId
+                        measure.groupFirstRep.addPopulation(compo)
+
+
                         val obs = qh.codingQuestionnaire(
                             it.linkId, it.text,
                             it.answer
                         )
 
                         createResource(obs, subjectReference, encounterReference)
+                    }
+                    when (case) {
+                        "moh-505-reporting-form" -> {
+                            fhirEngine.create(measure)
+                        }
                     }
                 } catch (e: Exception) {
                     Log.e("TAG", "Error experienced ${e.message}}")
