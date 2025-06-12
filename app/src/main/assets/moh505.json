@@ -992,7 +992,7 @@
         {
           "type": "integer",
           "linkId": "neonatal-deaths-cases-under-5",
-          "text": "Cases",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "neonatal-deaths-summary",
@@ -1014,7 +1014,7 @@
         {
           "type": "integer",
           "linkId": "neonatal-deaths-cases-over-5",
-          "text": "Cases",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "neonatal-deaths-summary",
@@ -1036,7 +1036,7 @@
         {
           "type": "integer",
           "linkId": "neonatal-deaths-deaths-under-5",
-          "text": "Deaths",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "neonatal-deaths-summary",
@@ -1058,7 +1058,7 @@
         {
           "type": "integer",
           "linkId": "neonatal-deaths-deaths-over-5",
-          "text": "Deaths",
+          "text": "Over 5 Deaths",
           "enableWhen": [
             {
               "question": "neonatal-deaths-summary",
@@ -1222,7 +1222,7 @@
         {
           "type": "integer",
           "linkId": "acute-malnutrition-cases-under-5",
-          "text": "Cases",
+          "text": "Under 5 Cases",
           "enableWhen": [
             {
               "question": "acute-malnutrition-summary",
@@ -1244,7 +1244,7 @@
         {
           "type": "integer",
           "linkId": "acute-malnutrition-cases-over-5",
-          "text": "Cases",
+          "text": "Over 5 Cases",
           "enableWhen": [
             {
               "question": "acute-malnutrition-summary",
@@ -1266,7 +1266,7 @@
         {
           "type": "integer",
           "linkId": "acute-malnutrition-deaths-under-5",
-          "text": "Deaths",
+          "text": "Under 5 Deaths",
           "enableWhen": [
             {
               "question": "acute-malnutrition-summary",

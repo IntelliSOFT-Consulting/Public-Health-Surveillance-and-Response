@@ -17,6 +17,8 @@ import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FI
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.models.QuestionnaireAnswer
 import com.icl.surveillance.models.SpecimenConfig
+import com.icl.surveillance.utils.Constants.FACILITY_DETAILS
+import com.icl.surveillance.utils.Constants.WEEK_ENDING_DATE
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.utils.QuestionnaireHelper
 import java.time.LocalDate
@@ -657,8 +659,20 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         } catch (e: Exception) {
                             compo.count = 0
                         }
+
+                        if (it.linkId == WEEK_ENDING_DATE) {
+                            val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                                .parse(it.answer)
+                            if (date != null) {
+                                measure.date = date
+                            }
+
+                        }
                         compo.id = it.linkId
-                        measure.groupFirstRep.addPopulation(compo)
+                        // check if the linkId is not in the excluded list and add to measure
+                        if (!FACILITY_DETAILS.contains(it.linkId)) {
+                            measure.groupFirstRep.addPopulation(compo)
+                        }
 
 
                         val obs = qh.codingQuestionnaire(
