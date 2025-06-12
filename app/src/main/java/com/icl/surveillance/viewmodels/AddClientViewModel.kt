@@ -17,6 +17,7 @@ import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FI
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.models.QuestionnaireAnswer
 import com.icl.surveillance.models.SpecimenConfig
+import com.icl.surveillance.utils.Constants.ALL_LINK_IDS
 import com.icl.surveillance.utils.Constants.FACILITY_DETAILS
 import com.icl.surveillance.utils.Constants.WEEK_ENDING_DATE
 import com.icl.surveillance.utils.FormatterClass
@@ -670,7 +671,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         }
                         compo.id = it.linkId
                         // check if the linkId is not in the excluded list and add to measure
-                        if (!FACILITY_DETAILS.contains(it.linkId)) {
+                        if (!ALL_LINK_IDS.contains(it.linkId)) {
                             measure.groupFirstRep.addPopulation(compo)
                         }
 
