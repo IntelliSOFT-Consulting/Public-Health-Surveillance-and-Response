@@ -20,18 +20,22 @@
             android:name=".clients.SyncActivity"
             android:exported="false"
             android:label="Data Sync"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.Surveillance.NoActionBar" />
         <activity
             android:name=".ui.patients.SummarizedActivity"
             android:exported="false"
-            android:label="Case Summary " />
+            android:label="Case Summary "
+            android:launchMode="singleTop" />
         <activity
             android:name=".cases.CaseListingActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTop" />
         <activity
             android:name=".auth.LauncherActivity"
             android:exported="true"
             android:label="@string/app_name"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.Surveillance.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,33 +47,38 @@
             android:name=".clients.AddParentCaseActivity"
             android:exported="false"
             android:label="New Case"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.Surveillance.NoActionBar" />
         <activity
             android:name=".ui.patients.FullCaseDetailsActivity"
             android:exported="false"
-            android:label="Case Summary " />
+            android:label="Case Summary "
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.patients.CaseDetailsActivity"
             android:exported="false"
-            android:label="Case Details" />
+            android:label="Case Details"
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.patients.AddCaseActivity"
             android:exported="false"
             android:label="New Case"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.Surveillance.NoActionBar" />
         <activity
             android:name=".ui.patients.ClientDetailsActivity"
             android:exported="false"
-            android:label="Case Details" />
+            android:label="Case Details"
+            android:launchMode="singleTop" />
         <activity
             android:name=".auth.LoginActivity"
             android:exported="false"
-            android:label="@string/app_name"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.Surveillance.FullScreen" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.Surveillance.NoActionBar" />
     </application>
 

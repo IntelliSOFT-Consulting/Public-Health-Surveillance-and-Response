@@ -6793,6 +6793,16 @@
           "linkId": "dysentery-tested-under-5",
           "text": "Dysentery Tested",
           "required": true,
+          "enableWhen": [
+            {
+              "question": "dysentery-bacillary-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
@@ -6805,6 +6815,16 @@
           "linkId": "dysentery-tested-over-5",
           "text": "Dysentery Tested \u2265 5 years",
           "required": true,
+          "enableWhen": [
+            {
+              "question": "dysentery-bacillary-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
@@ -6817,6 +6837,16 @@
           "linkId": "dysentery-positive-shigella",
           "text": "Dysentery Positive (S. dysenteriae)",
           "required": true,
+          "enableWhen": [
+            {
+              "question": "dysentery-bacillary-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
@@ -6829,6 +6859,16 @@
           "linkId": "bacterial-meningitis-csf-no",
           "text": "Bacterial Meningitis No CSF",
           "required": true,
+          "enableWhen": [
+            {
+              "question": "bacterial-meningitis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
@@ -6840,6 +6880,16 @@
           "type": "integer",
           "linkId": "bacterial-meningitis-csf-contaminated",
           "text": "Bacterial Meningitis No contaminated",
+          "enableWhen": [
+            {
+              "question": "bacterial-meningitis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true,
           "extension": [
             {
@@ -6852,6 +6902,16 @@
           "type": "integer",
           "linkId": "bacterial-meningitis-tested-positive",
           "text": "Bacterial Meningitis Tested +ve",
+          "enableWhen": [
+            {
+              "question": "bacterial-meningitis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true,
           "extension": [
             {
@@ -6864,6 +6924,16 @@
           "type": "integer",
           "linkId": "bacterial-meningitis-positive-nm",
           "text": "Bacterial Meningitis +ve Nm",
+          "enableWhen": [
+            {
+              "question": "bacterial-meningitis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true,
           "extension": [
             {
@@ -6876,6 +6946,16 @@
           "type": "integer",
           "linkId": "bacterial-meningitis-positive-spneum",
           "text": "Bacterial Meningitis +ve S. Pneum",
+          "enableWhen": [
+            {
+              "question": "bacterial-meningitis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true,
           "extension": [
             {
@@ -6888,6 +6968,16 @@
           "type": "integer",
           "linkId": "bacterial-meningitis-positive-hib",
           "text": "Bacterial Meningitis +ve Hib",
+          "enableWhen": [
+            {
+              "question": "bacterial-meningitis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true,
           "extension": [
             {
@@ -6900,6 +6990,16 @@
           "type": "integer",
           "linkId": "bacterial-meningitis-positive-sagalactiae",
           "text": "Bacterial Meningitis +ve S. agalactiae",
+          "enableWhen": [
+            {
+              "question": "bacterial-meningitis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true,
           "extension": [
             {
@@ -6912,6 +7012,16 @@
           "type": "integer",
           "linkId": "bacterial-meningitis-csf-subtyped",
           "text": "Bacterial Meningitis No of CSF Sub-Typed",
+          "enableWhen": [
+            {
+              "question": "bacterial-meningitis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true,
           "extension": [
             {
@@ -6924,6 +7034,16 @@
           "type": "integer",
           "linkId": "bacterial-meningitis-positive-nma",
           "text": "Bacterial Meningitis +ve Nm A",
+          "enableWhen": [
+            {
+              "question": "bacterial-meningitis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true,
           "extension": [
             {
@@ -6936,6 +7056,16 @@
           "type": "integer",
           "linkId": "bacterial-meningitis-positive-nmb",
           "text": "Bacterial Meningitis +ve Nm B",
+          "enableWhen": [
+            {
+              "question": "bacterial-meningitis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true,
           "extension": [
             {
@@ -6948,6 +7078,16 @@
           "type": "integer",
           "linkId": "bacterial-meningitis-positive-nmc",
           "text": "Bacterial Meningitis +ve Nm C",
+          "enableWhen": [
+            {
+              "question": "bacterial-meningitis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true,
           "extension": [
             {
@@ -6960,6 +7100,16 @@
           "type": "integer",
           "linkId": "bacterial-meningitis-positive-nmw",
           "text": "Bacterial Meningitis +ve Nm W",
+          "enableWhen": [
+            {
+              "question": "bacterial-meningitis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true,
           "extension": [
             {
@@ -6972,6 +7122,16 @@
           "type": "integer",
           "linkId": "bacterial-meningitis-positive-nmx",
           "text": "Bacterial Meningitis +ve Nm X",
+          "enableWhen": [
+            {
+              "question": "bacterial-meningitis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true,
           "extension": [
             {
@@ -6984,6 +7144,16 @@
           "type": "integer",
           "linkId": "bacterial-meningitis-positive-nmy",
           "text": "Bacterial Meningitis +ve Nm Y",
+          "enableWhen": [
+            {
+              "question": "bacterial-meningitis-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true,
           "extension": [
             {
@@ -7033,6 +7203,16 @@
           "linkId": "typhoid-tested-under-5",
           "text": "Typhoid Tested",
           "required": true,
+          "enableWhen": [
+            {
+              "question": "typhoid-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
@@ -7044,6 +7224,16 @@
           "type": "integer",
           "linkId": "typhoid-tested-over-5",
           "text": "Typhoid Tested \u2265 5 years",
+          "enableWhen": [
+            {
+              "question": "typhoid-summary",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "required": true,
           "extension": [
             {
