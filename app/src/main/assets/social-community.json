@@ -1,0 +1,400 @@
+{
+  "resourceType": "Questionnaire",
+  "id": "rcce-social-investigation-part-b",
+  "title": "RCCE Social Investigation Form - Part B: Community Questionnaire",
+  "status": "active",
+  "subjectType": [
+    "Patient"
+  ],
+  "item": [
+    {
+      "linkId": "socio-demographics",
+      "text": "Socio demographics information",
+      "type": "group",
+      "item": [
+        {
+          "linkId": "county",
+          "text": "County",
+          "type": "string"
+        },
+        {
+          "linkId": "sub-county",
+          "text": "Sub County",
+          "type": "string"
+        },
+        {
+          "linkId": "ward",
+          "text": "Ward",
+          "type": "string"
+        },
+        {
+          "linkId": "village",
+          "text": "Village",
+          "type": "string"
+        },
+        {
+          "linkId": "geocodes",
+          "text": "Geocodes",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "linkId": "respondent-info",
+      "text": "Respondent Information",
+      "type": "group",
+      "item": [
+        {
+          "linkId": "sex",
+          "text": "Sex",
+          "type": "string"
+        },
+        {
+          "linkId": "age",
+          "text": "Age (yrs/mths)",
+          "type": "string"
+        },
+        {
+          "linkId": "education",
+          "text": "Level of education",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "none",
+                "display": "None"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "primary",
+                "display": "Primary"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "secondary",
+                "display": "Secondary"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "tertiary",
+                "display": "Tertiary"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "occupation",
+          "text": "Occupation",
+          "type": "string"
+        },
+        {
+          "linkId": "religion",
+          "text": "Religion of respondent",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "christian",
+                "display": "Christian"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "muslim",
+                "display": "Muslim"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "hindu",
+                "display": "Hindu"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "atheist",
+                "display": "Atheist"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "other",
+                "display": "Others (specify)"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "religion-specify",
+          "text": "Specify other religion",
+          "type": "string",
+          "enableWhen": [
+            {
+              "question": "religion",
+              "operator": "=",
+              "answerCoding": {
+                "code": "other"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "household-size",
+          "text": "How many people live in this household?",
+          "type": "integer"
+        }
+      ]
+    },
+    {
+      "linkId": "knowledge-awareness",
+      "text": "Knowledge and Awareness on current disease outbreak in this community",
+      "type": "group",
+      "item": [
+        {
+          "linkId": "heard-outbreak",
+          "text": "Have you heard of the current disease outbreak in this area?",
+          "type": "boolean"
+        },
+        {
+          "linkId": "which-disease",
+          "text": "Which disease is it?",
+          "type": "choice",
+          "repeats": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "ajd",
+                "display": "Acute Jaundice"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "chikungunya",
+                "display": "Chikungunya Disease"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "dengue",
+                "display": "Dengue Fever Disease"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "yellow-fever",
+                "display": "Yellow Fever"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "covid19",
+                "display": "COVID-19"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "diarrhoea",
+                "display": "Diarrhoea Diseases"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "sars",
+                "display": "Severe Acute Respiratory Syndrome (SARS)"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "sari",
+                "display": "Severe Acute Respiratory Illness (SARI)"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "nnt",
+                "display": "Neonatal Tetanus (NNT)"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "ahfs",
+                "display": "Acute Haemorrhagic Fever Syndrome"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "typhoid",
+                "display": "Typhoid Fever"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "polio",
+                "display": "Polio (Poliomyelitis)"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "cholera",
+                "display": "Cholera"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "maternal-death",
+                "display": "Maternal Death"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "meningitis",
+                "display": "Meningitis"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "hepatitis",
+                "display": "Hepatitis"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "dysentery",
+                "display": "Dysentery Disease"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "avian-flu",
+                "display": "Avian Influenza (Bird Flu)"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "anthrax",
+                "display": "Anthrax"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "rabies",
+                "display": "Rabies"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "rvf",
+                "display": "Rift Valley Fever"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "brucellosis",
+                "display": "Brucellosis"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "leishmaniasis",
+                "display": "Leishmaniasis"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "malaria",
+                "display": "Malaria"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "measles",
+                "display": "Measles"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "explain-disease",
+          "text": "Would you explain what this disease is?",
+          "type": "boolean"
+        },
+        {
+          "linkId": "explanation",
+          "text": "If yes, what is it?",
+          "type": "string",
+          "enableWhen": [
+            {
+              "question": "explain-disease",
+              "operator": "=",
+              "answerBoolean": true
+            }
+          ]
+        },
+        {
+          "linkId": "know-risk-group",
+          "text": "Do you know who is at risk of this disease?",
+          "type": "boolean"
+        },
+        {
+          "linkId": "signs-symptoms",
+          "text": "What are some of the signs and symptoms of this disease?",
+          "type": "string"
+        },
+        {
+          "linkId": "transmission",
+          "text": "How do you think this disease is transmitted? (Check all that apply)",
+          "type": "string"
+        },
+        {
+          "linkId": "can-prevent",
+          "text": "Do you think this disease can be prevented?",
+          "type": "boolean"
+        },
+        {
+          "linkId": "preventive-measures",
+          "text": "Preventive Measures if Yes",
+          "type": "string",
+          "enableWhen": [
+            {
+              "question": "can-prevent",
+              "operator": "=",
+              "answerBoolean": true
+            }
+          ]
+        },
+        {
+          "linkId": "why-not-prevent",
+          "text": "If No, Why?",
+          "type": "string",
+          "enableWhen": [
+            {
+              "question": "can-prevent",
+              "operator": "=",
+              "answerBoolean": false
+            }
+          ]
+        },
+        {
+          "linkId": "household-infected",
+          "text": "Have you or any member of this household been infected by the current disease?",
+          "type": "boolean"
+        },
+        {
+          "linkId": "number-infected",
+          "text": "If yes, how many were infected in your household",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "household-infected",
+              "operator": "=",
+              "answerBoolean": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -194,6 +194,28 @@ class ChildFragment : Fragment() {
                 )
             }
 
+            31 -> {
+
+                val bundle =
+                    Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-case.json") }
+
+                FormatterClass()
+                    .saveSharedPref(
+                        "grandTitle", "RCCE Tools",
+                        requireContext()
+                    )
+                FormatterClass()
+                    .saveSharedPref(
+                        "childStage", "60",
+                        requireContext()
+                    )
+
+                findNavController().navigate(
+                    R.id.action_childFragment_to_caseSelectionFragment,
+                    bundle
+                )
+            }
+
             20 -> {
                 val bundle =
                     Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-case.json") }

@@ -107,10 +107,12 @@ class CaseSelectionFragment : Fragment() {
             "Visceral Leishmaniasis (Kala-azar) Case Management Form" -> "VL"
             "Visceral Leishmaniasis Case Management Form" -> "VL"
             "Social Listening and Rumor Tracking Tool" -> "SLR"
+            "RCCE Tools" -> "RCCE"
             else -> titleName
         }
         val add = when (title) {
             "SLR" -> "Add New Report"
+            "MOH 505" -> "Add New Record"
             else -> "Add New $title Case"
         }
         val view = when (title) {
@@ -127,7 +129,7 @@ class CaseSelectionFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = CaseOptionsAdapter(caseOptions) { option ->
             when (option.title) {
-                "Add New MOH 505 Case" -> {
+                "Add New Record" -> {
                     FormatterClass().saveSharedPref(
                         "currentCase", "MOH 505 Reporting Form", requireContext()
                     )
