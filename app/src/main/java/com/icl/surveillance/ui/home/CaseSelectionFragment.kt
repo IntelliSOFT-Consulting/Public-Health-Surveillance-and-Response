@@ -23,6 +23,7 @@ import com.icl.surveillance.clients.AddParentCaseActivity
 import com.icl.surveillance.databinding.FragmentCaseSelectionBinding
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.models.CaseOption
+import com.icl.surveillance.ui.home.sheet.SelectionBottomSheet
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
 import kotlin.getValue
@@ -98,6 +99,50 @@ class CaseSelectionFragment : Fragment() {
             setupRecyclerView()
         }
 
+
+        childFragmentManager.setFragmentResultListener(
+            SelectionBottomSheet.RESULT_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            when (bundle.getInt(SelectionBottomSheet.ARG_CHOICE)) {
+                SelectionBottomSheet.CHOICE_COUNTY -> {
+                    FormatterClass().saveSharedPref(
+                        "currentCase", "RCCE - County/Subcounty Interface", requireContext()
+                    )
+                    FormatterClass().saveSharedPref(
+                        "AddParentTitle",
+                        "RCCE - County/Subcounty Interface",
+                        requireContext()
+                    )
+                    FormatterClass().saveSharedPref(
+                        "questionnaire", "social-county.json", requireContext()
+                    )
+                    val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
+                    intent.putExtra("AddParentTitle", " $titleName")
+                    intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "social-county.json")
+                    startActivity(intent)
+                }
+
+                SelectionBottomSheet.CHOICE_COMMUNITY -> {
+                    FormatterClass().saveSharedPref(
+                        "currentCase", "RCCE - Community Questionnaire", requireContext()
+                    )
+                    FormatterClass().saveSharedPref(
+                        "AddParentTitle",
+                        "RCCE - Community Questionnaire",
+                        requireContext()
+                    )
+                    FormatterClass().saveSharedPref(
+                        "questionnaire", "social-community.json", requireContext()
+                    )
+                    val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
+                    intent.putExtra("AddParentTitle", " $titleName")
+                    intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "social-community.json")
+                    startActivity(intent)
+                }
+            }
+        }
+
     }
 
     private fun setupRecyclerView() {
@@ -129,6 +174,11 @@ class CaseSelectionFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = CaseOptionsAdapter(caseOptions) { option ->
             when (option.title) {
+                "Add New RCCE Case" -> {
+                    SelectionBottomSheet.show(childFragmentManager)
+
+                }
+
                 "Add New Record" -> {
                     FormatterClass().saveSharedPref(
                         "currentCase", "MOH 505 Reporting Form", requireContext()

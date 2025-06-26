@@ -74,4 +74,6 @@
     <string name="last_sync_status">Last sync status: %1$s</string>
     <string name="last_sync_status_na">Last sync status: Not available</string>
     <string name="moh505_form">MOH 505</string>
+    <string name="county_sub_county">County/Sub County Coordination Assessment</string>
+    <string name="community_tool">Community Questionnaire</string>
 </resources>
