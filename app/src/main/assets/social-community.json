@@ -1,11 +1,11 @@
 {
   "resourceType": "Questionnaire",
   "id": "rcce-social-investigation-part-b",
-  "title": "RCCE Social Investigation Form - Part B: Community Questionnaire",
-  "status": "active",
-  "subjectType": [
-    "Patient"
-  ],
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/4.0/StructureDefinition/Questionnaire"
+    ]
+  },
   "extension": [
     {
       "url": "http://hl7.org/fhir/StructureDefinition/variable",
@@ -47,6 +47,11 @@
         "expression": "%resource.descendants().where(linkId='819943434').answer.value.reference"
       }
     }
+  ],
+  "title": "RCCE Social Investigation Form - Part B: Community Questionnaire",
+  "status": "active",
+  "subjectType": [
+    "Patient"
   ],
   "item": [
     {
@@ -206,19 +211,70 @@
       "type": "group",
       "item": [
         {
-          "linkId": "sex",
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "linkId": "929966324957",
           "text": "Sex",
-          "type": "string"
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "male",
+                "display": "Male"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "female",
+                "display": "Female"
+              }
+            }
+          ]
         },
         {
           "linkId": "age",
           "text": "Age (yrs/mths)",
-          "type": "string"
+          "type": "integer"
         },
         {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "education",
           "text": "Level of education",
-          "type": "choice",
           "answerOption": [
             {
               "valueCoding": {
@@ -331,12 +387,69 @@
         {
           "linkId": "heard-outbreak",
           "text": "Have you heard of the current disease outbreak in this area?",
-          "type": "boolean"
+          "type": "choice",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ]
         },
         {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
           "linkId": "which-disease",
           "text": "Which disease is it?",
-          "type": "choice",
+          "enableWhen": [
+            {
+              "question": "heard-outbreak",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
           "repeats": true,
           "answerOption": [
             {
@@ -492,80 +605,284 @@
           ]
         },
         {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "explain-disease",
           "text": "Would you explain what this disease is?",
-          "type": "boolean"
+          "enableWhen": [
+            {
+              "question": "heard-outbreak",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
         },
         {
+          "type": "string",
           "linkId": "explanation",
           "text": "If yes, what is it?",
-          "type": "string",
           "enableWhen": [
             {
               "question": "explain-disease",
               "operator": "=",
-              "answerBoolean": true
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
             }
           ]
         },
         {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "know-risk-group",
           "text": "Do you know who is at risk of this disease?",
-          "type": "boolean"
+          "enableWhen": [
+            {
+              "question": "heard-outbreak",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
         },
         {
+          "type": "string",
           "linkId": "signs-symptoms",
           "text": "What are some of the signs and symptoms of this disease?",
-          "type": "string"
+          "enableWhen": [
+            {
+              "question": "heard-outbreak",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ]
         },
         {
+          "type": "string",
           "linkId": "transmission",
           "text": "How do you think this disease is transmitted? (Check all that apply)",
-          "type": "string"
+          "enableWhen": [
+            {
+              "question": "heard-outbreak",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ]
         },
         {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "can-prevent",
           "text": "Do you think this disease can be prevented?",
-          "type": "boolean"
+          "enableWhen": [
+            {
+              "question": "heard-outbreak",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
         },
         {
+          "type": "string",
           "linkId": "preventive-measures",
           "text": "Preventive Measures if Yes",
-          "type": "string",
           "enableWhen": [
             {
               "question": "can-prevent",
               "operator": "=",
-              "answerBoolean": true
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
             }
           ]
         },
         {
+          "type": "string",
           "linkId": "why-not-prevent",
           "text": "If No, Why?",
-          "type": "string",
           "enableWhen": [
             {
               "question": "can-prevent",
               "operator": "=",
-              "answerBoolean": false
+              "answerCoding": {
+                "code": "no",
+                "display": "No"
+              }
             }
           ]
         },
         {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "linkId": "household-infected",
           "text": "Have you or any member of this household been infected by the current disease?",
-          "type": "boolean"
+          "enableWhen": [
+            {
+              "question": "heard-outbreak",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
         },
         {
+          "type": "integer",
           "linkId": "number-infected",
           "text": "If yes, how many were infected in your household",
-          "type": "integer",
           "enableWhen": [
             {
               "question": "household-infected",
               "operator": "=",
-              "answerBoolean": true
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
             }
           ]
         }
