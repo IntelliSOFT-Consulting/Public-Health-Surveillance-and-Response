@@ -179,6 +179,17 @@ class CaseSelectionFragment : Fragment() {
 
                 }
 
+                "RCCE Case List" -> {
+                    FormatterClass().saveSharedPref(
+                        "listingTitle", "RCCE Tools", requireContext()
+                    )
+                    FormatterClass().saveSharedPref(
+                        "currentCase", "RCCE", requireContext()
+                    )
+                    val intent = Intent(requireContext(), CaseListingActivity::class.java)
+                    startActivity(intent)
+                }
+
                 "Add New Record" -> {
                     FormatterClass().saveSharedPref(
                         "currentCase", "MOH 505 Reporting Form", requireContext()

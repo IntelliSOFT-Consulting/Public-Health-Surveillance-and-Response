@@ -322,11 +322,19 @@ class PatientListViewModel(
             }
             .mapIndexedNotNull { index, fhirPatient ->
                 // Only return the patient if one of the identifiers matches the system
-                val matchingIdentifier = fhirPatient.resource.identifier.find {
-                    it.system == nameQuery
+
+                val matchingIdentifier = when (nameQuery) {
+                    "rcce" -> fhirPatient.resource.identifier.find {
+                        it.system == "rcce-community-questionnaire" || it.system == "rcce-countysubcounty-interface"
+                    }
+
+                    else -> fhirPatient.resource.identifier.find {
+                        it.system == nameQuery
+                    }
                 }
                 val epidIdenfifier =
                     fhirPatient.resource.identifier.find { it.type.codingFirstRep.code == "EPID" }
+
 
                 println("Displaying Cases for ->   matchingIdentifier ${matchingIdentifier?.value}")
 
@@ -377,6 +385,7 @@ class PatientListViewModel(
                         "moh-505-reporting-form" -> {
 
                         }
+
                         "vl-case-information" -> {
 
                             val childCaseInfoEncounter =

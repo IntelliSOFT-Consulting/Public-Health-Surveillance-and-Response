@@ -3,12 +3,175 @@
   "id": "rcce-social-investigation-part-a",
   "title": "RCCE Social Investigation Form - Part A: County/Subcounty Interface",
   "status": "active",
-  "subjectType": ["Location"],
+  "subjectType": [
+    "Patient"
+  ],
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
+        "name": "countyName",
+        "language": "text/fhirpath",
+        "expression": "%resource.descendants().where(linkId='294367770999').answer.value.reference"
+      }
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
+        "name": "patientCountyName",
+        "language": "text/fhirpath",
+        "expression": "%resource.descendants().where(linkId='a4-county').answer.value.reference"
+      }
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
+        "name": "selectedSubCountyName",
+        "language": "text/fhirpath",
+        "expression": "%resource.descendants().where(linkId='819946803642').answer.value.reference"
+      }
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
+        "name": "selectedWardName",
+        "language": "text/fhirpath",
+        "expression": "%resource.descendants().where(linkId='819943434').answer.value.reference"
+      }
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
+        "name": "selectedFacilityName",
+        "language": "text/fhirpath",
+        "expression": "%resource.descendants().where(linkId='819943434').answer.value.reference"
+      }
+    }
+  ],
   "item": [
+    {
+      "item": [
+        {
+          "linkId": "294367770999",
+          "text": "County ",
+          "type": "reference",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Location?partof=Location/0&_sort=name"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-choiceColumn",
+              "extension": [
+                {
+                  "url": "path",
+                  "valueString": "name"
+                },
+                {
+                  "url": "forDisplay",
+                  "valueBoolean": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "reference",
+          "linkId": "819946803642",
+          "text": "Subcounty ",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Location?partof={{%countyName}}&_sort=name"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-choiceColumn",
+              "extension": [
+                {
+                  "url": "path",
+                  "valueString": "name"
+                },
+                {
+                  "url": "forDisplay",
+                  "valueBoolean": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "reference",
+          "linkId": "819943434",
+          "text": "Ward ",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Location?partof={{%selectedSubCountyName}}&_sort=name"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-choiceColumn",
+              "extension": [
+                {
+                  "url": "path",
+                  "valueString": "name"
+                },
+                {
+                  "url": "forDisplay",
+                  "valueBoolean": true
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "151479012557",
+      "text": "Reporting Site"
+    },
     {
       "linkId": "county-subcounty-assessment",
       "text": "County/Subcounty Level Assessment",
       "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
       "item": [
         {
           "linkId": "rcce-focal-point",
@@ -26,16 +189,66 @@
           "type": "choice",
           "repeats": true,
           "answerOption": [
-            { "valueCoding": { "code": "CHMT", "display": "Members of CHMT" }},
-            { "valueCoding": { "code": "HPO", "display": "Health Promotion Officer" }},
-            { "valueCoding": { "code": "SO", "display": "Surveillance Officer" }},
-            { "valueCoding": { "code": "CS", "display": "Community Strategy" }},
-            { "valueCoding": { "code": "EPI", "display": "EPI Logistician" }},
-            { "valueCoding": { "code": "PHO", "display": "Public Health Officer" }},
-            { "valueCoding": { "code": "NO", "display": "Nursing Officer" }},
-            { "valueCoding": { "code": "EPIST", "display": "Epidemiologist" }},
-            { "valueCoding": { "code": "MO", "display": "Medical Officer" }},
-            { "valueCoding": { "code": "OTHER", "display": "Other (Specify)" }}
+            {
+              "valueCoding": {
+                "code": "CHMT",
+                "display": "Members of CHMT"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "HPO",
+                "display": "Health Promotion Officer"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "SO",
+                "display": "Surveillance Officer"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "CS",
+                "display": "Community Strategy"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "EPI",
+                "display": "EPI Logistician"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "PHO",
+                "display": "Public Health Officer"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "NO",
+                "display": "Nursing Officer"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "EPIST",
+                "display": "Epidemiologist"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "MO",
+                "display": "Medical Officer"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "OTHER",
+                "display": "Other (Specify)"
+              }
+            }
           ]
         },
         {
@@ -46,7 +259,9 @@
             {
               "question": "subcommittee-members",
               "operator": "=",
-              "answerCoding": { "code": "OTHER" }
+              "answerCoding": {
+                "code": "OTHER"
+              }
             }
           ]
         },
@@ -56,14 +271,54 @@
           "type": "choice",
           "repeats": true,
           "answerOption": [
-            { "valueCoding": { "code": "MOH", "display": "Ministry of Health" }},
-            { "valueCoding": { "code": "DISASTER", "display": "County Disaster Program" }},
-            { "valueCoding": { "code": "LIVESTOCK", "display": "Ministry of Livestock" }},
-            { "valueCoding": { "code": "ENV", "display": "Ministry of Environment" }},
-            { "valueCoding": { "code": "EDU", "display": "Ministry of Education" }},
-            { "valueCoding": { "code": "WATER", "display": "Ministry of Water" }},
-            { "valueCoding": { "code": "INTERIOR", "display": "Ministry of Interior and Security" }},
-            { "valueCoding": { "code": "OTHER", "display": "Other (Specify)" }}
+            {
+              "valueCoding": {
+                "code": "MOH",
+                "display": "Ministry of Health"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "DISASTER",
+                "display": "County Disaster Program"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "LIVESTOCK",
+                "display": "Ministry of Livestock"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "ENV",
+                "display": "Ministry of Environment"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "EDU",
+                "display": "Ministry of Education"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "WATER",
+                "display": "Ministry of Water"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "INTERIOR",
+                "display": "Ministry of Interior and Security"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "OTHER",
+                "display": "Other (Specify)"
+              }
+            }
           ]
         },
         {
@@ -74,7 +329,9 @@
             {
               "question": "government-sectors",
               "operator": "=",
-              "answerCoding": { "code": "OTHER" }
+              "answerCoding": {
+                "code": "OTHER"
+              }
             }
           ]
         },
@@ -98,13 +355,48 @@
           "text": "How often do you meet?",
           "type": "choice",
           "answerOption": [
-            { "valueCoding": { "code": "weekly", "display": "Once a week" }},
-            { "valueCoding": { "code": "bimonthly", "display": "Bi-monthly" }},
-            { "valueCoding": { "code": "monthly", "display": "Monthly" }},
-            { "valueCoding": { "code": "quarterly", "display": "Quarterly" }},
-            { "valueCoding": { "code": "rarely", "display": "Rarely" }},
-            { "valueCoding": { "code": "when-necessary", "display": "When necessary" }},
-            { "valueCoding": { "code": "other", "display": "Other (Specify)" }}
+            {
+              "valueCoding": {
+                "code": "weekly",
+                "display": "Once a week"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "bimonthly",
+                "display": "Bi-monthly"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "monthly",
+                "display": "Monthly"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "quarterly",
+                "display": "Quarterly"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "rarely",
+                "display": "Rarely"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "when-necessary",
+                "display": "When necessary"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "other",
+                "display": "Other (Specify)"
+              }
+            }
           ]
         },
         {
@@ -115,7 +407,9 @@
             {
               "question": "meeting-frequency",
               "operator": "=",
-              "answerCoding": { "code": "other" }
+              "answerCoding": {
+                "code": "other"
+              }
             }
           ]
         },
@@ -147,18 +441,78 @@
           "type": "choice",
           "repeats": true,
           "answerOption": [
-            { "valueCoding": { "code": "community-engagement", "display": "Community engagement" }},
-            { "valueCoding": { "code": "door-to-door", "display": "Door to Door mobilization" }},
-            { "valueCoding": { "code": "baraza", "display": "Community baraza / dialogue" }},
-            { "valueCoding": { "code": "media-talk", "display": "Media talk shows" }},
-            { "valueCoding": { "code": "stakeholders", "display": "Stakeholder engagements" }},
-            { "valueCoding": { "code": "training", "display": "Sensitization/Training" }},
-            { "valueCoding": { "code": "iec", "display": "Distribution of IEC materials" }},
-            { "valueCoding": { "code": "rumour", "display": "Rumour Tracking" }},
-            { "valueCoding": { "code": "social-media", "display": "Social Media posts" }},
-            { "valueCoding": { "code": "pas", "display": "PAS system" }},
-            { "valueCoding": { "code": "tv-radio", "display": "Airing of TV/Radio Spots" }},
-            { "valueCoding": { "code": "other", "display": "Other (Specify)" }}
+            {
+              "valueCoding": {
+                "code": "community-engagement",
+                "display": "Community engagement"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "door-to-door",
+                "display": "Door to Door mobilization"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "baraza",
+                "display": "Community baraza / dialogue"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "media-talk",
+                "display": "Media talk shows"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "stakeholders",
+                "display": "Stakeholder engagements"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "training",
+                "display": "Sensitization/Training"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "iec",
+                "display": "Distribution of IEC materials"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "rumour",
+                "display": "Rumour Tracking"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "social-media",
+                "display": "Social Media posts"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "pas",
+                "display": "PAS system"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "tv-radio",
+                "display": "Airing of TV/Radio Spots"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "other",
+                "display": "Other (Specify)"
+              }
+            }
           ]
         },
         {
@@ -169,7 +523,9 @@
             {
               "question": "implemented-activities",
               "operator": "=",
-              "answerCoding": { "code": "other" }
+              "answerCoding": {
+                "code": "other"
+              }
             }
           ]
         },
