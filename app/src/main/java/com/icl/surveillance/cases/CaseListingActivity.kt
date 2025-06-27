@@ -152,54 +152,42 @@ class CaseListingActivity : AppCompatActivity() {
         val currentCase = FormatterClass().getSharedPref("currentCase", this)
         FormatterClass().saveSharedPref("resourceId", patientItem.resourceId, this)
         FormatterClass().saveSharedPref("encounterId", patientItem.encounterId, this)
+        FormatterClass().saveSharedPref(
+            "encounterQuestionnaire",
+            patientItem.encounterQuestionnaire,
+            this
+        )
         FormatterClass().deleteSharedPref("isCase", this)
         FormatterClass().deleteSharedPref("isVaccinated", this)
         if (currentCase != null) {
             val slug = currentCase.toSlug()
 
+            println("This is the current Clicked Page $slug")
+            println("This is the current Clicked Page ${patientItem.encounterQuestionnaire}")
+
             FormatterClass().saveSharedPref("latestEncounter", slug, this)
+            val activityIntent = Intent(this@CaseListingActivity, SummarizedActivity::class.java)
             when (slug) {
-                "social-listening-and-rumor-tracking-tool" -> {
-
-                    startActivity(
-                        Intent(
-                            this@CaseListingActivity,
-                            SummarizedActivity::class.java
-                        )
-                    )
-                }
-
-                "vl-case-information" -> {
-
-                    startActivity(
-                        Intent(
-                            this@CaseListingActivity,
-                            SummarizedActivity::class.java
-                        )
-                    )
-                }
-
-                "afp-case-information" -> {
-
-                    startActivity(
-                        Intent(
-                            this@CaseListingActivity,
-                            SummarizedActivity::class.java
-                        )
-                    )
+                "social-listening-and-rumor-tracking-tool",
+                "vl-case-information",
+                "afp-case-information",
+                "rcce" -> {
+                    startActivity(activityIntent)
                 }
 
                 else -> {
-                    FormatterClass().saveSharedPref("isCase", patientItem.caseList, this)
-                    FormatterClass().saveSharedPref("isVaccinated", patientItem.vaccinated, this)
-                    startActivity(
-                        Intent(
-                            this@CaseListingActivity,
-                            SummarizedActivity::class.java
+                    FormatterClass().apply {
+                        saveSharedPref("isCase", patientItem.caseList, this@CaseListingActivity)
+                        saveSharedPref(
+                            "isVaccinated",
+                            patientItem.vaccinated,
+                            this@CaseListingActivity
                         )
-                    )
+                    }
+                    startActivity(activityIntent)
                 }
             }
+
         } else {
             Toast.makeText(this, "Please try again later ", Toast.LENGTH_SHORT).show()
         }

@@ -347,6 +347,7 @@ class CaseSelectionFragment : Fragment() {
             "VL" -> "vl-case-information"
             "SLR" -> "social-listening-and-rumor-tracking-tool"
             "MOH 505" -> "moh-505-reporting-form"
+            "RCCE" -> "rcce"
             else -> null
         }
         println("Case Type: $caseType")

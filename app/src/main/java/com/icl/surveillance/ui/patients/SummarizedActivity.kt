@@ -78,7 +78,19 @@ class SummarizedActivity : AppCompatActivity() {
 
             if (currentCase != null) {
                 val slug = currentCase.toSlug()
-                patientDetailsViewModel.getPatientInfoSummaryData(slug)
+                println("Dealing with the current Slug $slug")
+                val key = when (slug) {
+                    "rcce" -> {
+                        val encounterQuestionnaire = FormatterClass().getSharedPref(
+                            "encounterQuestionnaire",
+                            this@SummarizedActivity
+                        )
+                        "$encounterQuestionnaire"
+                    }
+
+                    else -> slug
+                }
+                patientDetailsViewModel.getPatientInfoSummaryData(key)
             }
 
             var customFragments = when (latestEncounter) {
@@ -238,6 +250,21 @@ class SummarizedActivity : AppCompatActivity() {
             "vl-case-information" -> "vl-case.json"
             "moh-505-reporting-form" -> "moh505.json"
             "social-listening-and-rumor-tracking-tool" -> "rumor-tracking-case.json"
+            "rcce" -> {
+
+                val encounterQuestionnaire = FormatterClass().getSharedPref(
+                    "encounterQuestionnaire",
+                    this@SummarizedActivity
+                )
+                println("This is the latest encounter $encounterQuestionnaire")
+                when (encounterQuestionnaire) {
+                    "rcce-community-questionnaire" -> "social-community.json"
+                    "rcce-countysubcounty-interface" -> "social-county.json"
+                    else -> ""
+
+                }
+            }
+
             else -> ""
         }
         try {

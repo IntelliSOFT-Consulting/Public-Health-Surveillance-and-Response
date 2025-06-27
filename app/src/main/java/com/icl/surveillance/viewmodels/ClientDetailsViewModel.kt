@@ -178,6 +178,7 @@ class ClientDetailsViewModel(
         var epidNo = ""
         var observations = mutableListOf<PatientListViewModel.ObservationItem>()
 
+        println("Dealing with the current Slug View Model $slug")
         val searchResult =
             fhirEngine.search<Patient> { filter(Resource.RES_ID, { value = of(patientId) }) }
         searchResult.first().let {
@@ -193,9 +194,13 @@ class ClientDetailsViewModel(
                         it.resource.birthDateElement.valueAsString
                     else ""
                 else ""
+
+
             val matchingIdentifier = it.resource.identifier.find {
                 it.system == slug
             }
+
+
             val epidIdenfifier =
                 it.resource.identifier.find { it.type.codingFirstRep.code == "EPID" }
 

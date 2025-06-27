@@ -342,6 +342,7 @@ class PatientListViewModel(
                     // Convert the FHIR Patient resource to your PatientItem model
                     var data = fhirPatient.resource.toPatientItem(index + 1)
                     val logicalId = matchingIdentifier.value
+                    val encounterQuestionnaire = matchingIdentifier.system
                     val obs =
                         fhirEngine.search<Observation> {
                             filter(
@@ -551,7 +552,8 @@ class PatientListViewModel(
                             epid = epid,
                             county = county,
                             subCounty = subCounty,
-                            caseOnsetDate = onset
+                            caseOnsetDate = onset,
+                            encounterQuestionnaire = encounterQuestionnaire
                         )
                     data
                 } else {
@@ -594,7 +596,8 @@ class PatientListViewModel(
         val labResults: String = "Pending",
         val lastUpdated: String,
         val caseList: String = "Case",
-        val vaccinated: String = "No"
+        val vaccinated: String = "No",
+        val encounterQuestionnaire: String = ""
     ) {
         override fun toString(): String = name
     }
