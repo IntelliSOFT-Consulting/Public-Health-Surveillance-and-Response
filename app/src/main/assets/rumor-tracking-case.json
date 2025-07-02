@@ -11,6 +11,14 @@
     {
       "url": "http://hl7.org/fhir/StructureDefinition/variable",
       "valueExpression": {
+        "name": "startDate",
+        "language": "text/fhirpath",
+        "expression": "%resource.descendants().where(linkId='date-from').answer.value"
+      }
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
         "name": "countyName",
         "language": "text/fhirpath",
         "expression": "%resource.descendants().where(linkId='294367770999').answer.value.reference"
@@ -818,7 +826,7 @@
             }
           ],
           "linkId": "735623392446",
-          "text": "Was the rumor investigated?",
+          "text": "Was Rumour Investigated?",
           "required": true,
           "answerOption": [
             {
@@ -831,6 +839,261 @@
               "valueCoding": {
                 "code": "no",
                 "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "investigator-name",
+          "text": "Name of Investigator",
+          "type": "display",
+          "enableWhen": [
+            {
+              "question": "735623392446",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "investigator-name-first",
+          "text": "First Name",
+          "type": "string",
+          "enableWhen": [
+            {
+              "question": "735623392446",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "investigator-name-middle",
+          "text": "Middle Name",
+          "type": "string",
+          "enableWhen": [
+            {
+              "question": "735623392446",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "investigator-name-surname",
+          "text": "Surname Name",
+          "type": "string",
+          "enableWhen": [
+            {
+              "question": "735623392446",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "investigator-phone",
+          "text": "Phone Number of Investigator",
+          "type": "string",
+          "enableWhen": [
+            {
+              "question": "735623392446",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "investigator-role",
+          "text": "Function/Role of Investigator",
+          "type": "string",
+          "enableWhen": [
+            {
+              "question": "735623392446",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "investigation-period",
+          "text": "Date of the investigation (from – to)",
+          "type": "display",
+          "enableWhen": [
+            {
+              "question": "735623392446",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "date-from",
+          "text": "From",
+          "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "735623392446",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "date-to",
+          "text": "To",
+          "type": "date",
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "735623392446",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "activities",
+          "text": "Main activities carried out (places visited, persons met, etc.)",
+          "type": "string",
+          "enableWhen": [
+            {
+              "question": "735623392446",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "results",
+          "text": "Results of the investigation",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "confirmed",
+                "display": "Confirmed Case of Disease"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "imported",
+                "display": "Imported Case"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "rumour",
+                "display": "Rumour"
+              }
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "735623392446",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "rumour-diagnosis",
+          "text": "Diagnosis",
+          "type": "string",
+          "enableWhen": [
+            {
+              "question": "735623392446",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "conclusion",
+          "text": "Conclusion/recommendations (action taken or directives given)",
+          "type": "string",
+          "enableWhen": [
+            {
+              "question": "735623392446",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
               }
             }
           ]

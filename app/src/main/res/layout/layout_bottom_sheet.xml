@@ -6,6 +6,7 @@
     android:id="@+id/sheetRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="20dp"
     android:background="@color/white"
     android:orientation="vertical"
     android:padding="24dp">
@@ -23,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:text="@string/county_sub_county"
+        android:textAllCaps="false"
         app:cornerRadius="20dp" />
 
     <com.google.android.material.button.MaterialButton
@@ -31,5 +33,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/community_tool"
+        android:textAllCaps="false"
         app:cornerRadius="20dp" />
 </LinearLayout>
