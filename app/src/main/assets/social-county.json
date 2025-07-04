@@ -254,6 +254,7 @@
           "text": "Who are the members of the RCCE subcommittee team?",
           "type": "choice",
           "repeats": true,
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -420,6 +421,7 @@
           "linkId": "meeting-frequency",
           "text": "How often do you meet?",
           "type": "choice",
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -469,6 +471,7 @@
           "linkId": "meeting-frequency-specify",
           "text": "Specify other meeting frequency",
           "type": "string",
+          "required": true,
           "enableWhen": [
             {
               "question": "meeting-frequency",
@@ -487,12 +490,14 @@
         {
           "linkId": "rcce-contingency-plan",
           "text": "Do you have a RCCE contingency plan for ongoing outbreak?",
-          "type": "boolean"
+          "type": "boolean",
+          "required": true
         },
         {
           "linkId": "rcce-contingency-plan-specify",
           "text": "Specify if Yes",
           "type": "string",
+          "required": true,
           "enableWhen": [
             {
               "question": "rcce-contingency-plan",
@@ -506,6 +511,7 @@
           "text": "What RCCE activities have you implemented?",
           "type": "choice",
           "repeats": true,
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -585,6 +591,7 @@
           "linkId": "implemented-activities-specify",
           "text": "Specify other activity",
           "type": "string",
+          "required": true,
           "enableWhen": [
             {
               "question": "implemented-activities",
@@ -598,12 +605,14 @@
         {
           "linkId": "social-listening",
           "text": "Do we have a way of doing community social listening?",
-          "type": "boolean"
+          "type": "boolean",
+          "required": true
         },
         {
           "linkId": "social-listening-methods",
           "text": "If yes, list ways of community social listening",
           "type": "string",
+          "required": true,
           "enableWhen": [
             {
               "question": "social-listening",
@@ -615,12 +624,58 @@
         {
           "linkId": "functional-hotline",
           "text": "Do you have a functional hotline?",
-          "type": "boolean"
+          "type": "boolean",
+          "required": true
         },
         {
           "linkId": "hotline-number",
           "text": "If yes, indicate the number",
           "type": "string",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "phone-number",
+                    "display": "Phone Number"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxLength",
+              "valueInteger": 10
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minLength",
+              "valueInteger": 10
+            }
+          ],
+          "item": [
+            {
+              "linkId": "2.1",
+              "text": "07xxxxxxxx",
+              "type": "display",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "flyover",
+                        "display": "Fly-over"
+                      }
+                    ],
+                    "text": "Flyover"
+                  }
+                }
+              ]
+            }
+          ],
           "enableWhen": [
             {
               "question": "functional-hotline",

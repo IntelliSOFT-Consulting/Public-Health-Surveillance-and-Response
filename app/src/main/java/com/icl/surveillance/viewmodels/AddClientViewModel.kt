@@ -153,6 +153,35 @@ class AddClientViewModel(application: Application, private val state: SavedState
             val measure = MeasureReport()
 
             when (case) {
+
+                "social-listening-and-rumor-tracking-tool" -> {
+
+                    val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
+                    val countyEntry = extractedAnswers.find { it.linkId == "a4-county" }
+                    var county = ""
+                    var subCounty = ""
+                    val currentYear = LocalDate.now().year
+
+                    if (subCountyEntry != null) {
+                        subCounty = subCountyEntry.answer
+                        patient.addressFirstRep.state = subCounty
+                        patient.addressFirstRep.addLine(subCounty)
+                    }
+                    if (countyEntry != null) {
+                        county = countyEntry.answer
+                        patient.addressFirstRep.city = county
+                        patient.addressFirstRep.addLine(county)
+                    }
+
+                    val countyCode = county.padEnd(3, 'X').take(3).uppercase()
+                    val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
+
+
+                    val epid = "KEN-$countyCode-$subCountyCode-$currentYear-RTT-"
+
+                    val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
+                    createResource(obs, subjectReference, encounterReference)
+                }
                 "measles-case-information" -> {
                     val genderEntry = extractedAnswers.find { it.linkId == "929966324957" }
                     val dobEntry = extractedAnswers.find { it.linkId == "257830485990" }
