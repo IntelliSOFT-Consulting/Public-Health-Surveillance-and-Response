@@ -111,7 +111,7 @@ class CaseSelectionFragment : Fragment() {
                     )
                     FormatterClass().saveSharedPref(
                         "AddParentTitle",
-                        "RCCE - County/Subcounty Interface",
+                        "County/Subcounty Interface",
                         requireContext()
                     )
                     FormatterClass().saveSharedPref(
@@ -129,7 +129,7 @@ class CaseSelectionFragment : Fragment() {
                     )
                     FormatterClass().saveSharedPref(
                         "AddParentTitle",
-                        "RCCE - Community Questionnaire",
+                        "Community Questionnaire",
                         requireContext()
                     )
                     FormatterClass().saveSharedPref(
@@ -158,10 +158,12 @@ class CaseSelectionFragment : Fragment() {
         val add = when (title) {
             "SLR" -> "Add New Report"
             "MOH 505" -> "Add New Record"
+            "Social Investigation Form" -> "Add New Social Investigation Form"
             else -> "Add New $title Case"
         }
         val view = when (title) {
             "SLR" -> "View Reported Cases"
+            "Social Investigation Form" -> "Social Investigation Reports"
             else -> "$title Case List"
         }
         val caseOptions = mutableListOf(
@@ -174,14 +176,14 @@ class CaseSelectionFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = CaseOptionsAdapter(caseOptions) { option ->
             when (option.title) {
-                "Add New RCCE Case" -> {
+                "Add New Social Investigation Form" -> {
                     SelectionBottomSheet.show(childFragmentManager)
 
                 }
 
-                "RCCE Case List" -> {
+                "Social Investigation Reports" -> {
                     FormatterClass().saveSharedPref(
-                        "listingTitle", "RCCE Tools", requireContext()
+                        "listingTitle", "Social Investigation Form", requireContext()
                     )
                     FormatterClass().saveSharedPref(
                         "currentCase", "RCCE", requireContext()
