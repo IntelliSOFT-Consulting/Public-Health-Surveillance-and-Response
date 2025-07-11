@@ -133,8 +133,10 @@ class LabResultsFragment : Fragment() {
         patientDetailsViewModel.currentLiveLabData.observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
                 binding.tvNoCase.visibility = View.VISIBLE
+                FormatterClass().saveSharedPref("labDone", "false", requireContext())
             } else {
 
+                FormatterClass().deleteSharedPref("labDone", requireContext())
                 binding.tvNoCase.visibility = View.GONE
                 binding.fab.visibility = View.GONE
                 parentLayout.removeAllViews()

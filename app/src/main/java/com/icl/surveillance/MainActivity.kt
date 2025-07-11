@@ -7,9 +7,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -40,9 +45,22 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: SyncFragmentViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val rootView: View = findViewById(R.id.container) // your root view ID
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            // Apply only top (status bar) and side padding
+            view.setPadding(
+                systemBars.left,
+                systemBars.top,
+                systemBars.right,
+                view.paddingBottom // keep existing bottom padding for BottomNavigationView
+            )
+
+            insets
+        }
 
         appUpdateManager = AppUpdateManagerFactory.create(this)
         checkForAppUpdate()
