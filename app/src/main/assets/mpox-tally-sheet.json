@@ -169,290 +169,1166 @@
       ],
       "item": [
         {
-          "linkId": "target_population_selection",
+          "linkId": "hcw_18_39_reported",
+          "text": "Were any healthcare workers aged 18–39 years reported?",
           "type": "choice",
-          "text": "Select Target Population",
-          "required": true,
           "answerOption": [
             {
               "valueCoding": {
-                "code": "health_care_workers",
-                "display": "Health Care Workers"
+                "code": "yes",
+                "display": "Yes"
               }
             },
             {
               "valueCoding": {
-                "code": "sex_workers",
-                "display": "Sex Workers"
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "hcw_18_39_male",
+          "text": "Number of male healthcare workers aged 18–39 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "hcw_18_39_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "hcw_18_39_female",
+          "text": "Number of female healthcare workers aged 18–39 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "hcw_18_39_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "hcw_18_39_male_no",
+          "text": "Number of male healthcare workers aged 18–39 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "hcw_18_39_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "hcw_18_39_female_no",
+          "text": "Number of female healthcare workers aged 18–39 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "hcw_18_39_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "hcw_40_59_reported",
+          "text": "Were any healthcare workers aged 40–59 years reported?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
               }
             },
             {
               "valueCoding": {
-                "code": "truck_drivers",
-                "display": "Truck Drivers"
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "hcw_40_59_male",
+          "text": "Number of male healthcare workers aged 40–59 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "hcw_40_59_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "hcw_40_59_female",
+          "text": "Number of female healthcare workers aged 40–59 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "hcw_40_59_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "hcw_40_59_male_no",
+          "text": "Number of male healthcare workers aged 40–59 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "hcw_40_59_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "hcw_40_59_female_no",
+          "text": "Number of female healthcare workers aged 40–59 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "hcw_40_59_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "hcw_60_plus_reported",
+          "text": "Were any healthcare workers aged 60+ years reported?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
               }
             },
             {
               "valueCoding": {
-                "code": "others",
-                "display": "Others"
+                "code": "no",
+                "display": "No"
               }
             }
           ]
         },
         {
-          "linkId": "health_care_workers",
-          "type": "group",
-          "text": "Health Care Workers",
-          "item": [
+          "linkId": "hcw_60_plus_male",
+          "text": "Number of male healthcare workers aged 60+ years reported",
+          "type": "integer",
+          "enableWhen": [
             {
-              "linkId": "hcw_18_39",
-              "type": "group",
-              "text": "Adults (18 to 39 yrs.)",
-              "item": [
-                {
-                  "linkId": "hcw_18_39_male",
-                  "type": "integer",
-                  "text": "Male",
-                  "required": true
-                },
-                {
-                  "linkId": "hcw_18_39_female",
-                  "type": "integer",
-                  "text": "Female",
-                  "required": true
-                }
-              ]
-            },
-            {
-              "linkId": "hcw_40_59",
-              "type": "group",
-              "text": "Adults (40 to 59 yrs.)",
-              "item": [
-                {
-                  "linkId": "hcw_40_59_male",
-                  "type": "integer",
-                  "text": "Male",
-                  "required": true
-                },
-                {
-                  "linkId": "hcw_40_59_female",
-                  "type": "integer",
-                  "text": "Female",
-                  "required": true
-                }
-              ]
-            },
-            {
-              "linkId": "hcw_60_plus",
-              "type": "group",
-              "text": "Adults (60+ Yrs)",
-              "item": [
-                {
-                  "linkId": "hcw_60_plus_male",
-                  "type": "integer",
-                  "text": "Male",
-                  "required": true
-                },
-                {
-                  "linkId": "hcw_60_plus_female",
-                  "type": "integer",
-                  "text": "Female",
-                  "required": true
-                }
-              ]
+              "question": "hcw_60_plus_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
             }
           ]
         },
         {
-          "linkId": "sex_workers",
-          "type": "group",
-          "text": "Sex Workers",
-          "item": [
+          "linkId": "hcw_60_plus_female",
+          "text": "Number of female healthcare workers aged 60+ years reported",
+          "type": "integer",
+          "enableWhen": [
             {
-              "linkId": "sw_18_39",
-              "type": "group",
-              "text": "Adults (18 to 39 yrs.)",
-              "item": [
-                {
-                  "linkId": "sw_18_39_male",
-                  "type": "integer",
-                  "text": "Male",
-                  "required": true
-                },
-                {
-                  "linkId": "sw_18_39_female",
-                  "type": "integer",
-                  "text": "Female",
-                  "required": true
-                }
-              ]
-            },
-            {
-              "linkId": "sw_40_59",
-              "type": "group",
-              "text": "Adults (40 to 59 yrs.)",
-              "item": [
-                {
-                  "linkId": "sw_40_59_male",
-                  "type": "integer",
-                  "text": "Male",
-                  "required": true
-                },
-                {
-                  "linkId": "sw_40_59_female",
-                  "type": "integer",
-                  "text": "Female",
-                  "required": true
-                }
-              ]
-            },
-            {
-              "linkId": "sw_60_plus",
-              "type": "group",
-              "text": "Adults (60+ Yrs)",
-              "item": [
-                {
-                  "linkId": "sw_60_plus_male",
-                  "type": "integer",
-                  "text": "Male",
-                  "required": true
-                },
-                {
-                  "linkId": "sw_60_plus_female",
-                  "type": "integer",
-                  "text": "Female",
-                  "required": true
-                }
-              ]
+              "question": "hcw_60_plus_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
             }
           ]
         },
         {
-          "linkId": "truck_drivers",
-          "type": "group",
-          "text": "Truck Drivers",
-          "item": [
+          "linkId": "hcw_60_plus_male_no",
+          "text": "Number of male healthcare workers aged 60+ years reported",
+          "type": "integer",
+          "extension": [
             {
-              "linkId": "td_18_39",
-              "type": "group",
-              "text": "Adults (18 to 39 yrs.)",
-              "item": [
-                {
-                  "linkId": "td_18_39_male",
-                  "type": "integer",
-                  "text": "Male",
-                  "required": true
-                },
-                {
-                  "linkId": "td_18_39_female",
-                  "type": "integer",
-                  "text": "Female",
-                  "required": true
-                }
-              ]
-            },
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
             {
-              "linkId": "td_40_59",
-              "type": "group",
-              "text": "Adults (40 to 59 yrs.)",
-              "item": [
-                {
-                  "linkId": "td_40_59_male",
-                  "type": "integer",
-                  "text": "Male",
-                  "required": true
-                },
-                {
-                  "linkId": "td_40_59_female",
-                  "type": "integer",
-                  "text": "Female",
-                  "required": true
-                }
-              ]
-            },
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
             {
-              "linkId": "td_60_plus",
-              "type": "group",
-              "text": "Adults (60+ Yrs)",
-              "item": [
-                {
-                  "linkId": "td_60_plus_male",
-                  "type": "integer",
-                  "text": "Male",
-                  "required": true
-                },
-                {
-                  "linkId": "td_60_plus_female",
-                  "type": "integer",
-                  "text": "Female",
-                  "required": true
-                }
-              ]
+              "question": "hcw_60_plus_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
             }
           ]
         },
         {
-          "linkId": "others",
-          "type": "group",
-          "text": "Others",
-          "item": [
+          "linkId": "hcw_60_plus_female_no",
+          "text": "Number of female healthcare workers aged 60+ years reported",
+          "type": "integer",
+          "extension": [
             {
-              "linkId": "others_18_39",
-              "type": "group",
-              "text": "Adults (18 to 39 yrs.)",
-              "item": [
-                {
-                  "linkId": "others_18_39_male",
-                  "type": "integer",
-                  "text": "Male",
-                  "required": true
-                },
-                {
-                  "linkId": "others_18_39_female",
-                  "type": "integer",
-                  "text": "Female",
-                  "required": true
-                }
-              ]
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "hcw_60_plus_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "sw_18_39_reported",
+          "text": "Were any sex workers aged 18–39 years reported?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
             },
             {
-              "linkId": "others_40_59",
-              "type": "group",
-              "text": "Adults (40 to 59 yrs.)",
-              "item": [
-                {
-                  "linkId": "others_40_59_male",
-                  "type": "integer",
-                  "text": "Male",
-                  "required": true
-                },
-                {
-                  "linkId": "others_40_59_female",
-                  "type": "integer",
-                  "text": "Female",
-                  "required": true
-                }
-              ]
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "sw_18_39_male",
+          "text": "Number of male sex workers aged 18–39 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "sw_18_39_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "sw_18_39_female",
+          "text": "Number of female sex workers aged 18–39 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "sw_18_39_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "sw_18_39_male_no",
+          "text": "Number of male sex workers aged 18–39 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "sw_18_39_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "sw_18_39_female_no",
+          "text": "Number of female sex workers aged 18–39 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "sw_18_39_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "sw_40_59_reported",
+          "text": "Were any sex workers aged 40–59 years reported?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
             },
             {
-              "linkId": "others_60_plus",
-              "type": "group",
-              "text": "Adults (60+ Yrs)",
-              "item": [
-                {
-                  "linkId": "others_60_plus_male",
-                  "type": "integer",
-                  "text": "Male",
-                  "required": true
-                },
-                {
-                  "linkId": "others_60_plus_female",
-                  "type": "integer",
-                  "text": "Female",
-                  "required": true
-                }
-              ]
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "sw_40_59_male",
+          "text": "Number of male sex workers aged 40–59 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "sw_40_59_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "sw_40_59_female",
+          "text": "Number of female sex workers aged 40–59 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "sw_40_59_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "sw_40_59_male_no",
+          "text": "Number of male sex workers aged 40–59 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "sw_40_59_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "sw_40_59_female_no",
+          "text": "Number of female sex workers aged 40–59 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "sw_40_59_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "sw_60_plus_reported",
+          "text": "Were any sex workers aged 60+ years reported?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "sw_60_plus_male",
+          "text": "Number of male sex workers aged 60+ years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "sw_60_plus_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "sw_60_plus_female",
+          "text": "Number of female sex workers aged 60+ years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "sw_60_plus_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "sw_60_plus_male_no",
+          "text": "Number of male sex workers aged 60+ years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "sw_60_plus_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "sw_60_plus_female_no",
+          "text": "Number of female sex workers aged 60+ years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "sw_60_plus_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "td_18_39_reported",
+          "text": "Were any truck drivers aged 18–39 years reported?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "td_18_39_male",
+          "text": "Number of male truck drivers aged 18–39 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "td_18_39_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "td_18_39_female",
+          "text": "Number of female truck drivers aged 18–39 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "td_18_39_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "td_18_39_male_no",
+          "text": "Number of male truck drivers aged 18–39 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "td_18_39_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "td_18_39_female_no",
+          "text": "Number of female truck drivers aged 18–39 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "td_18_39_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "td_40_59_reported",
+          "text": "Were any truck drivers aged 40–59 years reported?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "td_40_59_male",
+          "text": "Number of male truck drivers aged 40–59 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "td_40_59_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "td_40_59_female",
+          "text": "Number of female truck drivers aged 40–59 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "td_40_59_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "td_40_59_male_no",
+          "text": "Number of male truck drivers aged 40–59 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "td_40_59_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "td_40_59_female_no",
+          "text": "Number of female truck drivers aged 40–59 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "td_40_59_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "td_60_plus_reported",
+          "text": "Were any truck drivers aged 60+ years reported?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "td_60_plus_male",
+          "text": "Number of male truck drivers aged 60+ years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "td_60_plus_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "td_60_plus_female",
+          "text": "Number of female truck drivers aged 60+ years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "td_60_plus_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "td_60_plus_male_no",
+          "text": "Number of male truck drivers aged 60+ years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "td_60_plus_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "td_60_plus_female_no",
+          "text": "Number of female truck drivers aged 60+ years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "td_60_plus_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "others_18_39_reported",
+          "text": "Were any others aged 18–39 years reported?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "others_18_39_male",
+          "text": "Number of male others aged 18–39 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "others_18_39_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "others_18_39_female",
+          "text": "Number of female others aged 18–39 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "others_18_39_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "others_18_39_male_no",
+          "text": "Number of male others aged 18–39 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "others_18_39_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "others_18_39_female_no",
+          "text": "Number of female others aged 18–39 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "others_18_39_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "others_40_59_reported",
+          "text": "Were any others aged 40–59 years reported?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "others_40_59_male",
+          "text": "Number of male others aged 40–59 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "others_40_59_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "others_40_59_female",
+          "text": "Number of female others aged 40–59 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "others_40_59_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "others_40_59_male_no",
+          "text": "Number of male others aged 40–59 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "others_40_59_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "others_40_59_female_no",
+          "text": "Number of female others aged 40–59 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "others_40_59_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "others_60_plus_reported",
+          "text": "Were any others aged 60+ years reported?",
+          "type": "choice",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "others_60_plus_male",
+          "text": "Number of male others aged 60+ years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "others_60_plus_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "others_60_plus_female",
+          "text": "Number of female others aged 60+ years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "others_60_plus_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "others_60_plus_male_no",
+          "text": "Number of male others aged 60+ years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "others_60_plus_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "others_60_plus_female_no",
+          "text": "Number of female others aged 60+ years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "others_60_plus_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
             }
           ]
         }
@@ -505,7 +1381,16 @@
           "linkId": "aefi_count",
           "type": "integer",
           "text": "# of vaccinee with reported AEFI",
-          "required": true
+          "required": true,
+          "enableWhen": [
+            {
+              "question": "aefi_yes_no",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
         },
         {
           "linkId": "mpox_suspected_case_count",

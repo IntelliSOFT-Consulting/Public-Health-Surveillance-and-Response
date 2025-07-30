@@ -317,6 +317,7 @@ class CaseSelectionFragment : Fragment() {
                     val intent = Intent(requireContext(), CaseListingActivity::class.java)
                     startActivity(intent)
                 }
+
                 "VL Case List" -> {
                     FormatterClass().saveSharedPref(
                         "listingTitle", " ${option.title}", requireContext()
@@ -410,12 +411,14 @@ class CaseSelectionFragment : Fragment() {
             "SLR" -> "social-listening-and-rumor-tracking-tool"
             "MOH 505" -> "moh-505-reporting-form"
             "RCCE" -> "rcce"
+            "Mpox" -> "mpox-information"
             else -> null
         }
         println("Case Type: $caseType")
 
         caseType?.let {
             try {
+
                 patientListViewModel.handleCurrentCaseListing(it)
 
                 patientListViewModel.liveSearchedCases.observe(viewLifecycleOwner) { cases ->
