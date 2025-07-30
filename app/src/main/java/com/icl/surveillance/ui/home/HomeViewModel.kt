@@ -89,6 +89,11 @@ class HomeViewModel(application: Application, private val state: SavedStateHandl
             R.string.moh505_form, 100, 100
         ),
 
+        MPOX(
+            R.drawable.searching,
+            R.string.mpox, 100, 200
+        ),
+
 
         // Top Layer
 

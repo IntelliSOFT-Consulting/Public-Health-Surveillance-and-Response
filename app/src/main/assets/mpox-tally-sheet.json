@@ -1,0 +1,519 @@
+{
+  "resourceType": "Questionnaire",
+  "status": "active",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
+        "name": "countyName",
+        "language": "text/fhirpath",
+        "expression": "%resource.descendants().where(linkId='294367770999').answer.value.reference"
+      }
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
+        "name": "patientCountyName",
+        "language": "text/fhirpath",
+        "expression": "%resource.descendants().where(linkId='a4-county').answer.value.reference"
+      }
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
+        "name": "selectedSubCountyName",
+        "language": "text/fhirpath",
+        "expression": "%resource.descendants().where(linkId='819946803642').answer.value.reference"
+      }
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
+        "name": "selectedWardName",
+        "language": "text/fhirpath",
+        "expression": "%resource.descendants().where(linkId='819943434').answer.value.reference"
+      }
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
+        "name": "selectedFacilityName",
+        "language": "text/fhirpath",
+        "expression": "%resource.descendants().where(linkId='819943434').answer.value.reference"
+      }
+    }
+  ],
+  "item": [
+    {
+      "item": [
+        {
+          "linkId": "294367770999",
+          "text": "County ",
+          "type": "reference",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Location?partof=Location/0&_sort=name"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-choiceColumn",
+              "extension": [
+                {
+                  "url": "path",
+                  "valueString": "name"
+                },
+                {
+                  "url": "forDisplay",
+                  "valueBoolean": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "reference",
+          "linkId": "819946803642",
+          "text": "Subcounty ",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Location?partof={{%countyName}}&_sort=name"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-choiceColumn",
+              "extension": [
+                {
+                  "url": "path",
+                  "valueString": "name"
+                },
+                {
+                  "url": "forDisplay",
+                  "valueBoolean": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "reference",
+          "linkId": "819943434",
+          "text": "Ward ",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
+              "valueExpression": {
+                "language": "application/x-fhir-query",
+                "expression": "Location?partof={{%selectedSubCountyName}}&_sort=name"
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-choiceColumn",
+              "extension": [
+                {
+                  "url": "path",
+                  "valueString": "name"
+                },
+                {
+                  "url": "forDisplay",
+                  "valueBoolean": true
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "151479012557",
+      "text": "Reporting Site"
+    },
+    {
+      "linkId": "target_population",
+      "type": "group",
+      "text": "Target Population",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
+      "item": [
+        {
+          "linkId": "target_population_selection",
+          "type": "choice",
+          "text": "Select Target Population",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "health_care_workers",
+                "display": "Health Care Workers"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "sex_workers",
+                "display": "Sex Workers"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "truck_drivers",
+                "display": "Truck Drivers"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "others",
+                "display": "Others"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "health_care_workers",
+          "type": "group",
+          "text": "Health Care Workers",
+          "item": [
+            {
+              "linkId": "hcw_18_39",
+              "type": "group",
+              "text": "Adults (18 to 39 yrs.)",
+              "item": [
+                {
+                  "linkId": "hcw_18_39_male",
+                  "type": "integer",
+                  "text": "Male",
+                  "required": true
+                },
+                {
+                  "linkId": "hcw_18_39_female",
+                  "type": "integer",
+                  "text": "Female",
+                  "required": true
+                }
+              ]
+            },
+            {
+              "linkId": "hcw_40_59",
+              "type": "group",
+              "text": "Adults (40 to 59 yrs.)",
+              "item": [
+                {
+                  "linkId": "hcw_40_59_male",
+                  "type": "integer",
+                  "text": "Male",
+                  "required": true
+                },
+                {
+                  "linkId": "hcw_40_59_female",
+                  "type": "integer",
+                  "text": "Female",
+                  "required": true
+                }
+              ]
+            },
+            {
+              "linkId": "hcw_60_plus",
+              "type": "group",
+              "text": "Adults (60+ Yrs)",
+              "item": [
+                {
+                  "linkId": "hcw_60_plus_male",
+                  "type": "integer",
+                  "text": "Male",
+                  "required": true
+                },
+                {
+                  "linkId": "hcw_60_plus_female",
+                  "type": "integer",
+                  "text": "Female",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "sex_workers",
+          "type": "group",
+          "text": "Sex Workers",
+          "item": [
+            {
+              "linkId": "sw_18_39",
+              "type": "group",
+              "text": "Adults (18 to 39 yrs.)",
+              "item": [
+                {
+                  "linkId": "sw_18_39_male",
+                  "type": "integer",
+                  "text": "Male",
+                  "required": true
+                },
+                {
+                  "linkId": "sw_18_39_female",
+                  "type": "integer",
+                  "text": "Female",
+                  "required": true
+                }
+              ]
+            },
+            {
+              "linkId": "sw_40_59",
+              "type": "group",
+              "text": "Adults (40 to 59 yrs.)",
+              "item": [
+                {
+                  "linkId": "sw_40_59_male",
+                  "type": "integer",
+                  "text": "Male",
+                  "required": true
+                },
+                {
+                  "linkId": "sw_40_59_female",
+                  "type": "integer",
+                  "text": "Female",
+                  "required": true
+                }
+              ]
+            },
+            {
+              "linkId": "sw_60_plus",
+              "type": "group",
+              "text": "Adults (60+ Yrs)",
+              "item": [
+                {
+                  "linkId": "sw_60_plus_male",
+                  "type": "integer",
+                  "text": "Male",
+                  "required": true
+                },
+                {
+                  "linkId": "sw_60_plus_female",
+                  "type": "integer",
+                  "text": "Female",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "truck_drivers",
+          "type": "group",
+          "text": "Truck Drivers",
+          "item": [
+            {
+              "linkId": "td_18_39",
+              "type": "group",
+              "text": "Adults (18 to 39 yrs.)",
+              "item": [
+                {
+                  "linkId": "td_18_39_male",
+                  "type": "integer",
+                  "text": "Male",
+                  "required": true
+                },
+                {
+                  "linkId": "td_18_39_female",
+                  "type": "integer",
+                  "text": "Female",
+                  "required": true
+                }
+              ]
+            },
+            {
+              "linkId": "td_40_59",
+              "type": "group",
+              "text": "Adults (40 to 59 yrs.)",
+              "item": [
+                {
+                  "linkId": "td_40_59_male",
+                  "type": "integer",
+                  "text": "Male",
+                  "required": true
+                },
+                {
+                  "linkId": "td_40_59_female",
+                  "type": "integer",
+                  "text": "Female",
+                  "required": true
+                }
+              ]
+            },
+            {
+              "linkId": "td_60_plus",
+              "type": "group",
+              "text": "Adults (60+ Yrs)",
+              "item": [
+                {
+                  "linkId": "td_60_plus_male",
+                  "type": "integer",
+                  "text": "Male",
+                  "required": true
+                },
+                {
+                  "linkId": "td_60_plus_female",
+                  "type": "integer",
+                  "text": "Female",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "linkId": "others",
+          "type": "group",
+          "text": "Others",
+          "item": [
+            {
+              "linkId": "others_18_39",
+              "type": "group",
+              "text": "Adults (18 to 39 yrs.)",
+              "item": [
+                {
+                  "linkId": "others_18_39_male",
+                  "type": "integer",
+                  "text": "Male",
+                  "required": true
+                },
+                {
+                  "linkId": "others_18_39_female",
+                  "type": "integer",
+                  "text": "Female",
+                  "required": true
+                }
+              ]
+            },
+            {
+              "linkId": "others_40_59",
+              "type": "group",
+              "text": "Adults (40 to 59 yrs.)",
+              "item": [
+                {
+                  "linkId": "others_40_59_male",
+                  "type": "integer",
+                  "text": "Male",
+                  "required": true
+                },
+                {
+                  "linkId": "others_40_59_female",
+                  "type": "integer",
+                  "text": "Female",
+                  "required": true
+                }
+              ]
+            },
+            {
+              "linkId": "others_60_plus",
+              "type": "group",
+              "text": "Adults (60+ Yrs)",
+              "item": [
+                {
+                  "linkId": "others_60_plus_male",
+                  "type": "integer",
+                  "text": "Male",
+                  "required": true
+                },
+                {
+                  "linkId": "others_60_plus_female",
+                  "type": "integer",
+                  "text": "Female",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "utilization_aefi_mpox_surveilance",
+      "type": "group",
+      "text": "Vaccine Utilization, AEFI and Mpox Surveillance",
+      "item": [
+        {
+          "linkId": "vaccine_received",
+          "type": "integer",
+          "text": "Number of doses of vaccine received",
+          "required": true
+        },
+        {
+          "linkId": "vaccine_used",
+          "type": "integer",
+          "text": "Number of vaccine doses used",
+          "required": true
+        },
+        {
+          "linkId": "vaccine_remaining",
+          "type": "integer",
+          "text": "Number of vaccine doses remaining",
+          "required": true
+        },
+        {
+          "linkId": "aefi_yes_no",
+          "type": "choice",
+          "text": "Reported AEFI?",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "aefi_count",
+          "type": "integer",
+          "text": "# of vaccinee with reported AEFI",
+          "required": true
+        },
+        {
+          "linkId": "mpox_suspected_case_count",
+          "type": "integer",
+          "text": "No. of Mpox Suspected Case detected",
+          "required": true
+        }
+      ]
+    }
+  ]
+}

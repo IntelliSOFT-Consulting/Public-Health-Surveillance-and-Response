@@ -72,6 +72,34 @@ class AddClientViewModel(application: Application, private val state: SavedState
      * @param questionnaireResponse patient registration questionnaire response
      */
 
+    fun saveUserResponse(
+        questionnaireResponse: QuestionnaireResponse,
+        questionnaireResponseString: String,
+        context: Context
+    ) {
+        viewModelScope.launch {
+            if (QuestionnaireResponseValidator.validateQuestionnaireResponse(
+                    questionnaire,
+                    questionnaireResponse,
+                    getApplication(),
+                )
+                    .values
+                    .flatten()
+                    .any { it is Invalid }
+            ) {
+                isPatientSaved.value = false
+                return@launch
+            }
+
+            withContext(Dispatchers.IO) {
+                fhirEngine.create(questionnaireResponse)
+            }
+
+            withContext(Dispatchers.Main) { isPatientSaved.value = true }
+
+        }
+
+    }
 
     fun savePatientData(
         questionnaireResponse: QuestionnaireResponse,
@@ -182,6 +210,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
                     createResource(obs, subjectReference, encounterReference)
                 }
+
                 "measles-case-information" -> {
                     val genderEntry = extractedAnswers.find { it.linkId == "929966324957" }
                     val dobEntry = extractedAnswers.find { it.linkId == "257830485990" }

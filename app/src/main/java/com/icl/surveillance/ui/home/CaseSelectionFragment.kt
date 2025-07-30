@@ -1,5 +1,6 @@
 package com.icl.surveillance.ui.home
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -104,45 +105,82 @@ class CaseSelectionFragment : Fragment() {
             SelectionBottomSheet.RESULT_KEY,
             viewLifecycleOwner
         ) { _, bundle ->
+            val option = FormatterClass().getSharedPref("selected_option", requireContext())
             when (bundle.getInt(SelectionBottomSheet.ARG_CHOICE)) {
                 SelectionBottomSheet.CHOICE_COUNTY -> {
-                    FormatterClass().saveSharedPref(
-                        "currentCase", "RCCE - County/Subcounty Interface", requireContext()
+                    val isMpox = option == "Add New Mpox Case"
+
+                    val currentCase =
+                        if (isMpox) "Mpox - Tally Sheet" else "RCCE - County/Subcounty Interface"
+                    val addParentTitle =
+                        if (isMpox) "Mpox - Tally Sheet" else "County/Subcounty Interface"
+                    val questionnaireFile =
+                        if (isMpox) "mpox-tally-sheet.json" else "social-county.json"
+
+                    with(FormatterClass()) {
+                        saveSharedPref("currentCase", currentCase, requireContext())
+                        saveSharedPref("AddParentTitle", addParentTitle, requireContext())
+                        saveSharedPref("questionnaire", questionnaireFile, requireContext())
+                    }
+                    launchCaseFlow(
+                        requireContext(),
+                        " $titleName",
+                        currentCase,
+                        addParentTitle,
+                        questionnaireFile
                     )
-                    FormatterClass().saveSharedPref(
-                        "AddParentTitle",
-                        "County/Subcounty Interface",
-                        requireContext()
-                    )
-                    FormatterClass().saveSharedPref(
-                        "questionnaire", "social-county.json", requireContext()
-                    )
-                    val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
-                    intent.putExtra("AddParentTitle", " $titleName")
-                    intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "social-county.json")
-                    startActivity(intent)
+
                 }
 
                 SelectionBottomSheet.CHOICE_COMMUNITY -> {
-                    FormatterClass().saveSharedPref(
-                        "currentCase", "RCCE - Community Questionnaire", requireContext()
+                    val isMpox = option == "Add New Mpox Case"
+
+                    val currentCase =
+                        if (isMpox) "Mpox - Supervisor Checklist" else "RCCE - Community Questionnaire"
+                    val addParentTitle =
+                        if (isMpox) "Mpox - Supervisor Checklist" else "Community Questionnaire"
+                    val questionnaireFile =
+                        if (isMpox) "mpox-supervisor-checklist.json" else "social-community.json"
+
+                    with(FormatterClass()) {
+                        saveSharedPref("currentCase", currentCase, requireContext())
+                        saveSharedPref("AddParentTitle", addParentTitle, requireContext())
+                        saveSharedPref("questionnaire", questionnaireFile, requireContext())
+                    }
+                    launchCaseFlow(
+                        requireContext(),
+                        " $titleName",
+                        currentCase,
+                        addParentTitle,
+                        questionnaireFile
                     )
-                    FormatterClass().saveSharedPref(
-                        "AddParentTitle",
-                        "Community Questionnaire",
-                        requireContext()
-                    )
-                    FormatterClass().saveSharedPref(
-                        "questionnaire", "social-community.json", requireContext()
-                    )
-                    val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
-                    intent.putExtra("AddParentTitle", " $titleName")
-                    intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "social-community.json")
-                    startActivity(intent)
+
                 }
+
+
             }
         }
 
+    }
+
+    private fun launchCaseFlow(
+        context: Context,
+        titleName: String,
+        currentCase: String,
+        addParentTitle: String,
+        questionnaireFile: String
+    ) {
+        with(FormatterClass()) {
+            saveSharedPref("currentCase", currentCase, context)
+            saveSharedPref("AddParentTitle", addParentTitle, context)
+            saveSharedPref("questionnaire", questionnaireFile, context)
+        }
+
+        val intent = Intent(context, AddParentCaseActivity::class.java).apply {
+            putExtra("AddParentTitle", " $titleName")
+            putExtra(QUESTIONNAIRE_FILE_PATH_KEY, questionnaireFile)
+        }
+        startActivity(intent)
     }
 
     private fun setupRecyclerView() {
@@ -174,8 +212,20 @@ class CaseSelectionFragment : Fragment() {
 
         val recyclerView = requireView().findViewById<RecyclerView>(R.id.sdcLayoutsRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        FormatterClass().deleteSharedPref("selected_option", requireContext())
         recyclerView.adapter = CaseOptionsAdapter(caseOptions) { option ->
             when (option.title) {
+                "Add New Mpox Case" -> {
+                    FormatterClass().saveSharedPref(
+                        "selected_option",
+                        "Add New Mpox Case",
+                        requireContext()
+                    )
+                    val sheet =
+                        SelectionBottomSheet.newInstance("Tally Sheet", "Supervisor Checklist")
+                    sheet.show(childFragmentManager, "SelectionBottomSheet")
+                }
+
                 "Add New Social Investigation Form" -> {
                     SelectionBottomSheet.show(childFragmentManager)
 
@@ -257,6 +307,16 @@ class CaseSelectionFragment : Fragment() {
                     startActivity(intent)
                 }
 
+                "Mpox Case List" -> {
+                    FormatterClass().saveSharedPref(
+                        "listingTitle", " ${option.title}", requireContext()
+                    )
+                    FormatterClass().saveSharedPref(
+                        "currentCase", "Mpox Information", requireContext()
+                    )
+                    val intent = Intent(requireContext(), CaseListingActivity::class.java)
+                    startActivity(intent)
+                }
                 "VL Case List" -> {
                     FormatterClass().saveSharedPref(
                         "listingTitle", " ${option.title}", requireContext()

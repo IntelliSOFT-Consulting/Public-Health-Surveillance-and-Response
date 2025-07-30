@@ -19,6 +19,7 @@ import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.ui.patients.FullCaseDetailsActivity
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.ui.patients.SummarizedActivity
+import com.icl.surveillance.ui.patients.responses.ResponseQuestionnaireActivity
 import com.icl.surveillance.utils.FormatterClass
 
 class CaseListingActivity : AppCompatActivity() {
@@ -63,6 +64,7 @@ class CaseListingActivity : AppCompatActivity() {
             val slug = currentCase.toSlug()
 
             when (slug) {
+
                 "social-listening-and-rumor-tracking-tool" -> {
                     patientListViewModel.handleCurrentRumorCaseListing(slug)
                     recyclerView.adapter = adapterRumor
@@ -167,7 +169,14 @@ class CaseListingActivity : AppCompatActivity() {
 
             FormatterClass().saveSharedPref("latestEncounter", slug, this)
             val activityIntent = Intent(this@CaseListingActivity, SummarizedActivity::class.java)
+            val activityIntent2 =
+                Intent(this@CaseListingActivity, ResponseQuestionnaireActivity::class.java)
             when (slug) {
+
+                "mpox-information" -> {
+                    startActivity(activityIntent2)
+                }
+
                 "social-listening-and-rumor-tracking-tool",
                 "vl-case-information",
                 "afp-case-information",

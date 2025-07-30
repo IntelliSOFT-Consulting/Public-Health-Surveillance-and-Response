@@ -125,12 +125,23 @@ class AddParentCaseActivity : AppCompatActivity() {
         questionnaireResponse: QuestionnaireResponse,
         questionnaireResponseString: String
     ) {
+        val case = FormatterClass().getSharedPref("currentCase", this@AddParentCaseActivity)
+        // print case
+        Log.d("Questionnaire Response::::", "$case")
+        when (case) {
+            "Mpox - Supervisor Checklist" -> {
+                viewModel.saveUserResponse(questionnaireResponse, case, this@AddParentCaseActivity)
 
-        viewModel.savePatientData(
-            questionnaireResponse,
-            questionnaireResponseString,
-            this@AddParentCaseActivity
-        )
+            }
+
+            else -> {
+                viewModel.savePatientData(
+                    questionnaireResponse,
+                    questionnaireResponseString,
+                    this@AddParentCaseActivity
+                )
+            }
+        }
 
     }
 
@@ -209,3 +220,4 @@ class AddParentCaseActivity : AppCompatActivity() {
         return true
     }
 }
+
