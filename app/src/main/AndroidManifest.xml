@@ -19,7 +19,9 @@
         <activity
             android:name=".ui.patients.responses.ResponseQuestionnaireActivity"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:label="Case Summary"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.Surveillance.NoActionBar" />
         <activity
             android:name=".clients.SyncActivity"
             android:exported="false"
@@ -34,7 +36,9 @@
         <activity
             android:name=".cases.CaseListingActivity"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:label="Case List"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.Surveillance.NoActionBar" />
         <activity
             android:name=".auth.LauncherActivity"
             android:exported="true"

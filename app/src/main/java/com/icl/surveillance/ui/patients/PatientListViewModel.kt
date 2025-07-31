@@ -20,11 +20,21 @@ import com.icl.surveillance.utils.FormatterClass
 import java.time.LocalDate
 import java.time.ZoneId
 import kotlinx.coroutines.launch
+import org.hl7.fhir.r4.model.BooleanType
 import org.hl7.fhir.r4.model.Coding
+import org.hl7.fhir.r4.model.DateTimeType
+import org.hl7.fhir.r4.model.DateType
+import org.hl7.fhir.r4.model.DecimalType
 import org.hl7.fhir.r4.model.Encounter
+import org.hl7.fhir.r4.model.IntegerType
 import org.hl7.fhir.r4.model.Observation
 import org.hl7.fhir.r4.model.Patient
 import org.hl7.fhir.r4.model.QuestionnaireResponse
+import org.hl7.fhir.r4.model.Reference
+import org.hl7.fhir.r4.model.StringType
+import java.lang.reflect.Type
+import java.text.SimpleDateFormat
+import java.util.Locale
 import kotlin.String
 
 class PatientListViewModel(
@@ -311,42 +321,76 @@ class PatientListViewModel(
             }.sortedByDescending { it.lastUpdated }
     }
 
+    fun getAnswerValueAsString(
+        item: List<QuestionnaireResponse.QuestionnaireResponseItemComponent>,
+        linkId: String
+    ): String {
+        val answer = item
+            .flatMap { it.item ?: emptyList() }
+            .firstOrNull { it.linkId == linkId }
+            ?.answer?.firstOrNull()
+            ?.value
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+
+
+        return when (answer) {
+            is DateType -> answer.value?.let {
+                dateFormat.format(it)
+            } ?: "" // returns yyyy-MM-dd
+            is DateTimeType -> answer.value?.let { dateFormat.format(it) } ?: ""
+            is Reference -> answer.display ?: answer.reference ?: ""
+            is StringType -> answer.value ?: ""
+            is BooleanType -> answer.value.toString()
+            is IntegerType -> answer.value.toString()
+            is DecimalType -> answer.value.toString()
+            is Coding -> answer.display ?: answer.code ?: ""
+            else -> answer?.primitiveValue() ?: ""
+        }
+    }
+
+
     private suspend fun retrieveCasesByDisease(
         nameQuery: String,
     ): List<PatientItem> {
-        println("Displaying Cases for $nameQuery")
         when (nameQuery) {
             "mpox-information" -> {
 
-                val patients: MutableList<PatientItem> = mutableListOf()
+                val questionnaireData: MutableList<PatientItem> = mutableListOf()
+                val measureData: MutableList<PatientItem> = mutableListOf()
+                val patientsSorted: MutableList<PatientItem> = mutableListOf()
                 fhirEngine.search<QuestionnaireResponse> {
                     sort(QuestionnaireResponse.AUTHORED, Order.ASCENDING)
                     count = 500
                     from = 0
                 }.mapIndexed { index, fhirPatient ->
+
+                    val county = getAnswerValueAsString(fhirPatient.resource.item, "294367770999")
+                    val subCounty =
+                        getAnswerValueAsString(fhirPatient.resource.item, "819946803642")
+                    val caseOnsetDate =
+                        getAnswerValueAsString(fhirPatient.resource.item, "728034137219")
+
                     val data = PatientItem(
                         id = (index + 1).toString(),
                         resourceId = fhirPatient.resource.logicalId,
                         encounterId = fhirPatient.resource.logicalId,
                         name = fhirPatient.resource.item.firstOrNull()?.item?.firstOrNull() { it.linkId == "294367770999" }?.answer?.firstOrNull()?.valueReference?.display
                             ?: "",
-                        gender = "String",
-                        phone = "String",
-                        city = "String",
-                        country = "String",
+                        gender = "",
+                        phone = "",
+                        city = "",
+                        country = "",
                         isActive = false,
-                        epid = "String",
-                        county = fhirPatient.resource.item.firstOrNull()?.item?.firstOrNull() { it.linkId == "294367770999" }?.answer?.firstOrNull()?.valueReference?.display
-                            ?: "",
-                        subCounty = fhirPatient.resource.item.firstOrNull()?.item?.firstOrNull() { it.linkId == "819946803642" }?.answer?.firstOrNull()?.valueReference?.display
-                            ?: "",
-                        caseOnsetDate = "String",
-                        lastUpdated = "",
+                        epid = "",
+                        county = county,
+                        subCounty = subCounty,
+                        caseOnsetDate = caseOnsetDate,
+                        lastUpdated = fhirPatient.resource.authored.toString(),
                         isSummary = false
                     )
                     data
                 }.also {
-                    patients.addAll(it)
+                    questionnaireData.addAll(it)
                 }
 
                 // Add the other section for Tally Sheet
@@ -481,12 +525,14 @@ class PatientListViewModel(
                         }
                     }
                     .sortedByDescending { it.lastUpdated }
-                    .also {
-                        patients.addAll(it)
+                    .also { measureData.addAll(it)
                     }
 
+                val sortedList =(questionnaireData + measureData).sortedByDescending { s -> s.lastUpdated }
 
-                return patients
+                patientsSorted.clear()
+                patientsSorted.addAll(sortedList)
+                return sortedList
             }
 
             else -> {

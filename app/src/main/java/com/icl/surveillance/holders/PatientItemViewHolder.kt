@@ -21,6 +21,8 @@ import java.util.Locale
 class PatientItemViewHolder(binding: PatientListItemViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
     private val nameView: TextView = binding.name
+    private val parentLayout: LinearLayout = binding.lnParentHolder
+    private val parentOriginal: LinearLayout = binding.lnParentOriginal
     private val epid: TextView = binding.epid
     private val county: TextView = binding.county
     private val subCounty: TextView = binding.subCounty
@@ -33,6 +35,12 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
     private val tvDateLabel: TextView = binding.tvDateLabel
     private val lnNameAndEpid: LinearLayout = binding.lnNameAndEpid
     private val lnFinalClassification: LinearLayout = binding.lnFinalClassification
+
+
+    private val mpoxCounty: TextView = binding.mpoxCounty
+    private val mpoxSubCounty: TextView = binding.mpoxSubCounty
+    private val date: TextView = binding.date
+    private val type: TextView = binding.type
 
     fun bindTo(
         patientItem: PatientListViewModel.PatientItem,
@@ -62,8 +70,17 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
 
         if (current != null) {
             val slug = current.toSlug()
-            println("This is the sectional separator:::: $slug")
             when (slug) {
+                "mpox-information" -> {
+                    this.parentLayout.visibility = View.VISIBLE
+                    this.parentOriginal.visibility = View.GONE
+                    this.mpoxCounty.text = patientItem.county
+                    this.mpoxSubCounty.text = patientItem.subCounty
+                    this.date.text = patientItem.caseOnsetDate
+                    this.type.text = if (patientItem.isSummary) "Tally sheet" else "Checklist"
+
+                }
+
                 "moh-505-reporting-form" -> {
                     this.lnFinalClassification.visibility = View.GONE
                     this.lnNameAndEpid.visibility = View.GONE

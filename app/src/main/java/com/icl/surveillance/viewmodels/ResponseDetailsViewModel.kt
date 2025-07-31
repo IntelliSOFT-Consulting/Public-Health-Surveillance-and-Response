@@ -15,6 +15,8 @@ import kotlinx.coroutines.withContext
 import org.hl7.fhir.r4.model.Patient
 import org.hl7.fhir.r4.model.QuestionnaireResponse
 import org.hl7.fhir.r4.model.Resource
+import java.text.SimpleDateFormat
+import java.util.Locale
 import kotlin.let
 
 class ResponseDetailsViewModel(
@@ -31,6 +33,10 @@ class ResponseDetailsViewModel(
     }
 
     private suspend fun getInfoSummary(slug: String): PatientListViewModel.CaseDetailSummaryData {
+
+        val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+
+
         val searchResult =
             fhirEngine.search<QuestionnaireResponse> {
                 filter(
@@ -44,17 +50,35 @@ class ResponseDetailsViewModel(
             it.resource.item.forEach { k ->
                 k.item.forEach { j ->
                     val answer = j.answerFirstRep
-                    val value = when {
-                        answer.hasValueReference() -> answer.valueReference.display
-                        answer.hasValueCoding() -> answer.valueCoding.display
-                        answer.hasValueStringType() -> answer.valueStringType.value
-                        else -> "N/A"
+                    val value  = when {
+                    answer.hasValueReference() -> {
+                        val ref = answer.valueReference
+                        ref.display ?: ref.reference ?: ""
                     }
+                    answer.hasValueCoding() -> {
+                        val coding = answer.valueCoding
+                        coding.display ?: coding.code ?: ""
+                    }
+                    answer.hasValueStringType() -> answer.valueStringType.value ?: ""
+                    answer.hasValueDateType() -> {
+                        val date = answer.valueDateType.value
+                        date?.let { dateFormatter.format(it) } ?: ""
+                    }
+                    answer.hasValueDateTimeType() -> {
+                        val dateTime = answer.valueDateTimeType.value
+                        dateTime?.let { dateFormatter.format(it) } ?: ""
+                    }
+                    answer.hasValueBooleanType() -> answer.valueBooleanType.booleanValue().toString()
+                    answer.hasValueIntegerType() -> answer.valueIntegerType.value.toString()
+                    answer.hasValueDecimalType() -> answer.valueDecimalType.value.toString()
+                    else -> answer.value?.primitiveValue() ?: ""
+                }
+
 
                     val obs = PatientListViewModel.ObservationItem(
                         id = j.linkId,
                         code = j.linkId,
-                        value = value ?: "N/A",
+                        value = value ?: "",
                         created = j.linkId
                     )
                     observations.add(obs)

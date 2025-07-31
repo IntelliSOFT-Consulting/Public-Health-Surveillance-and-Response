@@ -48,6 +48,7 @@ class SummarizedActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivitySummarizedBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val patientId = FormatterClass().getSharedPref("resourceId", this@SummarizedActivity)
         val currentCase = FormatterClass().getSharedPref("currentCase", this)
@@ -63,11 +64,11 @@ class SummarizedActivity : AppCompatActivity() {
                 ),
             )
                 .get(ClientDetailsViewModel::class.java)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+//            insets
+//        }
         if (latestEncounter != null) {
 
             groups = parseFromAssets(this, latestEncounter).toMutableList()// this = Context

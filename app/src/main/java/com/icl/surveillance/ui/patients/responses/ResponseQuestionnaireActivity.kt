@@ -42,9 +42,11 @@ class ResponseQuestionnaireActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityResponseQuestionnaireBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         fhirEngine = FhirApplication.fhirEngine(this@ResponseQuestionnaireActivity)
-        val questionnaireId = FormatterClass().getSharedPref("resourceId",this@ResponseQuestionnaireActivity)
+        val questionnaireId =
+            FormatterClass().getSharedPref("resourceId", this@ResponseQuestionnaireActivity)
         val viewPager = binding.viewPager
         val tabLayout = binding.tabLayout
 
@@ -56,11 +58,11 @@ class ResponseQuestionnaireActivity : AppCompatActivity() {
                 ),
             )
                 .get(ResponseDetailsViewModel::class.java)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+//            insets
+//        }
 
         groups =
             parseFromAssets(this, "mpox-supervisor-checklist.json").toMutableList()// this = Context
