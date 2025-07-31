@@ -512,35 +512,6 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
                 }
 
-                "social-listening-and-rumor-tracking-tool" -> {
-
-
-                    val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
-                    val countyEntry = extractedAnswers.find { it.linkId == "a4-county" }
-                    var county = ""
-                    var subCounty = ""
-                    val currentYear = LocalDate.now().year
-
-                    if (subCountyEntry != null) {
-                        subCounty = subCountyEntry.answer
-                        patient.addressFirstRep.state = subCounty
-                        patient.addressFirstRep.addLine(subCounty)
-                    }
-                    if (countyEntry != null) {
-                        county = countyEntry.answer
-                        patient.addressFirstRep.city = county
-                        patient.addressFirstRep.addLine(county)
-                    }
-
-                    val countyCode = county.padEnd(3, 'X').take(3).uppercase()
-                    val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
-
-
-                    val epid = "KEN-$countyCode-$subCountyCode-$currentYear-RTT-"
-
-                    val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
-                    createResource(obs, subjectReference, encounterReference)
-                }
 
                 "vl-case-information" -> {
                     val fNameEntry = extractedAnswers.find { it.linkId == "817903655885" }
@@ -679,6 +650,45 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
                 }
 
+                "mpox-tally-sheet" -> {
+
+                    patient.nameFirstRep.family = "Mpox-Tally"
+                    patient.nameFirstRep.addGiven("Mpox-Tally")
+
+                    val subCountyEntry = extractedAnswers.find { it.linkId == "819946803642" }
+                    val countyEntry = extractedAnswers.find { it.linkId == "294367770999" }
+
+                    measure.id = generateUuid()
+                    measure.subject = subjectReference
+                    measure.status = MeasureReport.MeasureReportStatus.COMPLETE
+                    measure.type = MeasureReport.MeasureReportType.SUMMARY
+
+
+                    var county = ""
+                    var subCounty = ""
+                    val currentYear = LocalDate.now().year
+
+                    if (subCountyEntry != null) {
+                        subCounty = subCountyEntry.answer
+                        patient.addressFirstRep.state = subCounty
+                        patient.addressFirstRep.addLine(subCounty)
+                    }
+                    if (countyEntry != null) {
+                        county = countyEntry.answer
+                        patient.addressFirstRep.city = county
+                        patient.addressFirstRep.addLine(county)
+                    }
+
+                    val countyCode = county.padEnd(3, 'X').take(3).uppercase()
+                    val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
+                    var linked = "Mpox-"
+                    val epid = "KEN-$countyCode-$subCountyCode-$currentYear-$linked"
+
+                    val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
+                    createResource(obs, subjectReference, encounterReference)
+
+                }
+
             }
             withContext(Dispatchers.IO) {
                 try {
@@ -743,6 +753,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     }
                     when (case) {
                         "moh-505-reporting-form" -> {
+                            fhirEngine.create(measure)
+                        }
+
+                        "mpox-tally-sheet" -> {
                             fhirEngine.create(measure)
                         }
                     }

@@ -88,6 +88,8 @@ class SummarizedActivity : AppCompatActivity() {
                         "$encounterQuestionnaire"
                     }
 
+                    "mpox-information" -> "mpox-tally-sheet"
+
                     else -> slug
                 }
                 patientDetailsViewModel.getPatientInfoSummaryData(key)
@@ -249,6 +251,7 @@ class SummarizedActivity : AppCompatActivity() {
             "afp-case-information" -> "afp-case.json"
             "vl-case-information" -> "vl-case.json"
             "moh-505-reporting-form" -> "moh505.json"
+            "mpox-information" -> "mpox-tally-sheet.json"
             "social-listening-and-rumor-tracking-tool" -> "rumor-tracking-case.json"
             "rcce" -> {
 

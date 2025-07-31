@@ -164,8 +164,10 @@ class CaseListingActivity : AppCompatActivity() {
         if (currentCase != null) {
             val slug = currentCase.toSlug()
 
-            println("This is the current Clicked Page $slug")
+            println("This is the current Boolean Status ${patientItem.isSummary}")
+            println("This is the current Clicked Slug $slug")
             println("This is the current Clicked Page ${patientItem.encounterQuestionnaire}")
+            println("This is the current Clicked Page ${patientItem.resourceId}")
 
             FormatterClass().saveSharedPref("latestEncounter", slug, this)
             val activityIntent = Intent(this@CaseListingActivity, SummarizedActivity::class.java)
@@ -174,7 +176,11 @@ class CaseListingActivity : AppCompatActivity() {
             when (slug) {
 
                 "mpox-information" -> {
-                    startActivity(activityIntent2)
+                    if (patientItem.isSummary) {
+                        startActivity(activityIntent)
+                    } else {
+                        startActivity(activityIntent2)
+                    }
                 }
 
                 "social-listening-and-rumor-tracking-tool",

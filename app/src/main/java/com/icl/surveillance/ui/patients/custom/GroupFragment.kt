@@ -89,13 +89,18 @@ class GroupFragment : Fragment() {
     private fun checkIfParentAnswerMatches(
         operator: String?,
         parentLink: String?,
-        parentResponse: String?,
+        parentResponseData: String?,
         items: List<OutputItem>
     ): Boolean {
         var response = false
-        if (parentLink != null && parentResponse != null) {
-            val parentAnswer = items.find { it.linkId == parentLink }?.value
-            if (parentAnswer != null) {
+        if (parentLink != null && parentResponseData != null) {
+            val parentResponse = parentResponseData.lowercase()
+            val parentAnswerData = items.find { it.linkId == parentLink }?.value
+            println("Parent: -> answer $parentAnswerData")
+            println("Parent: -> Operator  $operator")
+            println("Parent: -> $parentResponse")
+            if (parentAnswerData != null) {
+                val parentAnswer = parentAnswerData.lowercase()
                 if (operator != null) {
                     when (operator) {
                         "!=" -> {

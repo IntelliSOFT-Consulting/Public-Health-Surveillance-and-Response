@@ -59,8 +59,10 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
 
         // what is the current case we are dealing with?
         val current = FormatterClass().getSharedPref("currentCase", context)
+
         if (current != null) {
             val slug = current.toSlug()
+            println("This is the sectional separator:::: $slug")
             when (slug) {
                 "moh-505-reporting-form" -> {
                     this.lnFinalClassification.visibility = View.GONE

@@ -44,7 +44,7 @@ class ResponseQuestionnaireActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         fhirEngine = FhirApplication.fhirEngine(this@ResponseQuestionnaireActivity)
-        val questionnaireId = "bf4c1c59-c5c5-4ac9-b65f-ba0e5869924c"
+        val questionnaireId = FormatterClass().getSharedPref("resourceId",this@ResponseQuestionnaireActivity)
         val viewPager = binding.viewPager
         val tabLayout = binding.tabLayout
 
@@ -64,7 +64,7 @@ class ResponseQuestionnaireActivity : AppCompatActivity() {
 
         groups =
             parseFromAssets(this, "mpox-supervisor-checklist.json").toMutableList()// this = Context
-        patientDetailsViewModel.getInfoSummaryData(questionnaireId)
+        patientDetailsViewModel.getInfoSummaryData("$questionnaireId")
         patientDetailsViewModel.liveSummaryData.observe(this) { data ->
 
             groups.forEach { group ->

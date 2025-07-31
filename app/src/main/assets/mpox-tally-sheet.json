@@ -129,6 +129,170 @@
               ]
             }
           ]
+        },
+        {
+          "linkId": "village",
+          "text": "Village",
+          "type": "string",
+          "required": true
+        },
+        {
+          "linkId": "team_no",
+          "text": "Team No",
+          "type": "string",
+          "required": true
+        },
+        {
+          "linkId": "team_type",
+          "text": "Team type",
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "static",
+                "display": "Static"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "temporary",
+                "display": "Temporary"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "fixed",
+                "display": "Fixed"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "campaign_day",
+          "text": "Campaign Day",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "type": "choice",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Day 1"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Day 2"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "3",
+                "display": "Day 3"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "4",
+                "display": "Day 4"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "5",
+                "display": "Day 5"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "6",
+                "display": "Day 6"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "7",
+                "display": "Day 7"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "8",
+                "display": "Day 8"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "9",
+                "display": "Day 9"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "10",
+                "display": "Day 10"
+              }
+            }
+          ]
+        },
+        {
+          "type": "date",
+          "linkId": "728034137219",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "yyyy-mm-dd"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "text": "Date"
         }
       ],
       "type": "group",
@@ -172,6 +336,25 @@
           "linkId": "hcw_18_39_reported",
           "text": "Were any healthcare workers aged 18–39 years reported?",
           "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "answerOption": [
             {
               "valueCoding": {
@@ -269,6 +452,25 @@
           "linkId": "hcw_40_59_reported",
           "text": "Were any healthcare workers aged 40–59 years reported?",
           "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "answerOption": [
             {
               "valueCoding": {
@@ -366,6 +568,25 @@
           "linkId": "hcw_60_plus_reported",
           "text": "Were any healthcare workers aged 60+ years reported?",
           "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "answerOption": [
             {
               "valueCoding": {
@@ -463,6 +684,25 @@
           "linkId": "sw_18_39_reported",
           "text": "Were any sex workers aged 18–39 years reported?",
           "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "answerOption": [
             {
               "valueCoding": {
@@ -560,6 +800,25 @@
           "linkId": "sw_40_59_reported",
           "text": "Were any sex workers aged 40–59 years reported?",
           "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "answerOption": [
             {
               "valueCoding": {
@@ -657,6 +916,25 @@
           "linkId": "sw_60_plus_reported",
           "text": "Were any sex workers aged 60+ years reported?",
           "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "answerOption": [
             {
               "valueCoding": {
@@ -754,6 +1032,25 @@
           "linkId": "td_18_39_reported",
           "text": "Were any truck drivers aged 18–39 years reported?",
           "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "answerOption": [
             {
               "valueCoding": {
@@ -851,6 +1148,25 @@
           "linkId": "td_40_59_reported",
           "text": "Were any truck drivers aged 40–59 years reported?",
           "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "answerOption": [
             {
               "valueCoding": {
@@ -948,6 +1264,25 @@
           "linkId": "td_60_plus_reported",
           "text": "Were any truck drivers aged 60+ years reported?",
           "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "answerOption": [
             {
               "valueCoding": {
@@ -1045,6 +1380,25 @@
           "linkId": "others_18_39_reported",
           "text": "Were any others aged 18–39 years reported?",
           "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "answerOption": [
             {
               "valueCoding": {
@@ -1142,6 +1496,25 @@
           "linkId": "others_40_59_reported",
           "text": "Were any others aged 40–59 years reported?",
           "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "answerOption": [
             {
               "valueCoding": {
@@ -1239,6 +1612,25 @@
           "linkId": "others_60_plus_reported",
           "text": "Were any others aged 60+ years reported?",
           "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "answerOption": [
             {
               "valueCoding": {
@@ -1362,6 +1754,24 @@
           "type": "choice",
           "text": "Reported AEFI?",
           "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
           "answerOption": [
             {
               "valueCoding": {
@@ -1380,7 +1790,7 @@
         {
           "linkId": "aefi_count",
           "type": "integer",
-          "text": "# of vaccinee with reported AEFI",
+          "text": "Number of vaccinee with reported AEFI",
           "required": true,
           "enableWhen": [
             {
