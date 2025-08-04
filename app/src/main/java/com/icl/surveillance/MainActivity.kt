@@ -26,7 +26,6 @@ import com.google.android.play.core.appupdate.AppUpdateManager
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.clients.SyncActivity
 import com.icl.surveillance.databinding.ActivityMainBinding
-import com.icl.surveillance.fhir.MainActivityViewModel
 import com.icl.surveillance.ui.patients.AddCaseActivity
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.utils.launchAndRepeatStarted

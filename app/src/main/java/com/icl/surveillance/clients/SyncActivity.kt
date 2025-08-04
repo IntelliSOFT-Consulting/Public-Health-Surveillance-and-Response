@@ -94,36 +94,40 @@ class SyncActivity : AppCompatActivity() {
     }
 
     private fun refreshPeriodicSynUi() {
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                periodicSyncViewModel.uiStateFlow.collect { uiState ->
-                    uiState.lastSyncStatus?.let {
-                        findViewById<TextView>(R.id.last_sync_status).text = it
-                    }
+        try {
+            lifecycleScope.launch {
+                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    periodicSyncViewModel.uiStateFlow.collect { uiState ->
+                        uiState.lastSyncStatus?.let {
+                            findViewById<TextView>(R.id.last_sync_status).text = it
+                        }
 
-                    uiState.lastSyncTime?.let {
-                        findViewById<TextView>(R.id.last_sync_time).text = it
-                    }
+                        uiState.lastSyncTime?.let {
+                            findViewById<TextView>(R.id.last_sync_time).text = it
+                        }
 
-                    uiState.currentSyncStatus?.let {
-                        findViewById<TextView>(R.id.current_sync_status).text = it
-                    }
+                        uiState.currentSyncStatus?.let {
+                            findViewById<TextView>(R.id.current_sync_status).text = it
+                        }
 
-                    val syncIndicator = findViewById<ProgressBar>(R.id.sync_indicator)
-                    val progressLabel = findViewById<TextView>(R.id.progress_percentage_label)
+                        val syncIndicator = findViewById<ProgressBar>(R.id.sync_indicator)
+                        val progressLabel = findViewById<TextView>(R.id.progress_percentage_label)
 
-                    if (uiState.progress != null) {
-                        syncIndicator.progress = uiState.progress
-                        syncIndicator.visibility = View.VISIBLE
+                        if (uiState.progress != null) {
+                            syncIndicator.progress = uiState.progress
+                            syncIndicator.visibility = View.VISIBLE
 
-                        progressLabel.text = "${uiState.progress}"
-                        progressLabel.visibility = View.VISIBLE
-                    } else {
-                        syncIndicator.progress = 0
-                        progressLabel.visibility = View.GONE
+                            progressLabel.text = "${uiState.progress}"
+                            progressLabel.visibility = View.VISIBLE
+                        } else {
+                            syncIndicator.progress = 0
+                            progressLabel.visibility = View.GONE
+                        }
                     }
                 }
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

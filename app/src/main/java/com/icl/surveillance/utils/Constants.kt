@@ -58,5 +58,32 @@ object Constants {
     )
 
     val ALL_LINK_IDS = FACILITY_DETAILS + ALL
+
+    val MPOX_GUIDES = listOf(
+        "294367770999",  // County
+        "819946803642",  // Subcounty
+        "819943434",     // Ward
+        "village",       // Village
+        "team_no",       // Team No
+        "team_type",     // Team type
+        "campaign_day",  // Campaign Day
+        "728034137219",  // Date
+        "hcw_18_39_reported",       // Were any healthcare workers aged 18–39 years reported?
+        "hcw_40_59_reported",       // Were any healthcare workers aged 40–59 years reported?
+        "hcw_60_plus_reported",     // Were any healthcare workers aged 60+ years reported?
+        "sw_18_39_reported",        // Were any sex workers aged 18–39 years reported?
+        "sw_40_59_reported",        // Were any sex workers aged 40–59 years reported?
+        "sw_60_plus_reported",      // Were any sex workers aged 60+ years reported?
+        "td_18_39_reported",        // Were any truck drivers aged 18–39 years reported?
+        "td_40_59_reported",        // Were any truck drivers aged 40–59 years reported?
+        "td_60_plus_reported",      // Were any truck drivers aged 60+ years reported?
+        "others_18_39_reported",    // Were any others aged 18–39 years reported?
+        "others_40_59_reported",    // Were any others aged 40–59 years reported?
+        "others_60_plus_reported",  // Were any others aged 60+ years reported?
+        "aefi_yes_no"               // Reported AEFI?
+
+    )
+
+    val ALL_MPOX_LINK_IDS = FACILITY_DETAILS + MPOX_GUIDES
 }
 

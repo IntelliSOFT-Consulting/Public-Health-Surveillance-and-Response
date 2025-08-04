@@ -34,6 +34,8 @@ import org.hl7.fhir.r4.model.Reference
 import org.hl7.fhir.r4.model.StringType
 import java.lang.reflect.Type
 import java.text.SimpleDateFormat
+import java.time.ZonedDateTime
+import java.util.Date
 import java.util.Locale
 import kotlin.String
 
@@ -367,8 +369,22 @@ class PatientListViewModel(
                     val county = getAnswerValueAsString(fhirPatient.resource.item, "294367770999")
                     val subCounty =
                         getAnswerValueAsString(fhirPatient.resource.item, "819946803642")
-                    val caseOnsetDate =
+                    var caseOnsetDate =
                         getAnswerValueAsString(fhirPatient.resource.item, "728034137219")
+
+                    if (caseOnsetDate.isEmpty()) {
+
+                        caseOnsetDate = try {
+                            val authoredDate: Date = fhirPatient.resource.authored
+                            val localDate = authoredDate.toInstant()
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDate()
+                            localDate.toString() // "2025-07-30"
+                        } catch (e: Exception) {
+                            "N/A"
+                        }
+
+                    }
 
                     val data = PatientItem(
                         id = (index + 1).toString(),
@@ -409,9 +425,6 @@ class PatientListViewModel(
 
                         val epidIdentifier =
                             fhirPatient.resource.identifier.find { it.type.codingFirstRep.code == "EPID" }
-
-
-                        println("Displaying Cases for ->   matchingIdentifier ${matchingIdentifier?.value}")
 
                         if (matchingIdentifier != null) {
                             // Convert the FHIR Patient resource to your PatientItem model
@@ -525,10 +538,12 @@ class PatientListViewModel(
                         }
                     }
                     .sortedByDescending { it.lastUpdated }
-                    .also { measureData.addAll(it)
+                    .also {
+                        measureData.addAll(it)
                     }
 
-                val sortedList =(questionnaireData + measureData).sortedByDescending { s -> s.lastUpdated }
+                val sortedList =
+                    (questionnaireData + measureData).sortedByDescending { s -> s.lastUpdated }
 
                 patientsSorted.clear()
                 patientsSorted.addAll(sortedList)

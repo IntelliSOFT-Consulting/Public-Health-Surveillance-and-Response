@@ -143,8 +143,7 @@
                         android:layout_marginStart="@dimen/text_margin"
                         android:layout_marginEnd="@dimen/small_text_margin"
                         android:layout_weight="1"
-                        android:background="@drawable/type_background"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
                         android:textStyle="normal"
                         tools:text="Checklist" />
                 </LinearLayout>
