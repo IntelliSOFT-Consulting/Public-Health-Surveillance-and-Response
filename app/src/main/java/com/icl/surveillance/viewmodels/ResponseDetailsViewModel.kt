@@ -47,32 +47,39 @@ class ResponseDetailsViewModel(
         var observations = mutableListOf<PatientListViewModel.ObservationItem>()
         searchResult.first().let {
             logicalId = it.resource.logicalId
+
             it.resource.item.forEach { k ->
                 k.item.forEach { j ->
                     val answer = j.answerFirstRep
-                    val value  = when {
-                    answer.hasValueReference() -> {
-                        val ref = answer.valueReference
-                        ref.display ?: ref.reference ?: ""
+                    val value = when {
+                        answer.hasValueReference() -> {
+                            val ref = answer.valueReference
+                            ref.display ?: ref.reference ?: ""
+                        }
+
+                        answer.hasValueCoding() -> {
+                            val coding = answer.valueCoding
+                            coding.display ?: coding.code ?: ""
+                        }
+
+                        answer.hasValueStringType() -> answer.valueStringType.value ?: ""
+                        answer.hasValueDateType() -> {
+                            val date = answer.valueDateType.value
+                            date?.let { dateFormatter.format(it) } ?: ""
+                        }
+
+                        answer.hasValueDateTimeType() -> {
+                            val dateTime = answer.valueDateTimeType.value
+                            dateTime?.let { dateFormatter.format(it) } ?: ""
+                        }
+
+                        answer.hasValueBooleanType() -> answer.valueBooleanType.booleanValue()
+                            .toString()
+
+                        answer.hasValueIntegerType() -> answer.valueIntegerType.value.toString()
+                        answer.hasValueDecimalType() -> answer.valueDecimalType.value.toString()
+                        else -> answer.value?.primitiveValue() ?: ""
                     }
-                    answer.hasValueCoding() -> {
-                        val coding = answer.valueCoding
-                        coding.display ?: coding.code ?: ""
-                    }
-                    answer.hasValueStringType() -> answer.valueStringType.value ?: ""
-                    answer.hasValueDateType() -> {
-                        val date = answer.valueDateType.value
-                        date?.let { dateFormatter.format(it) } ?: ""
-                    }
-                    answer.hasValueDateTimeType() -> {
-                        val dateTime = answer.valueDateTimeType.value
-                        dateTime?.let { dateFormatter.format(it) } ?: ""
-                    }
-                    answer.hasValueBooleanType() -> answer.valueBooleanType.booleanValue().toString()
-                    answer.hasValueIntegerType() -> answer.valueIntegerType.value.toString()
-                    answer.hasValueDecimalType() -> answer.valueDecimalType.value.toString()
-                    else -> answer.value?.primitiveValue() ?: ""
-                }
 
 
                     val obs = PatientListViewModel.ObservationItem(

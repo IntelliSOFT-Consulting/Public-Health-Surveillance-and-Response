@@ -35,6 +35,7 @@ import org.hl7.fhir.r4.model.StringType
 import java.lang.reflect.Type
 import java.text.SimpleDateFormat
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 import kotlin.String
@@ -371,17 +372,27 @@ class PatientListViewModel(
                         getAnswerValueAsString(fhirPatient.resource.item, "819946803642")
                     var caseOnsetDate =
                         getAnswerValueAsString(fhirPatient.resource.item, "728034137219")
+                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+
+                    val authored = try {
+                        val authoredDate: Date = fhirPatient.resource.authored
+                        val localDate = authoredDate.toInstant()
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDateTime()
+                        localDate.format(formatter)  // format here instead of toString()
+                    } catch (e: Exception) {
+                        ""
+                    }
 
                     if (caseOnsetDate.isEmpty()) {
-
                         caseOnsetDate = try {
                             val authoredDate: Date = fhirPatient.resource.authored
                             val localDate = authoredDate.toInstant()
                                 .atZone(ZoneId.systemDefault())
                                 .toLocalDate()
-                            localDate.toString() // "2025-07-30"
+                            localDate.toString()
                         } catch (e: Exception) {
-                            "N/A"
+                            ""
                         }
 
                     }
@@ -401,7 +412,7 @@ class PatientListViewModel(
                         county = county,
                         subCounty = subCounty,
                         caseOnsetDate = caseOnsetDate,
-                        lastUpdated = fhirPatient.resource.authored.toString(),
+                        lastUpdated = authored,
                         isSummary = false
                     )
                     data
@@ -545,8 +556,11 @@ class PatientListViewModel(
                 val sortedList =
                     (questionnaireData + measureData).sortedByDescending { s -> s.lastUpdated }
 
+                sortedList.forEach {
+                    println("Last Update Date:::: ${it.lastUpdated}")
+                }
                 patientsSorted.clear()
-                patientsSorted.addAll(sortedList)
+                patientsSorted.addAll(sortedList.reversed())
                 return sortedList
             }
 
@@ -1030,7 +1044,7 @@ class PatientListViewModel(
     )
 
     data class PatientDetailOverview(
-        val patient: PatientListViewModel.PatientItem,
+        val patient: PatientItem,
         override val firstInGroup: Boolean = false,
         override val lastInGroup: Boolean = false,
     ) : PatientDetailData
