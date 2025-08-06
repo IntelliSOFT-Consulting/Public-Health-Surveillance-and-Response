@@ -478,7 +478,7 @@
       "item": [
         {
           "linkId": "vaccines_with_valid_vvm",
-          "text": "Vaccines received with valid VVM status.",
+          "text": "Vaccines received with valid VVM (Vaccine Vial Monitor) status.",
           "type": "choice",
           "extension": [
             {
@@ -1035,7 +1035,7 @@
       "item": [
         {
           "linkId": "data_entered_in_nphiis",
-          "text": "Vaccination data entered in National Public Health Intelligence platform daily (NPHIIS) daily",
+          "text": "Vaccination data entered in National Public Health Intelligence platform daily (NPHIIS)",
           "type": "choice",
           "extension": [
             {
