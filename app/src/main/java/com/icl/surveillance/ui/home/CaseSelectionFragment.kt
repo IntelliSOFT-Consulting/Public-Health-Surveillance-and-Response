@@ -197,6 +197,7 @@ class CaseSelectionFragment : Fragment() {
             "SLR" -> "Add New Report"
             "MOH 505" -> "Add New Record"
             "Social Investigation Form" -> "Add New Social Investigation Form"
+            "Tally Sheet" -> "Add New Team Record"
             else -> "Add New $title Case"
         }
         val view = when (title) {
@@ -215,6 +216,44 @@ class CaseSelectionFragment : Fragment() {
         FormatterClass().deleteSharedPref("selected_option", requireContext())
         recyclerView.adapter = CaseOptionsAdapter(caseOptions) { option ->
             when (option.title) {
+                "Add New Team Record" -> {
+                    val currentCase = "Mpox - Tally Sheet"
+                    val addParentTitle = "Add New Team Record"
+                    val questionnaireFile = "mpox-tally-sheet.json"
+
+                    with(FormatterClass()) {
+                        saveSharedPref("currentCase", currentCase, requireContext())
+                        saveSharedPref("AddParentTitle", addParentTitle, requireContext())
+                        saveSharedPref("questionnaire", questionnaireFile, requireContext())
+                    }
+                    launchCaseFlow(
+                        requireContext(),
+                        " $titleName",
+                        currentCase,
+                        addParentTitle,
+                        questionnaireFile
+                    )
+                }
+
+                "Add New Supervisor Checklist Case" -> {
+                    val currentCase = "Mpox - Supervisor Checklist"
+                    val addParentTitle = "Add New Supervisor Checklist"
+                    val questionnaireFile = "mpox-supervisor-checklist.json"
+
+                    with(FormatterClass()) {
+                        saveSharedPref("currentCase", currentCase, requireContext())
+                        saveSharedPref("AddParentTitle", addParentTitle, requireContext())
+                        saveSharedPref("questionnaire", questionnaireFile, requireContext())
+                    }
+                    launchCaseFlow(
+                        requireContext(),
+                        " $titleName",
+                        currentCase,
+                        addParentTitle,
+                        questionnaireFile
+                    )
+                }
+
                 "Add New Mpox Case" -> {
                     FormatterClass().saveSharedPref(
                         "selected_option",
@@ -266,6 +305,28 @@ class CaseSelectionFragment : Fragment() {
                     )
                     FormatterClass().saveSharedPref(
                         "currentCase", "MOH 505 Reporting Form", requireContext()
+                    )
+                    val intent = Intent(requireContext(), CaseListingActivity::class.java)
+                    startActivity(intent)
+                }
+
+                "Tally Sheet Case List" -> {
+                    FormatterClass().saveSharedPref(
+                        "listingTitle", "Mpox - Tally Sheet", requireContext()
+                    )
+                    FormatterClass().saveSharedPref(
+                        "currentCase", "Mpox - Tally Sheet", requireContext()
+                    )
+                    val intent = Intent(requireContext(), CaseListingActivity::class.java)
+                    startActivity(intent)
+                }
+
+                "Supervisor Checklist Case List" -> {
+                    FormatterClass().saveSharedPref(
+                        "listingTitle", "Mpox - Supervisor Checklist", requireContext()
+                    )
+                    FormatterClass().saveSharedPref(
+                        "currentCase", "Mpox - Supervisor Checklist", requireContext()
                     )
                     val intent = Intent(requireContext(), CaseListingActivity::class.java)
                     startActivity(intent)
@@ -412,6 +473,8 @@ class CaseSelectionFragment : Fragment() {
             "MOH 505" -> "moh-505-reporting-form"
             "RCCE" -> "rcce"
             "Mpox" -> "mpox-information"
+            "Tally Sheet" -> "mpox-tally-sheet"
+            "Supervisor Checklist" -> "mpox-supervisor-checklist"
             else -> null
         }
         println("Case Type: $caseType")

@@ -128,7 +128,7 @@ class ChildFragment : Fragment() {
 
     private fun onItemClick(layout: HomeViewModel.Diseases) {
         val title = context?.getString(layout.textId) ?: ""
-
+println("Child Clicked ***** ${layout.level}")
         when (layout.level) {
             0 -> {
                 val bundle =
@@ -142,6 +142,26 @@ class ChildFragment : Fragment() {
                 FormatterClass()
                     .saveSharedPref(
                         "childStage", "6",
+                        requireContext()
+                    )
+
+                findNavController().navigate(
+                    R.id.action_childFragment_to_singleCaseFragment,
+                    bundle
+                )
+            }
+            13 -> {
+                val bundle =
+                    Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-case.json") }
+
+                FormatterClass()
+                    .saveSharedPref(
+                        "childTitle", title,
+                        requireContext()
+                    )
+                FormatterClass()
+                    .saveSharedPref(
+                        "childStage", "7",
                         requireContext()
                     )
 

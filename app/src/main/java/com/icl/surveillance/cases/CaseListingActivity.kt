@@ -176,16 +176,14 @@ class CaseListingActivity : AppCompatActivity() {
                 Intent(this@CaseListingActivity, ResponseQuestionnaireActivity::class.java)
             when (slug) {
 
-                "mpox-information" -> {
-                    if (patientItem.isSummary) {
-                        startActivity(activityIntent)
-                    } else {
-                        startActivity(activityIntent2)
-                    }
+                "mpox-supervisor-checklist" -> {
+
+                    startActivity(activityIntent2)
+
                 }
 
                 "social-listening-and-rumor-tracking-tool",
-                "vl-case-information",
+                "vl-case-information", "mpox-tally-sheet",
                 "afp-case-information",
                 "rcce" -> {
                     startActivity(activityIntent)

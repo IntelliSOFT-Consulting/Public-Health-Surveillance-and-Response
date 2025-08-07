@@ -76,7 +76,7 @@
     <string name="moh505_form">MOH 505</string>
     <string name="county_sub_county">County/Sub County Coordination Assessment</string>
     <string name="community_tool">Community Questionnaire</string>
-    <string name="mpox">Mpox</string>
+    <string name="mpox">Mpox Immunization</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
@@ -119,4 +119,6 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="tally">Tally Sheet</string>
+    <string name="supervisor">Supervisor Checklist</string>
 </resources>

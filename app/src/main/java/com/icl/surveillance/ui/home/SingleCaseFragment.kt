@@ -76,6 +76,7 @@ class SingleCaseFragment : Fragment() {
         var titleName = FormatterClass().getSharedPref("childTitle", requireContext())
         var stage = FormatterClass().getSharedPref("childStage", requireContext())
 
+        println("Current Stage is $stage")
         val activity = requireActivity() as AppCompatActivity
         activity.supportActionBar?.apply {
             title = ""
@@ -103,6 +104,9 @@ class SingleCaseFragment : Fragment() {
 
                         "100" -> {
                             submitList(viewModel.getMOHList())
+                        }
+                        "7" -> {
+                            submitList(viewModel.getDiseasesList(700))
                         }
 
                         else -> {

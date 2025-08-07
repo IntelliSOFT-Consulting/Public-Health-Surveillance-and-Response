@@ -69,6 +69,11 @@ class HomeViewModel(application: Application, private val state: SavedStateHandl
         ),
 
         // Mass
+
+        MPOX(
+            R.drawable.searching,
+            R.string.mpox, 1, 13
+        ),
         POLIO(
             R.drawable.searching,
             R.string.polio, 1, 10
@@ -87,11 +92,6 @@ class HomeViewModel(application: Application, private val state: SavedStateHandl
         MOH_505(
             R.drawable.searching,
             R.string.moh505_form, 100, 100
-        ),
-
-        MPOX(
-            R.drawable.searching,
-            R.string.mpox, 100, 200
         ),
 
 
@@ -118,6 +118,16 @@ class HomeViewModel(application: Application, private val state: SavedStateHandl
         AFP(
             R.drawable.searching,
             R.string.afp, 6, 0
+        ),
+
+
+        TALLY_SHEET(
+            R.drawable.searching,
+            R.string.tally, 700, 0
+        ),
+        SUPERVISOR_CHECKLIST(
+            R.drawable.searching,
+            R.string.supervisor, 700, 0
         ),
 
         RUMOR(

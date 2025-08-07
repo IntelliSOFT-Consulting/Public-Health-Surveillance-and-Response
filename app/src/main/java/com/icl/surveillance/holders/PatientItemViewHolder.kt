@@ -70,8 +70,9 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
 
         if (current != null) {
             val slug = current.toSlug()
+            println("Current Case Information: $slug")
             when (slug) {
-                "mpox-information" -> {
+                "mpox-supervisor-checklist","mpox-tally-sheet" -> {
                     this.parentLayout.visibility = View.VISIBLE
                     this.parentOriginal.visibility = View.GONE
                     this.mpoxCounty.text = patientItem.county
