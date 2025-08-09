@@ -5,6 +5,22 @@
     {
       "url": "http://hl7.org/fhir/StructureDefinition/variable",
       "valueExpression": {
+        "name": "dosesReceived",
+        "language": "text/fhirpath",
+        "expression": "%resource.descendants().where(linkId='vaccine_received').answer.value"
+      }
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
+        "name": "dosesUsed",
+        "language": "text/fhirpath",
+        "expression": "%resource.descendants().where(linkId='vaccine_used').answer.value"
+      }
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
         "name": "countyName",
         "language": "text/fhirpath",
         "expression": "%resource.descendants().where(linkId='294367770999').answer.value.reference"
@@ -316,7 +332,7 @@
     {
       "linkId": "target_population",
       "type": "group",
-      "text": "Target Population",
+      "text": "Number Reached",
       "extension": [
         {
           "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -1735,19 +1751,70 @@
           "linkId": "vaccine_received",
           "type": "integer",
           "text": "Number of doses of vaccine received",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 9999
+            }
+          ]
         },
         {
           "linkId": "vaccine_used",
           "type": "integer",
           "text": "Number of vaccine doses used",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 9999
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
+              "extension": [
+                {
+                  "url": "key",
+                  "valueId": "constraint-1"
+                },
+                {
+                  "url": "requirements",
+                  "valueString": "vaccine_used <= vaccine_received"
+                },
+                {
+                  "url": "severity",
+                  "valueCode": "error"
+                },
+                {
+                  "url": "expression",
+                  "valueString": "%context.answer.value <= %resource.descendants().where(linkId='vaccine_received').answer.value"
+                },
+                {
+                  "url": "human",
+                  "valueString": "Doses used cannot be more than the doses received"
+                },
+                {
+                  "url": "location",
+                  "valueString": "1"
+                }
+              ]
+            }
+          ]
         },
         {
           "linkId": "vaccine_remaining",
           "type": "integer",
           "text": "Number of vaccine doses remaining",
-          "required": true
+          "required": true,
+          "readOnly": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-calculatedExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "iif(%resource.descendants().where(linkId='vaccine_received').answer.exists() and %resource.descendants().where(linkId='vaccine_used').answer.exists(), %resource.descendants().where(linkId='vaccine_received').answer.value - %resource.descendants().where(linkId='vaccine_used').answer.value, {})"
+              }
+            }
+          ]
         },
         {
           "linkId": "aefi_yes_no",
@@ -1792,6 +1859,41 @@
           "type": "integer",
           "text": "Number of vaccinee with reported AEFI",
           "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 9999
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
+              "extension": [
+                {
+                  "url": "key",
+                  "valueId": "constraint-1"
+                },
+                {
+                  "url": "requirements",
+                  "valueString": "aefi_count <= vaccine_used"
+                },
+                {
+                  "url": "severity",
+                  "valueCode": "error"
+                },
+                {
+                  "url": "expression",
+                  "valueString": "%context.answer.value <= %resource.descendants().where(linkId='vaccine_used').answer.value"
+                },
+                {
+                  "url": "human",
+                  "valueString": "AEFI count cannot be more than the doses used"
+                },
+                {
+                  "url": "location",
+                  "valueString": "1"
+                }
+              ]
+            }
+          ],
           "enableWhen": [
             {
               "question": "aefi_yes_no",
@@ -1806,7 +1908,13 @@
           "linkId": "mpox_suspected_case_count",
           "type": "integer",
           "text": "No. of Mpox Suspected Case detected",
-          "required": true
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 9999
+            }
+          ]
         }
       ]
     }
