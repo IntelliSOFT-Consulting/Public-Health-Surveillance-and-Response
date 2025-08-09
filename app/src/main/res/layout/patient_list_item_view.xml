@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:id="@+id/ln_metadata_section"
@@ -109,12 +109,13 @@
                         android:textStyle="normal" />
 
                     <TextView
+                        android:id="@+id/tv_type"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/text_margin"
                         android:layout_marginEnd="@dimen/small_text_margin"
                         android:layout_weight="1"
-                        android:text="Type"
+                        android:text="Site Name"
                         android:textColor="@color/black"
                         android:textStyle="normal" />
                 </LinearLayout>
@@ -144,7 +145,64 @@
                         android:layout_marginEnd="@dimen/small_text_margin"
                         android:layout_weight="1"
                         android:textColor="@color/black"
-                        android:textStyle="normal"
+                        android:textStyle="bold"
+                        tools:text="Checklist" />
+                </LinearLayout>
+                <!-- Labels Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/text_margin"
+                        android:layout_marginEnd="@dimen/small_text_margin"
+                        android:layout_weight="1"
+                        android:text="Team Number"
+                        android:textColor="@color/black"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/tv_team_number"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/text_margin"
+                        android:layout_marginEnd="@dimen/small_text_margin"
+                        android:layout_weight="1"
+                        android:text="Supervisor Name"
+                        android:textColor="@color/black"
+                        android:textStyle="normal" />
+                </LinearLayout>
+
+                <!-- Values Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/team_number"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/text_margin"
+                        android:layout_marginEnd="@dimen/small_text_margin"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        tools:text="31/07/2025" />
+
+                    <TextView
+                        android:id="@+id/supervisor_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/text_margin"
+                        android:layout_marginEnd="@dimen/small_text_margin"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
                         tools:text="Checklist" />
                 </LinearLayout>
             </LinearLayout>

@@ -12,6 +12,7 @@ import com.icl.surveillance.databinding.PatientListItemViewBinding
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.utils.toSlug
+import java.text.Normalizer
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
@@ -41,6 +42,9 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
     private val mpoxSubCounty: TextView = binding.mpoxSubCounty
     private val date: TextView = binding.date
     private val type: TextView = binding.type
+    private val tvType: TextView = binding.tvType
+    private val teamNumber: TextView = binding.teamNumber
+    private val supervisorName: TextView = binding.supervisorName
 
     fun bindTo(
         patientItem: PatientListViewModel.PatientItem,
@@ -54,6 +58,8 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
         this.subCounty.text = patientItem.subCounty
         this.dateReported.text = patientItem.caseOnsetDate
         this.labResults.text = patientItem.labResults
+
+        val supervisor = FormatterClass().getSharedPref("fullNames", context)
 
         try {
             if (listingTitle.isNotEmpty()) {
@@ -70,15 +76,20 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
 
         if (current != null) {
             val slug = current.toSlug()
-            println("Current Case Information: $slug")
             when (slug) {
-                "mpox-supervisor-checklist","mpox-tally-sheet" -> {
+                "mpox-supervisor-checklist", "mpox-tally-sheet" -> {
                     this.parentLayout.visibility = View.VISIBLE
                     this.parentOriginal.visibility = View.GONE
                     this.mpoxCounty.text = patientItem.county
                     this.mpoxSubCounty.text = patientItem.subCounty
                     this.date.text = patientItem.caseOnsetDate
-                    this.type.text = if (patientItem.isSummary) "Tally sheet" else "Checklist"
+                    if (slug == "mpox-tally-sheet") {
+                        this.tvType.text = "Campaign Day"
+                    }
+                    this.type.text = patientItem.campaignDate
+                    this.supervisorName.text = supervisor
+                    this.teamNumber.text = patientItem.teamNumber
+
 
                 }
 

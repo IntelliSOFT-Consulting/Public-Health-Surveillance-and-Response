@@ -16,6 +16,7 @@ import com.google.android.fhir.search.Order
 import com.google.android.fhir.search.StringFilterModifier
 import com.google.android.fhir.search.count
 import com.google.android.fhir.search.search
+import com.google.android.gms.common.internal.GmsClientSupervisor
 import com.icl.surveillance.utils.FormatterClass
 import java.time.LocalDate
 import java.time.ZoneId
@@ -357,6 +358,7 @@ class PatientListViewModel(
     ): List<PatientItem> {
         val isSummary = nameQuery.contains("mpox")
 
+        println("Current Workflow :::: $nameQuery")
         when (nameQuery) {
             "mpox-supervisor-checklist" -> {
 
@@ -372,6 +374,13 @@ class PatientListViewModel(
                         getAnswerValueAsString(fhirPatient.resource.item, "819946803642")
                     var caseOnsetDate =
                         getAnswerValueAsString(fhirPatient.resource.item, "728034137219")
+
+
+                    var siteName =
+                        getAnswerValueAsString(fhirPatient.resource.item, "site_name")
+
+                    var teamNumber =
+                        getAnswerValueAsString(fhirPatient.resource.item, "site_type")
                     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
                     val authored = try {
@@ -413,7 +422,9 @@ class PatientListViewModel(
                         subCounty = subCounty,
                         caseOnsetDate = caseOnsetDate,
                         lastUpdated = authored,
-                        isSummary = isSummary
+                        isSummary = isSummary,
+                        campaignDate = siteName,
+                        teamNumber = teamNumber
                     )
                     data
                 }.also {
@@ -447,7 +458,6 @@ class PatientListViewModel(
                             fhirPatient.resource.identifier.find { it.type.codingFirstRep.code == "EPID" }
 
 
-                        println("Displaying Cases for ->   matchingIdentifier ${matchingIdentifier?.value}")
 
                         if (matchingIdentifier != null) {
                             // Convert the FHIR Patient resource to your PatientItem model
@@ -490,10 +500,28 @@ class PatientListViewModel(
                                     ?.value
                                     ?.asStringValue() ?: "Case"
 
+
+                            val campaignDay =
+                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "campaign_day" }
+                                    ?.resource
+                                    ?.value
+                                    ?.asStringValue() ?: ""
+                            val teamNumber =
+                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "team_no" }
+                                    ?.resource
+                                    ?.value
+                                    ?.asStringValue() ?: ""
+
+
+
+                            println("Current Workflow :::: Campaign Day : $campaignDay")
+
                             // Loading Lab Results
                             val childEncounter = loadChildEncounter(data.resourceId, logicalId)
 
                             when (nameQuery) {
+
+
                                 "moh-505-reporting-form" -> {
 
                                 }
@@ -665,7 +693,9 @@ class PatientListViewModel(
                                     subCounty = subCounty,
                                     caseOnsetDate = onset,
                                     encounterQuestionnaire = encounterQuestionnaire,
-                                    isSummary = isSummary
+                                    isSummary = isSummary,
+                                    campaignDate = campaignDay,
+                                    teamNumber = teamNumber
                                 )
                             data
                         } else {
@@ -712,7 +742,10 @@ class PatientListViewModel(
         val caseList: String = "Case",
         val vaccinated: String = "No",
         val encounterQuestionnaire: String = "",
-        val isSummary: Boolean = false
+        val isSummary: Boolean = false,
+        val campaignDate: String = "",
+        val teamNumber: String = "",
+        val supervisorName: String = ""
     ) {
         override fun toString(): String = name
     }

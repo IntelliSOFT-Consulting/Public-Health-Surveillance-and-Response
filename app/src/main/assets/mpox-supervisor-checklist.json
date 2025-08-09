@@ -1,6 +1,10 @@
 {
   "resourceType": "Questionnaire",
-  "status": "active",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/4.0/StructureDefinition/Questionnaire"
+    ]
+  },
   "extension": [
     {
       "url": "http://hl7.org/fhir/StructureDefinition/variable",
@@ -43,6 +47,14 @@
       }
     }
   ],
+  "version": "v.1.1",
+  "title": "Supervisor Checklist",
+  "status": "active",
+  "date": "2025-08-09",
+  "publisher": "Kiprotich Japheth",
+  "purpose": "Record all supervisor related activities",
+  "approvalDate": "2025-08-09",
+  "lastReviewDate": "2025-08-09",
   "item": [
     {
       "item": [
@@ -628,7 +640,6 @@
             }
           ]
         },
-
         {
           "linkId": "backup_generator_or_solar_available",
           "text": "Backup generator/solar system available?",
@@ -1461,15 +1472,22 @@
       ],
       "item": [
         {
+          "type": "string",
           "linkId": "key_challenges",
           "text": "Key challenges:",
-          "type": "string",
-          "required": true
+          "required": false
         },
         {
+          "type": "string",
           "linkId": "corrective_actions_taken",
           "text": "Corrective actions taken for gaps.",
-          "type": "string",
+          "enableWhen": [
+            {
+              "question": "key_challenges",
+              "operator": "exists",
+              "answerBoolean": true
+            }
+          ],
           "required": true
         },
         {
