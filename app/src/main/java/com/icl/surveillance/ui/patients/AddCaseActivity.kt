@@ -20,6 +20,7 @@ import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FI
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FRAGMENT_TAG
 import com.icl.surveillance.databinding.ActivityAddCaseBinding
 import com.icl.surveillance.utils.FormatterClass
+import com.icl.surveillance.utils.LocationUtils
 import com.icl.surveillance.utils.ProgressDialogManager
 import com.icl.surveillance.viewmodels.ScreenerViewModel
 import kotlinx.coroutines.launch
@@ -41,6 +42,22 @@ class AddCaseActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val titleName = FormatterClass().getSharedPref("title", this@AddCaseActivity)
         supportActionBar.apply { title = titleName }
+
+        LocationUtils.requestCurrentLocation(
+            this,
+            onLocationReceived = { lat, lon ->
+                println("Latitude: $lat, Longitude: $lon")
+
+                val latitude = lat.toString()
+                val longitude = lon.toString()
+                FormatterClass().saveSharedPref("latitude", latitude, this)
+                FormatterClass().saveSharedPref("longitude", longitude, this)
+            },
+            onError = { error ->
+                println("Error: $error")
+            }
+        )
+
         updateArguments()
         if (savedInstanceState == null) {
             addQuestionnaireFragment()

@@ -13,7 +13,7 @@ android {
         applicationId = "com.icl.surveillance"
         minSdk = 26
         targetSdk = 35
-        versionCode = 25
+        versionCode = 26
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -69,5 +69,6 @@ dependencies {
     implementation(libs.library)
     implementation("com.google.android.play:app-update:2.1.0")
     implementation("com.google.android.play:app-update-ktx:2.1.0")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
 
 }

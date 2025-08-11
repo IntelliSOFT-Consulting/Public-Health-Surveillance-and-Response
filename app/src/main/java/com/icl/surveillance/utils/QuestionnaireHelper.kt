@@ -1,11 +1,38 @@
 package com.icl.surveillance.utils
 
+import org.hl7.fhir.r4.model.CodeableConcept
+import org.hl7.fhir.r4.model.Coding
 import org.hl7.fhir.r4.model.Encounter
+import org.hl7.fhir.r4.model.Identifier
 import org.hl7.fhir.r4.model.Observation
 import org.hl7.fhir.r4.model.Quantity
 import org.hl7.fhir.r4.model.Reference
 
 class QuestionnaireHelper {
+
+
+    fun createFullFhirIdentifier(
+        codeData: String,
+        valueData: String,
+        systemData: String,
+        displayData: String
+    ): Identifier {
+        return Identifier().apply {
+            use = Identifier.IdentifierUse.OFFICIAL
+            type = CodeableConcept().apply {
+                addCoding(
+                    Coding().apply {
+                        system = systemData
+                        code = codeData
+                        display = displayData
+                    }
+                )
+                text = displayData
+            }
+            system = systemData
+            value = valueData
+        }
+    }
 
     fun codingQuestionnaire(code: String, display: String, text: String): Observation {
         val observation = Observation()

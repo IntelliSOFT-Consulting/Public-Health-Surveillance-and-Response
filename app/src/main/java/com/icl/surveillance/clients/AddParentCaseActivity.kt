@@ -23,6 +23,7 @@ import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FR
 import com.icl.surveillance.databinding.ActivityAddParentCaseBinding
 import com.icl.surveillance.ui.patients.AddCaseActivity
 import com.icl.surveillance.utils.FormatterClass
+import com.icl.surveillance.utils.LocationUtils
 import com.icl.surveillance.utils.ProgressDialogManager
 import com.icl.surveillance.viewmodels.AddClientViewModel
 import kotlinx.coroutines.launch
@@ -47,6 +48,21 @@ class AddParentCaseActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val titleName = FormatterClass().getSharedPref("AddParentTitle", this@AddParentCaseActivity)
         supportActionBar.apply { title = titleName }
+        LocationUtils.requestCurrentLocation(
+            this,
+            onLocationReceived = { lat, lon ->
+                println("Latitude: $lat, Longitude: $lon")
+
+                val latitude = lat.toString()
+                val longitude = lon.toString()
+                FormatterClass().saveSharedPref("latitude", latitude, this)
+                FormatterClass().saveSharedPref("longitude", longitude, this)
+            },
+            onError = { error ->
+                println("Error: $error")
+            }
+        )
+
 
 
         updateArguments()

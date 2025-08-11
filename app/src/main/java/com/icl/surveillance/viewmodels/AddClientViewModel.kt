@@ -93,6 +93,17 @@ class AddClientViewModel(application: Application, private val state: SavedState
             }
 
             withContext(Dispatchers.IO) {
+
+                val latitude = FormatterClass().getSharedPref("latitude", context)
+                val longitude = FormatterClass().getSharedPref("longitude", context)
+
+                questionnaireResponse.identifier = QuestionnaireHelper().createFullFhirIdentifier(
+                    codeData = "geo-location",
+                    valueData = "lat:${latitude},lon:${longitude}",
+                    systemData = "geo-location-details",
+                    displayData = "Latitude: $latitude, Longitude: $longitude"
+                )
+
                 fhirEngine.create(questionnaireResponse)
             }
 
@@ -767,6 +778,17 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         }
 
                         "mpox-tally-sheet" -> {
+                            val latitude = FormatterClass().getSharedPref("latitude", context)
+                            val longitude = FormatterClass().getSharedPref("longitude", context)
+
+                            measure.addIdentifier(
+                                QuestionnaireHelper().createFullFhirIdentifier(
+                                    codeData = "geo-location",
+                                    valueData = "lat:${latitude},lon:${longitude}",
+                                    systemData = "geo-location-details",
+                                    displayData = "Latitude: $latitude, Longitude: $longitude"
+                                )
+                            )
                             fhirEngine.create(measure)
                         }
                     }
