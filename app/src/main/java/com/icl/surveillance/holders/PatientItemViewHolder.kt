@@ -45,6 +45,7 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
     private val tvType: TextView = binding.tvType
     private val teamNumber: TextView = binding.teamNumber
     private val supervisorName: TextView = binding.supervisorName
+    private val tvTeamNumberLabel: TextView = binding.tvTeamNumberLabel
 
     fun bindTo(
         patientItem: PatientListViewModel.PatientItem,
@@ -85,6 +86,7 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
                     this.date.text = patientItem.caseOnsetDate
                     if (slug == "mpox-tally-sheet") {
                         this.tvType.text = "Campaign Day"
+                        this.tvTeamNumberLabel.text = "Team Number"
                     }
                     this.type.text = patientItem.campaignDate
                     this.supervisorName.text = supervisor
