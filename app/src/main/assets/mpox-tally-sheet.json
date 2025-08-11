@@ -1805,14 +1805,39 @@
           "type": "integer",
           "text": "Number of vaccine doses remaining",
           "required": true,
-          "readOnly": true,
           "extension": [
             {
-              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-calculatedExpression",
-              "valueExpression": {
-                "language": "text/fhirpath",
-                "expression": "iif(%resource.descendants().where(linkId='vaccine_received').answer.exists() and %resource.descendants().where(linkId='vaccine_used').answer.exists(), %resource.descendants().where(linkId='vaccine_received').answer.value - %resource.descendants().where(linkId='vaccine_used').answer.value, {})"
-              }
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 9999
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
+              "extension": [
+                {
+                  "url": "key",
+                  "valueId": "constraint-1"
+                },
+                {
+                  "url": "requirements",
+                  "valueString": "vaccine_used <= vaccine_received"
+                },
+                {
+                  "url": "severity",
+                  "valueCode": "error"
+                },
+                {
+                  "url": "expression",
+                  "valueString": "%context.answer.value <= %resource.descendants().where(linkId='vaccine_received').answer.value"
+                },
+                {
+                  "url": "human",
+                  "valueString": "Doses used cannot be more than the doses received"
+                },
+                {
+                  "url": "location",
+                  "valueString": "1"
+                }
+              ]
             }
           ]
         },

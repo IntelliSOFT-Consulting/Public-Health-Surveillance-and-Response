@@ -197,7 +197,7 @@ class CaseSelectionFragment : Fragment() {
             "SLR" -> "Add New Report"
             "MOH 505" -> "Add New Record"
             "Social Investigation Form" -> "Add New Social Investigation Form"
-            "Tally Sheet" -> "Add New Team Record"
+            "Summary Sheet" -> "Add New Team Record"
             else -> "Add New $title Case"
         }
         val view = when (title) {
@@ -310,9 +310,9 @@ class CaseSelectionFragment : Fragment() {
                     startActivity(intent)
                 }
 
-                "Tally Sheet Case List" -> {
+                "Summary Sheet Case List" -> {
                     FormatterClass().saveSharedPref(
-                        "listingTitle", "Mpox - Tally Sheet", requireContext()
+                        "listingTitle", "Mpox - Summary Sheet", requireContext()
                     )
                     FormatterClass().saveSharedPref(
                         "currentCase", "Mpox - Tally Sheet", requireContext()

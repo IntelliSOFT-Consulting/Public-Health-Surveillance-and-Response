@@ -32,7 +32,8 @@
             android:name=".ui.patients.SummarizedActivity"
             android:exported="false"
             android:label="Case Summary "
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.Surveillance.NoActionBar" />
         <activity
             android:name=".cases.CaseListingActivity"
             android:exported="false"

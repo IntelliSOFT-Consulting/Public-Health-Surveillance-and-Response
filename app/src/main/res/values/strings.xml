@@ -119,6 +119,6 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
-    <string name="tally">Tally Sheet</string>
+    <string name="tally">Summary Sheet</string>
     <string name="supervisor">Supervisor Checklist</string>
 </resources>
