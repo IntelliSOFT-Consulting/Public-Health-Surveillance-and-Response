@@ -1842,6 +1842,11 @@
           ]
         },
         {
+          "linkId": "aefi",
+          "type": "display",
+          "text": "AEFI"
+        },
+        {
           "linkId": "aefi_yes_no",
           "type": "choice",
           "text": "Reported AEFI?",
@@ -1930,6 +1935,11 @@
           ]
         },
         {
+          "linkId": "surveilance",
+          "type": "display",
+          "text": "Surveilance"
+        },
+        {
           "linkId": "mpox_suspected_case_count",
           "type": "integer",
           "text": "No. of Mpox Suspected Case detected",
@@ -1938,6 +1948,97 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 9999
+            }
+          ]
+        },
+        {
+          "linkId": "rumour_tracking",
+          "type": "display",
+          "text": "Rumour Tracking"
+        },
+        {
+          "linkId": "rumour_reported",
+          "type": "choice",
+          "text": "Were any rumours reported",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "rumour_escalated",
+          "type": "choice",
+          "text": "Were they escalated",
+          "required": true,
+          "enableWhen": [
+            {
+              "question": "rumour_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
             }
           ]
         }

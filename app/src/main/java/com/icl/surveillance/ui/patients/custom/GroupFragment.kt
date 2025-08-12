@@ -115,6 +115,12 @@ class GroupFragment : Fragment() {
                             }
                         }
 
+                        "exists" -> {
+                            if (parentResponse == "true") {
+                                response = true
+                            }
+                        }
+
                         else -> {
                             if (parentAnswer.trim() == parentResponse.trim() || parentAnswer.contains(
                                     parentResponse

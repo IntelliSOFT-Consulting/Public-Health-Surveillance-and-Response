@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.android.fhir.FhirEngine
+import com.google.android.fhir.datacapture.extensions.asStringValue
 import com.google.android.fhir.datacapture.extensions.logicalId
 import com.google.android.fhir.search.search
 import com.icl.surveillance.ui.patients.PatientListViewModel
@@ -45,53 +46,47 @@ class ResponseDetailsViewModel(
             }
         var logicalId = ""
         var observations = mutableListOf<PatientListViewModel.ObservationItem>()
-        searchResult.first().let {
-            logicalId = it.resource.logicalId
+        searchResult.firstOrNull()?.let { result ->
+            logicalId = result.resource.logicalId
 
-            it.resource.item.forEach { k ->
-                k.item.forEach { j ->
+            result.resource.item
+                .flatMap { it.item } // flatten one level
+                .forEach { j ->
                     val answer = j.answerFirstRep
-                    val value = when {
-                        answer.hasValueReference() -> {
-                            val ref = answer.valueReference
-                            ref.display ?: ref.reference ?: ""
+                    val value = extractAnswerValue(dateFormatter, answer)
+
+                    // Add nested items first if present
+                    if (j.hasItem()) {
+                        j.item.forEach { nested ->
+                            val testAnswer = nested.answer.firstOrNull()
+                                ?.takeIf { it.hasValueDecimalType() }
+                                ?.valueDecimalType
+                                ?.value
+
+                            observations.add(
+                                PatientListViewModel.ObservationItem(
+                                    id = nested.linkId,
+                                    code = nested.linkId,
+                                    value = "$testAnswer",
+                                    created = nested.linkId
+                                )
+                            )
                         }
-
-                        answer.hasValueCoding() -> {
-                            val coding = answer.valueCoding
-                            coding.display ?: coding.code ?: ""
-                        }
-
-                        answer.hasValueStringType() -> answer.valueStringType.value ?: ""
-                        answer.hasValueDateType() -> {
-                            val date = answer.valueDateType.value
-                            date?.let { dateFormatter.format(it) } ?: ""
-                        }
-
-                        answer.hasValueDateTimeType() -> {
-                            val dateTime = answer.valueDateTimeType.value
-                            dateTime?.let { dateFormatter.format(it) } ?: ""
-                        }
-
-                        answer.hasValueBooleanType() -> answer.valueBooleanType.booleanValue()
-                            .toString()
-
-                        answer.hasValueIntegerType() -> answer.valueIntegerType.value.toString()
-                        answer.hasValueDecimalType() -> answer.valueDecimalType.value.toString()
-                        else -> answer.value?.primitiveValue() ?: ""
                     }
 
-
+                    // Add current item
                     val obs = PatientListViewModel.ObservationItem(
                         id = j.linkId,
                         code = j.linkId,
-                        value = value ?: "",
+                        value = value,
                         created = j.linkId
                     )
-                    observations.add(obs)
-                }
-            }
 
+                    observations.add(obs)
+                    observations.forEach { r ->
+                        println("Observation::::: ${r.code} :::: ${r.value}")
+                    }
+                }
         }
         return PatientListViewModel.CaseDetailSummaryData(
             logicalId = logicalId,
@@ -102,5 +97,38 @@ class ResponseDetailsViewModel(
             observations = observations,
             epidNo = "epidNo"
         )
+    }
+
+    private fun extractAnswerValue(
+        dateFormatter: SimpleDateFormat,
+        answer: QuestionnaireResponse.QuestionnaireResponseItemAnswerComponent
+    ): String {
+
+        return when {
+            answer.hasValueReference() -> {
+                val ref = answer.valueReference
+                ref.display ?: ref.reference ?: ""
+            }
+
+            answer.hasValueCoding() -> {
+                val coding = answer.valueCoding
+                coding.display ?: coding.code ?: ""
+            }
+
+            answer.hasValueStringType() -> answer.valueStringType.value ?: ""
+            answer.hasValueDateType() -> answer.valueDateType.value.let { dateFormatter.format(it) }
+                ?: ""
+
+            answer.hasValueDateTimeType() -> answer.valueDateTimeType.value.let {
+                dateFormatter.format(
+                    it
+                )
+            } ?: ""
+
+            answer.hasValueBooleanType() -> answer.valueBooleanType.booleanValue().toString()
+            answer.hasValueIntegerType() -> answer.valueIntegerType.value.toString()
+            answer.hasValueDecimalType() -> answer.valueDecimalType.value.toString()
+            else -> answer.value?.primitiveValue() ?: ""
+        }
     }
 }
