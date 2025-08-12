@@ -14,6 +14,7 @@ import com.google.android.fhir.datacapture.XFhirQueryResolver
 import com.google.android.fhir.search.search // Import the local fhir
 import com.google.android.fhir.sync.Sync
 import com.google.android.fhir.sync.remote.HttpLogger
+import com.icl.surveillance.utils.ContribQuestionnaireItemViewHolderFactoryMatchersProviderFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,6 +52,8 @@ class FhirApplication : Application(), DataCaptureConfig.Provider {
             dataCaptureConfig =
                 DataCaptureConfig().apply {
                     urlResolver = ReferenceUrlResolver(this@FhirApplication as Context)
+                    questionnaireItemViewHolderFactoryMatchersProviderFactory =
+                        ContribQuestionnaireItemViewHolderFactoryMatchersProviderFactory
                     xFhirQueryResolver = XFhirQueryResolver { it ->
                         fhirEngine.search(it).map { it.resource }
                     }

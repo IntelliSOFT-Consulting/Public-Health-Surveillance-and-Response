@@ -22,6 +22,7 @@ import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FI
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FRAGMENT_TAG
 import com.icl.surveillance.databinding.ActivityAddParentCaseBinding
 import com.icl.surveillance.ui.patients.AddCaseActivity
+import com.icl.surveillance.utils.ContribQuestionnaireItemViewHolderFactoryMatchersProviderFactory
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.utils.LocationUtils
 import com.icl.surveillance.utils.ProgressDialogManager
@@ -178,18 +179,43 @@ class AddParentCaseActivity : AppCompatActivity() {
     }
 
     private fun addQuestionnaireFragment() {
-        supportFragmentManager.commit {
-            add(
-                R.id.add_patient_container,
-                QuestionnaireFragment.builder()
-                    .setQuestionnaire(viewModel.questionnaireJson)
-                    .setShowCancelButton(true)
-                    .setSubmitButtonText("Submit")
-                    .build(),
-                QUESTIONNAIRE_FRAGMENT_TAG,
-            )
+        lifecycleScope.launch {
+            if (supportFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) == null) {
+                supportFragmentManager.commit {
+                    setReorderingAllowed(true)
+                    val questionnaireFragmentBuilder =
+                        QuestionnaireFragment.builder().apply {
+                            setCustomQuestionnaireItemViewHolderFactoryMatchersProvider(
+                                ContribQuestionnaireItemViewHolderFactoryMatchersProviderFactory
+                                    .LOCATION_WIDGET_PROVIDER,
+                            )
+                            setQuestionnaire(viewModel.questionnaireJson)
+                        }
+//                    LayoutListViewModel.questionnaireLambdaMap[args.questionnaireLambdaKey ?: ""]!!.invoke(
+//                        questionnaireFragmentBuilder,
+//                    )
+                    add(
+                        R.id.add_patient_container,
+                        questionnaireFragmentBuilder.build(),
+                        QUESTIONNAIRE_FRAGMENT_TAG
+                    )
+                }
+            }
         }
     }
+//    private fun addQuestionnaireFragment() {
+//        supportFragmentManager.commit {
+//            add(
+//                R.id.add_patient_container,
+//                QuestionnaireFragment.builder()
+//                    .setQuestionnaire(viewModel.questionnaireJson)
+//                    .setShowCancelButton(true)
+//                    .setSubmitButtonText("Submit")
+//                    .build(),
+//                QUESTIONNAIRE_FRAGMENT_TAG,
+//            )
+//        }
+//    }
 
     private fun observePatientSaveAction() {
         viewModel.isPatientSaved.observe(this) {

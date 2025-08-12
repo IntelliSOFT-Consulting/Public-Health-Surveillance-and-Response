@@ -21,7 +21,17 @@
         <item name="windowActionBar">false</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
-
+    <style
+        name="Questionnaire.LocationWidgetButtonStyle"
+        parent="Widget.Material3.Button.TextButton.Icon"
+        >
+        <item name="android:drawableLeft">@drawable/baseline_add_location_24</item>
+        <item name="android:drawableTint">?attr/colorPrimary</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:text">@string/record_gps_location</item>
+        <item name="iconTint">?attr/colorPrimary</item>
+    </style>
     <style name="Theme.Surveillance.FullScreen">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
@@ -46,4 +56,6 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
+
+    <string name="record_gps_location">Record GPS Location</string>
 </resources>
