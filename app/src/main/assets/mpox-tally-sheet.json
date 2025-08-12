@@ -1739,6 +1739,470 @@
               }
             }
           ]
+        },
+        {
+          "linkId": "contact_under_18_reported",
+          "text": "Were any contacts aged under 18 years reported?",
+          "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "contact_under_18_male",
+          "text": "Number of male contacts aged under 18 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "contact_under_18_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "contact_under_18_female",
+          "text": "Number of female contacts aged under 18 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "contact_under_18_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "contact_under_18_male_no",
+          "text": "Number of male contacts aged under 18 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "contact_under_18_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "contact_under_18_female_no",
+          "text": "Number of female contacts aged under 18 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "contact_under_18_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "contact_18_39_reported",
+          "text": "Were any contacts aged 18–39 years reported?",
+          "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "contact_18_39_male",
+          "text": "Number of male contacts aged 18–39 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "contact_18_39_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "contact_18_39_female",
+          "text": "Number of female contacts aged 18–39 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "contact_18_39_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "contact_18_39_male_no",
+          "text": "Number of male contacts aged 18–39 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "contact_18_39_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "contact_18_39_female_no",
+          "text": "Number of female contacts aged 18–39 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "contact_18_39_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "contact_40_59_reported",
+          "text": "Were any contacts aged 40–59 years reported?",
+          "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "contact_40_59_male",
+          "text": "Number of male contacts aged 40–59 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "contact_40_59_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "contact_40_59_female",
+          "text": "Number of female contacts aged 40–59 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "contact_40_59_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "contact_40_59_male_no",
+          "text": "Number of male contacts aged 40–59 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "contact_40_59_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "contact_40_59_female_no",
+          "text": "Number of female contacts aged 40–59 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "contact_40_59_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "contact_60_plus_reported",
+          "text": "Were any contacts aged 60+ years reported?",
+          "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "contact_60_plus_male",
+          "text": "Number of male contacts aged 60+ years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "contact_60_plus_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "contact_60_plus_female",
+          "text": "Number of female contacts aged 60+ years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "contact_60_plus_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "contact_60_plus_male_no",
+          "text": "Number of male contacts aged 60+ years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "contact_60_plus_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "contact_60_plus_female_no",
+          "text": "Number of female contacts aged 60+ years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "contact_60_plus_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
         }
       ]
     },

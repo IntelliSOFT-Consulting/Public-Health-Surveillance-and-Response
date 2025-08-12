@@ -473,7 +473,7 @@ class CaseSelectionFragment : Fragment() {
             "MOH 505" -> "moh-505-reporting-form"
             "RCCE" -> "rcce"
             "Mpox" -> "mpox-information"
-            "Tally Sheet" -> "mpox-tally-sheet"
+            "Summary Sheet" -> "mpox-tally-sheet"
             "Supervisor Checklist" -> "mpox-supervisor-checklist"
             else -> null
         }
