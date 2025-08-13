@@ -46,6 +46,8 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
     private val teamNumber: TextView = binding.teamNumber
     private val supervisorName: TextView = binding.supervisorName
     private val tvTeamNumberLabel: TextView = binding.tvTeamNumberLabel
+    private val lnDateResultsLabel: LinearLayout = binding.tvDateResultsLabel
+    private val tvDateResultsValue: LinearLayout = binding.tvDateResultsValue
 
     fun bindTo(
         patientItem: PatientListViewModel.PatientItem,
@@ -78,6 +80,12 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
         if (current != null) {
             val slug = current.toSlug()
             when (slug) {
+                "mpox-register" -> {
+                    this.lnFinalClassification.visibility = View.GONE
+                    this.tvDateResultsValue.visibility = View.GONE
+                    this.lnDateResultsLabel.visibility = View.GONE
+                }
+
                 "mpox-supervisor-checklist", "mpox-tally-sheet" -> {
                     this.parentLayout.visibility = View.VISIBLE
                     this.parentOriginal.visibility = View.GONE

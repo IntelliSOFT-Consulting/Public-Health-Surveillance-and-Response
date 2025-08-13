@@ -194,6 +194,67 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
             when (case) {
 
+                "mpox-register" -> {
+                    val patientFNameEntry = extractedAnswers.find { it.linkId == "873240407472" }
+                    val patientMNameEntry = extractedAnswers.find { it.linkId == "246751846436" }
+                    val patientLNameEntry = extractedAnswers.find { it.linkId == "486402457213" }
+                    if (patientLNameEntry != null) {
+                        patient.nameFirstRep.family = patientLNameEntry.answer
+                    }
+
+                    if (patientFNameEntry != null) {
+                        patient.nameFirstRep.addGiven(patientFNameEntry.answer)
+                    }
+
+                    if (patientMNameEntry != null) {
+                        patient.nameFirstRep.addGiven(patientMNameEntry.answer)
+                    }
+                    val dobEntry = extractedAnswers.find { it.linkId == "257830485990" }
+                    val genderEntry = extractedAnswers.find { it.linkId == "929966324957" }
+                    val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
+                    val countyEntry = extractedAnswers.find { it.linkId == "a4-county" }
+                    var county = ""
+                    var subCounty = ""
+                    val currentYear = LocalDate.now().year
+
+                    if (subCountyEntry != null) {
+                        subCounty = subCountyEntry.answer
+                        patient.addressFirstRep.state = subCounty
+                        patient.addressFirstRep.addLine(subCounty)
+                    }
+                    if (countyEntry != null) {
+                        county = countyEntry.answer
+                        patient.addressFirstRep.city = county
+                        patient.addressFirstRep.addLine(county)
+                    }
+                    if (genderEntry != null) {
+                        val gender = when (genderEntry.answer.lowercase()) {
+                            "male" -> Enumerations.AdministrativeGender.MALE
+                            "female" -> Enumerations.AdministrativeGender.FEMALE
+                            else -> Enumerations.AdministrativeGender.UNKNOWN
+                        }
+                        patient.gender = gender
+                    }
+                    val pPhoneEntry = extractedAnswers.find { it.linkId == "754217593839" }
+                    val parentPhone = ContactPoint()
+                    if (pPhoneEntry != null) {
+
+                        parentPhone.value = pPhoneEntry.answer
+                        parentPhone.system = ContactPoint.ContactPointSystem.PHONE
+                        parentPhone.use = ContactPoint.ContactPointUse.MOBILE
+                    }
+
+                    patient.addTelecom(parentPhone)
+                    val countyCode = county.padEnd(3, 'X').take(3).uppercase()
+                    val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
+
+
+                    val epid = "KEN-$countyCode-$subCountyCode-$currentYear-MPOVAC-"
+
+                    val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
+                    createResource(obs, subjectReference, encounterReference)
+                }
+
                 "social-listening-and-rumor-tracking-tool" -> {
 
                     val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }

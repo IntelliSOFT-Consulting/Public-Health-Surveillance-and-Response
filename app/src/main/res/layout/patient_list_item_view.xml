@@ -351,6 +351,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/tv_date_results_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -382,6 +383,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/tv_date_results_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">

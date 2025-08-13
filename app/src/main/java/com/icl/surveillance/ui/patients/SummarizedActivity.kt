@@ -255,6 +255,7 @@ class SummarizedActivity : AppCompatActivity() {
             "mpox-information" -> "mpox-tally-sheet.json"
             "mpox-tally-sheet" -> "mpox-tally-sheet.json"
             "social-listening-and-rumor-tracking-tool" -> "rumor-tracking-case.json"
+            "mpox-register" -> "mpox-register.json"
             "rcce" -> {
 
                 val encounterQuestionnaire = FormatterClass().getSharedPref(
@@ -269,7 +270,6 @@ class SummarizedActivity : AppCompatActivity() {
 
                 }
             }
-
             else -> ""
         }
         try {

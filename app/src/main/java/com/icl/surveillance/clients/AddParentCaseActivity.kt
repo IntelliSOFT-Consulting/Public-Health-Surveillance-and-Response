@@ -1,7 +1,12 @@
 package com.icl.surveillance.clients
 
+import android.Manifest
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
@@ -9,6 +14,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import ca.uhn.fhir.context.FhirContext
@@ -32,6 +39,7 @@ import org.hl7.fhir.r4.model.Questionnaire
 import org.hl7.fhir.r4.model.QuestionnaireResponse
 
 class AddParentCaseActivity : AppCompatActivity() {
+    private val LOCATION_PERMISSION_REQUEST_CODE = 100
     private val viewModel: AddClientViewModel by viewModels()
     private lateinit var binding:
             ActivityAddParentCaseBinding // Binding class name is based on layout file name
@@ -49,23 +57,8 @@ class AddParentCaseActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val titleName = FormatterClass().getSharedPref("AddParentTitle", this@AddParentCaseActivity)
         supportActionBar.apply { title = titleName }
-        LocationUtils.requestCurrentLocation(
-            this,
-            onLocationReceived = { lat, lon ->
-                println("Latitude: $lat, Longitude: $lon")
 
-                val latitude = lat.toString()
-                val longitude = lon.toString()
-                FormatterClass().saveSharedPref("latitude", latitude, this)
-                FormatterClass().saveSharedPref("longitude", longitude, this)
-            },
-            onError = { error ->
-                println("Error: $error")
-            }
-        )
-
-
-
+//        checkAndRequestLocationPermission()
         updateArguments()
         if (savedInstanceState == null) {
             addQuestionnaireFragment()
@@ -84,6 +77,87 @@ class AddParentCaseActivity : AppCompatActivity() {
         ) { _, _ ->
             onBackPressed()
         }
+    }
+
+    private fun openAppSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = Uri.fromParts("package", packageName, null)
+        }
+        startActivity(intent)
+    }
+
+    private fun checkAndRequestLocationPermission() {
+        val fineLocationPermission = ContextCompat.checkSelfPermission(
+            this, Manifest.permission.ACCESS_FINE_LOCATION
+        )
+        val coarseLocationPermission = ContextCompat.checkSelfPermission(
+            this, Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+
+        if (fineLocationPermission != PackageManager.PERMISSION_GRANTED ||
+            coarseLocationPermission != PackageManager.PERMISSION_GRANTED
+        ) {
+            AlertDialog.Builder(this@AddParentCaseActivity)
+                .setTitle("Location Permission Needed")
+                .setMessage("We need your location to provide better services. Please allow location access.")
+                .setPositiveButton("Allow") { dialog, _ ->
+                    dialog.dismiss()
+                    if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) ||
+                        ContextCompat.checkSelfPermission(
+                            this,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        ActivityCompat.requestPermissions(
+                            this@AddParentCaseActivity,
+                            arrayOf(
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                            ),
+                            LOCATION_PERMISSION_REQUEST_CODE
+                        )
+                    } else {
+                        openAppSettings()
+                    }
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+        } else {
+            // Permission already granted
+            startLocationUpdates()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+                startLocationUpdates()
+            }
+        }
+    }
+
+
+    private fun startLocationUpdates() {
+        LocationUtils.requestCurrentLocation(
+            this,
+            onLocationReceived = { lat, lon ->
+                println("Latitude: $lat, Longitude: $lon")
+
+                val latitude = lat.toString()
+                val longitude = lon.toString()
+                FormatterClass().saveSharedPref("latitude", latitude, this)
+                FormatterClass().saveSharedPref("longitude", longitude, this)
+            },
+            onError = { error ->
+                println("Error: $error")
+
+            }
+        )
     }
 
     private fun onSubmitActionSubmit() {
@@ -262,4 +336,6 @@ class AddParentCaseActivity : AppCompatActivity() {
         return true
     }
 }
+
+
 

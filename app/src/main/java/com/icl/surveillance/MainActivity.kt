@@ -6,14 +6,19 @@ import android.app.Activity
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.location.LocationManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresPermission
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
@@ -57,6 +62,19 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appUpdateManager: AppUpdateManager
     private val UPDATE_REQUEST_CODE = 123
     private lateinit var binding: ActivityMainBinding
+
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            val granted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
+                    permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+
+            if (!granted) {
+                showPermissionDialog()
+            } else {
+                checkGpsEnabled()
+            }
+        }
     private val viewModel: SyncFragmentViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,51 +137,71 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
-
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-        locationRequest = LocationRequest.Builder(
-            Priority.PRIORITY_HIGH_ACCURACY, // Most accurate
-            2000 // Update interval in ms
-        ).setMinUpdateIntervalMillis(1000)
-            .build()
-
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                val location = locationResult.lastLocation
-                if (location != null) {
-                    val latitude = location.latitude
-                    val longitude = location.longitude
-                    Toast.makeText(
-                        this@MainActivity,
-                        "Lat: $latitude, Lon: $longitude",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    // Stop updates if you only need one reading
-                    fusedLocationClient.removeLocationUpdates(this)
-                }
-            }
-        }
-
         checkLocationPermission()
     }
 
     private fun checkLocationPermission() {
-        if (ActivityCompat.checkSelfPermission(
-                this, Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_REQUEST_CODE
+        val fineGranted = ActivityCompat.checkSelfPermission(
+            this, Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        val coarseGranted = ActivityCompat.checkSelfPermission(
+            this, Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        if (!fineGranted && !coarseGranted) {
+            requestPermissionLauncher.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
             )
         } else {
-            getCurrentLocation()
+            checkGpsEnabled()
         }
     }
 
+    private fun showPermissionDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Location Permission Needed")
+            .setMessage("This app requires location access to work properly. Please enable it in settings.")
+            .setCancelable(false)
+            .setPositiveButton("Open Settings") { _, _ ->
+                val intent = Intent(
+                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.fromParts("package", packageName, null)
+                )
+                startActivity(intent)
+            }
+            .setNegativeButton("Exit App") { _, _ ->
+                finishAffinity()
+            }
+            .show()
+    }
+
+    /** 3️⃣ Check if GPS is enabled **/
+    private fun checkGpsEnabled() {
+        val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
+        val gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+
+        if (!gpsEnabled) {
+            showGpsDialog()
+        }
+    }
+
+    private fun showGpsDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Enable GPS")
+            .setMessage("Your location services are turned off. Please enable GPS to continue.")
+            .setCancelable(false)
+            .setPositiveButton("Open Location Settings") { _, _ ->
+                startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+            }
+            .setNegativeButton("Exit App") { _, _ ->
+                finishAffinity()
+            }
+            .show()
+    }
 
     @SuppressLint("MissingPermission")
     private fun getCurrentLocation() {

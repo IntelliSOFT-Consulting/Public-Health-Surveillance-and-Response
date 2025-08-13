@@ -198,11 +198,13 @@ class CaseSelectionFragment : Fragment() {
             "MOH 505" -> "Add New Record"
             "Social Investigation Form" -> "Add New Social Investigation Form"
             "Summary Sheet" -> "Add New Team Record"
+            "Mpox Register" -> "Add New Mpox Register"
             else -> "Add New $title Case"
         }
         val view = when (title) {
             "SLR" -> "View Reported Cases"
             "Social Investigation Form" -> "Social Investigation Reports"
+            "Mpox Register" -> "Mpox Register List"
             else -> "$title Case List"
         }
         val caseOptions = mutableListOf(
@@ -296,6 +298,24 @@ class CaseSelectionFragment : Fragment() {
                     val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
                     intent.putExtra("AddParentTitle", " $titleName")
                     intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "moh505.json")
+                    startActivity(intent)
+                }
+
+                "Add New Mpox Register" -> {
+                    FormatterClass().saveSharedPref(
+                        "currentCase", "Mpox Register", requireContext()
+                    )
+                    FormatterClass().saveSharedPref(
+                        "AddParentTitle",
+                        "Mpox Register",
+                        requireContext()
+                    )
+                    FormatterClass().saveSharedPref(
+                        "questionnaire", "mpox-register.json", requireContext()
+                    )
+                    val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
+                    intent.putExtra("AddParentTitle", " $titleName")
+                    intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "mpox-register.json")
                     startActivity(intent)
                 }
 
@@ -457,6 +477,18 @@ class CaseSelectionFragment : Fragment() {
                     startActivity(intent)
                 }
 
+
+                "Mpox Register List" -> {
+                    FormatterClass().saveSharedPref(
+                        "listingTitle", " ${option.title}", requireContext()
+                    )
+                    FormatterClass().saveSharedPref(
+                        "currentCase", "Mpox Register", requireContext()
+                    )
+                    val intent = Intent(requireContext(), CaseListingActivity::class.java)
+                    startActivity(intent)
+                }
+
                 else -> {
                     Toast.makeText(requireContext(), "Coming Soon", Toast.LENGTH_SHORT).show()
                 }
@@ -475,6 +507,7 @@ class CaseSelectionFragment : Fragment() {
             "Mpox" -> "mpox-information"
             "Summary Sheet" -> "mpox-tally-sheet"
             "Supervisor Checklist" -> "mpox-supervisor-checklist"
+            "Mpox Register" -> "mpox-register"
             else -> null
         }
         println("Case Type: $caseType")

@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
@@ -28,7 +29,10 @@ class CurrentLocationDialogFragment : DialogFragment(R.layout.fragment_current_l
     private suspend fun getCurrentLocationHighAccuracy() {
         val result =
             locationServicesClient
-                .getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, CancellationTokenSource().token)
+                .getCurrentLocation(
+                    Priority.PRIORITY_HIGH_ACCURACY,
+                    CancellationTokenSource().token
+                )
                 .await()
         result?.let {
             setFragmentResult(
@@ -93,9 +97,11 @@ class CurrentLocationDialogFragment : DialogFragment(R.layout.fragment_current_l
                 permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
                     lifecycleScope.launch { getCurrentLocationHighAccuracy() }
                 }
+
                 permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
                     lifecycleScope.launch { getCurrentLocation() }
                 }
+
                 else -> {
                     // No location access granted.
                     Toast.makeText(
@@ -116,15 +122,19 @@ class CurrentLocationDialogFragment : DialogFragment(R.layout.fragment_current_l
             ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION,
-            ), -> {
+            ),
+                -> {
                 lifecycleScope.launch { getCurrentLocationHighAccuracy() }
             }
+
             ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION,
-            ), -> {
+            ),
+                -> {
                 lifecycleScope.launch { getCurrentLocation() }
             }
+
             else -> {
                 locationPermissionRequest.launch(
                     arrayOf(
@@ -135,6 +145,7 @@ class CurrentLocationDialogFragment : DialogFragment(R.layout.fragment_current_l
             }
         }
     }
+
 
     companion object {
         const val LATITUDE_REQUEST_RESULT_KEY = "location-latitude-result"

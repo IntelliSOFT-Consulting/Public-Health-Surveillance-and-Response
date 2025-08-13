@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.google.gson.Gson
 import com.icl.surveillance.R
@@ -59,10 +60,8 @@ class GroupFragment : Fragment() {
 
     private fun addChildItems() {
         for (item in group.items) {
-
-            println("Displaying item: ${item.text} with value: ${item.value} with linkId: ${item.linkId} and enable: ${item.enable} and parentLink: ${item.parentLink} and parentResponse: ${item.parentResponse} and parentOperator: ${item.parentOperator}")
-
             val fieldView = createCustomField(item)
+            val labelOnlyView = createCustomLabelField(item)
             var show = true
             if (!item.enable) {
                 show = false
@@ -78,6 +77,8 @@ class GroupFragment : Fragment() {
                 } else if (item.text.isEmpty() && item.value != null) {
                     val answerFieldView = createAnswerCustomField(item)
                     parentLayout.addView(answerFieldView)
+                } else if (item.text.isNotEmpty() && item.value?.isEmpty() == true) {
+                    parentLayout.addView(labelOnlyView)
                 } else {
                     parentLayout.addView(fieldView)
                 }
@@ -96,9 +97,7 @@ class GroupFragment : Fragment() {
         if (parentLink != null && parentResponseData != null) {
             val parentResponse = parentResponseData.lowercase()
             val parentAnswerData = items.find { it.linkId == parentLink }?.value
-            println("Parent: -> answer $parentAnswerData")
-            println("Parent: -> Operator  $operator")
-            println("Parent: -> $parentResponse")
+
             if (parentAnswerData != null) {
                 val parentAnswer = parentAnswerData.lowercase()
                 if (operator != null) {
@@ -179,6 +178,55 @@ class GroupFragment : Fragment() {
             )
         }
         horizontalLayout.addView(tvEpiLink)
+
+        // Add the horizontal layout with two TextViews to the main layout
+        layout.addView(horizontalLayout)
+
+        // Add a separator View (divider)
+        val divider = View(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                1 // Divider thickness
+            ).apply {
+                topMargin = 8
+                bottomMargin = 8
+            }
+            setBackgroundColor(android.graphics.Color.parseColor("#CCCCCC"))
+        }
+        layout.addView(divider)
+
+        return layout
+    }
+
+    private fun createCustomLabelField(item: OutputItem): View {
+        // Create the main LinearLayout to hold the views
+        val layout = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(8, 8, 8, 8)
+        }
+
+        // Create the horizontal LinearLayout for the two TextViews
+        val horizontalLayout = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.HORIZONTAL
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        }
+
+        val customFont = ResourcesCompat.getFont(requireContext(), R.font.inter)
+        // First TextView (label)
+        val label = TextView(requireContext()).apply {
+            text = item.text
+            textSize = 13f
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.blue))
+            setTypeface(customFont, Typeface.BOLD)
+
+            layoutParams = LinearLayout.LayoutParams(
+                0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f
+            )
+        }
+        horizontalLayout.addView(label)
 
         // Add the horizontal layout with two TextViews to the main layout
         layout.addView(horizontalLayout)
