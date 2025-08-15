@@ -77,7 +77,7 @@ class GroupFragment : Fragment() {
                 } else if (item.text.isEmpty() && item.value != null) {
                     val answerFieldView = createAnswerCustomField(item)
                     parentLayout.addView(answerFieldView)
-                } else if (item.text.isNotEmpty() && item.value?.isEmpty() == true) {
+                } else if (item.text.isNotEmpty() && item.value?.isEmpty() == true && item.type == "group") {
                     parentLayout.addView(labelOnlyView)
                 } else {
                     parentLayout.addView(fieldView)

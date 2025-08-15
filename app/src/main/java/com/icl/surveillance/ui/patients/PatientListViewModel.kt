@@ -511,6 +511,16 @@ class PatientListViewModel(
                                     ?.resource
                                     ?.value
                                     ?.asStringValue() ?: ""
+                            val occupation =
+                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "occupation" }
+                                    ?.resource
+                                    ?.value
+                                    ?.asStringValue() ?: ""
+                            val vaccinationCenter =
+                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "vaccination_center" }
+                                    ?.resource
+                                    ?.value
+                                    ?.asStringValue() ?: ""
 
 
 
@@ -686,6 +696,8 @@ class PatientListViewModel(
                             }
                             data =
                                 data.copy(
+                                    vaccinationCenter = vaccinationCenter,
+                                    occupation = occupation,
                                     caseList = caseList,
                                     encounterId = logicalId,
                                     epid = epid,
@@ -745,7 +757,9 @@ class PatientListViewModel(
         val isSummary: Boolean = false,
         val campaignDate: String = "",
         val teamNumber: String = "",
-        val supervisorName: String = ""
+        val supervisorName: String = "",
+        val vaccinationCenter: String = "",
+        val occupation: String = ""
     ) {
         override fun toString(): String = name
     }

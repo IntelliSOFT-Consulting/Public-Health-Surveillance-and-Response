@@ -2459,6 +2459,22 @@
           ]
         },
         {
+          "linkId": "rumour_details",
+          "type": "string",
+          "text": "What was the rumour about",
+          "required": true,
+          "enableWhen": [
+            {
+              "question": "rumour_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ]
+        },
+        {
           "linkId": "rumour_escalated",
           "type": "choice",
           "text": "Were they escalated",

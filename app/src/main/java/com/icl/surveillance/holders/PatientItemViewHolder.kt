@@ -49,6 +49,7 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
     private val lnDateResultsLabel: LinearLayout = binding.tvDateResultsLabel
     private val tvDateResultsValue: LinearLayout = binding.tvDateResultsValue
 
+
     fun bindTo(
         patientItem: PatientListViewModel.PatientItem,
         onItemClicked: (PatientListViewModel.PatientItem) -> Unit,
@@ -82,8 +83,10 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
             when (slug) {
                 "mpox-register" -> {
                     this.lnFinalClassification.visibility = View.GONE
-                    this.tvDateResultsValue.visibility = View.GONE
-                    this.lnDateResultsLabel.visibility = View.GONE
+                    this.tvDateLabel.text = "Occupation"
+                    this.tvLabLabel.text = "Vaccination Center"
+                    this.labResults.text = patientItem.vaccinationCenter
+                    this.dateReported.text = patientItem.occupation
                 }
 
                 "mpox-supervisor-checklist", "mpox-tally-sheet" -> {

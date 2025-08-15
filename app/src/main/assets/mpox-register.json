@@ -88,6 +88,44 @@
           "text": "Last Name"
         },
         {
+          "linkId": "dob_known",
+          "text": "Is Date of Birth known?",
+          "type": "choice",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ]
+        },
+        {
           "extension": [
             {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
@@ -115,7 +153,53 @@
           "linkId": "257830485990",
           "type": "date",
           "required": true,
-          "text": "Date of Birth"
+          "text": "Date of Birth",
+          "enableWhen": [
+            {
+              "question": "dob_known",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "age-group",
+          "text": "Age Details",
+          "type": "group",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-columnCount",
+              "valuePositiveInt": 3
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "dob_known",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "age-years",
+              "text": "Age in Years",
+              "type": "integer"
+            },
+            {
+              "linkId": "age-months",
+              "text": "Age in Months",
+              "type": "integer"
+            },
+            {
+              "linkId": "age-days",
+              "text": "Age in Days",
+              "type": "integer"
+            }
+          ]
         },
         {
           "linkId": "929966324957",
@@ -346,6 +430,17 @@
                 }
               ]
             }
+          ],
+          "enableWhen": [
+            {
+              "question": "nationality",
+              "operator": "=",
+              "answerCoding": {
+                "system": "urn:iso:std:iso:3166",
+                "code": "KE",
+                "display": "Kenyan"
+              }
+            }
           ]
         },
         {
@@ -353,6 +448,17 @@
           "type": "reference",
           "text": "Sub County",
           "required": true,
+          "enableWhen": [
+            {
+              "question": "nationality",
+              "operator": "=",
+              "answerCoding": {
+                "system": "urn:iso:std:iso:3166",
+                "code": "KE",
+                "display": "Kenyan"
+              }
+            }
+          ],
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
@@ -380,6 +486,17 @@
           "linkId": "a2-ward",
           "type": "reference",
           "text": "Ward",
+          "enableWhen": [
+            {
+              "question": "nationality",
+              "operator": "=",
+              "answerCoding": {
+                "system": "urn:iso:std:iso:3166",
+                "code": "KE",
+                "display": "Kenyan"
+              }
+            }
+          ],
           "required": true,
           "extension": [
             {
@@ -608,12 +725,14 @@
             {
               "linkId": "vaccine_name",
               "text": "Vaccine Name",
-              "type": "string"
+              "type": "string",
+              "required": true
             },
             {
               "linkId": "date_given",
               "text": "Date Given",
               "type": "date",
+              "required": true,
               "extension": [
                 {
                   "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
@@ -643,6 +762,7 @@
               "linkId": "next_appointment",
               "text": "Next Appointment",
               "type": "date",
+              "required": true,
               "extension": [
                 {
                   "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
@@ -671,12 +791,14 @@
             {
               "linkId": "batch_no",
               "text": "Batch Number",
-              "type": "string"
+              "type": "string",
+              "required": true
             },
             {
               "linkId": "vaccination_center",
               "text": "Name of Vaccination Center",
-              "type": "string"
+              "type": "string",
+              "required": true
             }
           ]
         },
