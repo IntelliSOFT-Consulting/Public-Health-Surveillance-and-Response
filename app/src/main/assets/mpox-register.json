@@ -340,6 +340,7 @@
           "linkId": "country_of_origin",
           "text": "If Non-Kenyan, specify country of origin",
           "type": "string",
+          "required": true,
           "enableWhen": [
             {
               "question": "nationality",

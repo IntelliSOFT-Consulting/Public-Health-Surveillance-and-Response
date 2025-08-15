@@ -211,11 +211,19 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     }
                     val dobEntry = extractedAnswers.find { it.linkId == "257830485990" }
                     val genderEntry = extractedAnswers.find { it.linkId == "929966324957" }
-                    val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
+                    val subCountyEntry = extractedAnswers.find { it.linkId == "vaccination_center" }
                     val countyEntry = extractedAnswers.find { it.linkId == "a4-county" }
                     var county = ""
                     var subCounty = ""
                     val currentYear = LocalDate.now().year
+                    if (dobEntry != null) {
+                        try {
+                            patient.birthDate =
+                                SimpleDateFormat("yyyy-MM-dd").parse(dobEntry.answer)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
 
                     if (subCountyEntry != null) {
                         subCounty = subCountyEntry.answer
@@ -235,6 +243,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         }
                         patient.gender = gender
                     }
+                    val originEntry = extractedAnswers.find { it.linkId == "country_of_origin" }
                     val pPhoneEntry = extractedAnswers.find { it.linkId == "754217593839" }
                     val parentPhone = ContactPoint()
                     if (pPhoneEntry != null) {
@@ -244,12 +253,17 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         parentPhone.use = ContactPoint.ContactPointUse.MOBILE
                     }
 
+                    val epid = if (originEntry != null) {
+                        val countryCode = originEntry.answer.padEnd(3, 'X').take(3).uppercase()
+                        "$countryCode-$county-$subCounty-$currentYear-MPOVAC-"
+                    } else {
+                        val countyCode = county.padEnd(3, 'X').take(3).uppercase()
+                        val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
+                        "KEN-$countyCode-$subCountyCode-$currentYear-MPOVAC-"
+                    }
+
                     patient.addTelecom(parentPhone)
-                    val countyCode = county.padEnd(3, 'X').take(3).uppercase()
-                    val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
 
-
-                    val epid = "KEN-$countyCode-$subCountyCode-$currentYear-MPOVAC-"
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
                     createResource(obs, subjectReference, encounterReference)

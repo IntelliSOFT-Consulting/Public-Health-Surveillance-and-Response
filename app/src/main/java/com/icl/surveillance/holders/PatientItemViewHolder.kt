@@ -48,6 +48,7 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
     private val tvTeamNumberLabel: TextView = binding.tvTeamNumberLabel
     private val lnDateResultsLabel: LinearLayout = binding.tvDateResultsLabel
     private val tvDateResultsValue: LinearLayout = binding.tvDateResultsValue
+    private val tvEpidLabel: TextView = binding.tvEpidLabel
 
 
     fun bindTo(
@@ -87,6 +88,7 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
                     this.tvLabLabel.text = "Vaccination Center"
                     this.labResults.text = patientItem.vaccinationCenter
                     this.dateReported.text = patientItem.occupation
+                    this.tvEpidLabel.text = "Serial Number"
                 }
 
                 "mpox-supervisor-checklist", "mpox-tally-sheet" -> {
