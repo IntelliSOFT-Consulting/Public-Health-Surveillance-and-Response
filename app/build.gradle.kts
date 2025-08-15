@@ -7,13 +7,13 @@ plugins {
 
 android {
     namespace = "com.icl.surveillance"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.icl.surveillance"
         minSdk = 26
         targetSdk = 35
-        versionCode = 26
+        versionCode = 28
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

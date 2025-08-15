@@ -528,6 +528,14 @@ class CaseSelectionFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        try {
+            setupRecyclerView()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

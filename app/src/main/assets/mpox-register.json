@@ -166,6 +166,58 @@
           ]
         },
         {
+          "linkId": "occupation",
+          "text": "Occupation",
+          "type": "choice",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "http://example.org/fhir/CodeSystem/occupation-codes",
+                "code": "HCW",
+                "display": "Health Care Worker"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "http://example.org/fhir/CodeSystem/occupation-codes",
+                "code": "SW",
+                "display": "Sex Worker"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "http://example.org/fhir/CodeSystem/occupation-codes",
+                "code": "TD",
+                "display": "Truck Driver"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "http://example.org/fhir/CodeSystem/occupation-codes",
+                "code": "OTH",
+                "display": "Other"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "occupation-other",
+          "text": "Please specify other occupation",
+          "type": "string",
+          "required": true,
+          "enableWhen": [
+            {
+              "question": "occupation",
+              "operator": "=",
+              "answerCoding": {
+                "system": "http://example.org/fhir/CodeSystem/occupation-codes",
+                "code": "OTH"
+              }
+            }
+          ]
+        },
+        {
           "linkId": "nationality",
           "text": "Nationality",
           "type": "choice",
@@ -215,6 +267,58 @@
               }
             }
           ]
+        },
+        {
+          "linkId": "patient-identify-type",
+          "type": "choice",
+          "text": "Identification Type",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop Down"
+                  }
+                ]
+              }
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "system": "http://hl7.org/fhir/administrative-identifier",
+                "code": "nationalId",
+                "display": "National ID"
+              }
+            },
+            {
+              "valueCoding": {
+                "system": "http://hl7.org/fhir/administrative-identifier",
+                "code": "passport",
+                "display": "Passport"
+              }
+            }
+          ]
+        },
+        {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-initialExpression",
+              "valueExpression": {
+                "language": "text/fhirpath",
+                "expression": "Patient.identifier.value",
+                "name": "patientIdentification"
+              }
+            }
+          ],
+          "linkId": "PR-id-value",
+          "type": "string",
+          "text": "Identification Number",
+          "required": true
         },
         {
           "linkId": "a4-county",
