@@ -1497,6 +1497,222 @@
       ]
     },
     {
+      "linkId": "rumour_tracking",
+      "type": "group",
+      "text": "Rumor Tracking",
+      "item": [
+        {
+          "linkId": "mpox_rumor_heard",
+          "text": "Have you heard any rumors / hesitancy on Mpox vaccine?",
+          "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "mpox_rumor_options",
+          "text": "If yes, select all that apply",
+          "type": "choice",
+          "repeats": true,
+          "required": true,
+          "enableWhen": [
+            {
+              "question": "mpox_rumor_heard",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "death",
+                "display": "Mpox vaccine can cause death"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "infertility",
+                "display": "Mpox vaccine can cause infertility"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "depopulation",
+                "display": "Mpox vaccine is Bill and Melinda depopulation agenda"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "unsafe",
+                "display": "Mpox vaccine is not safe and can cause serious side effects"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "covid_finish",
+                "display": "Mpox vaccine is a way of finishing the COVID-19 vaccine"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "other",
+                "display": "Other"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "mpox_rumor_other_specify",
+          "text": "If other kindly specify",
+          "type": "string",
+          "required": true,
+          "enableWhen": [
+            {
+              "question": "mpox_rumor_options",
+              "operator": "=",
+              "answerCoding": {
+                "code": "other"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "mpox_rumor_action",
+          "text": "State what you did with the rumor",
+          "type": "string",
+          "required": true
+        },
+        {
+          "linkId": "mpox_rumor_source_trusted",
+          "text": "Did you trust the source of the rumor?",
+          "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "mpox_rumor_investigated",
+          "text": "Was the rumor investigated?",
+          "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "mpox_rumor_steps_taken",
+          "text": "Which steps did you take to address the rumor?",
+          "type": "text",
+          "required": true
+        }
+      ],
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "linkId": "supervisors_final_assessment",
       "type": "group",
       "text": "Supervisor’s Final Assessment",
