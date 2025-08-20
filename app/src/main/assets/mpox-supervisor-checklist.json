@@ -239,7 +239,6 @@
             {
               "linkId": "latitude",
               "type": "decimal",
-              "required": true,
               "text": "Latitude",
               "extension": [
                 {
@@ -251,7 +250,6 @@
             {
               "linkId": "longitude",
               "type": "decimal",
-              "required": true,
               "text": "Longitude",
               "extension": [
                 {
