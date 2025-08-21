@@ -716,7 +716,7 @@
         }
       ],
       "linkId": "dosage",
-      "text": "Dose Information",
+      "text": "Dose Information and Supervisor Details",
       "item": [
         {
           "linkId": "dosage_one",
@@ -725,9 +725,46 @@
           "item": [
             {
               "linkId": "vaccine_name",
-              "text": "Vaccine Name",
-              "type": "string",
-              "required": true
+              "text": "Vaccine name",
+              "type": "choice",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "radio-button",
+                        "display": "Radio Button"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+                  "valueCode": "horizontal"
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "MVA-BN",
+                    "display": "MVA-BN"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LC16",
+                    "display": "LC16"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "ACAM2000",
+                    "display": "ACAM 2000"
+                  }
+                }
+              ]
             },
             {
               "linkId": "date_given",
@@ -804,14 +841,99 @@
           ]
         },
         {
+          "linkId": "second_dose",
+          "text": "Is the second dose due?",
+          "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
           "linkId": "dosage_two",
           "type": "group",
+          "enableWhen": [
+            {
+              "question": "second_dose",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ],
           "text": "Second Dose",
           "item": [
             {
               "linkId": "vaccine_name_two",
-              "text": "Vaccine Name",
-              "type": "string"
+              "text": "Vaccine name",
+              "type": "choice",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "coding": [
+                      {
+                        "system": "http://hl7.org/fhir/questionnaire-item-control",
+                        "code": "radio-button",
+                        "display": "Radio Button"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+                  "valueCode": "horizontal"
+                }
+              ],
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "MVA-BN",
+                    "display": "MVA-BN"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "LC16",
+                    "display": "LC16"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "ACAM2000",
+                    "display": "ACAM 2000"
+                  }
+                }
+              ]
             },
             {
               "linkId": "date_given_two",
@@ -882,6 +1004,12 @@
               "type": "string"
             }
           ]
+        },
+        {
+          "linkId": "supervisor_name",
+          "text": "Supervisor Name",
+          "type": "string",
+          "required": true
         }
       ]
     }

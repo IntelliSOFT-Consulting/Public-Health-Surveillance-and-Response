@@ -52,40 +52,37 @@ class ResponseDetailsViewModel(
             result.resource.item
                 .flatMap { it.item } // flatten one level
                 .forEach { j ->
-                    val answer = j.answerFirstRep
-                    val value = extractAnswerValue(dateFormatter, answer)
-
-                    // Add nested items first if present
+                    j.answer.forEach { answer ->
+                        val value = extractAnswerValue(dateFormatter, answer)
+                        val obs = PatientListViewModel.ObservationItem(
+                            id = j.linkId,
+                            code = j.linkId,
+                            value = value,
+                            created = j.linkId
+                        )
+                        observations.add(obs)
+                    }
                     if (j.hasItem()) {
                         j.item.forEach { nested ->
-                            val testAnswer = nested.answer.firstOrNull()
-                                ?.takeIf { it.hasValueDecimalType() }
-                                ?.valueDecimalType
-                                ?.value
+                            nested.answer.forEach { testAnswer ->
+                                val testAnswer = testAnswer
+                                    ?.takeIf { it.hasValueDecimalType() }
+                                    ?.valueDecimalType
+                                    ?.value
 
-                            observations.add(
-                                PatientListViewModel.ObservationItem(
-                                    id = nested.linkId,
-                                    code = nested.linkId,
-                                    value = "$testAnswer",
-                                    created = nested.linkId
+                                observations.add(
+                                    PatientListViewModel.ObservationItem(
+                                        id = nested.linkId,
+                                        code = nested.linkId,
+                                        value = "$testAnswer",
+                                        created = nested.linkId
+                                    )
                                 )
-                            )
+                            }
                         }
                     }
 
-                    // Add current item
-                    val obs = PatientListViewModel.ObservationItem(
-                        id = j.linkId,
-                        code = j.linkId,
-                        value = value,
-                        created = j.linkId
-                    )
 
-                    observations.add(obs)
-                    observations.forEach { r ->
-                        println("Observation::::: ${r.code} :::: ${r.value}")
-                    }
                 }
         }
         return PatientListViewModel.CaseDetailSummaryData(

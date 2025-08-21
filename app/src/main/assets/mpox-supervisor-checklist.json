@@ -259,6 +259,12 @@
               ]
             }
           ]
+        },
+        {
+          "linkId": "supervisor_name",
+          "text": "Supervisor Name",
+          "type": "string",
+          "required": true
         }
       ],
       "type": "group",
