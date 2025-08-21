@@ -131,6 +131,14 @@ class AddCaseActivity : AppCompatActivity() {
                     "AFP Stool Lab Information",
                     questionnaireResponseString
                 )
+            "afp-sixty-days.json" ->
+                viewModel.completeLabAssessment(
+                    questionnaireResponse,
+                    "$patientId",
+                    "$encounter",
+                    "AFP 60 Day Follow Up",
+                    questionnaireResponseString
+                )
             "afp-itd-lab.json" ->
                 viewModel.completeLabAssessment(
                     questionnaireResponse,

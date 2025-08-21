@@ -27,6 +27,7 @@ import com.icl.surveillance.ui.patients.custom.RegionalLabFragment
 import com.icl.surveillance.ui.patients.custom.VlFollowupFragment
 import com.icl.surveillance.ui.patients.custom.VlLabFragment
 import com.icl.surveillance.ui.patients.custom.VlTreatmentFragment
+import com.icl.surveillance.ui.patients.custom.afp.AFPFollowUpFragment
 import com.icl.surveillance.ui.patients.data.LabResultsFragment
 import com.icl.surveillance.ui.patients.data.RegionalLabResultsFragment
 import com.icl.surveillance.utils.FormatterClass
@@ -110,6 +111,7 @@ class SummarizedActivity : AppCompatActivity() {
                         "Stool Specimen Results" to LocalLabFragment(),
                         "ITD Lab Results" to ITDLabFragment(),
                         "Final Laboratory Results" to RegionalLabFragment(),
+                        "60 Day Follow Up" to AFPFollowUpFragment(),
                         "Contact Information" to ContactInformationFragment()
                     )
                 }
@@ -270,6 +272,7 @@ class SummarizedActivity : AppCompatActivity() {
 
                 }
             }
+
             else -> ""
         }
         try {

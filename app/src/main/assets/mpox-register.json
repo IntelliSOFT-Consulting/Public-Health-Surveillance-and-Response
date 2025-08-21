@@ -716,7 +716,7 @@
         }
       ],
       "linkId": "dosage",
-      "text": "Dose Information and Supervisor Details",
+      "text": "Dose Information",
       "item": [
         {
           "linkId": "dosage_one",
