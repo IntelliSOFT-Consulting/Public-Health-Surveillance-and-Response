@@ -759,7 +759,8 @@ class PatientListViewModel(
         val teamNumber: String = "",
         val supervisorName: String = "",
         val vaccinationCenter: String = "",
-        val occupation: String = ""
+        val occupation: String = "",
+        val syncStatus: String = "Pending",
     ) {
         override fun toString(): String = name
     }

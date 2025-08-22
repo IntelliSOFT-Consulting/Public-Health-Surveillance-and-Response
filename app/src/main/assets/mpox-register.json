@@ -933,6 +933,15 @@
                     "display": "ACAM 2000"
                   }
                 }
+              ],
+              "enableWhen": [
+                {
+                  "question": "second_dose",
+                  "operator": "=",
+                  "answerCoding": {
+                    "code": "yes"
+                  }
+                }
               ]
             },
             {
@@ -961,6 +970,15 @@
                 {
                   "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
                   "valueString": "yyyy-mm-dd"
+                }
+              ],
+              "enableWhen": [
+                {
+                  "question": "second_dose",
+                  "operator": "=",
+                  "answerCoding": {
+                    "code": "yes"
+                  }
                 }
               ]
             },
@@ -991,17 +1009,44 @@
                   "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
                   "valueString": "yyyy-mm-dd"
                 }
+              ],
+              "enableWhen": [
+                {
+                  "question": "second_dose",
+                  "operator": "=",
+                  "answerCoding": {
+                    "code": "yes"
+                  }
+                }
               ]
             },
             {
               "linkId": "batch_no_two",
               "text": "Batch Number",
-              "type": "string"
+              "type": "string",
+              "enableWhen": [
+                {
+                  "question": "second_dose",
+                  "operator": "=",
+                  "answerCoding": {
+                    "code": "yes"
+                  }
+                }
+              ]
             },
             {
               "linkId": "vaccination_center_two",
               "text": "Name of Vaccination Center",
-              "type": "string"
+              "type": "string",
+              "enableWhen": [
+                {
+                  "question": "second_dose",
+                  "operator": "=",
+                  "answerCoding": {
+                    "code": "yes"
+                  }
+                }
+              ]
             }
           ]
         },
