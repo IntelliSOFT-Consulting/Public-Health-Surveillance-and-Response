@@ -162,14 +162,14 @@
             },
             {
               "valueCoding": {
-                "code": "temporary",
-                "display": "Temporary"
+                "code": "temporary_fixed",
+                "display": "Temporary  Fixed"
               }
             },
             {
               "valueCoding": {
-                "code": "fixed",
-                "display": "Fixed"
+                "code": "mobile_sites",
+                "display": "Mobile sites"
               }
             }
           ],
@@ -265,6 +265,52 @@
           "text": "Supervisor Name",
           "type": "string",
           "required": true
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "supervisor_level",
+          "text": "Supervisor Level",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "National",
+                "code": "National"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "County",
+                "code": "County"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Sub County",
+                "code": "Sub County"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Partner",
+                "code": "Partner"
+              }
+            }
+          ]
         }
       ],
       "type": "group",
@@ -479,7 +525,7 @@
         },
         {
           "linkId": "trained_on_infection_prevention",
-          "text": "Vaccinators trained on infection prevention (gloves, masks, waste disposal).",
+          "text": "Vaccinators trained on infection prevention (hard hygiene, waste disposal).",
           "type": "choice",
           "extension": [
             {
@@ -538,7 +584,7 @@
       "item": [
         {
           "linkId": "vaccines_with_valid_vvm",
-          "text": "Vaccines received with valid VVM (Vaccine Vial Monitor) status.",
+          "text": "Vaccines carrier with foam pad?",
           "type": "choice",
           "extension": [
             {
@@ -576,7 +622,7 @@
         },
         {
           "linkId": "cold_chain_maintained_temp_logs",
-          "text": "Cold chain maintained (2–8°C) with temperature logs.",
+          "text": "Cold chain maintained (2–8°C) with temperature logs?",
           "type": "choice",
           "extension": [
             {
@@ -614,7 +660,7 @@
         },
         {
           "linkId": "sufficient_supplies_available",
-          "text": "Sufficient AD syringes, safety boxes, and diluents (if required).",
+          "text": "Sufficient AD syringes, safety boxes?",
           "type": "choice",
           "extension": [
             {
@@ -652,7 +698,7 @@
         },
         {
           "linkId": "emergency_stock_reserved",
-          "text": "Emergency stock reserved for high-risk areas.",
+          "text": "Emergency stock reserved for high-risk areas?",
           "type": "choice",
           "extension": [
             {
@@ -724,6 +770,16 @@
                 "display": "No"
               }
             }
+          ],
+          "enableWhen": [
+            {
+              "question": "site_type",
+              "operator": "=",
+              "answerCoding": {
+                "code": "static",
+                "display": "Static"
+              }
+            }
           ]
         }
       ]
@@ -749,7 +805,7 @@
       "item": [
         {
           "linkId": "site_meets_infection_standards",
-          "text": "Site meets infection prevention standards (handwashing, distancing).",
+          "text": "Site meets infection prevention standards (handwashing, distancing)?",
           "type": "choice",
           "extension": [
             {
@@ -787,7 +843,7 @@
         },
         {
           "linkId": "separate_zones_present",
-          "text": "Separate zones: Registration, Screening, Vaccination, Observation.",
+          "text": "Separate zones: Registration, Screening, Vaccination, Observation?",
           "type": "choice",
           "extension": [
             {
@@ -825,7 +881,7 @@
         },
         {
           "linkId": "privacy_ensured",
-          "text": "Privacy ensured (e.g., curtains for undressing if intradermal).",
+          "text": "Privacy ensured (e.g., curtains for undressing if intradermal)?",
           "type": "choice",
           "extension": [
             {
@@ -863,7 +919,7 @@
         },
         {
           "linkId": "emergency_kit_available",
-          "text": "Emergency kit with epinephrine, antihistamines, IV fluids available?",
+          "text": "Emergency kit with adrenaline, 2ml Syringe and needle available?",
           "type": "choice",
           "extension": [
             {
@@ -921,6 +977,44 @@
       ],
       "item": [
         {
+          "linkId": "correct_site",
+          "text": "Did the vaccinators administer Mpox vaccine in the correct site as per the guidelines (Observation)?",
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
           "linkId": "correct_route_used",
           "text": "Vaccine administered via correct route?",
           "type": "choice",
@@ -960,45 +1054,7 @@
         },
         {
           "linkId": "aseptic_technique_followed",
-          "text": "Aseptic technique (alcohol swab, sterile syringe).",
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "radio-button",
-                    "display": "Radio Button"
-                  }
-                ]
-              }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-              "valueCode": "horizontal"
-            }
-          ],
-          "required": true,
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "no",
-                "display": "No"
-              }
-            }
-          ]
-        },
-        {
-          "linkId": "no_vaccine_wastage",
-          "text": "No vaccine wastage (multi-dose vials used within expiry after opening).",
+          "text": "Aseptic technique (Dry cotton swap, sterile syringe and needle)?",
           "type": "choice",
           "extension": [
             {
@@ -1057,7 +1113,45 @@
       "item": [
         {
           "linkId": "data_entered_in_nphiis",
-          "text": "Vaccination data entered in National Public Health Intelligence platform daily (NPHIIS)",
+          "text": "Vaccination data entered in National Public Health Intelligence platform daily (NPHIIS)?",
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "any_aefis",
+          "text": "Was there an AEFI?",
           "type": "choice",
           "extension": [
             {
@@ -1129,6 +1223,16 @@
                 "display": "No"
               }
             }
+          ],
+          "enableWhen": [
+            {
+              "question": "any_aefis",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
           ]
         },
         {
@@ -1168,6 +1272,51 @@
               }
             }
           ]
+        },
+        {
+          "linkId": "which_tool",
+          "text": "Which Tool?",
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "check-box",
+                    "display": "Check Box"
+                  }
+                ]
+              }
+            }
+          ],
+          "required": true,
+          "repeats": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "Tally_Sheet",
+                "display": "Tally Sheet"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "AEFI_form",
+                "display": "AEFI form"
+              }
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "data_collection_tools_available",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ]
         }
       ]
     },
@@ -1192,7 +1341,7 @@
       "item": [
         {
           "linkId": "ppe_used",
-          "text": "PPE used by all vaccinators (gloves, masks).",
+          "text": "PPE used by all vaccinators (gowns)?",
           "type": "choice",
           "extension": [
             {
@@ -1230,7 +1379,7 @@
         },
         {
           "linkId": "sharps_in_safety_boxes",
-          "text": "Sharps in WHO-approved safety boxes.",
+          "text": "Sharps in WHO-approved safety boxes?",
           "type": "choice",
           "extension": [
             {
@@ -1268,7 +1417,7 @@
         },
         {
           "linkId": "biomedical_waste_disposed_correctly",
-          "text": "Biomedical waste disposed per national guidelines.",
+          "text": "Is the generated healthcare waste properly segregated?",
           "type": "choice",
           "extension": [
             {
@@ -1327,7 +1476,7 @@
       "item": [
         {
           "linkId": "rumors_addressed",
-          "text": "Rumors addressed via hotline/community leaders.",
+          "text": "Rumors addressed via hotline/community leaders?",
           "type": "choice",
           "extension": [
             {
@@ -1365,7 +1514,7 @@
         },
         {
           "linkId": "sensitization_materials_local_languages",
-          "text": "Sensitization materials in local languages (Swahili, vernacular).",
+          "text": "Sensitization materials in local languages (Swahili, vernacular)?",
           "type": "choice",
           "extension": [
             {
@@ -1462,7 +1611,7 @@
         },
         {
           "linkId": "aefi_forms_ready",
-          "text": "AEFI forms ready (report to national pharmacovigilance system).",
+          "text": "Have the AEFI forms been filled at the facility level and cascaded to the sub-county?",
           "type": "choice",
           "extension": [
             {
@@ -1494,6 +1643,16 @@
               "valueCoding": {
                 "code": "no",
                 "display": "No"
+              }
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "any_aefis",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
               }
             }
           ]
@@ -1616,7 +1775,16 @@
           "linkId": "mpox_rumor_action",
           "text": "State what you did with the rumor",
           "type": "string",
-          "required": true
+          "required": true,
+          "enableWhen": [
+            {
+              "question": "mpox_rumor_heard",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
         },
         {
           "linkId": "mpox_rumor_source_trusted",
@@ -1652,6 +1820,15 @@
               "valueCoding": {
                 "code": "no",
                 "display": "No"
+              }
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "mpox_rumor_heard",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
               }
             }
           ]
@@ -1692,13 +1869,31 @@
                 "display": "No"
               }
             }
+          ],
+          "enableWhen": [
+            {
+              "question": "mpox_rumor_heard",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
           ]
         },
         {
           "linkId": "mpox_rumor_steps_taken",
           "text": "Which steps did you take to address the rumor?",
           "type": "text",
-          "required": true
+          "required": true,
+          "enableWhen": [
+            {
+              "question": "mpox_rumor_heard",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
         }
       ],
       "extension": [

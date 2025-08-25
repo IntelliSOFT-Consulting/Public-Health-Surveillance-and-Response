@@ -99,8 +99,7 @@ class AddClientFragment : Fragment(R.layout.fragment_add_client) {
         val context = FhirContext.forR4()
         val questionnaireResponseString =
             context.newJsonParser().encodeResourceToString(questionnaireResponse)
-        println("Questionnaire Response: $questionnaireResponseString")
-        Log.e("TAG", "Questionnaire Response: $questionnaireResponseString")
+
         viewModel.savePatientData(
             questionnaireResponse,
             questionnaireResponseString,

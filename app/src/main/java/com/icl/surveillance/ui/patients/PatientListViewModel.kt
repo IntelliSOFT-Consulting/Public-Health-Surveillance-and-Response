@@ -1142,6 +1142,8 @@ internal fun Patient.toPatientItem(
     var subCounty = ""
     var caseOnsetDate = ""
 
+
+
     var lastUpdated = ""
     if (hasIdentifier()) {
         val id = identifier.find { it.system == "system-creation" }
