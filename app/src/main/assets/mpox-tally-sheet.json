@@ -186,14 +186,14 @@
             },
             {
               "valueCoding": {
-                "code": "temporary",
-                "display": "Temporary"
+                "code": "temporary_fixed",
+                "display": "Temporary  Fixed"
               }
             },
             {
               "valueCoding": {
-                "code": "fixed",
-                "display": "Fixed"
+                "code": "mobile_sites",
+                "display": "Mobile sites"
               }
             }
           ]
@@ -315,6 +315,52 @@
           "text": "Supervisor Name",
           "type": "string",
           "required": true
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "supervisor_level",
+          "text": "Supervisor Level",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "National",
+                "code": "National"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "County",
+                "code": "County"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Sub County",
+                "code": "Sub County"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Partner",
+                "code": "Partner"
+              }
+            }
+          ]
         }
       ],
       "type": "group",
@@ -702,6 +748,125 @@
             }
           ]
         },
+
+        {
+          "linkId": "sw_under_18_reported",
+          "text": "Were any sex workers aged under 18 years reported?",
+          "type": "choice",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "radio-button",
+                    "display": "Radio Button"
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            }
+          ],
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "no",
+                "display": "No"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "sw_under_18_male",
+          "text": "Number of male sex workers under 18 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "sw_under_18_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "sw_under_18_female",
+          "text": "Number of female sex workers aged under 18 years reported",
+          "type": "integer",
+          "enableWhen": [
+            {
+              "question": "sw_under_18_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "sw_under_18_male_no",
+          "text": "Number of male sex workers aged under 18 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "sw_under_18_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+        {
+          "linkId": "sw_under_18_female_no",
+          "text": "Number of female sex workers aged under 18 years reported",
+          "type": "integer",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ],
+          "initial": [
+            {
+              "valueInteger": 0
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "sw_under_18_reported",
+              "operator": "=",
+              "answerCoding": {
+                "code": "no"
+              }
+            }
+          ]
+        },
+
+
         {
           "linkId": "sw_18_39_reported",
           "text": "Were any sex workers aged 18–39 years reported?",
