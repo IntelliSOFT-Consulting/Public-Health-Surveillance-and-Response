@@ -719,132 +719,9 @@
       "text": "Dose Information",
       "item": [
         {
-          "linkId": "dosage_one",
-          "type": "group",
-          "text": "First Dose",
-          "item": [
-            {
-              "linkId": "vaccine_name",
-              "text": "Vaccine name",
-              "type": "choice",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "radio-button",
-                        "display": "Radio Button"
-                      }
-                    ]
-                  }
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-                  "valueCode": "horizontal"
-                }
-              ],
-              "answerOption": [
-                {
-                  "valueCoding": {
-                    "code": "MVA-BN",
-                    "display": "MVA-BN"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "LC16",
-                    "display": "LC16"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "ACAM2000",
-                    "display": "ACAM 2000"
-                  }
-                }
-              ]
-            },
-            {
-              "linkId": "date_given",
-              "text": "Date Given",
-              "type": "date",
-              "required": true,
-              "extension": [
-                {
-                  "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-                  "valueString": "Cannot be a date in the future"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-                  "valueDate": {
-                    "extension": [
-                      {
-                        "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-                        "valueExpression": {
-                          "language": "text/fhirpath",
-                          "expression": "today()"
-                        }
-                      }
-                    ]
-                  }
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
-                  "valueString": "yyyy-mm-dd"
-                }
-              ]
-            },
-            {
-              "linkId": "next_appointment",
-              "text": "Next Appointment",
-              "type": "date",
-              "required": true,
-              "extension": [
-                {
-                  "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-                  "valueString": "Cannot be a date in the past"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-                  "valueDate": {
-                    "extension": [
-                      {
-                        "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-                        "valueExpression": {
-                          "language": "text/fhirpath",
-                          "expression": "today()"
-                        }
-                      }
-                    ]
-                  }
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
-                  "valueString": "yyyy-mm-dd"
-                }
-              ]
-            },
-            {
-              "linkId": "batch_no",
-              "text": "Batch Number",
-              "type": "string",
-              "required": true
-            },
-            {
-              "linkId": "vaccination_center",
-              "text": "Name of Vaccination Center",
-              "type": "string",
-              "required": true
-            }
-          ]
-        },
-        {
-          "linkId": "second_dose",
-          "text": "Is the second dose due?",
+          "linkId": "vaccine_name",
+          "text": "Vaccine name",
           "type": "choice",
-          "required": true,
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
@@ -866,195 +743,147 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "yes",
-                "display": "Yes"
+                "code": "MVA-BN",
+                "display": "MVA-BN"
               }
             },
             {
               "valueCoding": {
-                "code": "no",
-                "display": "No"
+                "code": "LC16",
+                "display": "LC16"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "ACAM2000",
+                "display": "ACAM 2000"
               }
             }
           ]
         },
         {
-          "linkId": "dosage_two",
-          "type": "group",
-          "enableWhen": [
+          "linkId": "date_given",
+          "text": "Date Given",
+          "type": "date",
+          "required": true,
+          "extension": [
             {
-              "question": "second_dose",
-              "operator": "=",
-              "answerCoding": {
-                "code": "yes"
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
               }
-            }
-          ],
-          "text": "Second Dose",
-          "item": [
-            {
-              "linkId": "vaccine_name_two",
-              "text": "Vaccine name",
-              "type": "choice",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "radio-button",
-                        "display": "Radio Button"
-                      }
-                    ]
-                  }
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-                  "valueCode": "horizontal"
-                }
-              ],
-              "answerOption": [
-                {
-                  "valueCoding": {
-                    "code": "MVA-BN",
-                    "display": "MVA-BN"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "LC16",
-                    "display": "LC16"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "ACAM2000",
-                    "display": "ACAM 2000"
-                  }
-                }
-              ],
-              "enableWhen": [
-                {
-                  "question": "second_dose",
-                  "operator": "=",
-                  "answerCoding": {
-                    "code": "yes"
-                  }
-                }
-              ]
             },
             {
-              "linkId": "date_given_two",
-              "text": "Date Given",
-              "type": "date",
-              "extension": [
-                {
-                  "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-                  "valueString": "Cannot be a date in the future"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-                  "valueDate": {
-                    "extension": [
-                      {
-                        "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-                        "valueExpression": {
-                          "language": "text/fhirpath",
-                          "expression": "today()"
-                        }
-                      }
-                    ]
-                  }
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
-                  "valueString": "yyyy-mm-dd"
-                }
-              ],
-              "enableWhen": [
-                {
-                  "question": "second_dose",
-                  "operator": "=",
-                  "answerCoding": {
-                    "code": "yes"
-                  }
-                }
-              ]
-            },
-            {
-              "linkId": "next_appointment_two",
-              "text": "Next Appointment",
-              "type": "date",
-              "extension": [
-                {
-                  "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-                  "valueString": "Cannot be a date in the past"
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-                  "valueDate": {
-                    "extension": [
-                      {
-                        "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-                        "valueExpression": {
-                          "language": "text/fhirpath",
-                          "expression": "today()"
-                        }
-                      }
-                    ]
-                  }
-                },
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
-                  "valueString": "yyyy-mm-dd"
-                }
-              ],
-              "enableWhen": [
-                {
-                  "question": "second_dose",
-                  "operator": "=",
-                  "answerCoding": {
-                    "code": "yes"
-                  }
-                }
-              ]
-            },
-            {
-              "linkId": "batch_no_two",
-              "text": "Batch Number",
-              "type": "string",
-              "enableWhen": [
-                {
-                  "question": "second_dose",
-                  "operator": "=",
-                  "answerCoding": {
-                    "code": "yes"
-                  }
-                }
-              ]
-            },
-            {
-              "linkId": "vaccination_center_two",
-              "text": "Name of Vaccination Center",
-              "type": "string",
-              "enableWhen": [
-                {
-                  "question": "second_dose",
-                  "operator": "=",
-                  "answerCoding": {
-                    "code": "yes"
-                  }
-                }
-              ]
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "yyyy-mm-dd"
             }
           ]
+        },
+        {
+          "linkId": "next_appointment",
+          "text": "Next Appointment",
+          "type": "date",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the past"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "yyyy-mm-dd"
+            }
+          ]
+        },
+        {
+          "linkId": "batch_no",
+          "text": "Batch Number",
+          "type": "string",
+          "required": true
+        },
+        {
+          "linkId": "vaccination_center",
+          "text": "Name of Vaccination Center",
+          "type": "string",
+          "required": true
         },
         {
           "linkId": "supervisor_name",
           "text": "Supervisor Name",
           "type": "string",
           "required": true
+        },
+        {
+          "type": "choice",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                    "code": "drop-down",
+                    "display": "Drop down"
+                  }
+                ]
+              }
+            }
+          ],
+          "linkId": "supervisor_level",
+          "text": "Supervisor Level",
+          "required": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "National",
+                "code": "National"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "County",
+                "code": "County"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Sub County",
+                "code": "Sub County"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Partner",
+                "code": "Partner"
+              }
+            }
+          ]
         }
       ]
     }
