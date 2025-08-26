@@ -15,4 +15,11 @@
     <color name="pending">#C1BCAE</color>
     <color name="blue">#007AFF</color>
     <color name="green">#4CAF50</color>
+    <color name="activeTabBackground">#E0F7FA</color>
+    <color name="activeTabBorder">#0288D1</color>
+    <color name="inactiveTabBackground">#FFFFFF</color>
+    <color name="inactiveTabBorder">#BDBDBD</color>
+    <color name="activeTabText">#0288D1</color>
+    <color name="inactiveTabText">#757575</color>
+
 </resources>

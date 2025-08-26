@@ -1998,7 +1998,7 @@
         },
         {
           "linkId": "recommendations_for_next_phase",
-          "text": "Recommendations for next phase:",
+          "text": "Recommendations for next phase",
           "type": "string",
           "required": true
         }
