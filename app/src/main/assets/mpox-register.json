@@ -618,6 +618,48 @@
           "type": "string",
           "required": true,
           "text": "Phone Number"
+        },
+        {
+          "linkId": "location_widget",
+          "type": "group",
+          "text": "GPS Coordinate",
+          "extension": [
+            {
+              "url": "https://github.com/google/android-fhir/StructureDefinition/questionnaire-itemControl",
+              "valueCodeableConcept": {
+                "coding": [
+                  {
+                    "system": "https://github.com/google/android-fhir/questionnaire-item-control",
+                    "code": "location-widget"
+                  }
+                ]
+              }
+            }
+          ],
+          "item": [
+            {
+              "linkId": "latitude",
+              "type": "decimal",
+              "text": "Latitude",
+              "extension": [
+                {
+                  "url": "gps-coordinate",
+                  "valueString": "latitude"
+                }
+              ]
+            },
+            {
+              "linkId": "longitude",
+              "type": "decimal",
+              "text": "Longitude",
+              "extension": [
+                {
+                  "url": "gps-coordinate",
+                  "valueString": "longitude"
+                }
+              ]
+            }
+          ]
         }
       ]
     },

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.google.android.fhir.FhirEngine
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
@@ -33,6 +34,7 @@ import com.icl.surveillance.ui.patients.data.RegionalLabResultsFragment
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.Period
 import java.time.ZonedDateTime
@@ -56,6 +58,7 @@ class SummarizedActivity : AppCompatActivity() {
         val latestEncounter = FormatterClass().getSharedPref("latestEncounter", this)
         val isCase = FormatterClass().getSharedPref("isCase", this)
         println("Resource Id $patientId")
+
         fhirEngine = FhirApplication.fhirEngine(this@SummarizedActivity)
         patientDetailsViewModel =
             ViewModelProvider(
@@ -72,6 +75,7 @@ class SummarizedActivity : AppCompatActivity() {
 //        }
         if (latestEncounter != null) {
 
+            checkIfResourceHasQuestionnaireResponse(this, patientId)
             groups = parseFromAssets(this, latestEncounter).toMutableList()// this = Context
 
 
@@ -184,6 +188,18 @@ class SummarizedActivity : AppCompatActivity() {
 
         } else {
             Toast.makeText(this, "Please try again later!!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun checkIfResourceHasQuestionnaireResponse(
+        context: Context,
+        patientId: String?
+    ) {
+        if (patientId != null) {
+            lifecycleScope.launch {
+                val logicalId =
+                    patientDetailsViewModel.checkIfResourceHasQuestionnaireResponse(patientId)
+            }
         }
     }
 

@@ -34,6 +34,7 @@ import org.hl7.fhir.r4.model.Condition
 import org.hl7.fhir.r4.model.Encounter
 import org.hl7.fhir.r4.model.Observation
 import org.hl7.fhir.r4.model.Patient
+import org.hl7.fhir.r4.model.QuestionnaireResponse
 import org.hl7.fhir.r4.model.Resource
 import org.hl7.fhir.r4.model.ResourceType
 import kotlin.String
@@ -127,6 +128,15 @@ class ClientDetailsViewModel(
         return fhirEngine
             .search<Encounter> { filter(Encounter.SUBJECT, { value = "Patient/$patientId" }) }
             .map { it.resource }
+    }
+
+    suspend fun checkIfResourceHasQuestionnaireResponse(patientId: String): String {
+        val searchResult = fhirEngine.search<QuestionnaireResponse> {
+            filter(QuestionnaireResponse.SUBJECT, { value = "Patient/$patientId" })
+        }
+        val logicalId = searchResult.firstOrNull()?.resource?.logicalId ?: ""
+        println("Logical Id $logicalId")
+        return logicalId
     }
 
     private suspend fun epidSummary(slug: String): PatientListViewModel.CaseId {
