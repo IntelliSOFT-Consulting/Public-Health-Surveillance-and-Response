@@ -28,7 +28,7 @@
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/text_margin"
             android:paddingTop="4dp"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/sync_icon"

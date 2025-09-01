@@ -785,6 +785,11 @@ class PatientListViewModel(
                                     ?.resource
                                     ?.value
                                     ?.asStringValue() ?: ""
+                            val supervisorName =
+                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "supervisor_name" }
+                                    ?.resource
+                                    ?.value
+                                    ?.asStringValue() ?: ""
                             val occupation =
                                 obs.firstOrNull { it.resource.code.codingFirstRep.code == "occupation" }
                                     ?.resource
@@ -981,7 +986,8 @@ class PatientListViewModel(
                                     encounterQuestionnaire = encounterQuestionnaire,
                                     isSummary = isSummary,
                                     campaignDate = campaignDay,
-                                    teamNumber = teamNumber
+                                    teamNumber = teamNumber,
+                                    supervisorName = supervisorName
                                 )
                             data
                         } else {

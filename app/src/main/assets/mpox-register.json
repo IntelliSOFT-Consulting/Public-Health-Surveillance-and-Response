@@ -147,7 +147,7 @@
             },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
-              "valueString": "yyyy-mm-dd"
+              "valueString": "dd-mm-yyyy"
             }
           ],
           "linkId": "257830485990",
@@ -850,37 +850,7 @@
             },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
-              "valueString": "yyyy-mm-dd"
-            }
-          ]
-        },
-        {
-          "linkId": "next_appointment",
-          "text": "Next Appointment",
-          "type": "date",
-          "required": true,
-          "extension": [
-            {
-              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-              "valueString": "Cannot be a date in the past"
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueDate": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-                    "valueExpression": {
-                      "language": "text/fhirpath",
-                      "expression": "today()"
-                    }
-                  }
-                ]
-              }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
-              "valueString": "yyyy-mm-dd"
+              "valueString": "dd-mm-yyyy"
             }
           ]
         },
