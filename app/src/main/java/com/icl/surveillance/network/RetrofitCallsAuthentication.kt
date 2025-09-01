@@ -29,11 +29,11 @@ class RetrofitCallsAuthentication {
 
         CoroutineScope(Dispatchers.Main).launch {
             val job = Job()
-            CoroutineScope(Dispatchers.IO + job).launch { starLogin(context, dbSignIn) }.join()
+            CoroutineScope(Dispatchers.IO + job).launch { startLogin(context, dbSignIn) }.join()
         }
     }
 
-    private fun starLogin(context: Context, dbSignIn: DbSignIn) {
+    private fun startLogin(context: Context, dbSignIn: DbSignIn) {
 
         val job1 = Job()
         CoroutineScope(Dispatchers.Main + job1).launch {
