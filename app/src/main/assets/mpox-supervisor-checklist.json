@@ -7,6 +7,23 @@
   },
   "extension": [
     {
+      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-launchContext",
+      "extension": [
+        {
+          "url": "name",
+          "valueCoding": {
+            "system": "http://hl7.org/fhir/uv/sdc/CodeSystem/launchContext",
+            "code": "client",
+            "display": "Client as a QuestionnaireResponse"
+          }
+        },
+        {
+          "url": "type",
+          "valueCode": "QuestionnaireResponse"
+        }
+      ]
+    },
+    {
       "url": "http://hl7.org/fhir/StructureDefinition/variable",
       "valueExpression": {
         "name": "countyName",

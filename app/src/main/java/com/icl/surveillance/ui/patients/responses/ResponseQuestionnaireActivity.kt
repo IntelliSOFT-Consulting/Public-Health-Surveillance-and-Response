@@ -1,8 +1,11 @@
 package com.icl.surveillance.ui.patients.responses
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +30,7 @@ import com.icl.surveillance.models.OutputItem
 import com.icl.surveillance.models.QuestionnaireItem
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
+import com.icl.surveillance.viewmodels.EditSupervisorChecklistViewModel
 import com.icl.surveillance.viewmodels.ResponseDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
 import com.icl.surveillance.viewmodels.factories.ResponseDetailsViewModelFactory
@@ -36,6 +40,15 @@ class ResponseQuestionnaireActivity : AppCompatActivity() {
     private lateinit var binding: ActivityResponseQuestionnaireBinding
     private lateinit var fhirEngine: FhirEngine
     private lateinit var patientDetailsViewModel: ResponseDetailsViewModel
+
+    override fun onResume() {
+        super.onResume()
+        try {
+            loadData()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +62,7 @@ class ResponseQuestionnaireActivity : AppCompatActivity() {
             FormatterClass().getSharedPref("resourceId", this@ResponseQuestionnaireActivity)
         val viewPager = binding.viewPager
         val tabLayout = binding.tabLayout
-
+        println("Resource Id $questionnaireId")
         patientDetailsViewModel =
             ViewModelProvider(
                 this,
@@ -63,6 +76,13 @@ class ResponseQuestionnaireActivity : AppCompatActivity() {
 //            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
 //            insets
 //        }
+
+        loadData()
+    }
+
+    private fun loadData() {
+        val questionnaireId =
+            FormatterClass().getSharedPref("resourceId", this@ResponseQuestionnaireActivity)
 
         groups =
             parseFromAssets(this, "mpox-supervisor-checklist.json").toMutableList()// this = Context
@@ -85,9 +105,9 @@ class ResponseQuestionnaireActivity : AppCompatActivity() {
                 }
             }
             val adapter = GroupPagerAdapter(this, groups, emptyList())
-            viewPager.adapter = adapter
+            binding.viewPager.adapter = adapter
 
-            TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
                 tab.text = adapter.getTabTitle(position)
             }.attach()
         }
@@ -177,6 +197,34 @@ class ResponseQuestionnaireActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressedDispatcher.onBackPressed()
         return true
+    }
+
+    // create a menu item here:
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_edit, menu)
+        return true
+    }
+
+    // handle on menu click here
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_edit -> {
+                val patientId =
+                    FormatterClass().getSharedPref("patientId", this@ResponseQuestionnaireActivity)
+
+                val intent = Intent(
+                    this@ResponseQuestionnaireActivity,
+                    EditChecklistActivity::class.java
+                ).apply {
+                    putExtra("questionnaire_id", patientId)
+                }
+                startActivity(intent)
+
+                return true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
 

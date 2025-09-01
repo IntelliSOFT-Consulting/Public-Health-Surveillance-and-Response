@@ -222,9 +222,6 @@ class AddCaseActivity : AppCompatActivity() {
                             )
                             setQuestionnaire(viewModel.questionnaire)
                         }
-//                    LayoutListViewModel.questionnaireLambdaMap[args.questionnaireLambdaKey ?: ""]!!.invoke(
-//                        questionnaireFragmentBuilder,
-//                    )
                     add(
                         R.id.add_patient_container,
                         questionnaireFragmentBuilder.build(),

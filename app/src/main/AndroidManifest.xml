@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-
     <application
         android:name=".fhir.FhirApplication"
         android:allowBackup="true"
@@ -19,6 +18,11 @@
         android:theme="@style/Theme.Surveillance"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.patients.responses.EditChecklistActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.Surveillance.NoActionBar" />
         <activity
             android:name=".ui.patients.responses.ResponseQuestionnaireActivity"
             android:exported="false"

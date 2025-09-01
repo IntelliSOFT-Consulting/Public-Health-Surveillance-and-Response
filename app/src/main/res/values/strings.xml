@@ -122,4 +122,5 @@
     <string name="tally">Summary Sheet</string>
     <string name="supervisor">Supervisor Checklist</string>
     <string name="mpox_register">Mpox Register</string>
+    <string name="edit">Edit</string>
 </resources>

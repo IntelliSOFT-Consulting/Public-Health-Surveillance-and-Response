@@ -55,7 +55,7 @@ class SummarizedActivity : AppCompatActivity() {
         val currentCase = FormatterClass().getSharedPref("currentCase", this)
         val latestEncounter = FormatterClass().getSharedPref("latestEncounter", this)
         val isCase = FormatterClass().getSharedPref("isCase", this)
-
+        println("Resource Id $patientId")
         fhirEngine = FhirApplication.fhirEngine(this@SummarizedActivity)
         patientDetailsViewModel =
             ViewModelProvider(
