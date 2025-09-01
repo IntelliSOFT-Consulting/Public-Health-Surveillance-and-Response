@@ -799,6 +799,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     patient.identifier.add(identifierSystem)
                     fhirEngine.create(patient)
                     fhirEngine.create(enc)
+                    questionnaireResponse.id = generateUuid()
+                    questionnaireResponse.subject = subjectReference
+                    questionnaireResponse.encounter = encounterReference
+                    fhirEngine.create(questionnaireResponse)
 
                     extractedAnswers.forEach {
 

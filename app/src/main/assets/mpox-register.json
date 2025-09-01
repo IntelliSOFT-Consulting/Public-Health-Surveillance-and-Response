@@ -165,6 +165,27 @@
           ]
         },
         {
+          "linkId": "calculated_age",
+          "type": "string",
+          "required": true,
+          "text": "Age",
+          "enableWhen": [
+            {
+              "question": "dob_known",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes"
+              }
+            }
+          ],
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
+            }
+          ]
+        },
+        {
           "linkId": "age-group",
           "text": "Age Details",
           "type": "group",

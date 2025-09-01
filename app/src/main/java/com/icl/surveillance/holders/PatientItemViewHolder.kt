@@ -64,7 +64,6 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
         this.dateReported.text = patientItem.caseOnsetDate
         this.labResults.text = patientItem.labResults
 
-        val supervisor = FormatterClass().getSharedPref("fullNames", context)
 
         try {
             if (listingTitle.isNotEmpty()) {
@@ -102,7 +101,7 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
                         this.tvTeamNumberLabel.text = "Team Number"
                     }
                     this.type.text = patientItem.campaignDate
-                    this.supervisorName.text = supervisor
+                    this.supervisorName.text = patientItem.supervisorName
                     this.teamNumber.text = patientItem.teamNumber
 
 

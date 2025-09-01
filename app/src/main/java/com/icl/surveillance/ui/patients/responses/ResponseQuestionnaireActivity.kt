@@ -60,8 +60,7 @@ class ResponseQuestionnaireActivity : AppCompatActivity() {
         fhirEngine = FhirApplication.fhirEngine(this@ResponseQuestionnaireActivity)
         val questionnaireId =
             FormatterClass().getSharedPref("resourceId", this@ResponseQuestionnaireActivity)
-        val viewPager = binding.viewPager
-        val tabLayout = binding.tabLayout
+
         println("Resource Id $questionnaireId")
         patientDetailsViewModel =
             ViewModelProvider(

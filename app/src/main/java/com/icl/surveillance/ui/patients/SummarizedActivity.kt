@@ -158,6 +158,11 @@ class SummarizedActivity : AppCompatActivity() {
                                 outputItem.value = calculateDaysSinceOnset(data.observations)
                             }
 
+
+                            "calculated_age" -> { // Calculate Days since onset
+                                outputItem.value = calculatePatientAge(data.observations)
+                            }
+
                             "age-at-onset" -> {  // Calculate Age at Onset
                                 outputItem.value = calculateAgeAtOnset(data.observations)
                             }
@@ -189,6 +194,33 @@ class SummarizedActivity : AppCompatActivity() {
             .replace("[^a-z0-9\\s-]".toRegex(), "")
             .replace("\\s+".toRegex(), "-")
             .replace("-+".toRegex(), "-")
+    }
+
+    fun calculatePatientAge(observations: List<PatientListViewModel.ObservationItem>): String {
+        var age = "0"
+        val formatter = DateTimeFormatter.ISO_DATE // assumes date format is "yyyy-MM-dd"
+
+        val dob = observations.find { obs ->
+            obs.code == "257830485990"
+        }?.value
+        val created = observations.find { obs ->
+            obs.code == "257830485990"
+        }?.created
+        println("Date of Birth Selected $dob Created $created")
+        if (dob == null || created == null) age = "0"
+        try {
+            val dobDate = LocalDate.parse(dob, formatter)
+            // Parse the created date using a formatter
+            val createdFormatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy")
+            val createdDate = ZonedDateTime.parse(created, createdFormatter).toLocalDate()
+
+            val period = Period.between(dobDate, createdDate)
+
+            age = "${period.years} years, ${period.months} months, ${period.days} days"
+        } catch (e: Exception) {
+            age = "0"
+        }
+        return age
     }
 
     fun calculateDaysSinceOnset(observations: List<PatientListViewModel.ObservationItem>): String {

@@ -195,20 +195,6 @@ class AddCaseActivity : AppCompatActivity() {
         }
     }
 
-//    private fun addQuestionnaireFragment() {
-//        supportFragmentManager.commit {
-//            add(
-//                R.id.add_patient_container,
-//                QuestionnaireFragment.builder()
-//                    .setQuestionnaire(viewModel.questionnaire)
-//                    .setShowCancelButton(true)
-//                    .setSubmitButtonText("Submit")
-//                    .build(),
-//                QUESTIONNAIRE_FRAGMENT_TAG,
-//            )
-//        }
-//    }
-
     private fun addQuestionnaireFragment() {
         lifecycleScope.launch {
             if (supportFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) == null) {

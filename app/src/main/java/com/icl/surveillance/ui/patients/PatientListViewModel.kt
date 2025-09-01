@@ -651,6 +651,9 @@ class PatientListViewModel(
 
                     var teamNumber =
                         getAnswerValueAsString(fhirPatient.resource.item, "site_type")
+
+                    var supervisorName =
+                        getAnswerValueAsString(fhirPatient.resource.item, "supervisor_name")
                     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
                     val authored = try {
@@ -694,7 +697,8 @@ class PatientListViewModel(
                         lastUpdated = authored,
                         isSummary = isSummary,
                         campaignDate = siteName,
-                        teamNumber = teamNumber
+                        teamNumber = teamNumber,
+                        supervisorName = supervisorName
                     )
                     data
                 }.also {
