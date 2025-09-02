@@ -291,7 +291,7 @@
             },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
-              "valueString": "yyyy-mm-dd"
+              "valueString": "dd-mm-yyyy"
             },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
