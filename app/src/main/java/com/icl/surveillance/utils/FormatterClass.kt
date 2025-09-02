@@ -44,7 +44,11 @@ class FormatterClass {
         editor.apply()
     }
 
-    fun formatCurrentDateTime(date: Date): String {
+    /**
+     * Formats the provided [date] into a string using the pattern
+     * `yyyy-MM-dd HH:mm:ss` and the English locale.
+     */
+    fun formatDateTime(date: Date): String {
         return dateInverseFormatSeconds.format(date)
     }
 

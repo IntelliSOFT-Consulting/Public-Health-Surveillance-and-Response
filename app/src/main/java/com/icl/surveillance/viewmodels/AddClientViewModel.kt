@@ -142,9 +142,9 @@ class AddClientViewModel(application: Application, private val state: SavedState
             coding0.display = "System Creation"
             codingList0.add(coding0)
             typeCodeableConcept0.coding = codingList0
-            typeCodeableConcept0.text = FormatterClass().formatCurrentDateTime(Date())
+            typeCodeableConcept0.text = FormatterClass().formatDateTime(Date())
 
-            identifierSystem0.value = FormatterClass().formatCurrentDateTime(Date())
+            identifierSystem0.value = FormatterClass().formatDateTime(Date())
             identifierSystem0.system = "system-creation"
             identifierSystem0.type = typeCodeableConcept0
 
