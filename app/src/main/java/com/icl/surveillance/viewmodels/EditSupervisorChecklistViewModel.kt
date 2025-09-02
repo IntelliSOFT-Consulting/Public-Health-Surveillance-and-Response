@@ -24,21 +24,22 @@ import org.hl7.fhir.r4.model.Resource
 
 class EditSupervisorChecklistViewModel(
     application: Application,
-    private val questionnaireId: String
+    private val questionnaireId: String,
+    private val questionnaire: String
 ) :
     AndroidViewModel(application) {
     private val fhirEngine: FhirEngine = FhirApplication.fhirEngine(application.applicationContext)
 
-    val livePatientData = liveData { emit(prepareEditPatient()) }
+    val liveEditData = liveData { emit(prepareEditRecord()) }
 
-    private suspend fun prepareEditPatient(): Pair<String, String> {
+    private suspend fun prepareEditRecord(): Pair<String, String> {
         // This is actually a QuestionnaireResponse, not a Patient
         val questionnaireResponse = fhirEngine.get<QuestionnaireResponse>(questionnaireId)
 
         // Read the original Questionnaire from assets
         val questionnaireJson =
             getApplication<Application>()
-                .readFileFromAssets("mpox-supervisor-checklist.json")
+                .readFileFromAssets(questionnaire)
                 .trimIndent()
 
         // Parse the Questionnaire

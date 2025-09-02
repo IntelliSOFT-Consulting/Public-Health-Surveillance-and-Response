@@ -54,6 +54,8 @@ class ClientDetailsViewModel(
     val currentLiveLabData = MutableLiveData<List<PatientListViewModel.LabResults>>()
     val liveLinkedData = MutableLiveData<List<ContactResults>>()
     val liveClinicalData = MutableLiveData<ClinicalData>()
+    var hasQuestionnaireResponse: Boolean = false
+
 
     /** Emits list of [PatientDetailData]. */
     fun getPatientDetailData(category: String, parent: String?) {

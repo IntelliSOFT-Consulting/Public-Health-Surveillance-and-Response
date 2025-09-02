@@ -1,8 +1,11 @@
 package com.icl.surveillance.ui.patients
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +34,7 @@ import com.icl.surveillance.ui.patients.custom.VlTreatmentFragment
 import com.icl.surveillance.ui.patients.custom.afp.AFPFollowUpFragment
 import com.icl.surveillance.ui.patients.data.LabResultsFragment
 import com.icl.surveillance.ui.patients.data.RegionalLabResultsFragment
+import com.icl.surveillance.ui.patients.responses.EditChecklistActivity
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
@@ -68,11 +72,7 @@ class SummarizedActivity : AppCompatActivity() {
                 ),
             )
                 .get(ClientDetailsViewModel::class.java)
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-//            insets
-//        }
+
         if (latestEncounter != null) {
 
             checkIfResourceHasQuestionnaireResponse(this, patientId)
@@ -199,7 +199,57 @@ class SummarizedActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 val logicalId =
                     patientDetailsViewModel.checkIfResourceHasQuestionnaireResponse(patientId)
+
+                if (logicalId.isNotEmpty()) {
+                    // create the option menu:
+                    FormatterClass().saveSharedPref("resourceId", logicalId, context)
+                    patientDetailsViewModel.hasQuestionnaireResponse = true
+
+                    invalidateOptionsMenu()
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    supportActionBar?.setDisplayShowHomeEnabled(true)
+
+                }
             }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_edit, menu)
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        val hasResponse = patientDetailsViewModel.hasQuestionnaireResponse // set this as a flag
+        menu.findItem(R.id.action_edit)?.isVisible = hasResponse
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_edit -> {
+
+                FormatterClass().saveSharedPref(
+                    "questionnaire",
+                    "mpox-register.json",
+                    this@SummarizedActivity
+                )
+
+                val patientId =
+                    FormatterClass().getSharedPref("resourceId", this@SummarizedActivity)
+
+                val intent = Intent(
+                    this@SummarizedActivity,
+                    EditChecklistActivity::class.java
+                ).apply {
+                    putExtra("questionnaire_id", patientId)
+                }
+                startActivity(intent)
+
+                return true
+            }
+
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

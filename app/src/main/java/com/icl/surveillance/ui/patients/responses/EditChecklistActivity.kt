@@ -39,11 +39,24 @@ class EditChecklistActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar.apply { title = "Edit Supervisor Checklist" }
+        val titleText = when (FormatterClass().getSharedPref("questionnaire", this)) {
+            "mpox-register.json" -> "Edit Mpox Register"
+            "mpox-tally-sheet.json" -> "Edit Summary Sheet"
+            "mpox-supervisor-checklist.json" -> "Edit Supervisor Checklist"
+            else -> ""
+        }
+        supportActionBar.apply { title = titleText }
         val questionnaireId =
             FormatterClass().getSharedPref("resourceId", this)
         println("Selected Questionnaire ID: $questionnaireId")
-        val factory = EditSupervisorChecklistViewModelFactory(application, "$questionnaireId")
+
+        val questionnaire =
+            FormatterClass().getSharedPref("questionnaire", this@EditChecklistActivity)
+        val factory = EditSupervisorChecklistViewModelFactory(
+            application = application, questionnaireId =
+                "$questionnaireId", questionnaire =
+                "$questionnaire"
+        )
         viewModel = ViewModelProvider(this, factory)[EditSupervisorChecklistViewModel::class.java]
 
         updateArguments()
@@ -52,7 +65,7 @@ class EditChecklistActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        viewModel.livePatientData.observe(this) { addQuestionnaireFragment(it) }
+        viewModel.liveEditData.observe(this) { addQuestionnaireFragment(it) }
         observePatientSaveAction()
 
         supportFragmentManager.setFragmentResultListener(
@@ -163,7 +176,7 @@ class EditChecklistActivity : AppCompatActivity() {
 
     private fun updateArguments() {
         val json = FormatterClass().getSharedPref("questionnaire", this)
-        intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "mpox-supervisor-checklist.json")
+        intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, json)
     }
 
     companion object {

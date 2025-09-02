@@ -210,7 +210,7 @@ class ResponseQuestionnaireActivity : AppCompatActivity() {
             R.id.action_edit -> {
                 val patientId =
                     FormatterClass().getSharedPref("patientId", this@ResponseQuestionnaireActivity)
-
+                FormatterClass().saveSharedPref("questionnaire","mpox-supervisor-checklist.json",this@ResponseQuestionnaireActivity)
                 val intent = Intent(
                     this@ResponseQuestionnaireActivity,
                     EditChecklistActivity::class.java
