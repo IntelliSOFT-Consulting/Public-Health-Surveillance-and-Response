@@ -58,10 +58,7 @@ class SummarizedActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val patientId = FormatterClass().getSharedPref("resourceId", this@SummarizedActivity)
-        val currentCase = FormatterClass().getSharedPref("currentCase", this)
-        val latestEncounter = FormatterClass().getSharedPref("latestEncounter", this)
-        val isCase = FormatterClass().getSharedPref("isCase", this)
-        println("Resource Id $patientId")
+
 
         fhirEngine = FhirApplication.fhirEngine(this@SummarizedActivity)
         patientDetailsViewModel =
@@ -72,6 +69,25 @@ class SummarizedActivity : AppCompatActivity() {
                 ),
             )
                 .get(ClientDetailsViewModel::class.java)
+
+        loadData()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        try {
+            loadData()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun loadData() {
+        val patientId = FormatterClass().getSharedPref("resourceId", this@SummarizedActivity)
+
+        val currentCase = FormatterClass().getSharedPref("currentCase", this)
+        val latestEncounter = FormatterClass().getSharedPref("latestEncounter", this)
+        val isCase = FormatterClass().getSharedPref("isCase", this)
 
         if (latestEncounter != null) {
 
@@ -84,7 +100,6 @@ class SummarizedActivity : AppCompatActivity() {
 
             if (currentCase != null) {
                 val slug = currentCase.toSlug()
-                println("Dealing with the current Slug $slug")
                 val key = when (slug) {
                     "rcce" -> {
                         val encounterQuestionnaire = FormatterClass().getSharedPref(
@@ -202,6 +217,7 @@ class SummarizedActivity : AppCompatActivity() {
 
                 if (logicalId.isNotEmpty()) {
                     // create the option menu:
+                    FormatterClass().saveSharedPref("patientId", patientId, context)
                     FormatterClass().saveSharedPref("resourceId", logicalId, context)
                     patientDetailsViewModel.hasQuestionnaireResponse = true
 

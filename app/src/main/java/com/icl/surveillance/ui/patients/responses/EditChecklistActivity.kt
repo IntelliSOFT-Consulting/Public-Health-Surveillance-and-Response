@@ -2,11 +2,9 @@ package com.icl.surveillance.ui.patients.responses
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -19,7 +17,6 @@ import ca.uhn.fhir.context.FhirVersionEnum
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.google.android.material.button.MaterialButton
 import com.icl.surveillance.R
-import com.icl.surveillance.clients.AddClientFragment
 import com.icl.surveillance.databinding.ActivityEditChecklistBinding
 import com.icl.surveillance.utils.ContribQuestionnaireItemViewHolderFactoryMatchersProviderFactory
 import com.icl.surveillance.utils.FormatterClass
@@ -108,9 +105,13 @@ class EditChecklistActivity : AppCompatActivity() {
             val questionnaireFragment =
                 supportFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG)
                         as QuestionnaireFragment
+            val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
 
+            val questionnaire= FormatterClass().getSharedPref("questionnaire",this@EditChecklistActivity)
             val questionnaireResponse = questionnaireFragment.getQuestionnaireResponse()
-            viewModel.updatePatient(questionnaireResponse)
+            val questionnaireResponseString =
+                jsonParser.encodeResourceToString(questionnaireResponse)
+            viewModel.updatePatient(this@EditChecklistActivity,questionnaireResponse,questionnaire,questionnaireResponseString)
         }
     }
 

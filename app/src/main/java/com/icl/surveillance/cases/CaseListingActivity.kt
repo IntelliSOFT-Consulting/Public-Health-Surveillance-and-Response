@@ -36,7 +36,6 @@ class CaseListingActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
         val titleName = FormatterClass().getSharedPref("listingTitle", this)
-        val currentCase = FormatterClass().getSharedPref("currentCase", this)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.apply {
@@ -52,6 +51,12 @@ class CaseListingActivity : AppCompatActivity() {
                 ),
             )
                 .get(PatientListViewModel::class.java)
+        loadData()
+    }
+
+    fun loadData() {
+        val titleName = FormatterClass().getSharedPref("listingTitle", this)
+        val currentCase = FormatterClass().getSharedPref("currentCase", this)
         val recyclerView: RecyclerView = binding.patientListContainer.patientList
         val adapter = PatientItemRecyclerViewAdapter(this::onPatientItemClicked, "$titleName", this)
         val adapterRumor = PatientItemRecyclerViewAdapterRumor(this::onRumorItemClicked)
@@ -64,6 +69,7 @@ class CaseListingActivity : AppCompatActivity() {
                     patientListViewModel.handleCurrentRumorCaseListing(slug)
                     recyclerView.adapter = adapterRumor
                 }
+
                 else -> {
                     patientListViewModel.handleCurrentCaseListing(slug)
                     recyclerView.adapter = adapter
@@ -112,6 +118,15 @@ class CaseListingActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        try {
+            loadData()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     private fun onRumorItemClicked(patientItem: PatientListViewModel.RumorItem) {
         val currentCase = FormatterClass().getSharedPref("currentCase", this)
         FormatterClass().saveSharedPref("resourceId", patientItem.resourceId, this)
@@ -146,6 +161,7 @@ class CaseListingActivity : AppCompatActivity() {
 
     private fun onPatientItemClicked(patientItem: PatientListViewModel.PatientItem) {
         val currentCase = FormatterClass().getSharedPref("currentCase", this)
+        FormatterClass().saveSharedPref("patientId", patientItem.resourceId, this)
         FormatterClass().saveSharedPref("resourceId", patientItem.resourceId, this)
         FormatterClass().saveSharedPref("encounterId", patientItem.encounterId, this)
         FormatterClass().saveSharedPref(
