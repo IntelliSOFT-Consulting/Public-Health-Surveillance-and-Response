@@ -9,10 +9,9 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
@@ -45,6 +44,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
+
 class SummarizedActivity : AppCompatActivity() {
     private lateinit var groups: MutableList<OutputGroup>
     private lateinit var binding: ActivitySummarizedBinding
@@ -67,8 +67,7 @@ class SummarizedActivity : AppCompatActivity() {
                 PatientDetailsViewModelFactory(
                     this@SummarizedActivity.application, fhirEngine, "$patientId"
                 ),
-            )
-                .get(ClientDetailsViewModel::class.java)
+            ).get(ClientDetailsViewModel::class.java)
 
         loadData()
     }
@@ -84,7 +83,6 @@ class SummarizedActivity : AppCompatActivity() {
 
     fun loadData() {
         val patientId = FormatterClass().getSharedPref("resourceId", this@SummarizedActivity)
-
         val currentCase = FormatterClass().getSharedPref("currentCase", this)
         val latestEncounter = FormatterClass().getSharedPref("latestEncounter", this)
         val isCase = FormatterClass().getSharedPref("isCase", this)
@@ -243,6 +241,19 @@ class SummarizedActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.action_delete -> {
+                SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Are you sure?")
+                    .setContentText("You Won't be able to recover this record!")
+                    .setConfirmText("Yes,delete it!")
+                    .setConfirmClickListener { sDialog ->
+                        Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show()
+                        sDialog.dismissWithAnimation()
+                    }
+                    .show()
+                return true
+            }
+
             R.id.action_edit -> {
 
                 FormatterClass().saveSharedPref(

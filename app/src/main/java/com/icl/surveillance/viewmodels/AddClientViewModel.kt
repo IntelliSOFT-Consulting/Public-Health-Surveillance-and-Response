@@ -255,7 +255,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
                     val epid = if (originEntry != null) {
                         val countryCode = originEntry.answer.padEnd(3, 'X').take(3).uppercase()
-                        "$countryCode-$county-$subCounty-$currentYear-MPOVAC-"
+                        "$countryCode-$subCounty-$currentYear-MPOVAC-"
                     } else {
                         val countyCode = county.padEnd(3, 'X').take(3).uppercase()
                         val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()

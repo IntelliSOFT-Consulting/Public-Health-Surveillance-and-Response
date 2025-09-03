@@ -627,7 +627,7 @@ class PatientListViewModel(
     }
 
 
-    private suspend fun retrieveCasesByDiseaseActiveLatest(
+    private suspend fun retrieveCasesByDisease(
         nameQuery: String,
     ): List<PatientItem> {
         val isSummary = nameQuery.contains("mpox")
@@ -794,11 +794,19 @@ class PatientListViewModel(
                                     ?.resource
                                     ?.value
                                     ?.asStringValue() ?: ""
-                            val occupation =
+                            var occupation =
                                 obs.firstOrNull { it.resource.code.codingFirstRep.code == "occupation" }
                                     ?.resource
                                     ?.value
                                     ?.asStringValue() ?: ""
+                            val occupationOther =
+                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "occupation-other" }
+                                    ?.resource
+                                    ?.value
+                                    ?.asStringValue() ?: ""
+                            if (occupation == "Other") {
+                                occupation = occupationOther
+                            }
                             val vaccinationCenter =
                                 obs.firstOrNull { it.resource.code.codingFirstRep.code == "vaccination_center" }
                                     ?.resource
@@ -1002,12 +1010,11 @@ class PatientListViewModel(
             }
         }
     }
-    private suspend fun retrieveCasesByDisease(
+
+    private suspend fun retrieveCasesByDiseaseOptimized(
         nameQuery: String,
     ): List<PatientItem> {
         val isSummary = nameQuery.contains("mpox")
-
-        println("Current Workflow :::: $nameQuery")
 
         return when (nameQuery) {
             "mpox-supervisor-checklist" -> retrieveMpoxSupervisorCases(isSummary)
@@ -1063,7 +1070,10 @@ class PatientListViewModel(
         }.sortedByDescending { it.lastUpdated }
     }
 
-    private suspend fun retrievePatientCases(nameQuery: String, isSummary: Boolean): List<PatientItem> {
+    private suspend fun retrievePatientCases(
+        nameQuery: String,
+        isSummary: Boolean
+    ): List<PatientItem> {
         // Get all patients first
         val patients = fhirEngine.search<Patient> {
             sort(Patient.GIVEN, Order.ASCENDING)
@@ -1072,7 +1082,8 @@ class PatientListViewModel(
         }
 
         // Filter and collect valid patients with their encounter IDs
-        val validPatients = mutableListOf<Triple<SearchResult<Patient>, String, String>>() // patient, logicalId, system
+        val validPatients =
+            mutableListOf<Triple<SearchResult<Patient>, String, String>>() // patient, logicalId, system
         val encounterIds = mutableSetOf<String>()
 
         patients.forEach { fhirPatient ->
@@ -1246,7 +1257,8 @@ class PatientListViewModel(
                     status = otherStatus
                 }
 
-                val allResults = listOf(rapidResults, datResult, aResult, mResult).map { it.lowercase() }
+                val allResults =
+                    listOf(rapidResults, datResult, aResult, mResult).map { it.lowercase() }
                 val results = when {
                     allResults.any { it == "positive" } -> "Positive"
                     allResults.all { it == "negative" } -> "Negative"
@@ -1295,7 +1307,10 @@ class PatientListViewModel(
         }
     }
 
-    private suspend fun processMeaslesLabResults(data: PatientItem, patientId: String): PatientItem {
+    private suspend fun processMeaslesLabResults(
+        data: PatientItem,
+        patientId: String
+    ): PatientItem {
         return try {
             val childEncounter = loadChildEncounter(data.resourceId, patientId)
             val measlesEncounter = childEncounter.firstOrNull { encounter ->
@@ -1311,7 +1326,8 @@ class PatientListViewModel(
                 val measlesIgm = findObservationValue(obs, "measles-igm") ?: "Pending"
 
                 // Get maxDays from main observations (this was from the original outer obs search)
-                val maxDays = "" // You may need to pass the main observations here or load separately
+                val maxDays =
+                    "" // You may need to pass the main observations here or load separately
 
                 val finalClassification = when (measlesIgm.lowercase()) {
                     "positive" -> if (maxDays.lowercase() == "yes") "Pending" else "Confirmed by lab"
@@ -1357,11 +1373,15 @@ class PatientListViewModel(
             "rcce" -> patient.identifier.find {
                 it.system == "rcce-community-questionnaire" || it.system == "rcce-countysubcounty-interface"
             }
+
             else -> patient.identifier.find { it.system == nameQuery }
         }
     }
 
-    private fun findObservationValue(observations: List<SearchResult<Observation>>, code: String): String? {
+    private fun findObservationValue(
+        observations: List<SearchResult<Observation>>,
+        code: String
+    ): String? {
         return observations.firstOrNull { it.resource.code.codingFirstRep.code == code }
             ?.resource?.value?.asStringValue()
     }
@@ -1387,6 +1407,7 @@ class PatientListViewModel(
             ""
         }
     }
+
     data class RumorItem(
         val id: String,
         val resourceId: String,
