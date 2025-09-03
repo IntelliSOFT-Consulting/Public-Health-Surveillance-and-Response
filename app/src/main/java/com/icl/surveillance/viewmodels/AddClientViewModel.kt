@@ -35,6 +35,7 @@ import org.hl7.fhir.r4.model.Coding
 import org.hl7.fhir.r4.model.ContactPoint
 import org.hl7.fhir.r4.model.DateTimeType
 import org.hl7.fhir.r4.model.Enumerations
+import org.hl7.fhir.r4.model.Extension
 import org.hl7.fhir.r4.model.HumanName
 import org.hl7.fhir.r4.model.Identifier
 import org.hl7.fhir.r4.model.MeasureReport
@@ -97,13 +98,26 @@ class AddClientViewModel(application: Application, private val state: SavedState
                 val latitude = FormatterClass().getSharedPref("latitude", context)
                 val longitude = FormatterClass().getSharedPref("longitude", context)
 
-                questionnaireResponse.identifier = QuestionnaireHelper().createFullFhirIdentifier(
+                val locationIdentifier = QuestionnaireHelper().createFullFhirIdentifier(
                     codeData = "geo-location",
                     valueData = "lat:${latitude},lon:${longitude}",
                     systemData = "geo-location-details",
                     displayData = "Latitude: $latitude, Longitude: $longitude"
                 )
 
+                val responseType = QuestionnaireHelper().createFullFhirIdentifier(
+                    codeData = "supervisor_checklist",
+                    valueData = "supervisor_checklist",
+                    systemData = "supervisor_checklist",
+                    displayData = "Supervisor Checklist"
+                )
+
+                questionnaireResponse.identifier = locationIdentifier
+                val extension = Extension().apply {
+                    url = "supervisor_checklist"
+                    setValue(responseType)
+                }
+//                questionnaireResponse.addExtension(extension)
                 fhirEngine.create(questionnaireResponse)
             }
 

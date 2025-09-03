@@ -146,7 +146,6 @@ class AddParentCaseActivity : AppCompatActivity() {
         LocationUtils.requestCurrentLocation(
             this,
             onLocationReceived = { lat, lon ->
-                println("Latitude: $lat, Longitude: $lon")
 
                 val latitude = lat.toString()
                 val longitude = lon.toString()

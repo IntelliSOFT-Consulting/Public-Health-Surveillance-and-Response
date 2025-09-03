@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +17,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
@@ -207,10 +209,28 @@ class ResponseQuestionnaireActivity : AppCompatActivity() {
     // handle on menu click here
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.action_delete -> {
+                SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Are you sure?")
+                    .setContentText("You Won't be able to recover this record!")
+                    .setConfirmText("Yes,delete it!")
+                    .setConfirmClickListener { sDialog ->
+                        Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show()
+                        sDialog.dismissWithAnimation()
+                    }
+                    .show()
+
+                return true
+            }
+
             R.id.action_edit -> {
                 val patientId =
                     FormatterClass().getSharedPref("patientId", this@ResponseQuestionnaireActivity)
-                FormatterClass().saveSharedPref("questionnaire","mpox-supervisor-checklist.json",this@ResponseQuestionnaireActivity)
+                FormatterClass().saveSharedPref(
+                    "questionnaire",
+                    "mpox-supervisor-checklist.json",
+                    this@ResponseQuestionnaireActivity
+                )
                 val intent = Intent(
                     this@ResponseQuestionnaireActivity,
                     EditChecklistActivity::class.java

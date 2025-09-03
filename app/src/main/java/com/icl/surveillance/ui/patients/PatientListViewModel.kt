@@ -641,70 +641,74 @@ class PatientListViewModel(
                     sort(QuestionnaireResponse.AUTHORED, Order.ASCENDING)
                     count = 500
                     from = 0
-                }.mapIndexed { index, fhirPatient ->
+                }.mapIndexedNotNull { index, fhirPatient ->
+                    if (fhirPatient.resource.hasIdentifier()) {
+                        val county =
+                            getAnswerValueAsString(fhirPatient.resource.item, "294367770999")
+                        val subCounty =
+                            getAnswerValueAsString(fhirPatient.resource.item, "819946803642")
+                        var caseOnsetDate =
+                            getAnswerValueAsString(fhirPatient.resource.item, "728034137219")
 
-                    val county = getAnswerValueAsString(fhirPatient.resource.item, "294367770999")
-                    val subCounty =
-                        getAnswerValueAsString(fhirPatient.resource.item, "819946803642")
-                    var caseOnsetDate =
-                        getAnswerValueAsString(fhirPatient.resource.item, "728034137219")
 
+                        var siteName =
+                            getAnswerValueAsString(fhirPatient.resource.item, "site_name")
 
-                    var siteName =
-                        getAnswerValueAsString(fhirPatient.resource.item, "site_name")
+                        var teamNumber =
+                            getAnswerValueAsString(fhirPatient.resource.item, "site_type")
 
-                    var teamNumber =
-                        getAnswerValueAsString(fhirPatient.resource.item, "site_type")
+                        var supervisorName =
+                            getAnswerValueAsString(fhirPatient.resource.item, "supervisor_name")
+                        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
-                    var supervisorName =
-                        getAnswerValueAsString(fhirPatient.resource.item, "supervisor_name")
-                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-
-                    val authored = try {
-                        val authoredDate: Date = fhirPatient.resource.authored
-                        val localDate = authoredDate.toInstant()
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDateTime()
-                        localDate.format(formatter)  // format here instead of toString()
-                    } catch (e: Exception) {
-                        ""
-                    }
-
-                    if (caseOnsetDate.isEmpty()) {
-                        caseOnsetDate = try {
+                        val authored = try {
                             val authoredDate: Date = fhirPatient.resource.authored
                             val localDate = authoredDate.toInstant()
                                 .atZone(ZoneId.systemDefault())
-                                .toLocalDate()
-                            localDate.toString()
+                                .toLocalDateTime()
+                            localDate.format(formatter)  // format here instead of toString()
                         } catch (e: Exception) {
                             ""
                         }
 
-                    }
+                        if (caseOnsetDate.isEmpty()) {
+                            caseOnsetDate = try {
+                                val authoredDate: Date = fhirPatient.resource.authored
+                                val localDate = authoredDate.toInstant()
+                                    .atZone(ZoneId.systemDefault())
+                                    .toLocalDate()
+                                localDate.toString()
+                            } catch (e: Exception) {
+                                ""
+                            }
 
-                    val data = PatientItem(
-                        id = (index + 1).toString(),
-                        resourceId = fhirPatient.resource.logicalId,
-                        encounterId = fhirPatient.resource.logicalId,
-                        name = fhirPatient.resource.item.firstOrNull()?.item?.firstOrNull() { it.linkId == "294367770999" }?.answer?.firstOrNull()?.valueReference?.display
-                            ?: "",
-                        gender = "",
-                        phone = "",
-                        city = "",
-                        country = "",
-                        isActive = false,
-                        epid = "",
-                        county = county,
-                        subCounty = subCounty,
-                        caseOnsetDate = caseOnsetDate,
-                        lastUpdated = authored,
-                        isSummary = isSummary,
-                        campaignDate = siteName,
-                        teamNumber = teamNumber,
-                        supervisorName = supervisorName
-                    )
-                    data
+                        }
+
+                        val data = PatientItem(
+                            id = (index + 1).toString(),
+                            resourceId = fhirPatient.resource.logicalId,
+                            encounterId = fhirPatient.resource.logicalId,
+                            name = fhirPatient.resource.item.firstOrNull()?.item?.firstOrNull() { it.linkId == "294367770999" }?.answer?.firstOrNull()?.valueReference?.display
+                                ?: "",
+                            gender = "",
+                            phone = "",
+                            city = "",
+                            country = "",
+                            isActive = false,
+                            epid = "",
+                            county = county,
+                            subCounty = subCounty,
+                            caseOnsetDate = caseOnsetDate,
+                            lastUpdated = authored,
+                            isSummary = isSummary,
+                            campaignDate = siteName,
+                            teamNumber = teamNumber,
+                            supervisorName = supervisorName
+                        )
+                        data
+                    } else {
+                        null
+                    }
                 }.also {
                     questionnaireData.addAll(it)
                 }
@@ -812,10 +816,6 @@ class PatientListViewModel(
                                     ?.resource
                                     ?.value
                                     ?.asStringValue() ?: ""
-
-
-
-                            println("Current Workflow :::: Campaign Day : $campaignDay")
 
                             // Loading Lab Results
                             val childEncounter = loadChildEncounter(data.resourceId, logicalId)
