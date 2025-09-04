@@ -64,12 +64,10 @@ class CaseListingActivity : AppCompatActivity() {
         if (currentCase != null) {
             val slug = currentCase.toSlug()
             when (slug) {
-
                 "social-listening-and-rumor-tracking-tool" -> {
                     patientListViewModel.handleCurrentRumorCaseListing(slug)
                     recyclerView.adapter = adapterRumor
                 }
-
                 else -> {
                     patientListViewModel.handleCurrentCaseListing(slug)
                     recyclerView.adapter = adapter
@@ -143,9 +141,7 @@ class CaseListingActivity : AppCompatActivity() {
                 "afp-case-information" -> {
                     startActivity(Intent(this@CaseListingActivity, SummarizedActivity::class.java))
                 }
-
                 else -> {
-
                     startActivity(
                         Intent(
                             this@CaseListingActivity,

@@ -13,12 +13,23 @@ private val Context.dataStorage: DataStore<Preferences> by
 preferencesDataStore(name = "surveilance_app_storage")
 
 class DemoDataStore(private val context: Context) {
-  
-  suspend fun saveLastUpdatedTimestamp(resourceType: ResourceType, timestamp: String) {
-    context.dataStorage.edit { pref -> pref[stringPreferencesKey(resourceType.name)] = timestamp }
-  }
-  
-  suspend fun getLastUpdateTimestamp(resourceType: ResourceType): String? {
-    return context.dataStorage.data.first()[stringPreferencesKey(resourceType.name)]
-  }
+
+    suspend fun saveLastUpdatedTimestamp(resourceType: ResourceType, timestamp: String) {
+        context.dataStorage.edit { pref ->
+            pref[stringPreferencesKey(resourceType.name)] = timestamp
+        }
+    }
+
+    suspend fun getLastUpdateTimestamp(resourceType: ResourceType): String? {
+        return context.dataStorage.data.first()[stringPreferencesKey(resourceType.name)]
+    }
+
+    suspend fun clearAllTimestamps(resourceTypes: List<ResourceType>) {
+        context.dataStorage.edit { pref ->
+            resourceTypes.forEach { type ->
+                pref.remove(stringPreferencesKey(type.name))
+            }
+        }
+    }
+
 }

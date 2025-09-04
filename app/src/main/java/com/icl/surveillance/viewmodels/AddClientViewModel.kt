@@ -895,12 +895,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
                 } catch (e: Exception) {
                     Log.e("TAG", "Error experienced ${e.message}}")
                 }
-
                 withContext(Dispatchers.Main) { isPatientSaved.value = true }
             }
         }
     }
-
     private suspend fun createSpecimenResource(
         linkId: String,
         dateAnswer: String,

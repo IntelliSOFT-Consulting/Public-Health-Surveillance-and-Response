@@ -58,8 +58,11 @@ class SummarizedActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val patientId = FormatterClass().getSharedPref("resourceId", this@SummarizedActivity)
+        val currentCase = FormatterClass().getSharedPref("currentCase", this@SummarizedActivity)
 
 
+        val slug = currentCase?.toSlug()
+        println("Current Case $slug")
         fhirEngine = FhirApplication.fhirEngine(this@SummarizedActivity)
         patientDetailsViewModel =
             ViewModelProvider(
@@ -155,18 +158,14 @@ class SummarizedActivity : AppCompatActivity() {
                 }
             }
             patientDetailsViewModel.liveSummaryData.observe(this) { data ->
-
                 groups.forEach { group ->
                     // For each item inside the group
-
                     group.items.forEach { outputItem ->
                         // Try to find a matching observation
-
                         val matchingObservation = data.observations.find { obs ->
                             obs.code == outputItem.linkId
                         }
                         when (outputItem.linkId) {
-
                             "992818778559" -> { // Retrieve EPID No.
                                 outputItem.value = data.epidNo
                             }
@@ -174,7 +173,6 @@ class SummarizedActivity : AppCompatActivity() {
                             "920645761660" -> { // Calculate Days since onset
                                 outputItem.value = calculateDaysSinceOnset(data.observations)
                             }
-
 
                             "calculated_age" -> { // Calculate Days since onset
                                 outputItem.value = calculatePatientAge(data.observations)
@@ -256,23 +254,42 @@ class SummarizedActivity : AppCompatActivity() {
 
             R.id.action_edit -> {
 
-                FormatterClass().saveSharedPref(
-                    "questionnaire",
-                    "mpox-register.json",
-                    this@SummarizedActivity
-                )
+                val currentCase =
+                    FormatterClass().getSharedPref("currentCase", this@SummarizedActivity)
+                if (currentCase != null) {
+                    val slug = currentCase.toSlug()
 
-                val patientId =
-                    FormatterClass().getSharedPref("resourceId", this@SummarizedActivity)
+                    when (slug) {
+                        "mpox-tally-sheet" -> {
+                            FormatterClass().saveSharedPref(
+                                "questionnaire",
+                                "mpox-tally-sheet.json",
+                                this@SummarizedActivity
+                            )
+                        }
 
-                val intent = Intent(
-                    this@SummarizedActivity,
-                    EditChecklistActivity::class.java
-                ).apply {
-                    putExtra("questionnaire_id", patientId)
+                        "mpox-register" ->
+                            FormatterClass().saveSharedPref(
+                                "questionnaire",
+                                "mpox-register.json",
+                                this@SummarizedActivity
+                            )
+
+                        else -> {
+
+                        }
+                    }
+                    val patientId =
+                        FormatterClass().getSharedPref("resourceId", this@SummarizedActivity)
+
+                    val intent = Intent(
+                        this@SummarizedActivity,
+                        EditChecklistActivity::class.java
+                    ).apply {
+                        putExtra("questionnaire_id", patientId)
+                    }
+                    startActivity(intent)
                 }
-                startActivity(intent)
-
                 return true
             }
 

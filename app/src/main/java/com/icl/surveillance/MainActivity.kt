@@ -25,6 +25,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -51,6 +52,10 @@ import com.icl.surveillance.viewmodels.SyncFragmentViewModel
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.icl.surveillance.fhir.DemoDataStore
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import org.hl7.fhir.r4.model.ResourceType
 
 class MainActivity : AppCompatActivity() {
 
@@ -336,6 +341,27 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.action_restart -> {
+                lifecycleScope.launch {
+                    try {
+                        val trackedResources = listOf(
+                            ResourceType.Patient,
+                            ResourceType.Observation,
+                            ResourceType.Encounter,
+                            ResourceType.Immunization,
+                            ResourceType.QuestionnaireResponse,
+                            ResourceType.Condition,
+                            ResourceType.MeasureReport
+                        )
+                        DemoDataStore(this@MainActivity).clearAllTimestamps(trackedResources)
+                        viewModel.triggerOneTimeSync()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+                true
+            }
+
             R.id.action_refresh -> {
                 viewModel.triggerOneTimeSync()
                 try {
