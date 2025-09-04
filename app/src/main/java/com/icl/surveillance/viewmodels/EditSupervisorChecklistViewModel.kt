@@ -15,6 +15,7 @@ import com.ibm.icu.text.SimpleDateFormat
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.models.QuestionnaireAnswer
 import com.icl.surveillance.utils.FormatterClass
+import com.icl.surveillance.utils.QuestionnaireHelper
 import com.icl.surveillance.utils.readFileFromAssets
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
@@ -26,8 +27,11 @@ import org.hl7.fhir.r4.model.Observation
 import org.hl7.fhir.r4.model.Patient
 import org.hl7.fhir.r4.model.Questionnaire
 import org.hl7.fhir.r4.model.QuestionnaireResponse
+import org.hl7.fhir.r4.model.Reference
 import org.json.JSONArray
 import org.json.JSONObject
+import java.util.Date
+import java.util.UUID
 
 
 class EditSupervisorChecklistViewModel(
@@ -96,6 +100,10 @@ class EditSupervisorChecklistViewModel(
         }
     }
 
+    private fun generateUuid(): String {
+        return UUID.randomUUID().toString()
+    }
+
     private fun startBackgroundProcessing(
         context: Context,
         questionnaireResponseString: String,
@@ -155,6 +163,40 @@ class EditSupervisorChecklistViewModel(
                                 Observation.SUBJECT,
                                 { value = "Patient/${patientId}" })
                         }.take(500)
+
+                    val firstObs = patientObs.firstOrNull()
+
+                    if (firstObs != null) {
+                        val encounter = firstObs.resource.encounter
+                        println("Encounter ID: ${encounter?.id}")
+                    }
+
+                    val existingLinkIds = patientObs
+                        .mapNotNull { it.resource.code?.codingFirstRep?.code } // or however you map your code
+                        .toSet()
+
+                    // Now filter extractedAnswers to find the "new" ones not already in patientObs
+                    val newAnswers = extractedAnswers.filter { answer ->
+                        answer.linkId !in existingLinkIds
+                    }
+                    val patientId = generateUuid()
+                    val subjectReference = Reference("Patient/$patientId")
+                    val encounterReference = Reference("Patient/$patientId")
+
+                    val qh = QuestionnaireHelper()
+                    // create the newly added obs
+                    newAnswers.forEach { answer ->
+                        val obs = qh.codingQuestionnaire(
+                            code = answer.linkId,
+                            display = answer.text,
+                            text = answer.answer
+                        )
+                        obs.id = generateUuid()
+                        obs.subject = subjectReference
+                        obs.encounter = encounterReference
+                        obs.issued = Date()
+                        fhirEngine.create(obs)
+                    }
                     patientObs.forEach { resource ->
                         val updatedObservation = resource.resource.copy()
                         updatedObservation.id = resource.resource.id
@@ -163,14 +205,8 @@ class EditSupervisorChecklistViewModel(
                         if (latestAnswer != null) {
                             updatedObservation.valueStringType.value = latestAnswer.answer
                         }
-//                        println("Observation Retrieved: **** ${it.resource.code.codingFirstRep.code} Value ${it.resource.valueStringType}")
                         fhirEngine.update(updatedObservation)
                     }
-
-//                    extractedAnswers.forEach {
-//                        println("Extracted Data Here Link ID: ${it.linkId}, Text: ${it.text}, Answer: ${it.answer}")
-//
-//                    }
                 }
 
             } catch (e: Exception) {

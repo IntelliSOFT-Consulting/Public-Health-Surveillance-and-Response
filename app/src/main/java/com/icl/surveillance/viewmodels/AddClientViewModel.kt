@@ -225,11 +225,16 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     }
                     val dobEntry = extractedAnswers.find { it.linkId == "257830485990" }
                     val genderEntry = extractedAnswers.find { it.linkId == "929966324957" }
-                    val subCountyEntry = extractedAnswers.find { it.linkId == "vaccination_center" }
+                    val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
+                    val centerEntry = extractedAnswers.find { it.linkId == "vaccination_center" }
                     val countyEntry = extractedAnswers.find { it.linkId == "a4-county" }
                     var county = ""
                     var subCounty = ""
+                    var center = ""
                     val currentYear = LocalDate.now().year
+                    if (centerEntry != null) {
+                        center = centerEntry.answer
+                    }
                     if (dobEntry != null) {
                         try {
                             patient.birthDate =
@@ -269,7 +274,9 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
                     val epid = if (originEntry != null) {
                         val countryCode = originEntry.answer.padEnd(3, 'X').take(3).uppercase()
-                        "$countryCode-$subCounty-$currentYear-MPOVAC-"
+                        "$countryCode-${
+                            center.padEnd(3, 'X').take(3).uppercase()
+                        }-$currentYear-MPOVAC-"
                     } else {
                         val countyCode = county.padEnd(3, 'X').take(3).uppercase()
                         val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()

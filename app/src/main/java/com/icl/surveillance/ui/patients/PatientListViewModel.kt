@@ -627,6 +627,104 @@ class PatientListViewModel(
     }
 
 
+    private suspend fun processVlCase(
+        fhirEngine: FhirEngine,
+        childEncounters: List<EncounterItem>,
+        data: PatientItem
+    ): PatientItem {
+        val childCase = childEncounters.firstOrNull { it.reasonCode == "VL Laboratory Examination" }
+            ?: return data
+
+        val obs1 = fhirEngine.search<Observation> {
+            filter(
+                Observation.ENCOUNTER,
+                { value = "Encounter/${childCase.id}" })
+        }
+
+        val resultsList = listOf(
+            obs1.getValue("286501145394"), // rapid
+            obs1.getValue("839711142610"), // dat
+            obs1.getValue("108406555539"), // aResult
+            obs1.getValue("320819009291")  // mResult
+        ).map { it.lowercase() }
+
+        val status = obs1.getValue("655245793432").takeUnless { it == "Other (specify)" }
+            ?: obs1.getValue("843481153132")
+
+        val results = when {
+            resultsList.any { it == "positive" } -> "Positive"
+            resultsList.all { it == "negative" } -> "Negative"
+            resultsList.all { it == "not done" } -> "Not Done"
+            else -> "Pending Results"
+        }
+
+        return data.copy(labResults = results, status = status)
+    }
+
+    private suspend fun processAfpCase(
+        fhirEngine: FhirEngine,
+        childEncounters: List<EncounterItem>,
+        data: PatientItem
+    ): PatientItem {
+        val childCase = childEncounters.firstOrNull { it.reasonCode == "AFP Final Lab Information" }
+            ?: return data
+
+        val obs1 = fhirEngine.search<Observation> {
+            filter(
+                Observation.ENCOUNTER,
+                { value = "Encounter/${childCase.id}" })
+        }
+
+        val afp = obs1.getValue("329949474707", "Pending")
+
+        val status = when (afp) {
+            "WPV", "cVDPV", "aVDPV", "iVDPV" -> "Confirmed by lab"
+            "Discarded" -> "Discarded"
+            "Compatible" -> "Compatible"
+            else -> "Pending"
+        }
+
+        return data.copy(labResults = afp, status = status)
+    }
+
+    private suspend fun processMeaslesCase(
+        fhirEngine: FhirEngine,
+        childEncounters: List<EncounterItem>,
+        data: PatientItem,
+//        obsMap: Map<String, Observation>
+    ): PatientItem {
+        val childCase = childEncounters.firstOrNull { it.reasonCode == "Measles Lab Information" }
+            ?: return data
+
+        val obs1 = fhirEngine.search<Observation> {
+            filter(
+                Observation.ENCOUNTER,
+                { value = "Encounter/${childCase.id}" })
+        }
+
+        val measlesIgm = obs1.getValue("measles-igm", "Pending")
+        val maxDays = "yes"// obsMap["308128177300"]?.resource?.value?.asStringValue().orEmpty()
+
+        val classification = when (measlesIgm.lowercase()) {
+            "positive" -> if (maxDays.lowercase() == "yes") "Pending" else "Confirmed by lab"
+            "negative" -> "Discarded"
+            "indeterminate" -> "Compatible/Clinical/Probable"
+            else -> "Pending Results"
+        }
+
+        return data.copy(labResults = measlesIgm, status = classification)
+    }
+
+    /* ----------------------- UTIL ----------------------- */
+
+    private fun List<SearchResult<Observation>>.getValue(
+        code: String,
+        default: String = "Pending"
+    ): String {
+        return this.firstOrNull { it.resource.code.codingFirstRep.code == code }
+            ?.resource?.value?.asStringValue() ?: default
+    }
+
     private suspend fun retrieveCasesByDisease(
         nameQuery: String,
     ): List<PatientItem> {
@@ -639,7 +737,7 @@ class PatientListViewModel(
                 val questionnaireData: MutableList<PatientItem> = mutableListOf()
                 fhirEngine.search<QuestionnaireResponse> {
                     sort(QuestionnaireResponse.AUTHORED, Order.ASCENDING)
-                    count = 500
+                    count = 1000
                     from = 0
                 }.mapIndexedNotNull { index, fhirPatient ->
                     if (fhirPatient.resource.hasIdentifier()) {
@@ -717,296 +815,382 @@ class PatientListViewModel(
             }
 
             else -> {
+                return fhirEngine.search<Patient> {
+                    sort(Patient.GIVEN, Order.ASCENDING)
+                    count = 1000
+                    from = 0
+                }.mapIndexedNotNull { index, fhirPatient ->
 
-                return fhirEngine
-                    .search<Patient> {
-                        sort(Patient.GIVEN, Order.ASCENDING)
-                        count = 500
-                        from = 0
-                    }
-                    .mapIndexedNotNull { index, fhirPatient ->
-                        // Only return the patient if one of the identifiers matches the system
-
-                        val matchingIdentifier = when (nameQuery) {
-                            "rcce" -> fhirPatient.resource.identifier.find {
-                                it.system == "rcce-community-questionnaire" || it.system == "rcce-countysubcounty-interface"
-                            }
-
-                            else -> fhirPatient.resource.identifier.find {
-                                it.system == nameQuery
-                            }
+                    val patient = fhirPatient.resource
+                    val matchingIdentifier = when (nameQuery) {
+                        "rcce" -> patient.identifier.find {
+                            it.system == "rcce-community-questionnaire" ||
+                                    it.system == "rcce-countysubcounty-interface"
                         }
-                        val epidIdenfifier =
-                            fhirPatient.resource.identifier.find { it.type.codingFirstRep.code == "EPID" }
 
+                        else -> patient.identifier.find { it.system == nameQuery }
+                    } ?: return@mapIndexedNotNull null
 
+                    val epidIdentifier =
+                        patient.identifier.find { it.type.codingFirstRep.code == "EPID" }
+                    val logicalId = matchingIdentifier.value
+                    val encounterQuestionnaire = matchingIdentifier.system
 
-                        if (matchingIdentifier != null) {
-                            // Convert the FHIR Patient resource to your PatientItem model
-                            var data = fhirPatient.resource.toPatientItem(index + 1)
-                            val logicalId = matchingIdentifier.value
-                            val encounterQuestionnaire = matchingIdentifier.system
-                            val obs =
-                                fhirEngine.search<Observation> {
-                                    filter(
-                                        Observation.ENCOUNTER,
-                                        { value = "Encounter/${logicalId}" })
-                                }.take(500)
+                    // Fetch all obs for this encounter once
+                    val obs = fhirEngine.search<Observation> {
+                        filter(
+                            Observation.ENCOUNTER,
+                            { value = "Encounter/${logicalId}" })
+                    }.take(500)
 
-                            val epid = if (epidIdenfifier != null) epidIdenfifier.value else
-                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "EPID" }
-                                    ?.resource
-                                    ?.value
-                                    ?.asStringValue() ?: ""
+                    val obsMap = obs.associateBy { it.resource.code.codingFirstRep.code }
 
-                            val county =
-                                if (fhirPatient.resource.hasAddress()) if (fhirPatient.resource.addressFirstRep.hasCity()) fhirPatient.resource.addressFirstRep.city else "" else
-                                    obs.firstOrNull { it.resource.code.codingFirstRep.code == "a4-county" }
-                                        ?.resource
-                                        ?.value
-                                        ?.asStringValue() ?: ""
-                            val subCounty =
-                                if (fhirPatient.resource.hasAddress()) if (fhirPatient.resource.addressFirstRep.hasState()) fhirPatient.resource.addressFirstRep.state else "" else
-                                    obs.firstOrNull { it.resource.code.codingFirstRep.code == "a3-sub-county" }
-                                        ?.resource
-                                        ?.value
-                                        ?.asStringValue() ?: ""
-                            val onset =
-                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "728034137219" }
-                                    ?.resource
-                                    ?.value
-                                    ?.asStringValue() ?: ""
-                            val caseList =
-                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "865158268604" }
-                                    ?.resource
-                                    ?.value
-                                    ?.asStringValue() ?: "Case"
+                    // Core demographics
+                    val epid = epidIdentifier?.value
+                        ?: obsMap["EPID"]?.resource?.value?.asStringValue().orEmpty()
 
+                    val county = patient.addressFirstRep?.city
+                        ?: obsMap["a4-county"]?.resource?.value?.asStringValue().orEmpty()
 
-                            val campaignDay =
-                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "campaign_day" }
-                                    ?.resource
-                                    ?.value
-                                    ?.asStringValue() ?: ""
-                            val teamNumber =
-                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "team_no" }
-                                    ?.resource
-                                    ?.value
-                                    ?.asStringValue() ?: ""
-                            val supervisorName =
-                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "supervisor_name" }
-                                    ?.resource
-                                    ?.value
-                                    ?.asStringValue() ?: ""
-                            var occupation =
-                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "occupation" }
-                                    ?.resource
-                                    ?.value
-                                    ?.asStringValue() ?: ""
-                            val occupationOther =
-                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "occupation-other" }
-                                    ?.resource
-                                    ?.value
-                                    ?.asStringValue() ?: ""
-                            if (occupation == "Other") {
-                                occupation = occupationOther
-                            }
-                            val vaccinationCenter =
-                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "vaccination_center" }
-                                    ?.resource
-                                    ?.value
-                                    ?.asStringValue() ?: ""
+                    val subCounty = patient.addressFirstRep?.state
+                        ?: obsMap["a3-sub-county"]?.resource?.value?.asStringValue().orEmpty()
 
-                            // Loading Lab Results
-                            val childEncounter = loadChildEncounter(data.resourceId, logicalId)
+                    val onset = obsMap["728034137219"]?.resource?.value?.asStringValue().orEmpty()
+                    val caseList =
+                        obsMap["865158268604"]?.resource?.value?.asStringValue() ?: "Case"
 
-                            when (nameQuery) {
+                    val campaignDay =
+                        obsMap["campaign_day"]?.resource?.value?.asStringValue().orEmpty()
+                    val teamNumber = obsMap["team_no"]?.resource?.value?.asStringValue().orEmpty()
+                    val supervisorName =
+                        obsMap["supervisor_name"]?.resource?.value?.asStringValue().orEmpty()
 
+                    var occupation =
+                        obsMap["occupation"]?.resource?.value?.asStringValue().orEmpty()
+                    val occupationOther =
+                        obsMap["occupation-other"]?.resource?.value?.asStringValue().orEmpty()
+                    if (occupation == "Other") occupation = occupationOther
 
-                                "moh-505-reporting-form" -> {
+                    val vaccinationCenter =
+                        obsMap["vaccination_center"]?.resource?.value?.asStringValue().orEmpty()
 
-                                }
+                    // Load child encounters (lab info, case info, etc.)
+                    val childEncounters = loadChildEncounter(patient.logicalId, logicalId)
 
-                                "vl-case-information" -> {
+                    var data = patient.toPatientItem(index + 1).copy(
+                        vaccinationCenter = vaccinationCenter,
+                        occupation = occupation,
+                        caseList = caseList,
+                        encounterId = logicalId,
+                        epid = epid,
+                        county = county,
+                        subCounty = subCounty,
+                        caseOnsetDate = onset,
+                        encounterQuestionnaire = encounterQuestionnaire,
+                        isSummary = isSummary,
+                        campaignDate = campaignDay,
+                        teamNumber = teamNumber,
+                        supervisorName = supervisorName
+                    )
 
-                                    val childCaseInfoEncounter =
-                                        childEncounter.firstOrNull {
-                                            it.reasonCode == "VL Laboratory Examination"
-                                        }
-
-                                    childCaseInfoEncounter?.let { kk ->
-                                        val obs1 =
-                                            fhirEngine.search<Observation> {
-                                                filter(
-                                                    Observation.ENCOUNTER,
-                                                    { value = "Encounter/${kk.id}" })
-                                            }
-                                        var results = "Pending Results"
-                                        val rapidResults =
-                                            obs1.firstOrNull { it.resource.code.codingFirstRep.code == "286501145394" }
-                                                ?.resource
-                                                ?.value
-                                                ?.asStringValue() ?: "Pending"
-                                        val datResult =
-                                            obs1.firstOrNull { it.resource.code.codingFirstRep.code == "839711142610" }
-                                                ?.resource
-                                                ?.value
-                                                ?.asStringValue() ?: "Pending"
-
-                                        val aResult =
-                                            obs1.firstOrNull { it.resource.code.codingFirstRep.code == "108406555539" }
-                                                ?.resource
-                                                ?.value
-                                                ?.asStringValue() ?: "Pending"
-                                        val mResult =
-
-                                            obs1.firstOrNull { it.resource.code.codingFirstRep.code == "320819009291" }
-                                                ?.resource
-                                                ?.value
-                                                ?.asStringValue() ?: "Pending"
-
-                                        var status =
-                                            obs1.firstOrNull { it.resource.code.codingFirstRep.code == "655245793432" }
-                                                ?.resource
-                                                ?.value
-                                                ?.asStringValue() ?: "Pending"
-                                        val otherStatus =
-                                            obs1.firstOrNull { it.resource.code.codingFirstRep.code == "843481153132" }
-                                                ?.resource
-                                                ?.value
-                                                ?.asStringValue() ?: "Pending"
-
-                                        if (status == "Other (specify)") {
-                                            status = otherStatus
-                                        }
-                                        // Normalize to lowercase for easier comparison
-                                        val allResults = listOf(
-                                            rapidResults,
-                                            datResult,
-                                            aResult,
-                                            mResult
-                                        ).map { it.lowercase() }
-
-                                        results = when {
-                                            allResults.any { it == "positive" } -> "Positive"
-                                            allResults.all { it == "negative" } -> "Negative"
-                                            allResults.all { it == "not done" } -> "Not Done"
-                                            else -> "Pending Results"
-                                        }
-
-                                        data = data.copy(
-                                            labResults = results,
-                                            status = status
-                                        )
-                                    }
-                                }
-
-                                "afp-case-information" -> {
-                                    // CLASSIFICATION FOR A AFP CASE
-                                    val childCaseInfoEncounter =
-                                        childEncounter.firstOrNull {
-                                            it.reasonCode == "AFP Final Lab Information"
-                                        }
-
-                                    childCaseInfoEncounter?.let { kk ->
-                                        val obs1 =
-                                            fhirEngine.search<Observation> {
-                                                filter(
-                                                    Observation.ENCOUNTER,
-                                                    { value = "Encounter/${kk.id}" })
-                                            }
-                                        val afp =
-                                            obs1.firstOrNull { it.resource.code.codingFirstRep.code == "329949474707" }
-                                                ?.resource
-                                                ?.value
-                                                ?.asStringValue() ?: "Pending"
-
-                                        data = data.copy(
-                                            labResults = afp,
-                                            status = when (afp) {
-                                                "WPV", "cVDPV", "aVDPV", "iVDPV" -> "Confirmed by lab"
-                                                "Discarded" -> "Discarded"
-                                                "Compatible" -> "Compatible"
-                                                else -> "Pending"
-                                            }
-                                        )
-                                    }
-                                }
-
-                                else -> {
-                                    var measlesIgm = "Pending"
-                                    var finalClassification = "Pending Results"
-                                    var maxDays = "No"
-                                    val childCaseInfoEncounter =
-                                        childEncounter.firstOrNull {
-                                            it.reasonCode == "Measles Lab Information"
-                                        }
-
-                                    childCaseInfoEncounter?.let { kk ->
-                                        val obs1 =
-                                            fhirEngine.search<Observation> {
-                                                filter(
-                                                    Observation.ENCOUNTER,
-                                                    { value = "Encounter/${kk.id}" })
-                                            }
-
-                                        measlesIgm =
-                                            obs1.firstOrNull { it.resource.code.codingFirstRep.code == "measles-igm" }
-                                                ?.resource
-                                                ?.value
-                                                ?.asStringValue() ?: "Pending"
-
-                                        maxDays =
-                                            obs.firstOrNull { it.resource.code.codingFirstRep.code == "308128177300" }
-                                                ?.resource
-                                                ?.value
-                                                ?.asStringValue() ?: ""
-
-
-                                        finalClassification = when (measlesIgm.lowercase()) {
-                                            "positive" -> {
-                                                when (maxDays.lowercase()) {
-                                                    "yes" -> "Pending"
-                                                    else -> "Confirmed by lab"
-                                                }
-                                            }
-
-                                            "negative" -> "Discarded"
-                                            "indeterminate" -> "Compatible/Clinical/Probable"
-                                            else -> "Pending Results"
-
-                                        }
-
-                                        data =
-                                            data.copy(
-                                                labResults = measlesIgm,
-                                                status = finalClassification,
-                                            )
-                                    }
-                                }
-                            }
-                            data =
-                                data.copy(
-                                    vaccinationCenter = vaccinationCenter,
-                                    occupation = occupation,
-                                    caseList = caseList,
-                                    encounterId = logicalId,
-                                    epid = epid,
-                                    county = county,
-                                    subCounty = subCounty,
-                                    caseOnsetDate = onset,
-                                    encounterQuestionnaire = encounterQuestionnaire,
-                                    isSummary = isSummary,
-                                    campaignDate = campaignDay,
-                                    teamNumber = teamNumber,
-                                    supervisorName = supervisorName
-                                )
-                            data
-                        } else {
-                            null // Not a match — exclude
-                        }
+                    // Lab result processing
+                    data = when (nameQuery) {
+                        "vl-case-information" -> processVlCase(fhirEngine, childEncounters, data)
+                        "afp-case-information" -> processAfpCase(fhirEngine, childEncounters, data)
+                        else -> processMeaslesCase(fhirEngine, childEncounters, data)
                     }
-                    .sortedByDescending { it.lastUpdated }
+
+                    data
+                }.sortedByDescending { it.lastUpdated }
+
+//                return fhirEngine
+//                    .search<Patient> {
+//                        count = 5000
+//                        from = 0
+//                    }
+//                    .mapIndexedNotNull { index, fhirPatient ->
+//                        // Only return the patient if one of the identifiers matches the system
+//
+//                        val matchingIdentifier = when (nameQuery) {
+//                            "rcce" -> fhirPatient.resource.identifier.find {
+//                                it.system == "rcce-community-questionnaire" || it.system == "rcce-countysubcounty-interface"
+//                            }
+//
+//                            else -> fhirPatient.resource.identifier.find {
+//                                it.system == nameQuery
+//                            }
+//                        }
+//                        val epidIdenfifier =
+//                            fhirPatient.resource.identifier.find { it.type.codingFirstRep.code == "EPID" }
+//
+//
+//
+//                        if (matchingIdentifier != null) {
+//                            // Convert the FHIR Patient resource to your PatientItem model
+//                            var data = fhirPatient.resource.toPatientItem(index + 1)
+//                            val logicalId = matchingIdentifier.value
+//                            val encounterQuestionnaire = matchingIdentifier.system
+//                            val obs =
+//                                fhirEngine.search<Observation> {
+//                                    filter(
+//                                        Observation.ENCOUNTER,
+//                                        { value = "Encounter/${logicalId}" })
+//                                }.take(500)
+//
+//                            val epid = if (epidIdenfifier != null) epidIdenfifier.value else
+//                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "EPID" }
+//                                    ?.resource
+//                                    ?.value
+//                                    ?.asStringValue() ?: ""
+//
+//                            val county =
+//                                if (fhirPatient.resource.hasAddress()) if (fhirPatient.resource.addressFirstRep.hasCity()) fhirPatient.resource.addressFirstRep.city else "" else
+//                                    obs.firstOrNull { it.resource.code.codingFirstRep.code == "a4-county" }
+//                                        ?.resource
+//                                        ?.value
+//                                        ?.asStringValue() ?: ""
+//                            val subCounty =
+//                                if (fhirPatient.resource.hasAddress()) if (fhirPatient.resource.addressFirstRep.hasState()) fhirPatient.resource.addressFirstRep.state else "" else
+//                                    obs.firstOrNull { it.resource.code.codingFirstRep.code == "a3-sub-county" }
+//                                        ?.resource
+//                                        ?.value
+//                                        ?.asStringValue() ?: ""
+//                            val onset =
+//                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "728034137219" }
+//                                    ?.resource
+//                                    ?.value
+//                                    ?.asStringValue() ?: ""
+//                            val caseList =
+//                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "865158268604" }
+//                                    ?.resource
+//                                    ?.value
+//                                    ?.asStringValue() ?: "Case"
+//
+//
+//                            val campaignDay =
+//                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "campaign_day" }
+//                                    ?.resource
+//                                    ?.value
+//                                    ?.asStringValue() ?: ""
+//                            val teamNumber =
+//                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "team_no" }
+//                                    ?.resource
+//                                    ?.value
+//                                    ?.asStringValue() ?: ""
+//                            val supervisorName =
+//                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "supervisor_name" }
+//                                    ?.resource
+//                                    ?.value
+//                                    ?.asStringValue() ?: ""
+//                            var occupation =
+//                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "occupation" }
+//                                    ?.resource
+//                                    ?.value
+//                                    ?.asStringValue() ?: ""
+//                            val occupationOther =
+//                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "occupation-other" }
+//                                    ?.resource
+//                                    ?.value
+//                                    ?.asStringValue() ?: ""
+//                            if (occupation == "Other") {
+//                                occupation = occupationOther
+//                            }
+//                            val vaccinationCenter =
+//                                obs.firstOrNull { it.resource.code.codingFirstRep.code == "vaccination_center" }
+//                                    ?.resource
+//                                    ?.value
+//                                    ?.asStringValue() ?: ""
+//
+//                            // Loading Lab Results
+//                            val childEncounter = loadChildEncounter(data.resourceId, logicalId)
+//
+//                            when (nameQuery) {
+//
+//
+//                                "moh-505-reporting-form" -> {
+//
+//                                }
+//
+//                                "vl-case-information" -> {
+//
+//                                    val childCaseInfoEncounter =
+//                                        childEncounter.firstOrNull {
+//                                            it.reasonCode == "VL Laboratory Examination"
+//                                        }
+//
+//                                    childCaseInfoEncounter?.let { kk ->
+//                                        val obs1 =
+//                                            fhirEngine.search<Observation> {
+//                                                filter(
+//                                                    Observation.ENCOUNTER,
+//                                                    { value = "Encounter/${kk.id}" })
+//                                            }
+//                                        var results = "Pending Results"
+//                                        val rapidResults =
+//                                            obs1.firstOrNull { it.resource.code.codingFirstRep.code == "286501145394" }
+//                                                ?.resource
+//                                                ?.value
+//                                                ?.asStringValue() ?: "Pending"
+//                                        val datResult =
+//                                            obs1.firstOrNull { it.resource.code.codingFirstRep.code == "839711142610" }
+//                                                ?.resource
+//                                                ?.value
+//                                                ?.asStringValue() ?: "Pending"
+//
+//                                        val aResult =
+//                                            obs1.firstOrNull { it.resource.code.codingFirstRep.code == "108406555539" }
+//                                                ?.resource
+//                                                ?.value
+//                                                ?.asStringValue() ?: "Pending"
+//                                        val mResult =
+//
+//                                            obs1.firstOrNull { it.resource.code.codingFirstRep.code == "320819009291" }
+//                                                ?.resource
+//                                                ?.value
+//                                                ?.asStringValue() ?: "Pending"
+//
+//                                        var status =
+//                                            obs1.firstOrNull { it.resource.code.codingFirstRep.code == "655245793432" }
+//                                                ?.resource
+//                                                ?.value
+//                                                ?.asStringValue() ?: "Pending"
+//                                        val otherStatus =
+//                                            obs1.firstOrNull { it.resource.code.codingFirstRep.code == "843481153132" }
+//                                                ?.resource
+//                                                ?.value
+//                                                ?.asStringValue() ?: "Pending"
+//
+//                                        if (status == "Other (specify)") {
+//                                            status = otherStatus
+//                                        }
+//                                        // Normalize to lowercase for easier comparison
+//                                        val allResults = listOf(
+//                                            rapidResults,
+//                                            datResult,
+//                                            aResult,
+//                                            mResult
+//                                        ).map { it.lowercase() }
+//
+//                                        results = when {
+//                                            allResults.any { it == "positive" } -> "Positive"
+//                                            allResults.all { it == "negative" } -> "Negative"
+//                                            allResults.all { it == "not done" } -> "Not Done"
+//                                            else -> "Pending Results"
+//                                        }
+//
+//                                        data = data.copy(
+//                                            labResults = results,
+//                                            status = status
+//                                        )
+//                                    }
+//                                }
+//
+//                                "afp-case-information" -> {
+//                                    // CLASSIFICATION FOR A AFP CASE
+//                                    val childCaseInfoEncounter =
+//                                        childEncounter.firstOrNull {
+//                                            it.reasonCode == "AFP Final Lab Information"
+//                                        }
+//
+//                                    childCaseInfoEncounter?.let { kk ->
+//                                        val obs1 =
+//                                            fhirEngine.search<Observation> {
+//                                                filter(
+//                                                    Observation.ENCOUNTER,
+//                                                    { value = "Encounter/${kk.id}" })
+//                                            }
+//                                        val afp =
+//                                            obs1.firstOrNull { it.resource.code.codingFirstRep.code == "329949474707" }
+//                                                ?.resource
+//                                                ?.value
+//                                                ?.asStringValue() ?: "Pending"
+//
+//                                        data = data.copy(
+//                                            labResults = afp,
+//                                            status = when (afp) {
+//                                                "WPV", "cVDPV", "aVDPV", "iVDPV" -> "Confirmed by lab"
+//                                                "Discarded" -> "Discarded"
+//                                                "Compatible" -> "Compatible"
+//                                                else -> "Pending"
+//                                            }
+//                                        )
+//                                    }
+//                                }
+//
+//                                else -> {
+//                                    var measlesIgm = "Pending"
+//                                    var finalClassification = "Pending Results"
+//                                    var maxDays = "No"
+//                                    val childCaseInfoEncounter =
+//                                        childEncounter.firstOrNull {
+//                                            it.reasonCode == "Measles Lab Information"
+//                                        }
+//
+//                                    childCaseInfoEncounter?.let { kk ->
+//                                        val obs1 =
+//                                            fhirEngine.search<Observation> {
+//                                                filter(
+//                                                    Observation.ENCOUNTER,
+//                                                    { value = "Encounter/${kk.id}" })
+//                                            }
+//
+//                                        measlesIgm =
+//                                            obs1.firstOrNull { it.resource.code.codingFirstRep.code == "measles-igm" }
+//                                                ?.resource
+//                                                ?.value
+//                                                ?.asStringValue() ?: "Pending"
+//
+//                                        maxDays =
+//                                            obs.firstOrNull { it.resource.code.codingFirstRep.code == "308128177300" }
+//                                                ?.resource
+//                                                ?.value
+//                                                ?.asStringValue() ?: ""
+//
+//
+//                                        finalClassification = when (measlesIgm.lowercase()) {
+//                                            "positive" -> {
+//                                                when (maxDays.lowercase()) {
+//                                                    "yes" -> "Pending"
+//                                                    else -> "Confirmed by lab"
+//                                                }
+//                                            }
+//
+//                                            "negative" -> "Discarded"
+//                                            "indeterminate" -> "Compatible/Clinical/Probable"
+//                                            else -> "Pending Results"
+//
+//                                        }
+//
+//                                        data =
+//                                            data.copy(
+//                                                labResults = measlesIgm,
+//                                                status = finalClassification,
+//                                            )
+//                                    }
+//                                }
+//                            }
+//                            data =
+//                                data.copy(
+//                                    vaccinationCenter = vaccinationCenter,
+//                                    occupation = occupation,
+//                                    caseList = caseList,
+//                                    encounterId = logicalId,
+//                                    epid = epid,
+//                                    county = county,
+//                                    subCounty = subCounty,
+//                                    caseOnsetDate = onset,
+//                                    encounterQuestionnaire = encounterQuestionnaire,
+//                                    isSummary = isSummary,
+//                                    campaignDate = campaignDay,
+//                                    teamNumber = teamNumber,
+//                                    supervisorName = supervisorName
+//                                )
+//                            data
+//                        } else {
+//                            null // Not a match — exclude
+//                        }
+//                    }
+//                    .sortedByDescending { it.lastUpdated }
             }
         }
     }

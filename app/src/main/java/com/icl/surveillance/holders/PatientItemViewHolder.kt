@@ -49,6 +49,8 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
     private val lnDateResultsLabel: LinearLayout = binding.tvDateResultsLabel
     private val tvDateResultsValue: LinearLayout = binding.tvDateResultsValue
     private val tvEpidLabel: TextView = binding.tvEpidLabel
+    private val lnCountyLabels: LinearLayout = binding.lnCountyLabels
+    private val lnCountyDetails: LinearLayout = binding.lnCountyDetails
 
 
     fun bindTo(
@@ -82,6 +84,12 @@ class PatientItemViewHolder(binding: PatientListItemViewBinding) :
             val slug = current.toSlug()
             when (slug) {
                 "mpox-register" -> {
+                    if (!patientItem.epid.startsWith("KEN")) {
+                        this.lnCountyLabels.visibility = View.GONE
+                        this.lnCountyDetails.visibility = View.GONE
+                        this.labResults.text = patientItem.subCounty
+                    }
+
                     this.lnFinalClassification.visibility = View.GONE
                     this.tvDateLabel.text = "Occupation"
                     this.tvLabLabel.text = "Vaccination Center"

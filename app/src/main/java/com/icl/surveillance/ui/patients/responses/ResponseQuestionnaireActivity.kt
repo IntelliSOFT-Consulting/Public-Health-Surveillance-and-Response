@@ -89,6 +89,11 @@ class ResponseQuestionnaireActivity : AppCompatActivity() {
             parseFromAssets(this, "mpox-supervisor-checklist.json").toMutableList()// this = Context
         patientDetailsViewModel.getInfoSummaryData("$questionnaireId")
         patientDetailsViewModel.liveSummaryData.observe(this) { data ->
+            patientDetailsViewModel.hasQuestionnaireResponse = true
+
+            invalidateOptionsMenu()
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setDisplayShowHomeEnabled(true)
 
             groups.forEach { group ->
                 // For each item inside the group
@@ -198,6 +203,12 @@ class ResponseQuestionnaireActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressedDispatcher.onBackPressed()
         return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        val hasResponse = patientDetailsViewModel.hasQuestionnaireResponse // set this as a flag
+        menu.findItem(R.id.action_edit)?.isVisible = hasResponse
+        return super.onPrepareOptionsMenu(menu)
     }
 
     // create a menu item here:

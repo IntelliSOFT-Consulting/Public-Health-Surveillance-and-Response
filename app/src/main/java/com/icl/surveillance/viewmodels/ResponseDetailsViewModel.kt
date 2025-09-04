@@ -25,6 +25,7 @@ class ResponseDetailsViewModel(
     private val fhirEngine: FhirEngine,
     private val questionnaireId: String,
 ) : AndroidViewModel(application) {
+    var hasQuestionnaireResponse: Boolean = true
     val liveSummaryData = MutableLiveData<PatientListViewModel.CaseDetailSummaryData>()
     fun getInfoSummaryData(slug: String) {
         CoroutineScope(Dispatchers.IO).launch {
