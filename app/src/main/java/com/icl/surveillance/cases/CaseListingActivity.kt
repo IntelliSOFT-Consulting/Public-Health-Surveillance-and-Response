@@ -68,6 +68,7 @@ class CaseListingActivity : AppCompatActivity() {
                     patientListViewModel.handleCurrentRumorCaseListing(slug)
                     recyclerView.adapter = adapterRumor
                 }
+
                 else -> {
                     patientListViewModel.handleCurrentCaseListing(slug)
                     recyclerView.adapter = adapter
@@ -141,6 +142,7 @@ class CaseListingActivity : AppCompatActivity() {
                 "afp-case-information" -> {
                     startActivity(Intent(this@CaseListingActivity, SummarizedActivity::class.java))
                 }
+
                 else -> {
                     startActivity(
                         Intent(
@@ -181,7 +183,6 @@ class CaseListingActivity : AppCompatActivity() {
                     startActivity(activityIntent2)
 
                 }
-
                 "social-listening-and-rumor-tracking-tool",
                 "vl-case-information", "mpox-tally-sheet",
                 "afp-case-information",

@@ -24,8 +24,6 @@ class TimestampBasedDownloadWorkManagerImpl(private val dataStore: DemoDataStore
         LinkedList(
             listOf(
                 "Patient?_sort=_lastUpdated",
-//                "Observation?_count=10000",
-//                "Encounter?_count=1000",
                 "Location?_count=1000",
                 "Specimen?_count=1000",
                 "MeasureReport?_count=1000",

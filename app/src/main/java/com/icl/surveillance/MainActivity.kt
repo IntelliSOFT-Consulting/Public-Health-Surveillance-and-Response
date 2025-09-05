@@ -371,7 +371,7 @@ class MainActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-                startActivity(Intent(this@MainActivity, SyncActivity::class.java))
+              //  startActivity(Intent(this@MainActivity, SyncActivity::class.java))
                 true
             }
 

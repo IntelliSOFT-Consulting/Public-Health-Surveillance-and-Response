@@ -64,6 +64,7 @@
                 app:boxCornerRadiusTopStart="50dp"
                 app:boxStrokeColor="@android:color/black"
                 app:hintEnabled="true"
+
                 app:startIconDrawable="@android:drawable/ic_menu_search"
                 app:startIconTint="@color/black">
 

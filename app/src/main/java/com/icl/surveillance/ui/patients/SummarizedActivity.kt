@@ -266,29 +266,35 @@ class SummarizedActivity : AppCompatActivity() {
                                 "mpox-tally-sheet.json",
                                 this@SummarizedActivity
                             )
+                            Toast.makeText(this@SummarizedActivity,"Coming soon", Toast.LENGTH_SHORT).show()
                         }
 
-                        "mpox-register" ->
+                        "mpox-register" -> {
                             FormatterClass().saveSharedPref(
                                 "questionnaire",
                                 "mpox-register.json",
                                 this@SummarizedActivity
                             )
+                            val patientId =
+                                FormatterClass().getSharedPref(
+                                    "resourceId",
+                                    this@SummarizedActivity
+                                )
+
+                            val intent = Intent(
+                                this@SummarizedActivity,
+                                EditChecklistActivity::class.java
+                            ).apply {
+                                putExtra("questionnaire_id", patientId)
+                            }
+                            startActivity(intent)
+                        }
 
                         else -> {
-
+                            Toast.makeText(this@SummarizedActivity,"Coming soon", Toast.LENGTH_SHORT).show()
                         }
                     }
-                    val patientId =
-                        FormatterClass().getSharedPref("resourceId", this@SummarizedActivity)
 
-                    val intent = Intent(
-                        this@SummarizedActivity,
-                        EditChecklistActivity::class.java
-                    ).apply {
-                        putExtra("questionnaire_id", patientId)
-                    }
-                    startActivity(intent)
                 }
                 return true
             }

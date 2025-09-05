@@ -193,81 +193,83 @@ class ClientDetailsViewModel(
         println("Dealing with the current Slug View Model $slug")
         val searchResult =
             fhirEngine.search<Patient> { filter(Resource.RES_ID, { value = of(patientId) }) }
-        searchResult.first().let {
-            logicalId = it.resource.logicalId
-            name =
-                if (it.resource.hasName()) {
-                    "${it.resource.name[0].givenAsSingleString} ${it.resource.name[0].family} "
-                } else ""
-            sex = if (it.resource.hasGenderElement()) it.resource.gender.display else ""
-            dob =
-                if (it.resource.hasBirthDateElement())
-                    if (it.resource.birthDateElement.hasValue())
-                        it.resource.birthDateElement.valueAsString
+        if (searchResult.isNotEmpty()) {
+            searchResult.first().let {
+                logicalId = it.resource.logicalId
+                name =
+                    if (it.resource.hasName()) {
+                        "${it.resource.name[0].givenAsSingleString} ${it.resource.name[0].family} "
+                    } else ""
+                sex = if (it.resource.hasGenderElement()) it.resource.gender.display else ""
+                dob =
+                    if (it.resource.hasBirthDateElement())
+                        if (it.resource.birthDateElement.hasValue())
+                            it.resource.birthDateElement.valueAsString
+                        else ""
                     else ""
-                else ""
 
 
-            val matchingIdentifier = it.resource.identifier.find {
-                it.system == slug
-            }
-
-
-            val epidIdenfifier =
-                it.resource.identifier.find { it.type.codingFirstRep.code == "EPID" }
-
-            if (epidIdenfifier != null) {
-                epidNo = epidIdenfifier.value
-            }
-            if (matchingIdentifier != null) {
-                encounterId = matchingIdentifier.value
-
-
-                fhirEngine.search<Observation> {
-                    filter(
-                        Observation.ENCOUNTER,
-                        { value = "Encounter/${matchingIdentifier.value}" })
+                val matchingIdentifier = it.resource.identifier.find {
+                    it.system == slug
                 }
-                    .map { ob ->
 
 
-                        val value =
-                            if (ob.resource.hasValueQuantity()) {
-                                ob.resource.valueQuantity.value.toString()
-                            } else if (ob.resource.hasValueCodeableConcept()) {
-                                ob.resource.valueCodeableConcept.coding.firstOrNull()?.display
-                                    ?: ""
-                            } else if (ob.resource.hasValueStringType()) {
-                                ob.resource.valueStringType.valueAsString
-                            } else {
-                                ""
-                            }
+                val epidIdenfifier =
+                    it.resource.identifier.find { it.type.codingFirstRep.code == "EPID" }
 
-                        val created =
-                            if (ob.resource.hasIssued()) ob.resource.issuedElement.value.toString() else ""
-                        val item = PatientListViewModel.ObservationItem(
-                            id = ob.resource.logicalId,
-                            code = ob.resource.code.codingFirstRep.code,
-                            value = value,
-                            created = created
-                        )
-                        observations.add(item)
-                    }
-                val obs =
+                if (epidIdenfifier != null) {
+                    epidNo = epidIdenfifier.value
+                }
+                if (matchingIdentifier != null) {
+                    encounterId = matchingIdentifier.value
+
+
                     fhirEngine.search<Observation> {
                         filter(
                             Observation.ENCOUNTER,
                             { value = "Encounter/${matchingIdentifier.value}" })
-                    }.take(500)
+                    }
+                        .map { ob ->
 
-                if (epidNo.isEmpty()) {
-                    epidNo = obs.firstOrNull { it.resource.code.codingFirstRep.code == "EPID" }
-                        ?.resource
-                        ?.value
-                        ?.asStringValue() ?: ""
+
+                            val value =
+                                if (ob.resource.hasValueQuantity()) {
+                                    ob.resource.valueQuantity.value.toString()
+                                } else if (ob.resource.hasValueCodeableConcept()) {
+                                    ob.resource.valueCodeableConcept.coding.firstOrNull()?.display
+                                        ?: ""
+                                } else if (ob.resource.hasValueStringType()) {
+                                    ob.resource.valueStringType.valueAsString
+                                } else {
+                                    ""
+                                }
+
+                            val created =
+                                if (ob.resource.hasIssued()) ob.resource.issuedElement.value.toString() else ""
+                            val item = PatientListViewModel.ObservationItem(
+                                id = ob.resource.logicalId,
+                                code = ob.resource.code.codingFirstRep.code,
+                                value = value,
+                                created = created
+                            )
+                            observations.add(item)
+                        }
+                    val obs =
+                        fhirEngine.search<Observation> {
+                            filter(
+                                Observation.ENCOUNTER,
+                                { value = "Encounter/${matchingIdentifier.value}" })
+                        }.take(500)
+
+                    if (epidNo.isEmpty()) {
+                        epidNo = obs.firstOrNull { it.resource.code.codingFirstRep.code == "EPID" }
+                            ?.resource
+                            ?.value
+                            ?.asStringValue() ?: ""
+                    }
                 }
-            }
 
+            }
         }
         return PatientListViewModel.CaseDetailSummaryData(
             logicalId = logicalId,
