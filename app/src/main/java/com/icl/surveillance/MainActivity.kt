@@ -355,6 +355,10 @@ class MainActivity : AppCompatActivity() {
                         )
                         DemoDataStore(this@MainActivity).clearAllTimestamps(trackedResources)
                         viewModel.triggerOneTimeSync()
+                        //  show toast
+                        Toast.makeText(this@MainActivity, "Sync Started ... ", Toast.LENGTH_SHORT).show()
+
+
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -371,7 +375,9 @@ class MainActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-              //  startActivity(Intent(this@MainActivity, SyncActivity::class.java))
+                // Display toast to show sync has started
+                Toast.makeText(this, "Sync Started ... ", Toast.LENGTH_SHORT).show()
+                //  startActivity(Intent(this@MainActivity, SyncActivity::class.java))
                 true
             }
 
