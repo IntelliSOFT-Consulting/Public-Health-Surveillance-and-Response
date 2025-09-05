@@ -1,6 +1,5 @@
 package com.icl.surveillance.ui.patients
 
-import android.R
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
@@ -20,9 +19,14 @@ import com.google.android.fhir.search.revInclude
 import com.google.android.fhir.search.search
 import com.google.android.gms.common.internal.GmsClientSupervisor
 import com.icl.surveillance.utils.FormatterClass
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import java.time.LocalDate
 import java.time.ZoneId
 import kotlinx.coroutines.launch
@@ -63,7 +67,130 @@ class PatientListViewModel(
     val liveSearchedCases = MutableLiveData<List<PatientItem>>()
     val liveRumorCases = MutableLiveData<List<RumorItem>>()
     val patientCount = MutableLiveData<Long>()
+    private val _patients = MutableStateFlow<List<PatientItem>>(emptyList())
+    val patients: StateFlow<List<PatientItem>> = _patients
 
+    private var page = 0
+    private val pageSize = 50
+    private var hasMore = true
+    private var isLoading = false
+
+    fun simulateScrollUntilEnd(slug: String, onFinished: (List<PatientItem>) -> Unit) {
+        viewModelScope.launch {
+            while (hasMore) {
+                loadMpoxPatientList(slug)
+                delay(300L) // optional pause to mimic scrolling
+            }
+            // When done, send back the full list
+            onFinished(_patients.value)
+        }
+    }
+
+    fun loadMpoxPatientList(nameQuery: String) {
+        val isSummary = nameQuery.contains("mpox")
+        if (!hasMore || isLoading) return
+        isLoading = true
+        page++
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val results = fhirEngine.search<Patient> {
+                sort(Patient.GIVEN, Order.ASCENDING)
+                count = pageSize
+                from = (page - 1) * pageSize
+                revInclude<Observation>(Observation.SUBJECT)
+            }
+
+            println("Mpox Results ${results.count()}")
+            if (results.isEmpty()) {
+                hasMore = false
+            } else {
+                val mapped = results.mapIndexedNotNull { index, wrapper ->
+                    val p = wrapper.resource
+                    val matchingIdentifier = p.identifier.find {
+                        it.system == nameQuery
+                    }
+                    if (matchingIdentifier != null) {
+
+                        val obs =
+                            wrapper.revIncluded?.get(ResourceType.Observation to Observation.SUBJECT.paramName) as? List<Observation>
+                                ?: emptyList()
+                        val epid =
+                            obs.firstOrNull { it.code.codingFirstRep.code == "EPID" }?.value?.asStringValue()
+                                ?: ""
+
+                        val county =
+                            obs.firstOrNull { it.code.codingFirstRep.code == "a4-county" }?.value?.asStringValue()
+                                ?: ""
+                        val subCounty =
+                            obs.firstOrNull { it.code.codingFirstRep.code == "a3-sub-county" }?.value?.asStringValue()
+                                ?: ""
+                        val onset =
+                            obs.firstOrNull { it.code.codingFirstRep.code == "728034137219" }?.value?.asStringValue()
+                                ?: ""
+                        val caseList =
+                            obs.firstOrNull { it.code.codingFirstRep.code == "865158268604" }?.value?.asStringValue()
+                                ?: "Case"
+
+
+                        val campaignDay =
+                            obs.firstOrNull { it.code.codingFirstRep.code == "campaign_day" }?.value?.asStringValue()
+                                ?: ""
+                        val teamNumber =
+                            obs.firstOrNull { it.code.codingFirstRep.code == "team_no" }?.value?.asStringValue()
+                                ?: ""
+                        val supervisorName =
+                            obs.firstOrNull { it.code.codingFirstRep.code == "supervisor_name" }?.value?.asStringValue()
+                                ?: ""
+                        var occupation =
+                            obs.firstOrNull { it.code.codingFirstRep.code == "occupation" }?.value?.asStringValue()
+                                ?: ""
+                        val occupationOther =
+                            obs.firstOrNull { it.code.codingFirstRep.code == "occupation_other" }?.value?.asStringValue()
+                                ?: ""
+
+                        if (occupation == "Other") {
+                            occupation = occupationOther
+                        }
+                        val vaccinationCenter =
+                            obs.firstOrNull { it.code.codingFirstRep.code == "vaccination_center" }?.value?.asStringValue()
+                                ?: ""
+                        val logicalId = matchingIdentifier.value
+                        val encounterQuestionnaire = matchingIdentifier.system
+                        PatientItem(
+                            id = (index + 1).toString(),
+                            resourceId = p.logicalId,
+                            encounterId = logicalId,
+                            name = if (p.hasName()) p.nameFirstRep.nameAsSingleString else "",
+                            gender = "",
+                            phone = "",
+                            city = "",
+                            country = "",
+                            isActive = true,
+                            epid = " $epid",
+                            county = " $county",
+                            subCounty = " $subCounty",
+                            caseOnsetDate = "",
+                            lastUpdated = "",
+                            encounterQuestionnaire = "$encounterQuestionnaire",
+                            isSummary = isSummary,
+                            campaignDate = "",
+                            teamNumber = " $teamNumber",
+                            supervisorName = "",
+                            vaccinationCenter = " $vaccinationCenter",
+                            occupation = " $occupation",
+                            syncStatus = "Pending",
+                        )
+                    } else {
+                        null
+                    }
+                }
+
+                _patients.update { it + mapped }
+            }
+
+            isLoading = false
+        }
+    }
 
     init {
         updatePatientListAndPatientCount({ getSearchResults() }, { searchedPatientCount() })
@@ -239,8 +366,7 @@ class PatientListViewModel(
             measles.equals("Positive", ignoreCase = true) -> "Confirmed by lab"
             rubella.equals("Positive", ignoreCase = true) -> "Confirmed rubella"
             measles.equals("Negative", ignoreCase = true) && rubella.equals(
-                "Negative",
-                ignoreCase = true
+                "Negative", ignoreCase = true
             ) -> "Discarded"
 
             else -> "" // no classification
@@ -366,21 +492,19 @@ class PatientListViewModel(
                             val patientId = data.resource.subject.reference.split("/").last()
                             println("Related Patient: $patientId")
 
-                            val searchResult =
-                                fhirEngine.search<Patient> {
-                                    filter(Resource.RES_ID, { value = of(patientId) })
-                                    revInclude<Observation>(Observation.SUBJECT)
-                                }
+                            val searchResult = fhirEngine.search<Patient> {
+                                filter(Resource.RES_ID, { value = of(patientId) })
+                                revInclude<Observation>(Observation.SUBJECT)
+                            }
                             if (searchResult.isNotEmpty()) {
                                 searchResult.first().let {
-                                 val    encounterId =
-                                        if (it.resource.hasIdentifier()) {
-                                            val enco =
-                                                it.resource.identifier.find { id -> id.system == "mpox-tally-sheet" }
-                                            if (enco != null) {
-                                                enco.value
-                                            } else ""
+                                    val encounterId = if (it.resource.hasIdentifier()) {
+                                        val enco =
+                                            it.resource.identifier.find { id -> id.system == "mpox-tally-sheet" }
+                                        if (enco != null) {
+                                            enco.value
                                         } else ""
+                                    } else ""
                                     println("Related Patient: Encounter ${it.resource.id}")
                                     val observations =
                                         it.revIncluded?.get(ResourceType.Observation to Observation.SUBJECT.paramName) as? List<Observation>
@@ -453,14 +577,16 @@ class PatientListViewModel(
                 return questionnaireData.sortedByDescending { it.lastUpdated }
             }
 
-            "mpox-registers" -> {
+            "mpox-register" -> {
+
+                val totalPatients = fhirEngine.count<Patient> {
+                    // you can add filters here if needed
+                }
+                println("Total Patients = $totalPatients")
                 val questionnaireData: MutableList<PatientItem> = mutableListOf()
                 fhirEngine.search<Patient> {
                     sort(Patient.GIVEN, Order.ASCENDING)
                     revInclude<Observation>(Observation.SUBJECT)
-                    revInclude<Encounter>(Encounter.SUBJECT)
-//                        count = 5000
-//                        from = 0
                 }.mapIndexedNotNull { index, fhirPatient ->
                     val matchingIdentifier = fhirPatient.resource.identifier.find {
                         it.system == nameQuery
@@ -670,8 +796,7 @@ class PatientListViewModel(
                                 childCaseInfoEncounter?.let { kk ->
                                     val obs1 = fhirEngine.search<Observation> {
                                         filter(
-                                            Observation.ENCOUNTER,
-                                            { value = "Encounter/${kk.id}" })
+                                            Observation.ENCOUNTER, { value = "Encounter/${kk.id}" })
                                     }
                                     var results = "Pending Results"
                                     val rapidResults =
@@ -726,8 +851,7 @@ class PatientListViewModel(
                                 childCaseInfoEncounter?.let { kk ->
                                     val obs1 = fhirEngine.search<Observation> {
                                         filter(
-                                            Observation.ENCOUNTER,
-                                            { value = "Encounter/${kk.id}" })
+                                            Observation.ENCOUNTER, { value = "Encounter/${kk.id}" })
                                     }
                                     val afp =
                                         obs1.firstOrNull { it.resource.code.codingFirstRep.code == "329949474707" }?.resource?.value?.asStringValue()
@@ -755,8 +879,7 @@ class PatientListViewModel(
                                 childCaseInfoEncounter?.let { kk ->
                                     val obs1 = fhirEngine.search<Observation> {
                                         filter(
-                                            Observation.ENCOUNTER,
-                                            { value = "Encounter/${kk.id}" })
+                                            Observation.ENCOUNTER, { value = "Encounter/${kk.id}" })
                                     }
 
                                     measlesIgm =
@@ -2575,8 +2698,7 @@ class PatientListViewModel(
     private suspend fun loadEncounter(patientId: String): List<Encounter> {
         return fhirEngine.search<Encounter> {
             filter(
-                Encounter.SUBJECT,
-                { value = "Patient/$patientId" })
+                Encounter.SUBJECT, { value = "Patient/$patientId" })
         }.map { it.resource }
     }
 

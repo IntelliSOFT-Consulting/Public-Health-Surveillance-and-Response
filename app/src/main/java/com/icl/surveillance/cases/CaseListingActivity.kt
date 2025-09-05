@@ -9,9 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.fhir.FhirEngine
 import com.icl.surveillance.R
+import com.icl.surveillance.adapters.MpoxPatientAdapter
 import com.icl.surveillance.adapters.PatientItemRecyclerViewAdapter
 import com.icl.surveillance.adapters.PatientItemRecyclerViewAdapterRumor
 import com.icl.surveillance.databinding.ActivityCaseListingBinding
@@ -21,11 +24,13 @@ import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.ui.patients.SummarizedActivity
 import com.icl.surveillance.ui.patients.responses.ResponseQuestionnaireActivity
 import com.icl.surveillance.utils.FormatterClass
+import kotlinx.coroutines.launch
 
 class CaseListingActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCaseListingBinding
     private lateinit var fhirEngine: FhirEngine
+    private val items = mutableListOf<PatientListViewModel.PatientItem>()
     private lateinit var patientListViewModel: PatientListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,16 +72,6 @@ class CaseListingActivity : AppCompatActivity() {
                 "social-listening-and-rumor-tracking-tool" -> {
                     patientListViewModel.handleCurrentRumorCaseListing(slug)
                     recyclerView.adapter = adapterRumor
-                }
-
-                else -> {
-                    patientListViewModel.handleCurrentCaseListing(slug)
-                    recyclerView.adapter = adapter
-                }
-            }
-
-            when (slug) {
-                "social-listening-and-rumor-tracking-tool" -> {
                     patientListViewModel.liveRumorCases.observe(this) {
                         binding.apply {
                             count.text = "Showing ${it.size} Results"
@@ -95,7 +90,53 @@ class CaseListingActivity : AppCompatActivity() {
                     }
                 }
 
+                "mpox-register" -> {
+                    val adapterRegister = MpoxPatientAdapter(
+                        items,
+                        this::onPatientItemClicked,
+                        "$titleName",
+                        this@CaseListingActivity
+                    )
+                    recyclerView.adapter = adapterRegister
+                    recyclerView.layoutManager = LinearLayoutManager(this@CaseListingActivity)
+                    patientListViewModel.loadMpoxPatientList(slug)
+                    patientListViewModel.simulateScrollUntilEnd(slug) { allPatients ->
+                        binding.apply {
+                            count.text = "Showing ${allPatients.size} Results"
+                        }
+                    }
+
+                    lifecycleScope.launch {
+                        patientListViewModel.patients.collect { newList ->
+                            adapterRegister.addPatients(newList) // only append new ones
+//                            items.clear()
+//                            items.addAll(newList)
+                            if (newList.isNotEmpty()) {
+                                binding.apply {
+//                                    count.text = "Showing ${newList.size} Results"
+                                    patientListContainer.pbProgress.visibility = View.GONE
+                                }
+                            }
+                        }
+                    }
+                    recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                        override fun onScrolled(rv: RecyclerView, dx: Int, dy: Int) {
+                            super.onScrolled(rv, dx, dy)
+                            val layoutManager = rv.layoutManager as LinearLayoutManager
+                            val visibleItemCount = layoutManager.childCount
+                            val totalItemCount = layoutManager.itemCount
+                            val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
+
+                            if (visibleItemCount + firstVisibleItem >= totalItemCount - 5) {
+                                patientListViewModel.loadMpoxPatientList(slug)
+                            }
+                        }
+                    })
+                }
+
                 else -> {
+                    patientListViewModel.handleCurrentCaseListing(slug)
+                    recyclerView.adapter = adapter
                     patientListViewModel.liveSearchedCases.observe(this) {
                         binding.apply {
                             count.text = "Showing ${it.size} Results"
@@ -183,6 +224,7 @@ class CaseListingActivity : AppCompatActivity() {
                     startActivity(activityIntent2)
 
                 }
+
                 "social-listening-and-rumor-tracking-tool",
                 "vl-case-information", "mpox-tally-sheet",
                 "afp-case-information",

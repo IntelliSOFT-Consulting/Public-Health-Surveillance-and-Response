@@ -515,11 +515,24 @@ class CaseSelectionFragment : Fragment() {
         caseType?.let {
             try {
 
-                patientListViewModel.handleCurrentCaseListing(it)
+                when (it) {
+                    "mpox-register" -> {
+                        patientListViewModel.simulateScrollUntilEnd(it) { allPatients ->
+                            println("Loaded total patients: ${allPatients.size}")
 
-                patientListViewModel.liveSearchedCases.observe(viewLifecycleOwner) { cases ->
-                    caseOptions[1] = caseOptions[1].copy(count = cases.size)
-                    recyclerView.adapter?.notifyDataSetChanged()
+                            caseOptions[1] = caseOptions[1].copy(count = allPatients.size)
+                            recyclerView.adapter?.notifyDataSetChanged()
+                        }
+                    }
+
+                    else -> {
+                        patientListViewModel.handleCurrentCaseListing(it)
+
+                        patientListViewModel.liveSearchedCases.observe(viewLifecycleOwner) { cases ->
+                            caseOptions[1] = caseOptions[1].copy(count = cases.size)
+                            recyclerView.adapter?.notifyDataSetChanged()
+                        }
+                    }
                 }
 
             } catch (e: Exception) {
