@@ -9,18 +9,19 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitBuilder {
 
-    fun getRetrofit(BASE_URL:String): Retrofit {
+    fun getRetrofit(baseUrl: String): Retrofit {
 
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
 
         val client = OkHttpClient.Builder()
-            .readTimeout(2, TimeUnit.MINUTES)
+            .readTimeout(5, TimeUnit.MINUTES)
+            .writeTimeout(5, TimeUnit.MINUTES)
             .connectTimeout(2, TimeUnit.MINUTES)
             .addInterceptor(interceptor).build()
 
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(baseUrl)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build() //Doesn't require the adapter

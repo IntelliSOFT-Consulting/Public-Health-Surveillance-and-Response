@@ -16,20 +16,91 @@ import com.icl.surveillance.models.DbSignIn
 import com.icl.surveillance.models.DbUser
 import com.icl.surveillance.models.UrlData
 import com.icl.surveillance.utils.FormatterClass
+import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import okhttp3.RequestBody
+import org.hl7.fhir.r4.model.Bundle
 import retrofit2.Response
 
 class RetrofitCallsAuthentication {
+    private val backgroundProcessingScope = CoroutineScope(
+        SupervisorJob() + Dispatchers.IO + CoroutineName("BackgroundProcessing")
+    )
 
     fun loginUser(context: Context, dbSignIn: DbSignIn) {
 
         CoroutineScope(Dispatchers.Main).launch {
             val job = Job()
             CoroutineScope(Dispatchers.IO + job).launch { startLogin(context, dbSignIn) }.join()
+        }
+    }
+
+    fun sendPatientToServer(
+        id: String,
+        payload: RequestBody
+    ) {
+        backgroundProcessingScope.launch {
+            val baseUrl = "https://hapi.fhir.org/baseR4/"
+            val apiService =
+                RetrofitBuilder.getRetrofit(baseUrl).create(Interface::class.java)
+            println("API Response:::: Started posting data $id -> payload $payload")
+            try {
+                val apiInterface = apiService.sendPatientToServer(id, payload)
+                if (apiInterface.isSuccessful) {
+                    val statusCode = apiInterface.code()
+                    val body = apiInterface.body()
+                    if (statusCode == 200 || statusCode == 201) {
+                        if (body != null) {
+                            println("API Response::::Success $body")
+                        } else {
+                            println("API Response:::: Body is null")
+                        }
+                    } else {
+                        println("API Response:::: Error Status Code: $statusCode")
+                    }
+                } else {
+                    val errorBody = apiInterface.errorBody()?.string()
+                    println("API Response:::: Error Response for $id")
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                println("API Response:::: Error -> ${e.message}")
+            }
+        }
+    }
+
+    fun sendBundleToServer(payload: RequestBody) {
+        backgroundProcessingScope.launch {
+            val baseUrl = "https://dsrfhir.intellisoftkenya.com/hapi/fhir/"
+            val apiService =
+                RetrofitBuilder.getRetrofit(baseUrl).create(Interface::class.java)
+            println("API Response:::: Started posting data")
+            try {
+                val apiInterface = apiService.sendBundleToServer(payload)
+                if (apiInterface.isSuccessful) {
+                    val statusCode = apiInterface.code()
+                    val body = apiInterface.body()
+                    if (statusCode == 200 || statusCode == 201) {
+                        if (body != null) {
+                            println("API Response:::: $body")
+                        } else {
+                            println("API Response:::: Body is null")
+                        }
+                    } else {
+                        println("API Response:::: Error Status Code: $statusCode")
+                    }
+                } else {
+                    println("API Response:::: Error Response: ${apiInterface.code()} ")
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                println("API Response:::: Error -> ${e.message}")
+            }
         }
     }
 
@@ -107,7 +178,8 @@ class RetrofitCallsAuthentication {
                         } else {
                             apiInterface.errorBody()?.let {
                                 //                  val errorBody = JSONObject(it.string())
-                                messageToast = "Invalid login credentials. Please try again." // errorBody.getString("error")
+                                messageToast =
+                                    "Invalid login credentials. Please try again." // errorBody.getString("error")
                             }
                         }
                     } catch (e: Exception) {

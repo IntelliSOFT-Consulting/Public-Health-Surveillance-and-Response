@@ -1,15 +1,17 @@
 package com.icl.surveillance.ui.patients
 
 import android.app.Application
-import android.content.Context
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import ca.uhn.fhir.context.FhirContext
+import ca.uhn.fhir.context.FhirVersionEnum
+import ca.uhn.fhir.parser.IParser
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.SearchResult
-import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.google.android.fhir.datacapture.extensions.asStringValue
 import com.google.android.fhir.datacapture.extensions.logicalId
 import com.google.android.fhir.search.Order
@@ -17,8 +19,7 @@ import com.google.android.fhir.search.StringFilterModifier
 import com.google.android.fhir.search.count
 import com.google.android.fhir.search.revInclude
 import com.google.android.fhir.search.search
-import com.google.android.gms.common.internal.GmsClientSupervisor
-import com.icl.surveillance.utils.FormatterClass
+import com.icl.surveillance.network.RetrofitCallsAuthentication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -30,8 +31,10 @@ import kotlinx.coroutines.flow.update
 import java.time.LocalDate
 import java.time.ZoneId
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.hl7.fhir.r4.model.BooleanType
-import org.hl7.fhir.r4.model.CodeType
+import org.hl7.fhir.r4.model.Bundle
 import org.hl7.fhir.r4.model.Coding
 import org.hl7.fhir.r4.model.DateTimeType
 import org.hl7.fhir.r4.model.DateType
@@ -51,10 +54,7 @@ import org.hl7.fhir.r4.model.ResourceType
 import org.hl7.fhir.r4.model.StringType
 import org.hl7.fhir.r4.model.TimeType
 import org.hl7.fhir.r4.model.UriType
-import java.lang.reflect.Type
 import java.text.SimpleDateFormat
-import java.time.OffsetDateTime
-import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
@@ -72,8 +72,300 @@ class PatientListViewModel(
 
     private var page = 0
     private val pageSize = 50
+    private var pageUpload = 0
+    private val pageSizeUpload = 50
     private var hasMore = true
     private var isLoading = false
+    private var hasMoreUpload = true
+    private var isUploadLoading = false
+
+    fun prepareListInBatches(nameQuery: String) {
+        val isSummary = nameQuery.contains("mpox")
+        if (!hasMoreUpload || isUploadLoading) return
+        isUploadLoading = true
+        page++
+        val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val results = fhirEngine.search<Patient> {
+                sort(Patient.GIVEN, Order.ASCENDING)
+                count = pageSizeUpload
+                from = (pageUpload - 1) * pageSizeUpload
+            }
+
+            if (results.isEmpty()) {
+                hasMoreUpload = false
+            } else {
+                val bundle = Bundle()
+                bundle.type = Bundle.BundleType.TRANSACTION
+
+                results.forEach { patient ->
+                    val patientResource = patient.resource.copy() as Patient
+                    patientResource.nameFirstRep.family = "test-bundle-2"
+                    //  sendSingleEntry(jsonParser, patientResource)
+                    val bundleEntry = Bundle.BundleEntryComponent()
+                    bundleEntry.resource = patientResource
+                    bundleEntry.fullUrl = "Patient/${patientResource.idElement.idPart}"
+                    bundleEntry.request = Bundle.BundleEntryRequestComponent()
+                    bundleEntry.request.setMethod(Bundle.HTTPVerb.PUT)
+                    bundleEntry.request.url =
+                        "Patient/${patientResource.idElement.idPart}"
+                    bundle.addEntry(bundleEntry)
+                }
+                sendBundleToServer(jsonParser, bundle)
+            }
+            isUploadLoading = false
+        }
+    }
+
+    fun prepareEncountersBatches(nameQuery: String) {
+        val isSummary = nameQuery.contains("mpox")
+        if (!hasMoreUpload || isUploadLoading) return
+        isUploadLoading = true
+        page++
+        val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val results = fhirEngine.search<Encounter> {
+                count = pageSizeUpload
+                from = (pageUpload - 1) * pageSizeUpload
+            }
+
+            if (results.isEmpty()) {
+                hasMoreUpload = false
+            } else {
+                val bundle = Bundle()
+                bundle.type = Bundle.BundleType.TRANSACTION
+
+                results.forEach { patient ->
+                    val patientResource = patient.resource.copy() as Encounter
+//                    patientResource.nameFirstRep.family = "test-bundle-2"
+                    //  sendSingleEntry(jsonParser, patientResource)
+                    val bundleEntry = Bundle.BundleEntryComponent()
+                    bundleEntry.resource = patientResource
+                    bundleEntry.fullUrl = "Encounter/${patientResource.idElement.idPart}"
+                    bundleEntry.request = Bundle.BundleEntryRequestComponent()
+                    bundleEntry.request.setMethod(Bundle.HTTPVerb.PUT)
+                    bundleEntry.request.url =
+                        "Encounter/${patientResource.idElement.idPart}"
+                    bundle.addEntry(bundleEntry)
+                }
+                sendBundleToServer(jsonParser, bundle)
+            }
+            isUploadLoading = false
+        }
+    }
+
+    fun prepareObsBatches(nameQuery: String) {
+        val isSummary = nameQuery.contains("mpox")
+        if (!hasMoreUpload || isUploadLoading) return
+        isUploadLoading = true
+        page++
+        val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val results = fhirEngine.search<Observation> {
+                count = pageSizeUpload
+                from = (pageUpload - 1) * pageSizeUpload
+            }
+
+            if (results.isEmpty()) {
+                hasMoreUpload = false
+            } else {
+                val bundle = Bundle()
+                bundle.type = Bundle.BundleType.TRANSACTION
+
+                results.forEach { patient ->
+                    val patientResource = patient.resource.copy() as Observation
+//                    patientResource.nameFirstRep.family = "test-bundle-2"
+                    //  sendSingleEntry(jsonParser, patientResource)
+                    val bundleEntry = Bundle.BundleEntryComponent()
+                    bundleEntry.resource = patientResource
+                    bundleEntry.fullUrl = "Observation/${patientResource.idElement.idPart}"
+                    bundleEntry.request = Bundle.BundleEntryRequestComponent()
+                    bundleEntry.request.setMethod(Bundle.HTTPVerb.PUT)
+                    bundleEntry.request.url =
+                        "Observation/${patientResource.idElement.idPart}"
+                    bundle.addEntry(bundleEntry)
+                }
+                sendBundleToServer(jsonParser, bundle)
+            }
+            isUploadLoading = false
+        }
+    }
+
+    fun prepareQuestionnaireResponseBatches(nameQuery: String) {
+        val isSummary = nameQuery.contains("mpox")
+        if (!hasMoreUpload || isUploadLoading) return
+        isUploadLoading = true
+        page++
+        val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val results = fhirEngine.search<QuestionnaireResponse> {
+                count = pageSizeUpload
+                from = (pageUpload - 1) * pageSizeUpload
+            }
+
+            if (results.isEmpty()) {
+                hasMoreUpload = false
+            } else {
+                val bundle = Bundle()
+                bundle.type = Bundle.BundleType.TRANSACTION
+
+                results.forEach { patient ->
+                    val patientResource = patient.resource.copy() as QuestionnaireResponse
+//                    patientResource.nameFirstRep.family = "test-bundle-2"
+                    //  sendSingleEntry(jsonParser, patientResource)
+                    val bundleEntry = Bundle.BundleEntryComponent()
+                    bundleEntry.resource = patientResource
+                    bundleEntry.fullUrl =
+                        "QuestionnaireResponse/${patientResource.idElement.idPart}"
+                    bundleEntry.request = Bundle.BundleEntryRequestComponent()
+                    bundleEntry.request.setMethod(Bundle.HTTPVerb.PUT)
+                    bundleEntry.request.url =
+                        "QuestionnaireResponse/${patientResource.idElement.idPart}"
+                    bundle.addEntry(bundleEntry)
+                }
+                sendBundleToServer(jsonParser, bundle)
+            }
+            isUploadLoading = false
+        }
+    }
+
+    fun prepareMeasureReportBatches(nameQuery: String) {
+        val isSummary = nameQuery.contains("mpox")
+        if (!hasMoreUpload || isUploadLoading) return
+        isUploadLoading = true
+        page++
+        val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val results = fhirEngine.search<MeasureReport> {
+                count = pageSizeUpload
+                from = (pageUpload - 1) * pageSizeUpload
+            }
+
+            if (results.isEmpty()) {
+                hasMoreUpload = false
+            } else {
+                val bundle = Bundle()
+                bundle.type = Bundle.BundleType.TRANSACTION
+
+                results.forEach { patient ->
+                    val patientResource = patient.resource.copy() as QuestionnaireResponse
+//                    patientResource.nameFirstRep.family = "test-bundle-2"
+                    //  sendSingleEntry(jsonParser, patientResource)
+                    val bundleEntry = Bundle.BundleEntryComponent()
+                    bundleEntry.resource = patientResource
+                    bundleEntry.fullUrl = "MeasureReport/${patientResource.idElement.idPart}"
+                    bundleEntry.request = Bundle.BundleEntryRequestComponent()
+                    bundleEntry.request.setMethod(Bundle.HTTPVerb.PUT)
+                    bundleEntry.request.url =
+                        "MeasureReport/${patientResource.idElement.idPart}"
+                    bundle.addEntry(bundleEntry)
+                }
+                sendBundleToServer(jsonParser, bundle)
+            }
+            isUploadLoading = false
+        }
+    }
+
+    fun loadAllPatients() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
+            val results = fhirEngine.search<Patient> {
+                sort(Patient.GIVEN, Order.ASCENDING)
+                count = 50
+                from = 0
+            }
+            if (results.isNotEmpty()) {
+                Log.e("Patient  Record ::::", " Count ${results.size}")
+                val bundle = Bundle()
+                bundle.type = Bundle.BundleType.TRANSACTION
+
+                results.forEach { patient ->
+
+                    val patientResource = patient.resource.copy() as Patient
+                    patientResource.nameFirstRep.family = "test-bundle-2"
+
+                    //  sendSingleEntry(jsonParser, patientResource)
+
+                    val bundleEntry = Bundle.BundleEntryComponent()
+                    bundleEntry.resource = patientResource
+                    bundleEntry.fullUrl = "Patient/${patientResource.idElement.idPart}"
+                    bundleEntry.request = Bundle.BundleEntryRequestComponent()
+                    bundleEntry.request.setMethod(Bundle.HTTPVerb.PUT)
+                    bundleEntry.request.url =
+                        "Patient/${patientResource.idElement.idPart}"
+                    bundle.addEntry(bundleEntry)
+
+                }
+                // handle API call
+                val payload = jsonParser.encodeResourceToString(bundle)
+                println("API Response:::: Ready to send bundle $payload")
+                sendBundleToServer(jsonParser, bundle)
+            }
+        }
+    }
+
+    private fun sendSingleEntry(jsonParser: IParser, patientResource: Patient) {
+        viewModelScope.launch {
+            val payload = jsonParser.encodeResourceToString(patientResource)
+            val apiCall = RetrofitCallsAuthentication()
+
+            val json = jsonParser.encodeResourceToString(patientResource)
+            val requestBody = json.toRequestBody("application/json".toMediaType())
+            apiCall.sendPatientToServer(patientResource.idElement.idPart, requestBody)
+        }
+    }
+
+    private fun sendBundleToServer(
+        jsonParser: IParser,
+        bundle: Bundle
+    ) {
+        viewModelScope.launch {
+            println("API Response:::: Preparing data")
+            val payload = jsonParser.encodeResourceToString(bundle)
+            val apiCall = RetrofitCallsAuthentication()
+            val json = jsonParser.encodeResourceToString(bundle)
+            val requestBody = json.toRequestBody("application/json".toMediaType())
+            apiCall.sendBundleToServer(requestBody)
+        }
+    }
+
+    fun prepareUploadData(slug: String) {
+        viewModelScope.launch {
+            while (hasMoreUpload) {
+                when (slug) {
+                    "patients" -> {
+                        prepareListInBatches(slug)
+                    }
+
+                    "encounters" -> {
+                        prepareEncountersBatches(slug)
+                    }
+
+                    "observations" -> {
+                        prepareObsBatches(slug)
+                    }
+
+                    "measureReports" -> {
+                        prepareMeasureReportBatches(slug)
+                    }
+
+                    "questionnaireResponses" -> {
+                        prepareQuestionnaireResponseBatches(slug)
+                    }
+
+                    else -> {
+
+                    }
+                }
+                delay(500L) // optional pause to mimic scrolling
+            }
+        }
+    }
 
     fun simulateScrollUntilEnd(slug: String, onFinished: (List<PatientItem>) -> Unit) {
         viewModelScope.launch {
@@ -100,7 +392,6 @@ class PatientListViewModel(
                 revInclude<Observation>(Observation.SUBJECT)
             }
 
-            println("Mpox Results ${results.count()}")
             if (results.isEmpty()) {
                 hasMore = false
             } else {
@@ -184,13 +475,12 @@ class PatientListViewModel(
                         null
                     }
                 }
-
                 _patients.update { it + mapped }
             }
-
             isLoading = false
         }
     }
+
 
     init {
         updatePatientListAndPatientCount({ getSearchResults() }, { searchedPatientCount() })
@@ -235,7 +525,10 @@ class PatientListViewModel(
         }.sortedByDescending { it.lastUpdated }
     }
 
-    private suspend fun loadPatientCases(nameQuery: String, isSummary: Boolean): List<PatientItem> {
+    private suspend fun loadPatientCases(
+        nameQuery: String,
+        isSummary: Boolean
+    ): List<PatientItem> {
         val patients = fhirEngine.search<Patient> {
             sort(Patient.GIVEN, Order.ASCENDING)
             count = 5000
@@ -652,8 +945,9 @@ class PatientListViewModel(
 
                         val authored = try {
                             val authoredDate: Date = fhirPatient.resource.authored
-                            val localDate = authoredDate.toInstant().atZone(ZoneId.systemDefault())
-                                .toLocalDateTime()
+                            val localDate =
+                                authoredDate.toInstant().atZone(ZoneId.systemDefault())
+                                    .toLocalDateTime()
                             localDate.format(formatter)  // format here instead of toString()
                         } catch (e: Exception) {
                             ""
@@ -796,7 +1090,8 @@ class PatientListViewModel(
                                 childCaseInfoEncounter?.let { kk ->
                                     val obs1 = fhirEngine.search<Observation> {
                                         filter(
-                                            Observation.ENCOUNTER, { value = "Encounter/${kk.id}" })
+                                            Observation.ENCOUNTER,
+                                            { value = "Encounter/${kk.id}" })
                                     }
                                     var results = "Pending Results"
                                     val rapidResults =
@@ -851,7 +1146,8 @@ class PatientListViewModel(
                                 childCaseInfoEncounter?.let { kk ->
                                     val obs1 = fhirEngine.search<Observation> {
                                         filter(
-                                            Observation.ENCOUNTER, { value = "Encounter/${kk.id}" })
+                                            Observation.ENCOUNTER,
+                                            { value = "Encounter/${kk.id}" })
                                     }
                                     val afp =
                                         obs1.firstOrNull { it.resource.code.codingFirstRep.code == "329949474707" }?.resource?.value?.asStringValue()
@@ -879,7 +1175,8 @@ class PatientListViewModel(
                                 childCaseInfoEncounter?.let { kk ->
                                     val obs1 = fhirEngine.search<Observation> {
                                         filter(
-                                            Observation.ENCOUNTER, { value = "Encounter/${kk.id}" })
+                                            Observation.ENCOUNTER,
+                                            { value = "Encounter/${kk.id}" })
                                     }
 
                                     measlesIgm =
@@ -1205,7 +1502,8 @@ class PatientListViewModel(
                 val itemMap =
                     fhirPatient.resource.item.flatMap { it.item }.associateBy { it.linkId }
                 val county = extractAnswerValue(itemMap["294367770999"]?.answer?.firstOrNull())
-                val subCounty = extractAnswerValue(itemMap["819946803642"]?.answer?.firstOrNull())
+                val subCounty =
+                    extractAnswerValue(itemMap["819946803642"]?.answer?.firstOrNull())
                 val siteName = extractAnswerValue(itemMap["site_name"]?.answer?.firstOrNull())
                 val teamNumber = extractAnswerValue(itemMap["site_type"]?.answer?.firstOrNull())
                 var caseOnsetDate =
@@ -1221,14 +1519,16 @@ class PatientListViewModel(
 
                 if (caseOnsetDate.isEmpty()) {
                     caseOnsetDate = try {
-                        fhirPatient.resource.authored?.toInstant()?.atZone(ZoneId.systemDefault())
+                        fhirPatient.resource.authored?.toInstant()
+                            ?.atZone(ZoneId.systemDefault())
                             ?.toLocalDate()?.toString() ?: ""
                     } catch (e: Exception) {
                         ""
                     }
                 }
                 println("Date of Occurrence  $caseOnsetDate")
-                val nameText = extractAnswerValue(itemMap["294367770999"]?.answer?.firstOrNull())
+                val nameText =
+                    extractAnswerValue(itemMap["294367770999"]?.answer?.firstOrNull())
 
                 PatientItem(
                     id = (index + 1).toString(),
@@ -1433,8 +1733,9 @@ class PatientListViewModel(
     private suspend fun processVlCase(
         fhirEngine: FhirEngine, childEncounters: List<EncounterItem>, data: PatientItem
     ): PatientItem {
-        val childCase = childEncounters.firstOrNull { it.reasonCode == "VL Laboratory Examination" }
-            ?: return data
+        val childCase =
+            childEncounters.firstOrNull { it.reasonCode == "VL Laboratory Examination" }
+                ?: return data
 
         val obs1 = fhirEngine.search<Observation> {
             filter(
@@ -1464,8 +1765,9 @@ class PatientListViewModel(
     private suspend fun processAfpCase(
         fhirEngine: FhirEngine, childEncounters: List<EncounterItem>, data: PatientItem
     ): PatientItem {
-        val childCase = childEncounters.firstOrNull { it.reasonCode == "AFP Final Lab Information" }
-            ?: return data
+        val childCase =
+            childEncounters.firstOrNull { it.reasonCode == "AFP Final Lab Information" }
+                ?: return data
 
         val obs1 = fhirEngine.search<Observation> {
             filter(
@@ -1490,8 +1792,9 @@ class PatientListViewModel(
         data: PatientItem,
 //        obsMap: Map<String, Observation>
     ): PatientItem {
-        val childCase = childEncounters.firstOrNull { it.reasonCode == "Measles Lab Information" }
-            ?: return data
+        val childCase =
+            childEncounters.firstOrNull { it.reasonCode == "Measles Lab Information" }
+                ?: return data
 
         val obs1 = fhirEngine.search<Observation> {
             filter(
@@ -1556,8 +1859,9 @@ class PatientListViewModel(
 
                         val authored = try {
                             val authoredDate: Date = fhirPatient.resource.authored
-                            val localDate = authoredDate.toInstant().atZone(ZoneId.systemDefault())
-                                .toLocalDateTime()
+                            val localDate =
+                                authoredDate.toInstant().atZone(ZoneId.systemDefault())
+                                    .toLocalDateTime()
                             localDate.format(formatter)  // format here instead of toString()
                         } catch (e: Exception) {
                             ""
@@ -1639,8 +1943,9 @@ class PatientListViewModel(
 
                     // Core demographics
                     val epid =
-                        epidIdentifier?.value ?: obsMap["EPID"]?.resource?.value?.asStringValue()
-                            .orEmpty()
+                        epidIdentifier?.value
+                            ?: obsMap["EPID"]?.resource?.value?.asStringValue()
+                                .orEmpty()
 
                     val county = patient.addressFirstRep?.city
                         ?: obsMap["a4-county"]?.resource?.value?.asStringValue().orEmpty()
@@ -1648,13 +1953,15 @@ class PatientListViewModel(
                     val subCounty = patient.addressFirstRep?.state
                         ?: obsMap["a3-sub-county"]?.resource?.value?.asStringValue().orEmpty()
 
-                    val onset = obsMap["728034137219"]?.resource?.value?.asStringValue().orEmpty()
+                    val onset =
+                        obsMap["728034137219"]?.resource?.value?.asStringValue().orEmpty()
                     val caseList =
                         obsMap["865158268604"]?.resource?.value?.asStringValue() ?: "Case"
 
                     val campaignDay =
                         obsMap["campaign_day"]?.resource?.value?.asStringValue().orEmpty()
-                    val teamNumber = obsMap["team_no"]?.resource?.value?.asStringValue().orEmpty()
+                    val teamNumber =
+                        obsMap["team_no"]?.resource?.value?.asStringValue().orEmpty()
                     val supervisorName =
                         obsMap["supervisor_name"]?.resource?.value?.asStringValue().orEmpty()
 
@@ -1688,8 +1995,18 @@ class PatientListViewModel(
 
                     // Lab result processing
                     data = when (nameQuery) {
-                        "vl-case-information" -> processVlCase(fhirEngine, childEncounters, data)
-                        "afp-case-information" -> processAfpCase(fhirEngine, childEncounters, data)
+                        "vl-case-information" -> processVlCase(
+                            fhirEngine,
+                            childEncounters,
+                            data
+                        )
+
+                        "afp-case-information" -> processAfpCase(
+                            fhirEngine,
+                            childEncounters,
+                            data
+                        )
+
                         else -> processMeaslesCase(fhirEngine, childEncounters, data)
                     }
 
@@ -2104,7 +2421,9 @@ class PatientListViewModel(
                     chunk.associateWith { encounterId ->
                         try {
                             fhirEngine.search<Observation> {
-                                filter(Observation.ENCOUNTER, { value = "Encounter/$encounterId" })
+                                filter(
+                                    Observation.ENCOUNTER,
+                                    { value = "Encounter/$encounterId" })
                                 count = 100
                             }
                         } catch (e: Exception) {
@@ -2248,7 +2567,10 @@ class PatientListViewModel(
         }
     }
 
-    private suspend fun processAFPLabResults(data: PatientItem, patientId: String): PatientItem {
+    private suspend fun processAFPLabResults(
+        data: PatientItem,
+        patientId: String
+    ): PatientItem {
         return try {
             val childEncounter = loadChildEncounter(data.resourceId, patientId)
             val afpEncounter = childEncounter.firstOrNull { encounter ->

@@ -40,6 +40,7 @@
             app:tabGravity="fill"
             app:tabIndicatorHeight="0dp"
             app:tabMode="scrollable"
+
             app:tabSelectedTextColor="@color/activeTabText"
             app:tabTextColor="@color/inactiveTabText" />
 

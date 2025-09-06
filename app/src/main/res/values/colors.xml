@@ -21,5 +21,7 @@
     <color name="inactiveTabBorder">#BDBDBD</color>
     <color name="activeTabText">#0288D1</color>
     <color name="inactiveTabText">#757575</color>
+    <color name="activeTabPressed">#3700B3</color>
+
 
 </resources>

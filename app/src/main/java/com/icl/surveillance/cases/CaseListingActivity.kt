@@ -2,6 +2,8 @@ package com.icl.surveillance.cases
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -12,6 +14,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
 import com.icl.surveillance.R
 import com.icl.surveillance.adapters.MpoxPatientAdapter
@@ -19,6 +24,7 @@ import com.icl.surveillance.adapters.PatientItemRecyclerViewAdapter
 import com.icl.surveillance.adapters.PatientItemRecyclerViewAdapterRumor
 import com.icl.surveillance.databinding.ActivityCaseListingBinding
 import com.icl.surveillance.fhir.FhirApplication
+import com.icl.surveillance.fhir.MpoxSyncWorker
 import com.icl.surveillance.ui.patients.FullCaseDetailsActivity
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.ui.patients.SummarizedActivity
@@ -46,6 +52,7 @@ class CaseListingActivity : AppCompatActivity() {
         supportActionBar?.apply {
             title = " $titleName"
         }
+
 
         fhirEngine = FhirApplication.fhirEngine(this)
         patientListViewModel =
@@ -100,11 +107,7 @@ class CaseListingActivity : AppCompatActivity() {
                     recyclerView.adapter = adapterRegister
                     recyclerView.layoutManager = LinearLayoutManager(this@CaseListingActivity)
                     patientListViewModel.loadMpoxPatientList(slug)
-                    patientListViewModel.simulateScrollUntilEnd(slug) { allPatients ->
-                        binding.apply {
-                            count.text = "Showing ${allPatients.size} Results"
-                        }
-                    }
+
 
                     lifecycleScope.launch {
                         patientListViewModel.patients.collect { newList ->
@@ -113,12 +116,13 @@ class CaseListingActivity : AppCompatActivity() {
 //                            items.addAll(newList)
                             if (newList.isNotEmpty()) {
                                 binding.apply {
-//                                    count.text = "Showing ${newList.size} Results"
+                                    count.text = "Showing ${newList.size} Results"
                                     patientListContainer.pbProgress.visibility = View.GONE
                                 }
                             }
                         }
                     }
+
                     recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                         override fun onScrolled(rv: RecyclerView, dx: Int, dy: Int) {
                             super.onScrolled(rv, dx, dy)
@@ -247,6 +251,42 @@ class CaseListingActivity : AppCompatActivity() {
 
         } else {
             Toast.makeText(this, "Please try again later ", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_upload, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_refresh -> {
+                SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Are you sure?")
+                    .setContentText("Are you sure you wish to upload your local data?")
+                    .setConfirmText("Yes,Upload!")
+                    .setConfirmClickListener { sDialog ->
+                        lifecycleScope.launch {
+                          //  patientListViewModel.prepareUploadData("mpox-register")
+                            val workRequest = OneTimeWorkRequestBuilder<MpoxSyncWorker>().build()
+                            WorkManager.getInstance(this@CaseListingActivity).enqueue(workRequest)
+                        }
+                        Toast.makeText(
+                            this@CaseListingActivity,
+                            "Uploading data.....",
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                        sDialog.dismissWithAnimation()
+                    }
+                    .show()
+
+
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
