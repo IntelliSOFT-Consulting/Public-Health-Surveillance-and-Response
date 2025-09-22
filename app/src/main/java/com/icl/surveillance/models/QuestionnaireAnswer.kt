@@ -116,6 +116,11 @@ data class DbUser(
     val phone: String?, // nullable
     val email: String
 )
+data class Notification(
+    val title: String,
+    val message: String,
+    val timestamp: String
+)
 
 data class CaseOption(
     val title: String,

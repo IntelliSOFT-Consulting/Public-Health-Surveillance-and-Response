@@ -136,4 +136,7 @@
     <string name="jane_doe_example_com">jane.doe@example.com</string>
     <string name="jane_doe">Jane Doe</string>
     <string name="profile_image">Profile Image</string>
+    <string name="no_notifications">No notifications</string>
+    <string name="no_notifications_yet">No notifications yet</string>
+    <string name="you_re_all_caught_up">You\'re all caught up.</string>
 </resources>

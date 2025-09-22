@@ -22,6 +22,7 @@ import com.icl.surveillance.adapters.HomeRecyclerViewAdapter
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.clients.AddParentCaseActivity
 import com.icl.surveillance.databinding.FragmentHomeBinding
+import com.icl.surveillance.ui.notifications.NotificationActivity
 import com.icl.surveillance.utils.FormatterClass
 
 class HomeFragment : Fragment() {
@@ -48,7 +49,11 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding.apply {
+            notificationIcon.setOnClickListener {
+                startActivity(Intent(requireContext(), NotificationActivity::class.java))
+            }
+        }
 
         val adapter =
             HomeRecyclerViewAdapter(

@@ -19,6 +19,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.notifications.NotificationActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.Surveillance.NoActionBar" />
+        <activity
             android:name=".ui.patients.responses.EditChecklistActivity"
             android:exported="false"
             android:launchMode="singleTop"

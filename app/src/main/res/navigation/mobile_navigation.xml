@@ -27,9 +27,9 @@
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.icl.surveillance.ui.notifications.NotificationsFragment"
+        android:name="com.icl.surveillance.ui.profile.ProfileFragment"
         android:label=""
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/addClientFragment"
         android:name="com.icl.surveillance.clients.AddClientFragment"
