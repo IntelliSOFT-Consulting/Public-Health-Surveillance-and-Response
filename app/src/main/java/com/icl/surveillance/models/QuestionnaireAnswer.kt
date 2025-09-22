@@ -91,6 +91,21 @@ data class DbSignInResponse(
     val refresh_expires_in: String,
     val refresh_token: String,
 )
+data class UserResponse(
+    val status: String,
+    val user: User
+)
+
+data class User(
+    val firstName: String,
+    val lastName: String,
+    val role: String,
+    val id: String,
+    val idNumber: String,
+    val fullNames: String,
+    val phone: String?, // Nullable
+    val email: String
+)
 
 data class DbResetPassword(
     val status: String,

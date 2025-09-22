@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/colorBackground"
+    android:background="@color/white"
     android:fillViewport="true"
     android:padding="24dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:dividerPadding="16dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
@@ -22,7 +23,7 @@
             android:layout_height="120dp"
             android:layout_marginTop="8dp"
             android:contentDescription="@string/profile_image"
-            android:src="@drawable/avatar" />
+            android:src="@drawable/baseline_account_circle_24" />
 
         <!-- Name -->
         <TextView
@@ -30,8 +31,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:fontFamily="@font/inter"
             android:text="@string/jane_doe"
-            android:textAppearance="?attr/textAppearanceHeadlineSmall"
+            android:textColor="@color/black"
             android:textStyle="bold" />
 
         <!-- Email -->
@@ -39,18 +41,18 @@
             android:id="@+id/tvEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/inter"
             android:text="@string/jane_doe_example_com"
-            android:textAppearance="?attr/textAppearanceBodyMedium"
-            android:textColor="@color/gray" />
+            android:textColor="@color/black" />
 
         <!-- Phone -->
         <TextView
             android:id="@+id/tvPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/inter"
             android:text="@string/_254_712_345_678"
-            android:textAppearance="?attr/textAppearanceBodyMedium"
-            android:textColor="@color/gray" />
+            android:textColor="@color/black" />
 
         <!-- Level -->
         <TextView
@@ -58,17 +60,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
+            android:fontFamily="@font/inter"
             android:text="Level: Sub-county"
-            android:textAppearance="?attr/textAppearanceLabelMedium"
-            android:textColor="@color/teal_700" />
+            android:textColor="@color/black" />
 
         <!-- ⚡ App Management Section -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp">
+            android:layout_margin="10dp"
+            android:background="@color/white"
+            android:backgroundTint="@color/white"
+            android:elevation="15dp"
+            android:orientation="vertical"
+            android:paddingVertical="@dimen/fab_margin"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="10dp"
+            app:strokeColor="@color/gray"
+            app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -80,8 +89,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
+                    android:fontFamily="@font/inter"
                     android:text="@string/app_storage"
-                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:textColor="@color/black"
                     android:textStyle="bold" />
 
                 <com.google.android.material.button.MaterialButton
@@ -104,8 +114,16 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp">
+            android:layout_margin="10dp"
+            android:background="@color/white"
+            android:backgroundTint="@color/white"
+            android:elevation="15dp"
+            android:orientation="vertical"
+            android:paddingVertical="@dimen/fab_margin"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="10dp"
+            app:strokeColor="@color/gray"
+            app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -117,8 +135,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:text="Account"
-                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:fontFamily="@font/inter"
+                    android:text="@string/account"
+                    android:textColor="@color/black"
                     android:textStyle="bold" />
 
                 <com.google.android.material.button.MaterialButton
@@ -126,7 +145,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/logout"
-                    android:textColor="@android:color/holo_red_dark" />
+                    android:textColor="@android:color/holo_red_dark"
+                    app:cornerRadius="20dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 

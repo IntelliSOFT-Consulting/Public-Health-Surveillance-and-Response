@@ -16,6 +16,7 @@
     </style>
 
 
+
     <style name="Theme.Surveillance.NoActionBar">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>

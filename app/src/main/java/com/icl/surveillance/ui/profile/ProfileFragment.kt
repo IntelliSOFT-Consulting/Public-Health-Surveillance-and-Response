@@ -54,6 +54,8 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
 
+            mapUserData()
+
             btnClearCache.setOnClickListener {
                 showConfirmationDialog(
                     title = "Confirmation?",
@@ -78,6 +80,29 @@ class ProfileFragment : Fragment() {
                 )
             }
 
+        }
+    }
+
+    private fun mapUserData() {
+        try {
+            binding.apply {
+                val formatter = FormatterClass()
+                val firstName = formatter.getSharedPref("firstName", requireContext())
+                val lastName = formatter.getSharedPref("lastName", requireContext())
+
+                val phone = formatter.getSharedPref("phone", requireContext())
+                val email = formatter.getSharedPref("email", requireContext())
+                val role = formatter.getSharedPref("role", requireContext())
+
+                tvUserName.text = "$firstName $lastName"
+                tvEmail.text = " $email"
+                tvPhone.text = " $phone"
+                tvLevel.text = " $role"
+
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

@@ -4,7 +4,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/colorBackground">
+    android:background="@color/white">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -21,12 +21,12 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/notificationContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
-        android:padding="10dp">
+        android:background="@color/white">
 
         <!-- Empty State -->
         <LinearLayout
@@ -49,14 +49,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/no_notifications_yet"
-                android:textAppearance="?attr/textAppearanceTitleMedium"
+                android:textColor="@color/black"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/you_re_all_caught_up"
-                android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="@color/gray" />
         </LinearLayout>
 
@@ -68,5 +67,5 @@
             android:clipToPadding="false"
             android:visibility="gone" />
 
-    </FrameLayout>
+    </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

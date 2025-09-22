@@ -5,6 +5,7 @@ import com.icl.surveillance.models.DbSetPasswordReq
 import com.icl.surveillance.models.DbSignIn
 import com.icl.surveillance.models.DbSignInResponse
 import com.icl.surveillance.models.DbUserInfoResponse
+import com.icl.surveillance.models.UserResponse
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -21,7 +22,10 @@ interface Interface {
     @POST("provider/login")
     suspend fun signInUser(@Body dbSignIn: DbSignIn): Response<DbSignInResponse>
 
-//    @GET("Location")
+    @GET("provider/me")
+    suspend fun getUser(): Response<UserResponse>
+
+    //    @GET("Location")
 //    suspend fun getLocations(
 //        @Query("_count") count: Int = 18000
 //    ): LocationResponse
