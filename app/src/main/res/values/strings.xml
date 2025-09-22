@@ -123,4 +123,17 @@
     <string name="supervisor">Supervisor Checklist</string>
     <string name="mpox_register">Mpox Register</string>
     <string name="edit">Edit</string>
+    <string name="cases">Cases</string>
+    <string name="_0">0</string>
+    <string name="add_new_measles_case">Add new measles case</string>
+    <string name="app_storage">App Storage</string>
+    <string name="clear_cache">Clear Cache</string>
+    <string name="clear_app_data">Clear App Data</string>
+    <string name="account">Account</string>
+    <string name="logout">Logout</string>
+    <string name="level_sub_county">Level: Sub-county</string>
+    <string name="_254_712_345_678">+254 712 345 678</string>
+    <string name="jane_doe_example_com">jane.doe@example.com</string>
+    <string name="jane_doe">Jane Doe</string>
+    <string name="profile_image">Profile Image</string>
 </resources>

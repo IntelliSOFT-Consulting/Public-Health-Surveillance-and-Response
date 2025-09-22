@@ -21,6 +21,10 @@ interface Interface {
     @POST("provider/login")
     suspend fun signInUser(@Body dbSignIn: DbSignIn): Response<DbSignInResponse>
 
+//    @GET("Location")
+//    suspend fun getLocations(
+//        @Query("_count") count: Int = 18000
+//    ): LocationResponse
     @PUT("Patient/{id}")
     @Headers("Content-Type: application/json")
     suspend fun sendPatientToServer(

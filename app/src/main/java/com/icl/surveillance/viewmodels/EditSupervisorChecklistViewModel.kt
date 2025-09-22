@@ -275,7 +275,6 @@ class EditSupervisorChecklistViewModel(
         if (json.has("item")) {
             processItems(json.getJSONArray("item"))
         }
-
         return results
     }
 

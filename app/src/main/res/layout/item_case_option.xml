@@ -41,9 +41,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Add new measles case"
+                android:fontFamily="@font/inter"
+                android:text="@string/add_new_measles_case"
                 android:textColor="@android:color/white"
-                android:textSize="16sp" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <!-- RIGHT SIDE (0.5 weight) -->
@@ -67,14 +68,16 @@
                     android:id="@+id/case_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="38"
+                    android:fontFamily="@font/inter"
+                    android:text="@string/_0"
                     android:textColor="@android:color/white"
-                    android:textSize="24sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Cases"
+                    android:fontFamily="@font/inter"
+                    android:text="@string/cases"
                     android:textColor="@android:color/white"
                     android:textSize="12sp" />
             </LinearLayout>
