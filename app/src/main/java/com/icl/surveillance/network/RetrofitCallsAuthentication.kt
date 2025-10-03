@@ -9,6 +9,7 @@ import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.icl.surveillance.MainActivity
+import com.icl.surveillance.auth.OneTimeSyncActivity
 import com.icl.surveillance.models.DbResetPasswordData
 import com.icl.surveillance.models.DbResponseError
 import com.icl.surveillance.models.DbSetPasswordReq
@@ -157,9 +158,7 @@ class RetrofitCallsAuthentication {
                                         context
                                     )
                                     formatter.saveSharedPref("isLoggedIn", "true", context)
-
                                     getUserDetails(context)
-
                                     messageToast = "Login successful.."
 
                                     val intent = Intent(context, MainActivity::class.java)

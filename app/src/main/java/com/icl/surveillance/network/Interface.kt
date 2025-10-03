@@ -5,6 +5,7 @@ import com.icl.surveillance.models.DbSetPasswordReq
 import com.icl.surveillance.models.DbSignIn
 import com.icl.surveillance.models.DbSignInResponse
 import com.icl.surveillance.models.DbUserInfoResponse
+import com.icl.surveillance.models.FhirBundle
 import com.icl.surveillance.models.UserResponse
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -16,11 +17,15 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.Url
 
 interface Interface {
 
     @POST("provider/login")
     suspend fun signInUser(@Body dbSignIn: DbSignIn): Response<DbSignInResponse>
+    @GET
+    suspend fun fetchBundle(@Url url: String): FhirBundle
+
 
     @GET("provider/me")
     suspend fun getUser(): Response<UserResponse>

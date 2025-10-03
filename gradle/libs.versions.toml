@@ -28,6 +28,8 @@ firebaseCrashlytics = "19.4.2"
 googleGmsGoogleServices = "4.4.2"
 googleFirebaseCrashlytics = "3.0.3"
 workRuntimeKtx = "2.10.1"
+firebaseMessagingKtx = "25.0.1"
+firebaseMessaging = "25.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -56,6 +58,8 @@ androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "converterMoshi" }
+firebase-messaging-ktx = { group = "com.google.firebase", name = "firebase-messaging-ktx", version.ref = "firebaseMessagingKtx" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

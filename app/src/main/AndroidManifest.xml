@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
 
     <application
         android:name=".fhir.FhirApplication"
@@ -18,6 +20,18 @@
         android:theme="@style/Theme.Surveillance"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <service
+            android:name=".services.AppFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name=".auth.OneTimeSyncActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.notifications.NotificationActivity"
             android:exported="false"
@@ -95,7 +109,8 @@
             android:name=".auth.LoginActivity"
             android:exported="false"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.Surveillance.FullScreen" />
+            android:theme="@style/Theme.Surveillance.FullScreen"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

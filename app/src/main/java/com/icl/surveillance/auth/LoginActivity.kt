@@ -1,9 +1,15 @@
 package com.icl.surveillance.auth
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.icl.surveillance.MainActivity
@@ -18,21 +24,6 @@ class LoginActivity : AppCompatActivity() {
     private var retrofitCallsAuthentication = RetrofitCallsAuthentication()
     private lateinit var binding: ActivityLoginBinding
 
-//    override fun onStart() {
-//        super.onStart()
-//
-//        try {
-//            val loggedIn = FormatterClass().getSharedPref("isLoggedIn", this@LoginActivity)
-//            if (loggedIn != null) {
-//                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-//                startActivity(intent)
-//                this@LoginActivity.finish()
-//            }
-//        } catch (e: Exception) {
-//
-//            e.printStackTrace()
-//        }
-//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +36,36 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    1001
+                )
+            }
+        }
+
+
         binding.apply {
+            loginCard.apply {
+                animate()
+                    .alpha(1f)
+                    .translationY(0f)
+                    .setDuration(600)
+                    .setInterpolator(AccelerateDecelerateInterpolator())
+                    .start()
+            }
+            logo.apply {
+                animate()
+                    .alpha(1f)
+                    .setDuration(400)
+                    .setStartDelay(100)
+                    .start()
+            }
             btnLogin.setOnClickListener {
                 val email = etEmail.text.toString()
                 val password = etPassword.text.toString()

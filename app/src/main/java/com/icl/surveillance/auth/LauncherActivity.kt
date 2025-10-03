@@ -51,9 +51,10 @@ class LauncherActivity : AppCompatActivity() {
                 )
             }
         }
-
-
-
+        appUpdateInfoTask.addOnFailureListener { e ->
+            // Handle the failure
+            e.printStackTrace()
+        }
         lifecycleScope.launch {
             delay(3000) // 3 seconds
             val loggedIn = FormatterClass().getSharedPref("isLoggedIn", this@LauncherActivity)

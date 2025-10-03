@@ -2,6 +2,7 @@ package com.icl.surveillance.models
 
 import com.icl.surveillance.R
 import kotlinx.serialization.Serializable
+import org.hl7.fhir.r4.model.Location
 
 data class QuestionnaireAnswer(
     val linkId: String,
@@ -82,7 +83,58 @@ data class DbSignIn(
 )
 
 data class DbResetPasswordData(val idNumber: String, val email: String)
+data class FhirBundle(
+    val resourceType: String,
+    val id: String,
+    val type: String,
+    val link: List<FhirLink>?,
+    val entry: List<FhirEntry>?
+)
 
+data class FhirLink(
+    val relation: String,
+    val url: String
+)
+
+data class FhirEntry(
+    val fullUrl: String,
+    val resource: LocationResource,
+    val search: SearchInfo
+)
+data class LocationResource(
+    val resourceType: String = "Location",
+    val id: String,
+    val meta: Meta,
+    val name: String,
+    val type: List<LocationType>,
+    val partOf: PartOf? = null
+)
+
+data class Meta(
+    val versionId: String,
+    val lastUpdated: String,
+    val source: String
+)
+
+data class LocationType(
+    val coding: List<Coding>
+)
+
+data class Coding(
+    val system: String,
+    val code: String,
+    val display: String
+)
+
+data class PartOf(
+    val reference: String,
+    val display: String
+)
+
+
+data class SearchInfo(
+    val mode: String
+)
 
 data class DbSetPasswordReq(val resetCode: String, val idNumber: String, val password: String)
 data class DbSignInResponse(
@@ -91,6 +143,7 @@ data class DbSignInResponse(
     val refresh_expires_in: String,
     val refresh_token: String,
 )
+
 data class UserResponse(
     val status: String,
     val user: User
@@ -131,6 +184,7 @@ data class DbUser(
     val phone: String?, // nullable
     val email: String
 )
+
 data class Notification(
     val title: String,
     val message: String,
@@ -148,10 +202,3 @@ data class SpecimenConfig(
     val entryLinkId: String,
     val dateLinkId: String
 )
-//data class LocationResponse(
-//    val resourceType: String,
-//    val entry: List<Entry>?
-//)
-//data class Entry(
-//    val resource: Location
-//)

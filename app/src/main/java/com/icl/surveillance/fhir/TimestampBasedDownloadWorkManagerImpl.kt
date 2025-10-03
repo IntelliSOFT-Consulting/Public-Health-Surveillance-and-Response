@@ -20,16 +20,8 @@ import org.hl7.fhir.r4.model.ResourceType
 class TimestampBasedDownloadWorkManagerImpl(private val dataStore: DemoDataStore) :
     DownloadWorkManager {
     private val resourceTypeList = ResourceType.values().map { it.name }
-    private val urls =
-        LinkedList(
-            listOf(
-                "Patient?_sort=_lastUpdated",
-                "Location?_count=1000",
-                "Specimen?_count=1000",
-                "MeasureReport?_count=1000",
-                "QuestionnaireResponse?_count=1000"
-            )
-        )
+    private val urls = getRespectiveFilteredResources()
+
 
     override suspend fun getNextRequest(): DownloadRequest? {
         var url = urls.poll() ?: return null
@@ -139,6 +131,45 @@ class TimestampBasedDownloadWorkManagerImpl(private val dataStore: DemoDataStore
                     map.value.maxOfOrNull { it.meta.lastUpdated }?.toTimeZoneString() ?: "",
                 )
             }
+    }
+
+    fun getRespectiveFilteredResources(): LinkedList<String> {
+        val userRole = "sub_county_user"
+        val urls = when (userRole.lowercase()) {
+            "facility_nurse" -> listOf(
+                "Patient?_sort=_lastUpdated",
+                "AllergyIntolerance",
+                "Observation?_count=1000",
+                "Encounter?_count=1000"
+            )
+
+            "sub_county_user" -> listOf(
+                "Patient?_sort=_lastUpdated",
+                "Encounter?_count=1000",
+                "MeasureReport?_count=1000",
+                "QuestionnaireResponse?_count=1000"
+            )
+
+            "county_user" -> listOf(
+                "MeasureReport?_count=1000",
+                "QuestionnaireResponse?_count=1000",
+                "Specimen?_count=1000"
+            )
+
+            "national_user" -> listOf(
+                "Patient?_sort=_lastUpdated",
+                "AllergyIntolerance",
+                "Observation?_count=1000",
+                "Encounter?_count=1000",
+                "MeasureReport?_count=1000",
+                "QuestionnaireResponse?_count=1000",
+                "Specimen?_count=1000"
+            )
+
+            else -> emptyList() // No access or undefined role
+        }
+
+        return LinkedList(urls)
     }
 }
 

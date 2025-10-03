@@ -241,7 +241,7 @@ class MainActivity : AppCompatActivity() {
         ) {
             getCurrentLocation()
         } else {
-            Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
             // show a confirmation alert dialog to exit app with reason permission required
 
         }

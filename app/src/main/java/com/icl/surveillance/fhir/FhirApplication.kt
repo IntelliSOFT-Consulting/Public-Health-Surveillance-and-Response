@@ -3,6 +3,12 @@ package com.icl.surveillance.fhir
 import android.app.Application
 import android.content.Context
 import android.util.Log
+import androidx.lifecycle.lifecycleScope
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.google.android.fhir.DatabaseErrorStrategy
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.FhirEngineConfiguration
@@ -14,10 +20,12 @@ import com.google.android.fhir.datacapture.XFhirQueryResolver
 import com.google.android.fhir.search.search // Import the local fhir
 import com.google.android.fhir.sync.Sync
 import com.google.android.fhir.sync.remote.HttpLogger
+import com.icl.surveillance.network.Constants.BASE_URL
 import com.icl.surveillance.utils.ContribQuestionnaireItemViewHolderFactoryMatchersProviderFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 class FhirApplication : Application(), DataCaptureConfig.Provider {
     // Only initiate the FhirEngine when used for the first time, not when the app is created.
@@ -35,7 +43,7 @@ class FhirApplication : Application(), DataCaptureConfig.Provider {
                 enableEncryptionIfSupported = false,
                 DatabaseErrorStrategy.RECREATE_AT_OPEN,
                 ServerConfiguration(
-                    "https://dsrfhir.intellisoftkenya.com/hapi/fhir/",
+                    BASE_URL,
                     httpLogger =
                         HttpLogger(
                             HttpLogger.Configuration(
@@ -62,7 +70,25 @@ class FhirApplication : Application(), DataCaptureConfig.Provider {
             e.printStackTrace()
         }
 
-        CoroutineScope(Dispatchers.IO).launch { Sync.oneTimeSync<FhirSyncWorker>(this@FhirApplication) }
+        CoroutineScope(Dispatchers.IO).launch {
+            Sync.oneTimeSync<FhirSyncWorker>(this@FhirApplication)
+            val workRequest =
+                PeriodicWorkRequestBuilder<LocationDownloadedWorker>(15, TimeUnit.MINUTES)
+                    .setConstraints(
+                        Constraints.Builder()
+                            .setRequiredNetworkType(NetworkType.CONNECTED) // Ensure network is available
+                            .build()
+                    )
+                    .build()
+            val uniqueName = "location_downloader"//${UUID.randomUUID()}"
+
+            WorkManager.getInstance(this@FhirApplication)
+                .enqueueUniquePeriodicWork(
+                    uniqueName,  // unique name to avoid duplicates
+                    ExistingPeriodicWorkPolicy.KEEP,   // KEEP = don't run again if already enqueued
+                    workRequest
+                )
+        }
     }
 
     private fun constructFhirEngine(): FhirEngine {

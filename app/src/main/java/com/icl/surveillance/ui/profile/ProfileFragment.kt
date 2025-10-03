@@ -97,7 +97,7 @@ class ProfileFragment : Fragment() {
                 tvUserName.text = "$firstName $lastName"
                 tvEmail.text = " $email"
                 tvPhone.text = " $phone"
-                tvLevel.text = " $role"
+                tvLevel.text = "ROLE: $role"
 
             }
 
