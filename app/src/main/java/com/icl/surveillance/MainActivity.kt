@@ -52,10 +52,12 @@ import com.icl.surveillance.viewmodels.SyncFragmentViewModel
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.icl.surveillance.auth.LoginActivity
 import com.icl.surveillance.fhir.DemoDataStore
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.ResourceType
+import kotlin.jvm.java
 
 class MainActivity : AppCompatActivity() {
 
@@ -81,6 +83,22 @@ class MainActivity : AppCompatActivity() {
             }
         }
     private val viewModel: SyncFragmentViewModel by viewModels()
+
+
+    override fun onStart() {
+        super.onStart()
+        val isLoggedIn = FormatterClass().getSharedPref("isLoggedIn", this)
+        if (isLoggedIn == null || isLoggedIn != "true") {
+            startActivity(
+                Intent(this, LoginActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+
+            )
+            finish()
+        }
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -356,7 +374,8 @@ class MainActivity : AppCompatActivity() {
                         DemoDataStore(this@MainActivity).clearAllTimestamps(trackedResources)
                         viewModel.triggerOneTimeSync()
                         //  show toast
-                        Toast.makeText(this@MainActivity, "Sync Started ... ", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MainActivity, "Sync Started ... ", Toast.LENGTH_SHORT)
+                            .show()
 
 
                     } catch (e: Exception) {

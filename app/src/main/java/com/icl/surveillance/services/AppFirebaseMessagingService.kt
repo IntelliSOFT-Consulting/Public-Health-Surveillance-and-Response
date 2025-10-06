@@ -12,6 +12,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.icl.surveillance.MainActivity
 import com.icl.surveillance.R
+import com.icl.surveillance.network.Constants.NOTIFICATION_CODE
 import com.icl.surveillance.utils.FormatterClass
 
 
@@ -34,8 +35,13 @@ class AppFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun sendNotification(title: String, message: String) {
         val channelId = "default_channel"
-        val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+
+
+        // Intent for the main activity when notification is clicked
+        val intent = Intent(this, MainActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        }
+
         val pendingIntent = PendingIntent.getActivity(
             this,
             0,
@@ -43,26 +49,42 @@ class AppFirebaseMessagingService : FirebaseMessagingService() {
             PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
         )
 
+        // Intent for the "Mark as Read" action
+        val markReadIntent = Intent(this, MarkReadReceiver::class.java)
+        val markReadPendingIntent = PendingIntent.getBroadcast(
+            this,
+            1,
+            markReadIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.mipmap.ic_launcher_round)
             .setContentTitle(title)
             .setContentText(message)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(message))
+            .addAction(android.R.drawable.ic_menu_delete, "Mark as Read", markReadPendingIntent)
             .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
 
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
+        // Create notification channel (required for Android 8+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,
                 "Default Channel",
                 NotificationManager.IMPORTANCE_HIGH
-            )
+            ).apply {
+                description = "General app notifications"
+            }
             notificationManager.createNotificationChannel(channel)
         }
 
-        notificationManager.notify(0, notificationBuilder.build())
+        // Show the notification
+        notificationManager.notify(NOTIFICATION_CODE, notificationBuilder.build())
     }
+
 }

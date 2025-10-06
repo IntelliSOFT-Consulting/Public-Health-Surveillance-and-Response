@@ -16,6 +16,7 @@ import com.icl.surveillance.models.DbSetPasswordReq
 import com.icl.surveillance.models.DbSignIn
 import com.icl.surveillance.models.DbUser
 import com.icl.surveillance.models.UrlData
+import com.icl.surveillance.network.Constants.BASE_URL
 import com.icl.surveillance.utils.FormatterClass
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
@@ -46,7 +47,7 @@ class RetrofitCallsAuthentication {
         payload: RequestBody
     ) {
         backgroundProcessingScope.launch {
-            val baseUrl = "https://hapi.fhir.org/baseR4/"
+            val baseUrl = BASE_URL//"https://hapi.fhir.org/baseR4/"
             val apiService =
                 RetrofitBuilder.getRetrofit(baseUrl).create(Interface::class.java)
             println("API Response:::: Started posting data $id -> payload $payload")
@@ -78,7 +79,7 @@ class RetrofitCallsAuthentication {
 
     fun sendBundleToServer(payload: RequestBody) {
         backgroundProcessingScope.launch {
-            val baseUrl = "https://dsrfhir.intellisoftkenya.com/hapi/fhir/"
+            val baseUrl = BASE_URL
             val apiService =
                 RetrofitBuilder.getRetrofit(baseUrl).create(Interface::class.java)
             println("API Response:::: Started posting data")

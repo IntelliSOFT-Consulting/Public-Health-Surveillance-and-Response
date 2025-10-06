@@ -5,6 +5,7 @@ import android.content.Context
 object Constants {
     const val BASE_URL = "https://dsrfhir.intellisoftkenya.com/hapi/fhir/"
     const val LOCATION_STARTER = "${BASE_URL}Location?_count=200&_offset=0"
+    const val NOTIFICATION_CODE = 1001
 
 
     private const val PREF_NAME = "pagination_pref"

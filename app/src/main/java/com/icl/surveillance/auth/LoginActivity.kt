@@ -36,6 +36,13 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
+        // Let's check the saved token
+        val token = FormatterClass().getSharedPref("fcmToken", this)
+        if (token != null) {
+            println("Token: $token")
+//            retrofitCallsAuthentication.sendToken(this, token)
+        }
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
@@ -49,13 +56,12 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-
         binding.apply {
             loginCard.apply {
                 animate()
                     .alpha(1f)
                     .translationY(0f)
-                    .setDuration(600)
+                    .setDuration(1000)
                     .setInterpolator(AccelerateDecelerateInterpolator())
                     .start()
             }
