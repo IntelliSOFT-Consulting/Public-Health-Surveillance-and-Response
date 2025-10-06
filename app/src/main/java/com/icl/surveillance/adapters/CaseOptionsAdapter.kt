@@ -3,6 +3,7 @@ package com.icl.surveillance.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,7 @@ class CaseOptionsAdapter(
     private val items: List<CaseOption>,
     private val onItemClick: (CaseOption) -> Unit
 ) : RecyclerView.Adapter<CaseOptionsAdapter.ViewHolder>() {
+    private var lastPosition = -1
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView = view.findViewById(R.id.title)
@@ -44,6 +46,16 @@ class CaseOptionsAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items[position])
+        val adapterPos = holder.adapterPosition
+        if (adapterPos != RecyclerView.NO_POSITION && adapterPos > lastPosition) {
+            val animation = AnimationUtils.loadAnimation(
+                holder.itemView.context,
+                R.anim.item_animation_fall_down
+            )
+            holder.itemView.startAnimation(animation)
+            lastPosition = adapterPos
+        }
+
     }
 
     override fun getItemCount(): Int = items.size
