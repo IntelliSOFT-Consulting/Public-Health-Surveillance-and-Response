@@ -9,13 +9,12 @@ import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.icl.surveillance.MainActivity
-import com.icl.surveillance.auth.OneTimeSyncActivity
 import com.icl.surveillance.models.DbResetPasswordData
 import com.icl.surveillance.models.DbResponseError
 import com.icl.surveillance.models.DbSetPasswordReq
 import com.icl.surveillance.models.DbSignIn
-import com.icl.surveillance.models.DbUser
 import com.icl.surveillance.models.UrlData
+import com.icl.surveillance.models.User
 import com.icl.surveillance.network.Constants.BASE_URL
 import com.icl.surveillance.utils.FormatterClass
 import kotlinx.coroutines.CoroutineName
@@ -26,7 +25,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import okhttp3.RequestBody
-import org.hl7.fhir.r4.model.Bundle
 import retrofit2.Response
 
 class RetrofitCallsAuthentication {
@@ -227,7 +225,6 @@ class RetrofitCallsAuthentication {
                         if (statusCode == 200 || statusCode == 201) {
 
                             if (body != null) {
-
                                 val user = body.user
                                 if (user != null) {
                                     saveUserInformation(user, context)
@@ -245,19 +242,34 @@ class RetrofitCallsAuthentication {
         }
     }
 
-    private fun saveUserInformation(user: DbUser, context: Context) {
+    private fun saveUserInformation(user: User, context: Context) {
         val formatter = FormatterClass()
-
+        val location = user.locationInfo
         val userDetails =
             mapOf(
+                // User Info
                 "firstName" to user.firstName,
                 "lastName" to user.lastName,
                 "role" to user.role,
                 "id" to user.id,
+                "fhirPractitionerId" to user.fhirPractitionerId,
+                "practitionerRole" to user.practitionerRole,
                 "idNumber" to user.idNumber,
                 "fullNames" to user.fullNames,
-                "phone" to (user.phone ?: ""), // Store empty string if null
-                "email" to user.email
+                "phone" to (user.phone ?: ""),
+                "email" to user.email,
+
+                // Location Info
+                "facility" to location.facility,
+                "facilityName" to location.facilityName,
+                "ward" to location.ward,
+                "wardName" to location.wardName,
+                "subCounty" to location.subCounty,
+                "subCountyName" to location.subCountyName,
+                "county" to location.county,
+                "countyName" to location.countyName,
+                "country" to location.country,
+                "countryName" to location.countryName
             )
 
         userDetails.forEach { (key, value) -> formatter.saveSharedPref(key, value, context) }

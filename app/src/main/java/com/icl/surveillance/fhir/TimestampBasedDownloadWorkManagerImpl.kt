@@ -1,8 +1,11 @@
 package com.icl.surveillance.fhir
 
+import android.content.Context
 import com.google.android.fhir.sync.DownloadWorkManager
 import com.google.android.fhir.sync.SyncDataParams
 import com.google.android.fhir.sync.download.DownloadRequest
+import com.icl.surveillance.models.UserRole
+import com.icl.surveillance.utils.FormatterClass
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Date
@@ -17,10 +20,13 @@ import org.hl7.fhir.r4.model.Reference
 import org.hl7.fhir.r4.model.Resource
 import org.hl7.fhir.r4.model.ResourceType
 
-class TimestampBasedDownloadWorkManagerImpl(private val dataStore: DemoDataStore) :
+class TimestampBasedDownloadWorkManagerImpl(
+    private val dataStore: DemoDataStore,
+    val context: Context
+) :
     DownloadWorkManager {
     private val resourceTypeList = ResourceType.values().map { it.name }
-    private val urls = getRespectiveFilteredResources()
+    private val urls = getRespectiveFilteredResources(context)
 
 
     override suspend fun getNextRequest(): DownloadRequest? {
@@ -133,8 +139,70 @@ class TimestampBasedDownloadWorkManagerImpl(private val dataStore: DemoDataStore
             }
     }
 
-    fun getRespectiveFilteredResources(): LinkedList<String> {
-        val userRole = "sub_county_user"
+    fun getFacilitiesInSubcounty(subcountyId: String): List<String> {
+        val map = mapOf(
+            "sc001" to listOf("101", "102", "103"),
+            "sc002" to listOf("201", "202")
+        )
+        return map[subcountyId] ?: emptyList()
+    }
+
+
+    fun getRespectiveFilteredResources(context: Context): LinkedList<String> {
+        val formatter = FormatterClass()
+        val storedRole = formatter.getSharedPref("practitionerRole", context)
+        val userRole = UserRole.fromKey(storedRole ?: "")
+        val urls = when (userRole) {
+
+            UserRole.FACILITY_SURVEILLANCE_FOCAL_PERSON, UserRole.SUPERVISOR, UserRole.VACCINATOR -> {
+                val facility = formatter.getSharedPref("facility", context)
+                if (facility != null) {
+                    listOf(
+                        "Patient?organization?=Organization/{$facility}_sort=_lastUpdated",
+                        "AllergyIntolerance",
+                        "Observation?_count=1000",
+                        "Encounter?_count=1000"
+                    )
+                } else emptyList()
+            }
+
+            UserRole.SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
+                val subCounty = formatter.getSharedPref("subCounty", context)
+                if (subCounty != null) {
+                    val facilities = getFacilitiesInSubcounty(subCounty) // e.g., ["1234", "5678"]
+                    if (facilities.isNotEmpty()) {
+                        val patientQueries = facilities.map { facilityId ->
+                            "Patient?organization=Organization/$facilityId&_sort=_lastUpdated"
+                        }
+                        val extraResources = listOf(
+                            "Patient?_sort=_lastUpdated",
+                            "Encounter?_count=1000",
+                            "MeasureReport?_count=1000",
+                            "QuestionnaireResponse?_count=1000"
+                        )
+                        patientQueries + extraResources
+                    } else
+                        emptyList()
+
+                } else emptyList()
+            }
+
+            UserRole.COUNTY_DISEASE_SURVEILLANCE_OFFICER -> listOf(
+                "MeasureReport?_count=1000",
+                "QuestionnaireResponse?_count=1000",
+                "Specimen?_count=1000"
+            )
+
+
+            null -> emptyList()
+        }
+
+        return LinkedList(urls)
+    }
+
+    fun getRespectiveFilteredResourcesAlt(): LinkedList<String> {
+        val userRole = "sub_county_users"
+
         val urls = when (userRole.lowercase()) {
             "facility_nurse" -> listOf(
                 "Patient?_sort=_lastUpdated",

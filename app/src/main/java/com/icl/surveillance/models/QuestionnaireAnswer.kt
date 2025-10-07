@@ -101,6 +101,7 @@ data class FhirEntry(
     val resource: LocationResource,
     val search: SearchInfo
 )
+
 data class LocationResource(
     val resourceType: String = "Location",
     val id: String,
@@ -144,22 +145,6 @@ data class DbSignInResponse(
     val refresh_token: String,
 )
 
-data class UserResponse(
-    val status: String,
-    val user: User
-)
-
-data class User(
-    val firstName: String,
-    val lastName: String,
-    val role: String,
-    val id: String,
-    val idNumber: String,
-    val fullNames: String,
-    val phone: String?, // Nullable
-    val email: String
-)
-
 data class DbResetPassword(
     val status: String,
     val response: String,
@@ -170,20 +155,6 @@ data class DbResponseError(
     val error: String,
 )
 
-data class DbUserInfoResponse(
-    val user: DbUser?,
-)
-
-data class DbUser(
-    val firstName: String,
-    val lastName: String,
-    val role: String,
-    val id: String,
-    val idNumber: String,
-    val fullNames: String,
-    val phone: String?, // nullable
-    val email: String
-)
 
 data class Notification(
     val title: String,
@@ -202,3 +173,66 @@ data class SpecimenConfig(
     val entryLinkId: String,
     val dateLinkId: String
 )
+
+data class UserResponse(
+    val status: String,
+    val user: User
+)
+
+data class User(
+    val firstName: String,
+    val lastName: String,
+    val fhirPractitionerId: String,
+    val practitionerRole: String,
+    val role: String,
+    val id: String,
+    val idNumber: String,
+    val fullNames: String,
+    val phone: String?, // Nullable
+    val email: String,
+    val locationInfo: LocationInfo
+)
+
+data class LocationInfo(
+    val facility: String,
+    val facilityName: String,
+    val ward: String,
+    val wardName: String,
+    val subCounty: String,
+    val subCountyName: String,
+    val county: String,
+    val countyName: String,
+    val country: String,
+    val countryName: String
+)
+
+data class UserProfilePrefs(
+    val firstName: String,
+    val lastName: String,
+    val fullNames: String,
+    val email: String,
+    val phone: String,
+    val idNumber: String,
+    val role: String,
+    val county: String,
+    val countyName: String,
+    val subCounty: String,
+    val subCountyName: String,
+    val ward: String,
+    val wardName: String,
+    val facility: String,
+    val facilityName: String
+)
+
+enum class UserRole(val key: String) {
+    COUNTY_DISEASE_SURVEILLANCE_OFFICER("county_user"),
+    SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER("sub_county_user"),
+    FACILITY_SURVEILLANCE_FOCAL_PERSON("facility_nurse"),
+    SUPERVISOR("supervisor"),
+    VACCINATOR("vaccinator");
+
+    companion object {
+        fun fromKey(key: String): UserRole? =
+            entries.firstOrNull { it.key.equals(key, ignoreCase = true) }
+    }
+}

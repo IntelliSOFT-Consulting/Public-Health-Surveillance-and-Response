@@ -4,7 +4,6 @@ import com.icl.surveillance.models.DbResetPassword
 import com.icl.surveillance.models.DbSetPasswordReq
 import com.icl.surveillance.models.DbSignIn
 import com.icl.surveillance.models.DbSignInResponse
-import com.icl.surveillance.models.DbUserInfoResponse
 import com.icl.surveillance.models.FhirBundle
 import com.icl.surveillance.models.UserResponse
 import okhttp3.RequestBody
@@ -23,17 +22,10 @@ interface Interface {
 
     @POST("provider/login")
     suspend fun signInUser(@Body dbSignIn: DbSignIn): Response<DbSignInResponse>
+
     @GET
     suspend fun fetchBundle(@Url url: String): FhirBundle
 
-
-    @GET("provider/me")
-    suspend fun getUser(): Response<UserResponse>
-
-    //    @GET("Location")
-//    suspend fun getLocations(
-//        @Query("_count") count: Int = 18000
-//    ): LocationResponse
     @PUT("Patient/{id}")
     @Headers("Content-Type: application/json")
     suspend fun sendPatientToServer(
@@ -48,7 +40,7 @@ interface Interface {
     @GET("provider/me")
     suspend fun getUserInfo(
         @Header("Authorization") token: String,
-    ): Response<DbUserInfoResponse>
+    ): Response<UserResponse>
 
     @GET("provider/reset-password")
     suspend fun resetPassword(

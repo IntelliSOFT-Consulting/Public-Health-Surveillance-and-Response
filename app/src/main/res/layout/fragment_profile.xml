@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:fillViewport="true"
-    android:padding="24dp">
+    android:padding="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             android:id="@+id/profileImage"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:contentDescription="@string/profile_image"
             android:src="@drawable/baseline_account_circle_24" />
 
@@ -54,21 +54,58 @@
             android:text="@string/_254_712_345_678"
             android:textColor="@color/black" />
 
-        <!-- Level -->
-        <TextView
-            android:id="@+id/tvLevel"
-            android:layout_width="wrap_content"
+
+        <!-- 👤 User Info Section -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:fontFamily="@font/inter"
-            android:text="Level: Sub-county"
-            android:textColor="@color/black" />
+            android:layout_marginTop="24dp"
+            android:background="@color/white"
+            android:backgroundTint="@color/white"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:strokeColor="@color/gray"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- ID Number -->
+                <include
+                    android:id="@+id/idItem"
+                    layout="@layout/item_label_value" />
+                <!-- Role -->
+                <include
+                    android:id="@+id/roleItem"
+                    layout="@layout/item_label_value" />
+                <!-- County -->
+                <include
+                    android:id="@+id/countyItem"
+                    layout="@layout/item_label_value" />
+                <!-- Sub-county -->
+                <include
+                    android:id="@+id/subCountyItem"
+                    layout="@layout/item_label_value" />
+                <!-- Ward -->
+                <include
+                    android:id="@+id/wardItem"
+                    layout="@layout/item_label_value" />
+                <!-- Facility -->
+                <include
+                    android:id="@+id/facilityItem"
+                    layout="@layout/item_label_value" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- ⚡ App Management Section -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
             android:background="@color/white"
             android:backgroundTint="@color/white"
             android:elevation="15dp"
@@ -114,7 +151,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
             android:background="@color/white"
             android:backgroundTint="@color/white"
             android:elevation="15dp"

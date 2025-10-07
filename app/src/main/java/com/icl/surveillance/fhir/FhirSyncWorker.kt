@@ -12,19 +12,22 @@ import com.google.android.fhir.sync.upload.UploadStrategy
 class FhirSyncWorker(appContext: Context, workerParams: WorkerParameters) :
     FhirSyncWorker(appContext, workerParams) {
 
-  override fun getDownloadWorkManager(): DownloadWorkManager {
-    return TimestampBasedDownloadWorkManagerImpl(FhirApplication.dataStore(applicationContext))
-  }
+    override fun getDownloadWorkManager(): DownloadWorkManager {
+        return TimestampBasedDownloadWorkManagerImpl(
+            FhirApplication.dataStore(applicationContext),
+            applicationContext
+        )
+    }
 
-  override fun getConflictResolver() = AcceptLocalConflictResolver
+    override fun getConflictResolver() = AcceptLocalConflictResolver
 
-  override fun getFhirEngine() = FhirApplication.fhirEngine(applicationContext)
+    override fun getFhirEngine() = FhirApplication.fhirEngine(applicationContext)
 
-  override fun getUploadStrategy(): UploadStrategy =
-      UploadStrategy.forBundleRequest(
-          methodForCreate = HttpCreateMethod.PUT,
-          methodForUpdate = HttpUpdateMethod.PATCH,
-          squash = true,
-          bundleSize = 500,
-      )
+    override fun getUploadStrategy(): UploadStrategy =
+        UploadStrategy.forBundleRequest(
+            methodForCreate = HttpCreateMethod.PUT,
+            methodForUpdate = HttpUpdateMethod.PATCH,
+            squash = true,
+            bundleSize = 500,
+        )
 }

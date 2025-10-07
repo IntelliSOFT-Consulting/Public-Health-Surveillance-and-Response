@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import android.text.format.DateFormat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
@@ -36,7 +37,9 @@ class PeriodicSyncViewModel(application: Application) : AndroidViewModel(applica
         viewModelScope.launch { initializePeriodicSync() }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private suspend fun initializePeriodicSync() {
+
         val periodicSyncJobStatusFlow =
             Sync.periodicSync<FhirSyncWorker>(
                 context = getApplication<Application>().applicationContext,
@@ -48,6 +51,7 @@ class PeriodicSyncViewModel(application: Application) : AndroidViewModel(applica
             )
 
         periodicSyncJobStatusFlow.collect { status -> _pollPeriodicSyncJobStatus.emit(status) }
+
     }
 
     fun collectPeriodicSyncJobStatus() {
@@ -93,12 +97,14 @@ class PeriodicSyncViewModel(application: Application) : AndroidViewModel(applica
                         LastSyncJobStatus.Succeeded::class.java.simpleName,
                     )
 
-            is LastSyncJobStatus.Failed ->
+            is LastSyncJobStatus.Failed -> {
+                println("Failed last sync status: ${lastSyncJobStatus.timestamp}")
                 getApplication<FhirApplication>()
                     .getString(
                         R.string.last_sync_status,
                         LastSyncJobStatus.Failed::class.java.simpleName
                     )
+            }
 
             else -> getApplication<FhirApplication>().getString(R.string.last_sync_status_na)
         }

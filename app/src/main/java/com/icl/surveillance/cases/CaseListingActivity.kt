@@ -61,8 +61,7 @@ class CaseListingActivity : AppCompatActivity() {
                 PatientListViewModel.PatientListViewModelFactory(
                     this.application, fhirEngine
                 ),
-            )
-                .get(PatientListViewModel::class.java)
+            ).get(PatientListViewModel::class.java)
         loadData()
     }
 
@@ -165,7 +164,7 @@ class CaseListingActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         try {
-            loadData()
+//            loadData()
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -268,7 +267,7 @@ class CaseListingActivity : AppCompatActivity() {
                     .setConfirmText("Yes,Upload!")
                     .setConfirmClickListener { sDialog ->
                         lifecycleScope.launch {
-                          //  patientListViewModel.prepareUploadData("mpox-register")
+                            //  patientListViewModel.prepareUploadData("mpox-register")
                             val workRequest = OneTimeWorkRequestBuilder<MpoxSyncWorker>().build()
                             WorkManager.getInstance(this@CaseListingActivity).enqueue(workRequest)
                         }

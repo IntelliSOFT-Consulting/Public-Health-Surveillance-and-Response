@@ -7,11 +7,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import cn.pedant.SweetAlert.SweetAlertDialog
+import com.icl.surveillance.R
 import com.icl.surveillance.auth.LoginActivity
 import com.icl.surveillance.databinding.FragmentProfileBinding
+import com.icl.surveillance.databinding.ItemLabelValueBinding
+import com.icl.surveillance.models.UserProfilePrefs
 import com.icl.surveillance.utils.FormatterClass
 import java.io.File
 
@@ -34,6 +38,11 @@ class ProfileFragment : Fragment() {
 
 
         return root
+    }
+
+    fun setLabelValue(bindingSection: ItemLabelValueBinding, labelText: String, valueText: String) {
+        bindingSection.tvLabel.text = labelText
+        bindingSection.tvValue.text = valueText
     }
 
     private fun deleteDir(dir: File?): Boolean {
@@ -83,6 +92,28 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    fun getUserPrefs(context: Context): UserProfilePrefs {
+        val f = FormatterClass()
+        return UserProfilePrefs(
+            f.getSharedPref("firstName", context) ?: "",
+            f.getSharedPref("lastName", context) ?: "",
+            f.getSharedPref("fullNames", context) ?: "",
+            f.getSharedPref("email", context) ?: "",
+            f.getSharedPref("phone", context) ?: "-",
+            f.getSharedPref("idNumber", context) ?: "",
+            f.getSharedPref("role", context) ?: "",
+            f.getSharedPref("county", context) ?: "",
+            f.getSharedPref("countyName", context) ?: "",
+            f.getSharedPref("subCounty", context) ?: "",
+            f.getSharedPref("subCountyName", context) ?: "",
+            f.getSharedPref("ward", context) ?: "",
+            f.getSharedPref("wardName", context) ?: "",
+            f.getSharedPref("facility", context) ?: "",
+            f.getSharedPref("facilityName", context) ?: ""
+        )
+    }
+
+
     private fun mapUserData() {
         try {
             binding.apply {
@@ -97,7 +128,30 @@ class ProfileFragment : Fragment() {
                 tvUserName.text = "$firstName $lastName"
                 tvEmail.text = " $email"
                 tvPhone.text = " $phone"
-                tvLevel.text = "ROLE: $role"
+
+
+                // Set reusable items
+                val user = getUserPrefs(requireContext())
+
+
+                setLabelValue(binding.idItem, "ID Number:", user.idNumber)
+                setLabelValue(binding.roleItem, "Role:", user.role)
+                setLabelValue(
+                    binding.countyItem,
+                    "County:", user.countyName
+                )
+                setLabelValue(
+                    binding.subCountyItem,
+                    "Sub-county:", user.subCountyName
+                )
+                setLabelValue(
+                    binding.wardItem,
+                    "Ward:", user.wardName
+                )
+                setLabelValue(
+                    binding.facilityItem,
+                    "Facility:", user.facilityName
+                )
 
             }
 
