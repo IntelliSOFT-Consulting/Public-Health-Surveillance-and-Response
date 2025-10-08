@@ -54,9 +54,11 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.icl.surveillance.auth.LoginActivity
 import com.icl.surveillance.fhir.DemoDataStore
+import com.icl.surveillance.viewmodels.PeriodicSyncViewModel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.ResourceType
+import kotlin.getValue
 import kotlin.jvm.java
 
 class MainActivity : AppCompatActivity() {
@@ -70,7 +72,7 @@ class MainActivity : AppCompatActivity() {
     private val UPDATE_REQUEST_CODE = 123
     private lateinit var binding: ActivityMainBinding
 
-
+    private val periodicViewModel: PeriodicSyncViewModel by viewModels()
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             val granted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
@@ -117,7 +119,7 @@ class MainActivity : AppCompatActivity() {
 
             insets
         }
-
+//        periodicViewModel.collectPeriodicSyncJobStatus()
         appUpdateManager = AppUpdateManagerFactory.create(this)
         checkForAppUpdate()
 

@@ -16,6 +16,7 @@ import com.icl.surveillance.auth.LoginActivity
 import com.icl.surveillance.databinding.FragmentProfileBinding
 import com.icl.surveillance.databinding.ItemLabelValueBinding
 import com.icl.surveillance.models.UserProfilePrefs
+import com.icl.surveillance.models.UserRole
 import com.icl.surveillance.utils.FormatterClass
 import java.io.File
 
@@ -134,24 +135,67 @@ class ProfileFragment : Fragment() {
                 val user = getUserPrefs(requireContext())
 
 
-                setLabelValue(binding.idItem, "ID Number:", user.idNumber)
-                setLabelValue(binding.roleItem, "Role:", user.role)
+                setLabelValue(idItem, "ID Number:", user.idNumber)
+                setLabelValue(roleItem, "Role:", user.role)
                 setLabelValue(
-                    binding.countyItem,
+                    countyItem,
                     "County:", user.countyName
                 )
                 setLabelValue(
-                    binding.subCountyItem,
+                    subCountyItem,
                     "Sub-county:", user.subCountyName
                 )
                 setLabelValue(
-                    binding.wardItem,
+                    wardItem,
                     "Ward:", user.wardName
                 )
                 setLabelValue(
-                    binding.facilityItem,
+                    facilityItem,
                     "Facility:", user.facilityName
                 )
+                val userRole = UserRole.fromAny(user.role)
+                println("userRole: $userRole")
+                println("userRole: ${user.role}")
+                when (userRole) {
+                    UserRole.ADMINISTRATOR -> {
+                        countyItem.lnParent.visibility = View.GONE
+                        subCountyItem.lnParent.visibility = View.GONE
+                        wardItem.lnParent.visibility = View.GONE
+                        facilityItem.lnParent.visibility = View.GONE
+                    }
+
+                    UserRole.SUPERUSER -> {
+                        countyItem.lnParent.visibility = View.GONE
+                        subCountyItem.lnParent.visibility = View.GONE
+                        wardItem.lnParent.visibility = View.GONE
+                        facilityItem.lnParent.visibility = View.GONE
+                    }
+
+                    UserRole.COUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
+                        countyItem.lnParent.visibility = View.VISIBLE
+                        subCountyItem.lnParent.visibility = View.GONE
+                        wardItem.lnParent.visibility = View.GONE
+                        facilityItem.lnParent.visibility = View.GONE
+
+                    }
+
+                    UserRole.SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
+                        countyItem.lnParent.visibility = View.VISIBLE
+                        subCountyItem.lnParent.visibility = View.VISIBLE
+                        wardItem.lnParent.visibility = View.GONE
+                        facilityItem.lnParent.visibility = View.GONE
+
+                    }
+
+                    UserRole.FACILITY_SURVEILLANCE_FOCAL_PERSON,
+                    UserRole.SUPERVISOR,
+                    UserRole.VACCINATOR -> {
+
+                    }
+
+                    else -> {
+                    }
+                }
 
             }
 

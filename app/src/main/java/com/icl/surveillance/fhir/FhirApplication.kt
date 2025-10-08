@@ -22,6 +22,7 @@ import com.google.android.fhir.sync.Sync
 import com.google.android.fhir.sync.remote.HttpLogger
 import com.icl.surveillance.network.Constants.BASE_URL
 import com.icl.surveillance.utils.ContribQuestionnaireItemViewHolderFactoryMatchersProviderFactory
+import com.icl.surveillance.utils.FormatterClass
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -88,8 +89,24 @@ class FhirApplication : Application(), DataCaptureConfig.Provider {
                     ExistingPeriodicWorkPolicy.KEEP,   // KEEP = don't run again if already enqueued
                     workRequest
                 )
+            createPatientsOnAppFirstLaunch()
+
         }
     }
+
+    fun createPatientsOnAppFirstLaunch() {
+        CoroutineScope(Dispatchers.IO).launch {
+            if (FormatterClass().isFirstLaunch(this@FhirApplication)) {
+                println("Creating Locations & Organizations on first launch")
+                ResourceCreationHelper().createLocations().forEach { fhirEngine.create(it) }
+                ResourceCreationHelper().createRespectiveOrganization()
+                    .forEach { fhirEngine.create(it) }
+                FormatterClass().setFirstLaunchCompleted(this@FhirApplication)
+                println("Locations & Organizations created on first launch")
+            }
+        }
+    }
+
 
     private fun constructFhirEngine(): FhirEngine {
         return FhirEngineProvider.getInstance(this)

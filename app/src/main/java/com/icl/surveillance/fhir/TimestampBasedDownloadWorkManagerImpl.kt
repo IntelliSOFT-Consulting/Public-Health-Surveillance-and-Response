@@ -1,11 +1,19 @@
 package com.icl.surveillance.fhir
 
 import android.content.Context
+import com.google.android.fhir.FhirEngine
+import com.google.android.fhir.datacapture.extensions.logicalId
+import com.google.android.fhir.search.search
 import com.google.android.fhir.sync.DownloadWorkManager
 import com.google.android.fhir.sync.SyncDataParams
 import com.google.android.fhir.sync.download.DownloadRequest
+import com.icl.surveillance.models.LocationLevel
 import com.icl.surveillance.models.UserRole
 import com.icl.surveillance.utils.FormatterClass
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Date
@@ -15,19 +23,31 @@ import org.hl7.fhir.exceptions.FHIRException
 import org.hl7.fhir.r4.model.Bundle
 import org.hl7.fhir.r4.model.Encounter
 import org.hl7.fhir.r4.model.ListResource
+import org.hl7.fhir.r4.model.Location
 import org.hl7.fhir.r4.model.OperationOutcome
+import org.hl7.fhir.r4.model.Organization
 import org.hl7.fhir.r4.model.Reference
 import org.hl7.fhir.r4.model.Resource
 import org.hl7.fhir.r4.model.ResourceType
+import kotlin.collections.emptyList
 
 class TimestampBasedDownloadWorkManagerImpl(
-    private val dataStore: DemoDataStore,
-    val context: Context
-) :
-    DownloadWorkManager {
+    private val dataStore: DemoDataStore, val context: Context, val fhirEngine: FhirEngine
+) : DownloadWorkManager {
     private val resourceTypeList = ResourceType.values().map { it.name }
-    private val urls = getRespectiveFilteredResources(context)
+    private var urls: LinkedList<String> = LinkedList()
+    private val locationAndOrganizationUrls = LinkedList(listOf("Location", "Organization"))
 
+    init {
+        getRespectiveFilteredResources(context) { filteredUrls ->
+            urls = LinkedList<String>().apply {
+                addAll(locationAndOrganizationUrls)
+                addAll(filteredUrls)
+            }
+            // ✅ urls is now ready for use
+            println("Filtered resources: $urls")
+        }
+    }
 
     override suspend fun getNextRequest(): DownloadRequest? {
         var url = urls.poll() ?: return null
@@ -44,8 +64,7 @@ class TimestampBasedDownloadWorkManagerImpl(
         return urls.associate { url ->
             val resourceType = ResourceType.fromCode(url.substringBefore("?"))
             if (resourceType == ResourceType.Patient) {
-                resourceType to
-                        url.plus("&${SyncDataParams.SUMMARY_KEY}=${SyncDataParams.SUMMARY_COUNT_VALUE}")
+                resourceType to url.plus("&${SyncDataParams.SUMMARY_KEY}=${SyncDataParams.SUMMARY_COUNT_VALUE}")
             } else {
                 resourceType to url
             }
@@ -85,26 +104,6 @@ class TimestampBasedDownloadWorkManagerImpl(
                     val patientUrl = "${entry.fullUrl}/\$everything"
                     urls.add(patientUrl)
                 }
-//                if (type == "Encounter") {
-//                    val patientUrl = "${entry.fullUrl}/\$everything"
-//                    urls.add(patientUrl)
-//
-//                    val no = entry.resource as Encounter
-//                    if (no.hasPartOf()) {
-//                        val patientUrl = "${entry.fullUrl}/\$everything"
-//                        urls.add(patientUrl)
-//                    }
-//                }
-//
-//                if (type == "Observation") {
-//                    val patientUrl = "${entry.fullUrl}"
-//                    urls.add(patientUrl)
-//                }
-
-//                if (type == "Location") {
-//                    val patientUrl = "${entry.fullUrl}"
-//                    urls.add(patientUrl)
-//                }
             }
 
             val nextUrl =
@@ -117,10 +116,8 @@ class TimestampBasedDownloadWorkManagerImpl(
         // Finally, extract the downloaded resources from the bundle.
         var bundleCollection: Collection<Resource> = mutableListOf()
         if (response is Bundle && response.type == Bundle.BundleType.SEARCHSET) {
-            bundleCollection =
-                response.entry
-                    .map { it.resource }
-                    .also { extractAndSaveLastUpdateTimestampToFetchFutureUpdates(it) }
+            bundleCollection = response.entry.map { it.resource }
+                .also { extractAndSaveLastUpdateTimestampToFetchFutureUpdates(it) }
         }
         return bundleCollection
     }
@@ -128,157 +125,303 @@ class TimestampBasedDownloadWorkManagerImpl(
     private suspend fun extractAndSaveLastUpdateTimestampToFetchFutureUpdates(
         resources: List<Resource>,
     ) {
-        resources
-            .groupBy { it.resourceType }
-            .entries
-            .map { map ->
-                dataStore.saveLastUpdatedTimestamp(
-                    map.key,
-                    map.value.maxOfOrNull { it.meta.lastUpdated }?.toTimeZoneString() ?: "",
-                )
+        resources.groupBy { it.resourceType }.entries.map { map ->
+            dataStore.saveLastUpdatedTimestamp(
+                map.key,
+                map.value.maxOfOrNull { it.meta.lastUpdated }?.toTimeZoneString() ?: "",
+            )
+        }
+    }
+
+    fun getFacilitiesByLevel(
+        startId: String,
+        level: LocationLevel,
+        onResult: (List<String>) -> Unit
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val facilityIds = mutableListOf<String>()
+                val locationIdsToProcess = mutableListOf(startId)
+
+                when (level) {
+                    LocationLevel.FACILITY -> {
+                        // Already at facility level
+                        facilityIds.add(startId)
+                    }
+
+                    LocationLevel.WARD -> {
+                        // One-level deep
+                        for (wardId in locationIdsToProcess) {
+                            val facilities = fhirEngine.search<Location> {
+                                filter(Location.PARTOF, { value = "Location/$wardId" })
+                            }
+                            facilityIds.addAll(facilities.map { it.resource.logicalId })
+                        }
+                    }
+
+                    LocationLevel.SUB_COUNTY -> {
+                        // Get wards under sub-county
+                        val wards = fhirEngine.search<Location> {
+                            filter(Location.PARTOF, { value = "Location/$startId" })
+                        }
+                        val wardIds = wards.map { it.resource.logicalId }
+
+                        // Get facilities under each ward
+                        for (wardId in wardIds) {
+                            val facilities = fhirEngine.search<Location> {
+                                filter(Location.PARTOF, { value = "Location/$wardId" })
+                            }
+                            facilityIds.addAll(facilities.map { it.resource.logicalId })
+                        }
+                    }
+
+                    LocationLevel.COUNTY -> {
+                        // Get sub-counties under county
+                        val subCounties = fhirEngine.search<Location> {
+                            filter(Location.PARTOF, { value = "Location/$startId" })
+                        }
+
+                        val subCountyIds = subCounties.map { it.resource.logicalId }
+
+                        for (subCountyId in subCountyIds) {
+                            // Get wards under sub-county
+                            val wards = fhirEngine.search<Location> {
+                                filter(Location.PARTOF, { value = "Location/$subCountyId" })
+                            }
+
+                            val wardIds = wards.map { it.resource.logicalId }
+
+                            // Get facilities under each ward
+                            for (wardId in wardIds) {
+                                val facilities = fhirEngine.search<Location> {
+                                    filter(Location.PARTOF, { value = "Location/$wardId" })
+                                }
+                                facilityIds.addAll(facilities.map { it.resource.logicalId })
+                            }
+                        }
+                    }
+
+                    LocationLevel.NATIONAL -> {
+                        // Get all counties first
+                        val counties = fhirEngine.search<Location> {
+                            // Optional: Add filter by type = "county" if available
+                        }
+
+                        val countyIds = counties.map { it.resource.logicalId }
+
+                        for (countyId in countyIds) {
+                            // Recursive call for each county
+                            getFacilitiesByLevel(countyId, LocationLevel.COUNTY) { ids ->
+                                facilityIds.addAll(ids)
+                            }
+                        }
+                    }
+                }
+
+                withContext(Dispatchers.Main) {
+                    onResult(facilityIds)
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    onResult(emptyList())
+                }
             }
+        }
     }
 
-    fun getFacilitiesInSubcounty(subcountyId: String): List<String> {
-        val map = mapOf(
-            "sc001" to listOf("101", "102", "103"),
-            "sc002" to listOf("201", "202")
-        )
-        return map[subcountyId] ?: emptyList()
+    fun getAllFacilities(
+        parentId: String, onResult: (List<String>) -> Unit
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val locations = fhirEngine.search<Location> {
+                    filter(Location.PARTOF, { value = "Location/$parentId" })
+                }
+                val facilities = locations.map { it.resource.logicalId }
+
+                withContext(Dispatchers.Main) {
+                    onResult(facilities)
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    onResult(emptyList()) // fallback on error
+                }
+            }
+        }
+    }
+
+    fun getAllFacilitiesAlt(
+        parentId: String, onResult: (List<String>) -> Unit
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                // Step 1: Get all Location resources
+                val allLocations = fhirEngine.search<Location> {
+                    filter(Location.PARTOF, { value = "Location/$parentId" })
+                }.map { it.resource }
+
+                // Step 2: Build map of Location ID → Location
+                val locationMap = allLocations.associateBy { it.id }
+
+                // Step 3: Filter facilities
+                val facilities = allLocations.filter { loc ->
+                    loc.hasTypeCode("FACILITY") && isUnderNationalHierarchy(loc, locationMap)
+                }
+
+                val facilityIds = facilities.map { it.id }
+
+                withContext(Dispatchers.Main) {
+                    onResult(facilityIds)
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    onResult(emptyList())
+                }
+            }
+        }
+    }
+
+    fun Location.hasTypeCode(code: String): Boolean {
+        return this.type.any { type ->
+            type.coding.any { coding ->
+                coding.code.equals(code, ignoreCase = true)
+            }
+        }
+    }
+
+    fun isUnderNationalHierarchy(
+        location: Location, locationMap: Map<String, Location>
+    ): Boolean {
+        var current = location
+        var depth = 0
+
+        while (current.partOf?.reference != null && depth < 5) {
+            val parentId = current.partOf.reference.removePrefix("Location/")
+            val parent = locationMap[parentId] ?: return false
+            current = parent
+            depth++
+        }
+
+        // If it has at least 3 levels above (county → subcounty → ward), assume valid
+        return depth >= 3
     }
 
 
-    fun getRespectiveFilteredResources(context: Context): LinkedList<String> {
+    fun getRespectiveFilteredResources(
+        context: Context, onResult: (LinkedList<String>) -> Unit
+    ) {
         val formatter = FormatterClass()
         val storedRole = formatter.getSharedPref("practitionerRole", context)
-        val userRole = UserRole.fromKey(storedRole ?: "")
-        val urls = when (userRole) {
+        val userRole = UserRole.fromAny(storedRole ?: "")
 
+        println("Current User Role:::: $userRole")
+
+        when (userRole) {
             UserRole.FACILITY_SURVEILLANCE_FOCAL_PERSON, UserRole.SUPERVISOR, UserRole.VACCINATOR -> {
                 val facility = formatter.getSharedPref("facility", context)
-                if (facility != null) {
+                val urls = if (facility != null) {
                     listOf(
-                        "Patient?organization?=Organization/{$facility}_sort=_lastUpdated",
+                        "Patient?organization=Organization/$facility&_sort=_lastUpdated",
                         "AllergyIntolerance",
                         "Observation?_count=1000",
                         "Encounter?_count=1000"
                     )
                 } else emptyList()
+
+                onResult(LinkedList(urls))
             }
 
             UserRole.SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
                 val subCounty = formatter.getSharedPref("subCounty", context)
                 if (subCounty != null) {
-                    val facilities = getFacilitiesInSubcounty(subCounty) // e.g., ["1234", "5678"]
-                    if (facilities.isNotEmpty()) {
+                    getFacilitiesByLevel(subCounty, LocationLevel.SUB_COUNTY) { facilities ->
                         val patientQueries = facilities.map { facilityId ->
                             "Patient?organization=Organization/$facilityId&_sort=_lastUpdated"
                         }
+
                         val extraResources = listOf(
                             "Patient?_sort=_lastUpdated",
                             "Encounter?_count=1000",
                             "MeasureReport?_count=1000",
                             "QuestionnaireResponse?_count=1000"
                         )
-                        patientQueries + extraResources
-                    } else
-                        emptyList()
 
-                } else emptyList()
+                        val combinedResources = LinkedList(patientQueries + extraResources)
+                        onResult(combinedResources)
+                    }
+                } else {
+                    onResult(LinkedList()) // subCounty was null
+                }
             }
 
-            UserRole.COUNTY_DISEASE_SURVEILLANCE_OFFICER -> listOf(
-                "MeasureReport?_count=1000",
-                "QuestionnaireResponse?_count=1000",
-                "Specimen?_count=1000"
-            )
+            UserRole.COUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
+                val urls = listOf(
+                    "MeasureReport?_count=1000",
+                    "QuestionnaireResponse?_count=1000",
+                    "Specimen?_count=1000"
+                )
+                onResult(LinkedList(urls))
+            }
+
+            null -> {
+                onResult(LinkedList()) // unknown role
+            }
+
+            UserRole.ADMINISTRATOR -> {
+
+            }
+
+            UserRole.SUPERUSER -> {
 
 
-            null -> emptyList()
-        }
-
-        return LinkedList(urls)
-    }
-
-    fun getRespectiveFilteredResourcesAlt(): LinkedList<String> {
-        val userRole = "sub_county_users"
-
-        val urls = when (userRole.lowercase()) {
-            "facility_nurse" -> listOf(
-                "Patient?_sort=_lastUpdated",
-                "AllergyIntolerance",
-                "Observation?_count=1000",
-                "Encounter?_count=1000"
-            )
-
-            "sub_county_user" -> listOf(
-                "Patient?_sort=_lastUpdated",
-                "Encounter?_count=1000",
-                "MeasureReport?_count=1000",
-                "QuestionnaireResponse?_count=1000"
-            )
-
-            "county_user" -> listOf(
-                "MeasureReport?_count=1000",
-                "QuestionnaireResponse?_count=1000",
-                "Specimen?_count=1000"
-            )
-
-            "national_user" -> listOf(
-                "Patient?_sort=_lastUpdated",
-                "AllergyIntolerance",
-                "Observation?_count=1000",
-                "Encounter?_count=1000",
-                "MeasureReport?_count=1000",
-                "QuestionnaireResponse?_count=1000",
-                "Specimen?_count=1000"
-            )
-
-            else -> emptyList() // No access or undefined role
-        }
-
-        return LinkedList(urls)
-    }
-}
-
-/**
- * Affixes the last updated timestamp to the request URL.
- *
- * If the request URL includes the `$everything` parameter, the last updated timestamp will be
- * attached using the `_since` parameter. Otherwise, the last updated timestamp will be attached
- * using the `_lastUpdated` parameter.
- */
-private fun affixLastUpdatedTimestamp(url: String, lastUpdated: String): String {
-    var downloadUrl = url
-
-    // Affix lastUpdate to a $everything query using _since as per:
-    // https://hl7.org/fhir/operation-patient-everything.html
-    if (downloadUrl.contains("\$everything")) {
-        downloadUrl = "$downloadUrl?_since=$lastUpdated"
-    }
-    if (!downloadUrl.contains("\$everything")) {
-        downloadUrl = if (downloadUrl.contains("?_count=")) {
-            url
-        } else if (downloadUrl.contains("&_lastUpdated")) {
-            url
-        } else if (downloadUrl.contains("sort")) {
-            "$downloadUrl&_lastUpdated=gt$lastUpdated"
-        } else {
-            "$downloadUrl?_lastUpdated=gt$lastUpdated"
+            }
         }
     }
 
-    // Do not modify any URL set by a server that specifies the token of the page to return.
-    if (downloadUrl.contains("&page_token")) {
-        downloadUrl = url
+
+    /**
+     * Affixes the last updated timestamp to the request URL.
+     *
+     * If the request URL includes the `$everything` parameter, the last updated timestamp will be
+     * attached using the `_since` parameter. Otherwise, the last updated timestamp will be attached
+     * using the `_lastUpdated` parameter.
+     */
+    private fun affixLastUpdatedTimestamp(url: String, lastUpdated: String): String {
+        var downloadUrl = url
+
+        // Affix lastUpdate to a $everything query using _since as per:
+        // https://hl7.org/fhir/operation-patient-everything.html
+        if (downloadUrl.contains("\$everything")) {
+            downloadUrl = "$downloadUrl?_since=$lastUpdated"
+        }
+        if (!downloadUrl.contains("\$everything")) {
+            downloadUrl = if (downloadUrl.contains("?_count=")) {
+                url
+            } else if (downloadUrl.contains("&_lastUpdated")) {
+                url
+            } else if (downloadUrl.contains("sort")) {
+                "$downloadUrl&_lastUpdated=gt$lastUpdated"
+            } else {
+                "$downloadUrl?_lastUpdated=gt$lastUpdated"
+            }
+        }
+
+        // Do not modify any URL set by a server that specifies the token of the page to return.
+        if (downloadUrl.contains("&page_token")) {
+            downloadUrl = url
+        }
+        return downloadUrl
     }
-    return downloadUrl
-}
 
 
-private fun Date.toTimeZoneString(): String {
-    val simpleDateFormat =
-        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault())
-            .withZone(ZoneId.systemDefault())
-    return simpleDateFormat.format(this.toInstant())
+    private fun Date.toTimeZoneString(): String {
+        val simpleDateFormat =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault())
+                .withZone(ZoneId.systemDefault())
+        return simpleDateFormat.format(this.toInstant())
+    }
 }

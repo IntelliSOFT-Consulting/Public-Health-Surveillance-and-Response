@@ -1,6 +1,7 @@
 package com.icl.surveillance.fhir
 
 import android.content.Context
+import androidx.datastore.dataStore
 import androidx.work.WorkerParameters
 import com.google.android.fhir.sync.AcceptLocalConflictResolver
 import com.google.android.fhir.sync.DownloadWorkManager
@@ -13,9 +14,11 @@ class FhirSyncWorker(appContext: Context, workerParams: WorkerParameters) :
     FhirSyncWorker(appContext, workerParams) {
 
     override fun getDownloadWorkManager(): DownloadWorkManager {
+        val engine = FhirApplication.fhirEngine(applicationContext)
         return TimestampBasedDownloadWorkManagerImpl(
-            FhirApplication.dataStore(applicationContext),
-            applicationContext
+            dataStore = FhirApplication.dataStore(applicationContext),
+            context = applicationContext,
+            fhirEngine = engine
         )
     }
 

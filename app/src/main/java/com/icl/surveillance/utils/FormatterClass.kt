@@ -4,10 +4,13 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import com.icl.surveillance.R
+import com.icl.surveillance.network.Constants.FIRST_LAUNCH_KEY
 import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.util.Date
 import java.util.Locale
+import kotlin.contracts.contract
+
 
 class FormatterClass {
     private val dateInverseFormatSeconds: SimpleDateFormat =
@@ -41,6 +44,20 @@ class FormatterClass {
             context.getSharedPreferences(context.getString(R.string.app_name), MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.remove(key)
+        editor.apply()
+    }
+
+    fun isFirstLaunch(context: Context): Boolean {
+        val sharedPreferences: SharedPreferences =
+            context.getSharedPreferences(context.getString(R.string.app_name), MODE_PRIVATE)
+        return sharedPreferences.getBoolean(FIRST_LAUNCH_KEY, true)
+    }
+
+    fun setFirstLaunchCompleted(context: Context) {
+        val sharedPreferences: SharedPreferences =
+            context.getSharedPreferences(context.getString(R.string.app_name), MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(FIRST_LAUNCH_KEY, false)
         editor.apply()
     }
 

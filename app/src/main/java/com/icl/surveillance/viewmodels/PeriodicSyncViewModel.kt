@@ -38,7 +38,7 @@ class PeriodicSyncViewModel(application: Application) : AndroidViewModel(applica
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private suspend fun initializePeriodicSync() {
+    suspend fun initializePeriodicSync() {
 
         val periodicSyncJobStatusFlow =
             Sync.periodicSync<FhirSyncWorker>(

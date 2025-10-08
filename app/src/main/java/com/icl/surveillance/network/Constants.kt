@@ -7,7 +7,7 @@ object Constants {
     const val LOCATION_STARTER = "${BASE_URL}Location?_count=200&_offset=0"
     const val NOTIFICATION_CODE = 1001
 
-
+    const val FIRST_LAUNCH_KEY = "is_first_launch"
     private const val PREF_NAME = "pagination_pref"
     private const val KEY_NEXT_URL = "next_url"
 
