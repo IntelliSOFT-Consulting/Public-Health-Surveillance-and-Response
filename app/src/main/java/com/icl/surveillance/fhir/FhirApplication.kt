@@ -73,33 +73,34 @@ class FhirApplication : Application(), DataCaptureConfig.Provider {
 
         CoroutineScope(Dispatchers.IO).launch {
             Sync.oneTimeSync<FhirSyncWorker>(this@FhirApplication)
-            val workRequest =
-                PeriodicWorkRequestBuilder<LocationDownloadedWorker>(15, TimeUnit.MINUTES)
-                    .setConstraints(
-                        Constraints.Builder()
-                            .setRequiredNetworkType(NetworkType.CONNECTED) // Ensure network is available
-                            .build()
-                    )
-                    .build()
-            val uniqueName = "location_downloader"//${UUID.randomUUID()}"
-
-            WorkManager.getInstance(this@FhirApplication)
-                .enqueueUniquePeriodicWork(
-                    uniqueName,  // unique name to avoid duplicates
-                    ExistingPeriodicWorkPolicy.KEEP,   // KEEP = don't run again if already enqueued
-                    workRequest
-                )
-            createPatientsOnAppFirstLaunch()
+//            val workRequest =
+//                PeriodicWorkRequestBuilder<LocationDownloadedWorker>(15, TimeUnit.MINUTES)
+//                    .setConstraints(
+//                        Constraints.Builder()
+//                            .setRequiredNetworkType(NetworkType.CONNECTED) // Ensure network is available
+//                            .build()
+//                    )
+//                    .build()
+//            val uniqueName = "location_downloader"//${UUID.randomUUID()}"
+//
+//            WorkManager.getInstance(this@FhirApplication)
+//                .enqueueUniquePeriodicWork(
+//                    uniqueName,  // unique name to avoid duplicates
+//                    ExistingPeriodicWorkPolicy.KEEP,   // KEEP = don't run again if already enqueued
+//                    workRequest
+//                )
+            createRequiredResourcesOnAppFirstLaunch()
 
         }
     }
 
-    fun createPatientsOnAppFirstLaunch() {
+    fun createRequiredResourcesOnAppFirstLaunch() {
         CoroutineScope(Dispatchers.IO).launch {
             if (FormatterClass().isFirstLaunch(this@FhirApplication)) {
                 println("Creating Locations & Organizations on first launch")
-                ResourceCreationHelper().createLocations().forEach { fhirEngine.create(it) }
-                ResourceCreationHelper().createRespectiveOrganization()
+                ResourceCreationHelper().createLocations(this@FhirApplication)
+                    .forEach { fhirEngine.create(it) }
+                ResourceCreationHelper().createRespectiveOrganization(this@FhirApplication)
                     .forEach { fhirEngine.create(it) }
                 FormatterClass().setFirstLaunchCompleted(this@FhirApplication)
                 println("Locations & Organizations created on first launch")

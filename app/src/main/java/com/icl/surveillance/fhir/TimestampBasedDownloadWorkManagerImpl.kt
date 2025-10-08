@@ -41,7 +41,7 @@ class TimestampBasedDownloadWorkManagerImpl(
     init {
         getRespectiveFilteredResources(context) { filteredUrls ->
             urls = LinkedList<String>().apply {
-                addAll(locationAndOrganizationUrls)
+//                addAll(locationAndOrganizationUrls)
                 addAll(filteredUrls)
             }
             // ✅ urls is now ready for use
@@ -229,85 +229,6 @@ class TimestampBasedDownloadWorkManagerImpl(
                 }
             }
         }
-    }
-
-    fun getAllFacilities(
-        parentId: String, onResult: (List<String>) -> Unit
-    ) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val locations = fhirEngine.search<Location> {
-                    filter(Location.PARTOF, { value = "Location/$parentId" })
-                }
-                val facilities = locations.map { it.resource.logicalId }
-
-                withContext(Dispatchers.Main) {
-                    onResult(facilities)
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    onResult(emptyList()) // fallback on error
-                }
-            }
-        }
-    }
-
-    fun getAllFacilitiesAlt(
-        parentId: String, onResult: (List<String>) -> Unit
-    ) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                // Step 1: Get all Location resources
-                val allLocations = fhirEngine.search<Location> {
-                    filter(Location.PARTOF, { value = "Location/$parentId" })
-                }.map { it.resource }
-
-                // Step 2: Build map of Location ID → Location
-                val locationMap = allLocations.associateBy { it.id }
-
-                // Step 3: Filter facilities
-                val facilities = allLocations.filter { loc ->
-                    loc.hasTypeCode("FACILITY") && isUnderNationalHierarchy(loc, locationMap)
-                }
-
-                val facilityIds = facilities.map { it.id }
-
-                withContext(Dispatchers.Main) {
-                    onResult(facilityIds)
-                }
-
-            } catch (e: Exception) {
-                e.printStackTrace()
-                withContext(Dispatchers.Main) {
-                    onResult(emptyList())
-                }
-            }
-        }
-    }
-
-    fun Location.hasTypeCode(code: String): Boolean {
-        return this.type.any { type ->
-            type.coding.any { coding ->
-                coding.code.equals(code, ignoreCase = true)
-            }
-        }
-    }
-
-    fun isUnderNationalHierarchy(
-        location: Location, locationMap: Map<String, Location>
-    ): Boolean {
-        var current = location
-        var depth = 0
-
-        while (current.partOf?.reference != null && depth < 5) {
-            val parentId = current.partOf.reference.removePrefix("Location/")
-            val parent = locationMap[parentId] ?: return false
-            current = parent
-            depth++
-        }
-
-        // If it has at least 3 levels above (county → subcounty → ward), assume valid
-        return depth >= 3
     }
 
 

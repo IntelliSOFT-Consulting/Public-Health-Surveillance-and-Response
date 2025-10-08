@@ -252,3 +252,38 @@ enum class LocationLevel(val level: Int) {
     WARD(3),
     FACILITY(4)
 }
+
+data class LocalLocationEntry(
+    val fullUrl: String,
+    val resource: LocalLocationResource
+)
+
+data class LocalLocationResource(
+    val resourceType: String,
+    val id: String,
+    val name: String?,
+    val meta: LocalMeta,
+    val type: List<LocalLocationType>?,
+    val partOf: LocalPartOf? = null
+)
+
+data class LocalMeta(
+    val versionId: String,
+    val lastUpdated: String,
+    val source: String
+)
+
+data class LocalLocationType(
+    val coding: List<LocalCoding>
+)
+
+data class LocalCoding(
+    val system: String,
+    val code: String,
+    val display: String?
+)
+
+data class LocalPartOf(
+    val reference: String,
+    val display: String?
+)
