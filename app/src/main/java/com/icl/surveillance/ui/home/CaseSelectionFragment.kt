@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
 import com.icl.surveillance.R
 import com.icl.surveillance.adapters.CaseOptionsAdapter
@@ -217,7 +218,10 @@ class CaseSelectionFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         FormatterClass().deleteSharedPref("selected_option", requireContext())
         recyclerView.adapter = CaseOptionsAdapter(caseOptions) { option ->
+
+
             when (option.title) {
+
                 "Add New Team Record" -> {
                     val currentCase = "Mpox - Tally Sheet"
                     val addParentTitle = "Add New Team Record"
@@ -227,6 +231,11 @@ class CaseSelectionFragment : Fragment() {
                         saveSharedPref("currentCase", currentCase, requireContext())
                         saveSharedPref("AddParentTitle", addParentTitle, requireContext())
                         saveSharedPref("questionnaire", questionnaireFile, requireContext())
+                    }
+                    val canPerformAction = checkIfUserIsAllowedToAction()
+                    if (!canPerformAction) {
+                        showPermissionErrorDialog(requireContext())
+                        return@CaseOptionsAdapter
                     }
                     launchCaseFlow(
                         requireContext(),
@@ -247,6 +256,12 @@ class CaseSelectionFragment : Fragment() {
                         saveSharedPref("AddParentTitle", addParentTitle, requireContext())
                         saveSharedPref("questionnaire", questionnaireFile, requireContext())
                     }
+
+                    val canPerformAction = checkIfUserIsAllowedToAction()
+                    if (!canPerformAction) {
+                        showPermissionErrorDialog(requireContext())
+                        return@CaseOptionsAdapter
+                    }
                     launchCaseFlow(
                         requireContext(),
                         " $titleName",
@@ -262,12 +277,25 @@ class CaseSelectionFragment : Fragment() {
                         "Add New Mpox Case",
                         requireContext()
                     )
+
+
+                    val canPerformAction = checkIfUserIsAllowedToAction()
+                    if (!canPerformAction) {
+                        showPermissionErrorDialog(requireContext())
+                        return@CaseOptionsAdapter
+                    }
                     val sheet =
                         SelectionBottomSheet.newInstance("Tally Sheet", "Supervisor Checklist")
                     sheet.show(childFragmentManager, "SelectionBottomSheet")
                 }
 
                 "Add New Social Investigation Form" -> {
+
+                    val canPerformAction = checkIfUserIsAllowedToAction()
+                    if (!canPerformAction) {
+                        showPermissionErrorDialog(requireContext())
+                        return@CaseOptionsAdapter
+                    }
                     SelectionBottomSheet.show(childFragmentManager)
 
                 }
@@ -279,6 +307,12 @@ class CaseSelectionFragment : Fragment() {
                     FormatterClass().saveSharedPref(
                         "currentCase", "RCCE", requireContext()
                     )
+
+                    val canPerformAction = checkIfUserIsAllowedToAction()
+                    if (!canPerformAction) {
+                        showPermissionErrorDialog(requireContext())
+                        return@CaseOptionsAdapter
+                    }
                     val intent = Intent(requireContext(), CaseListingActivity::class.java)
                     startActivity(intent)
                 }
@@ -295,6 +329,12 @@ class CaseSelectionFragment : Fragment() {
                     FormatterClass().saveSharedPref(
                         "questionnaire", "moh505.json", requireContext()
                     )
+
+                    val canPerformAction = checkIfUserIsAllowedToAction()
+                    if (!canPerformAction) {
+                        showPermissionErrorDialog(requireContext())
+                        return@CaseOptionsAdapter
+                    }
                     val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
                     intent.putExtra("AddParentTitle", " $titleName")
                     intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "moh505.json")
@@ -313,6 +353,12 @@ class CaseSelectionFragment : Fragment() {
                     FormatterClass().saveSharedPref(
                         "questionnaire", "mpox-register.json", requireContext()
                     )
+
+                    val canPerformAction = checkIfUserIsAllowedToAction()
+                    if (!canPerformAction) {
+                        showPermissionErrorDialog(requireContext())
+                        return@CaseOptionsAdapter
+                    }
                     val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
                     intent.putExtra("AddParentTitle", " $titleName")
                     intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "mpox-register.json")
@@ -364,6 +410,12 @@ class CaseSelectionFragment : Fragment() {
                     FormatterClass().saveSharedPref(
                         "questionnaire", "rumor-tracking-case.json", requireContext()
                     )
+
+                    val canPerformAction = checkIfUserIsAllowedToAction()
+                    if (!canPerformAction) {
+                        showPermissionErrorDialog(requireContext())
+                        return@CaseOptionsAdapter
+                    }
                     val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
                     intent.putExtra("AddParentTitle", " $titleName")
                     intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "rumor-tracking-case.json")
@@ -382,6 +434,12 @@ class CaseSelectionFragment : Fragment() {
                     FormatterClass().saveSharedPref(
                         "questionnaire", "vl-case.json", requireContext()
                     )
+
+                    val canPerformAction = checkIfUserIsAllowedToAction()
+                    if (!canPerformAction) {
+                        showPermissionErrorDialog(requireContext())
+                        return@CaseOptionsAdapter
+                    }
                     val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
                     intent.putExtra("AddParentTitle", " $titleName")
                     intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "vl-case.json")
@@ -432,6 +490,12 @@ class CaseSelectionFragment : Fragment() {
                     FormatterClass().saveSharedPref(
                         "questionnaire", "afp-case.json", requireContext()
                     )
+
+                    val canPerformAction = checkIfUserIsAllowedToAction()
+                    if (!canPerformAction) {
+                        showPermissionErrorDialog(requireContext())
+                        return@CaseOptionsAdapter
+                    }
                     val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
                     intent.putExtra("AddParentTitle", "Add $titleName Case")
                     intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "afp-case.json")
@@ -449,6 +513,12 @@ class CaseSelectionFragment : Fragment() {
                     FormatterClass().saveSharedPref(
                         "questionnaire", "add-case.json", requireContext()
                     )
+
+                    val canPerformAction = checkIfUserIsAllowedToAction()
+                    if (!canPerformAction) {
+                        showPermissionErrorDialog(requireContext())
+                        return@CaseOptionsAdapter
+                    }
                     val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
                     intent.putExtra("AddParentTitle", "Add $titleName Case")
                     intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "add-case.json")
@@ -462,6 +532,7 @@ class CaseSelectionFragment : Fragment() {
                     FormatterClass().saveSharedPref(
                         "currentCase", "Measles Case Information", requireContext()
                     )
+                    
                     val intent = Intent(requireContext(), CaseListingActivity::class.java)
                     startActivity(intent)
                 }
@@ -540,6 +611,25 @@ class CaseSelectionFragment : Fragment() {
             }
         }
     }
+
+    fun showPermissionErrorDialog(context: Context) {
+        SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE).apply {
+            setTitleText("Operation Restricted")
+            setContentText("You do not have permission to perform this action.")
+            setConfirmText("Okay")
+            setConfirmClickListener { sDialog ->
+                sDialog.dismissWithAnimation()
+            }
+            show()
+        }
+    }
+
+    fun checkIfUserIsAllowedToAction(): Boolean {
+        val hasFacility = FormatterClass().getSharedPref("facility", requireContext())
+        println("Facility Selection: $hasFacility")
+        return !hasFacility.isNullOrEmpty()
+    }
+
 
     override fun onResume() {
         super.onResume()

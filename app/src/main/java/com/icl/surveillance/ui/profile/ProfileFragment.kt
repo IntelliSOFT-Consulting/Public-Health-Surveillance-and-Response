@@ -236,6 +236,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun logoutUser() {
+        FormatterClass().clearCache(requireContext())
         FormatterClass().deleteSharedPref("isLoggedIn", requireContext())
         startActivity(Intent(requireContext(), LoginActivity::class.java))
         requireActivity().finish()
