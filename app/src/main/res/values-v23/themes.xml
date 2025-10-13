@@ -9,4 +9,12 @@
         <item name="colorPrimaryVariant">@color/purple_200</item> <!-- This must be defined -->
 
     </style>
+
+    <style name="LabelStyle" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+
+    <style name="ValueStyle" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
 </resources>

@@ -69,6 +69,8 @@ class LauncherActivity : AppCompatActivity() {
         binding.apply {
             getStartedButton.apply {
                 setOnClickListener {
+                    FormatterClass().clearCache(this@LauncherActivity)
+                    FormatterClass().deleteSharedPref("isLoggedIn", this@LauncherActivity)
                     val intent = Intent(this@LauncherActivity, LoginActivity::class.java)
                     startActivity(intent)
                     this@LauncherActivity.finish()

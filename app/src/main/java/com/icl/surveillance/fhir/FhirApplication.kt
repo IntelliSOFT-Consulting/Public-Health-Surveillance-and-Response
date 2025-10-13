@@ -99,7 +99,10 @@ class FhirApplication : Application(), DataCaptureConfig.Provider {
             if (FormatterClass().isFirstLaunch(this@FhirApplication)) {
                 println("Creating Locations & Organizations on first launch")
                 ResourceCreationHelper().createLocations(this@FhirApplication)
-                    .forEach { fhirEngine.create(it) }
+                    .forEach {
+                        println("Creating location ${it.name}")
+                        fhirEngine.create(it)
+                    }
                 ResourceCreationHelper().createRespectiveOrganization(this@FhirApplication)
                     .forEach { fhirEngine.create(it) }
                 FormatterClass().setFirstLaunchCompleted(this@FhirApplication)

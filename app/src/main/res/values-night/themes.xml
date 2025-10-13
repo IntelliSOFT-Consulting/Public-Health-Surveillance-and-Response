@@ -43,4 +43,12 @@
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
+
+    <style name="LabelStyle" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+
+    <style name="ValueStyle" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
 </resources>

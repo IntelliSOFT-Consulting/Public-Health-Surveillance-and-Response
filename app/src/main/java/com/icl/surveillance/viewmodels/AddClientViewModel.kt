@@ -205,7 +205,6 @@ class AddClientViewModel(application: Application, private val state: SavedState
             val measure = MeasureReport()
             if (facility != null) {
                 patient.managingOrganization = Reference("Organization/$facility")
-
                 enc.locationFirstRep.location = Reference("Location/$facility")
                 measure.reporter = Reference("Organization/$facility")
                 questionnaireResponse.source = Reference("Organization/$facility")

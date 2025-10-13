@@ -3,8 +3,12 @@ package com.icl.surveillance.utils
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import com.google.common.reflect.TypeToken
+import com.google.gson.Gson
 import com.icl.surveillance.R
 import com.icl.surveillance.network.Constants.FIRST_LAUNCH_KEY
+import org.json.JSONArray
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.util.Date
@@ -16,6 +20,50 @@ class FormatterClass {
     private val dateInverseFormatSeconds: SimpleDateFormat =
         SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
 
+
+    private val PREFSNAME = "facility_cache"
+    private val KEYPREFIX = "facilities_"
+
+    private val PREFNAME = "location_cache"
+    private val KEYLOCATIONFACILITYMAP = "location_facility_map"
+
+    fun saveFacilityIdsForWard(context: Context, locationId: String, facilityIds: List<String>) {
+        val prefs = context.getSharedPreferences(PREFNAME, Context.MODE_PRIVATE)
+        val existingJson = prefs.getString(KEYLOCATIONFACILITYMAP, "{}")
+        val jsonObject = JSONObject(existingJson ?: "{}")
+
+        jsonObject.put(locationId, JSONArray(facilityIds))
+        prefs.edit().putString(KEYLOCATIONFACILITYMAP, jsonObject.toString()).apply()
+    }
+
+    fun getFacilityIdsForWard(context: Context, locationId: String): List<String>? {
+        val prefs = context.getSharedPreferences(PREFNAME, Context.MODE_PRIVATE)
+        val existingJson = prefs.getString(KEYLOCATIONFACILITYMAP, "{}")
+        val jsonObject = JSONObject(existingJson ?: "{}")
+
+        return if (jsonObject.has(locationId)) {
+            val jsonArray = jsonObject.getJSONArray(locationId)
+            List(jsonArray.length()) { jsonArray.getString(it) }
+        } else null
+    }
+
+    private fun prefs(context: Context): SharedPreferences =
+        context.getSharedPreferences(PREFSNAME, Context.MODE_PRIVATE)
+
+    fun saveFacilityIds(context: Context, wardId: String, facilityIds: List<String>) {
+        val json = Gson().toJson(facilityIds)
+        prefs(context).edit()
+            .putString("$KEYPREFIX$wardId", json)
+            .apply()
+    }
+
+    fun getFacilityIds(context: Context, wardId: String): List<String>? {
+        val json = prefs(context).getString("$KEYPREFIX$wardId", null)
+        return json?.let {
+            Gson().fromJson(it, object : TypeToken<List<String>>() {}.type)
+        }
+    }
+
     fun String.toSlug(): String {
         return this
             .trim() // remove leading/trailing spaces
@@ -24,6 +72,7 @@ class FormatterClass {
             .replace("\\s+".toRegex(), "-") // replace spaces with hyphens
             .replace("-+".toRegex(), "-") // collapse multiple hyphens
     }
+
 
     fun saveSharedPref(key: String, value: String, context: Context) {
         val sharedPreferences: SharedPreferences =
@@ -44,6 +93,17 @@ class FormatterClass {
             context.getSharedPreferences(context.getString(R.string.app_name), MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.remove(key)
+        editor.apply()
+    }
+    fun clearCache(context: Context) {
+        val prefsLocal = context.getSharedPreferences(PREFNAME, Context.MODE_PRIVATE)
+        prefs(context).edit().clear().apply()
+        prefsLocal.edit().clear().apply()
+
+        val sharedPreferences: SharedPreferences =
+            context.getSharedPreferences(context.getString(R.string.app_name), MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.clear()
         editor.apply()
     }
 
