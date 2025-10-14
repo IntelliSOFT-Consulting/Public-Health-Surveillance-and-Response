@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.icl.surveillance.ui.home.HomeFragment"
+        android:name="com.icl.nphi.ui.home.HomeFragment"
         android:label=""
         tools:layout="@layout/fragment_home">
         <action
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.icl.surveillance.ui.patients.PatientsFragment"
+        android:name="com.icl.nphi.ui.patients.PatientsFragment"
         android:label=""
         tools:layout="@layout/fragment_patient_list">
         <action
@@ -27,22 +27,22 @@
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.icl.surveillance.ui.profile.ProfileFragment"
+        android:name="com.icl.nphi.ui.profile.ProfileFragment"
         android:label=""
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/addClientFragment"
-        android:name="com.icl.surveillance.clients.AddClientFragment"
+        android:name="com.icl.nphi.clients.AddClientFragment"
         android:label="Add Client"
         tools:layout="@layout/fragment_add_client" />
     <activity
         android:id="@+id/clientDetailsActivity"
-        android:name="com.icl.surveillance.ui.patients.ClientDetailsActivity"
+        android:name="com.icl.nphi.ui.patients.ClientDetailsActivity"
         android:label=""
         tools:layout="@layout/activity_client_details" />
     <fragment
         android:id="@+id/singleCaseFragment"
-        android:name="com.icl.surveillance.ui.home.SingleCaseFragment"
+        android:name="com.icl.nphi.ui.home.SingleCaseFragment"
         android:label=""
         tools:layout="@layout/fragment_single_case">
         <action
@@ -57,17 +57,17 @@
     </fragment>
     <activity
         android:id="@+id/fullCaseDetailsActivity"
-        android:name="com.icl.surveillance.ui.patients.FullCaseDetailsActivity"
+        android:name="com.icl.nphi.ui.patients.FullCaseDetailsActivity"
         android:label=""
         tools:layout="@layout/activity_full_case_details" />
     <fragment
         android:id="@+id/caseSelectionFragment"
-        android:name="com.icl.surveillance.ui.home.CaseSelectionFragment"
+        android:name="com.icl.nphi.ui.home.CaseSelectionFragment"
         android:label=""
         tools:layout="@layout/fragment_case_selection" />
     <fragment
         android:id="@+id/childFragment"
-        android:name="com.icl.surveillance.ui.home.ChildFragment"
+        android:name="com.icl.nphi.ui.home.ChildFragment"
         android:label=""
         tools:layout="@layout/fragment_child" >
         <action

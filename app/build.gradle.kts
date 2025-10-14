@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.icl.surveillance"
+    namespace = "com.icl.nphi"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.icl.surveillance"
+        applicationId = "com.icl.nphi"
         minSdk = 26
         targetSdk = 35
         versionCode = 1

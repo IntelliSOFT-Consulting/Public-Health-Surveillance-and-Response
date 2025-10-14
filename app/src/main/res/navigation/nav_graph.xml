@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.icl.surveillance.ui.patients.responses.FirstFragment"
+        android:name="com.icl.nphi.ui.patients.responses.FirstFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first">
 
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.icl.surveillance.ui.patients.responses.SecondFragment"
+        android:name="com.icl.nphi.ui.patients.responses.SecondFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
 
