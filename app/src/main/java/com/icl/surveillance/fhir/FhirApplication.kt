@@ -18,6 +18,7 @@ import com.google.android.fhir.ServerConfiguration
 import com.google.android.fhir.datacapture.DataCaptureConfig
 import com.google.android.fhir.datacapture.XFhirQueryResolver
 import com.google.android.fhir.search.search // Import the local fhir
+import com.google.android.fhir.sync.HttpAuthenticationMethod
 import com.google.android.fhir.sync.Sync
 import com.google.android.fhir.sync.remote.HttpLogger
 import com.icl.surveillance.network.Constants.BASE_URL
@@ -54,6 +55,7 @@ class FhirApplication : Application(), DataCaptureConfig.Provider {
                             Log.e("App-HttpLog", it)
                         },
                     networkConfiguration = NetworkConfiguration(uploadWithGzip = false),
+                    authenticator = { HttpAuthenticationMethod.Bearer(retrieveStoredToken()) }
                 ),
             ),
         )
@@ -92,6 +94,16 @@ class FhirApplication : Application(), DataCaptureConfig.Provider {
             createRequiredResourcesOnAppFirstLaunch()
 
         }
+    }
+
+    fun retrieveStoredToken(): String {
+        var token = ""
+        val accessToken = FormatterClass().getSharedPref("access_token", this@FhirApplication)
+        if (accessToken != null) {
+            token = accessToken
+        }
+        return token
+
     }
 
     fun createRequiredResourcesOnAppFirstLaunch() {

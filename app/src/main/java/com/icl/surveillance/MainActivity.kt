@@ -120,6 +120,10 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 //        periodicViewModel.collectPeriodicSyncJobStatus()
+//        lifecycleScope.launch {
+//            periodicViewModel.initializePeriodicSync()
+//        }
+
         appUpdateManager = AppUpdateManagerFactory.create(this)
         checkForAppUpdate()
 

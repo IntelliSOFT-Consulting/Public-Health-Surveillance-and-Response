@@ -164,6 +164,15 @@ class CaseSelectionFragment : Fragment() {
 
     }
 
+    /**
+     * Launches the case flow for adding a new parent case.
+     *
+     * @param context The context.
+     * @param titleName The title of the case.
+     * @param currentCase The type of the current case.
+     * @param addParentTitle The title for the add parent case activity.
+     * @param questionnaireFile The questionnaire file to be used.
+     */
     private fun launchCaseFlow(
         context: Context,
         titleName: String,
@@ -184,6 +193,9 @@ class CaseSelectionFragment : Fragment() {
         startActivity(intent)
     }
 
+    /**
+     * Sets up the RecyclerView with the case options.
+     */
     private fun setupRecyclerView() {
         val titleName = FormatterClass().getSharedPref("grandTitle", requireContext())
 
@@ -532,7 +544,7 @@ class CaseSelectionFragment : Fragment() {
                     FormatterClass().saveSharedPref(
                         "currentCase", "Measles Case Information", requireContext()
                     )
-                    
+
                     val intent = Intent(requireContext(), CaseListingActivity::class.java)
                     startActivity(intent)
                 }
@@ -564,8 +576,6 @@ class CaseSelectionFragment : Fragment() {
                     Toast.makeText(requireContext(), "Coming Soon", Toast.LENGTH_SHORT).show()
                 }
             }
-
-
         }
         println("Case Type: $title")
         val caseType = when (title?.trim()) {
@@ -612,6 +622,11 @@ class CaseSelectionFragment : Fragment() {
         }
     }
 
+    /**
+     * Shows a permission error dialog.
+     *
+     * @param context The context.
+     */
     fun showPermissionErrorDialog(context: Context) {
         SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE).apply {
             setTitleText("Operation Restricted")
@@ -624,6 +639,11 @@ class CaseSelectionFragment : Fragment() {
         }
     }
 
+    /**
+     * Checks if the user is allowed to perform an action.
+     *
+     * @return `true` if the user is allowed to perform the action, `false` otherwise.
+     */
     fun checkIfUserIsAllowedToAction(): Boolean {
         val hasFacility = FormatterClass().getSharedPref("facility", requireContext())
         println("Facility Selection: $hasFacility")
