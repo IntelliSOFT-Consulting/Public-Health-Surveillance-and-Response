@@ -111,7 +111,7 @@ class AddCaseActivity : AppCompatActivity() {
                     "$patientId",
                     "$encounter",
                     "Measles Lab Information",
-                    questionnaireResponseString
+                    questionnaireResponseString, this@AddCaseActivity
                 )
 
             "measles-lab-reg-results.json" ->
@@ -120,7 +120,7 @@ class AddCaseActivity : AppCompatActivity() {
                     "$patientId",
                     "$encounter",
                     "Measles Regional Lab Information",
-                    questionnaireResponseString
+                    questionnaireResponseString,  this@AddCaseActivity
                 )
 
             "afp-case-stool-lab-results.json" ->
@@ -129,7 +129,7 @@ class AddCaseActivity : AppCompatActivity() {
                     "$patientId",
                     "$encounter",
                     "AFP Stool Lab Information",
-                    questionnaireResponseString
+                    questionnaireResponseString,  this@AddCaseActivity
                 )
             "afp-sixty-days.json" ->
                 viewModel.completeLabAssessment(
@@ -137,7 +137,7 @@ class AddCaseActivity : AppCompatActivity() {
                     "$patientId",
                     "$encounter",
                     "AFP 60 Day Follow Up",
-                    questionnaireResponseString
+                    questionnaireResponseString,  this@AddCaseActivity
                 )
             "afp-itd-lab.json" ->
                 viewModel.completeLabAssessment(
@@ -145,7 +145,7 @@ class AddCaseActivity : AppCompatActivity() {
                     "$patientId",
                     "$encounter",
                     "AFP ITD Lab Information",
-                    questionnaireResponseString
+                    questionnaireResponseString,  this@AddCaseActivity
                 )
 
             "vl-case-lab-information.json" ->
@@ -154,7 +154,7 @@ class AddCaseActivity : AppCompatActivity() {
                     "$patientId",
                     "$encounter",
                     "VL Laboratory Examination",
-                    questionnaireResponseString
+                    questionnaireResponseString,  this@AddCaseActivity
                 )
 
             "vl-case-sixMonthsFollowup.json" ->
@@ -163,7 +163,7 @@ class AddCaseActivity : AppCompatActivity() {
                     "$patientId",
                     "$encounter",
                     "VL Follow Up Information",
-                    questionnaireResponseString
+                    questionnaireResponseString,  this@AddCaseActivity
                 )
 
             "vl-case-hospitilization.json" ->
@@ -172,7 +172,7 @@ class AddCaseActivity : AppCompatActivity() {
                     "$patientId",
                     "$encounter",
                     "VL Hospitalization Information",
-                    questionnaireResponseString
+                    questionnaireResponseString, this@AddCaseActivity
                 )
 
             "afp-final-lab-results.json" ->
@@ -181,7 +181,7 @@ class AddCaseActivity : AppCompatActivity() {
                     "$patientId",
                     "$encounter",
                     "AFP Final Lab Information",
-                    questionnaireResponseString
+                    questionnaireResponseString,  this@AddCaseActivity
                 )
 
             "afp-contact-tracing.json" -> {
@@ -189,7 +189,7 @@ class AddCaseActivity : AppCompatActivity() {
                     questionnaireResponse,
                     "$patientId",
                     "$encounter",
-                    questionnaireResponseString
+                    questionnaireResponseString, this@AddCaseActivity
                 )
             }
         }

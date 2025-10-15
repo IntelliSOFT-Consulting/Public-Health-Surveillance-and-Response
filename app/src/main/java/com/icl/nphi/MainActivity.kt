@@ -61,6 +61,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.ResourceType
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import kotlin.getValue
 import kotlin.jvm.java
@@ -123,42 +124,34 @@ class MainActivity : AppCompatActivity() {
 
             insets
         }
+        lifecycleScope.launch {
+            try {
+                val workManager = WorkManager.getInstance(this@MainActivity)
+                val existing = workManager.getWorkInfosByTag("location_downloader").get()
 
-        val workRequest =
-            PeriodicWorkRequestBuilder<LocationDownloadedWorker>(15, TimeUnit.MINUTES)
-                .setConstraints(
-                    Constraints.Builder()
-                        .setRequiredNetworkType(NetworkType.CONNECTED) // Ensure network is available
-                        .build()
-                )
-                .build()
-        val uniqueName = "location_downloader"//${UUID.randomUUID()}"
+                if (existing.isEmpty()) {
+                    val workRequest =
+                        PeriodicWorkRequestBuilder<LocationDownloadedWorker>(10, TimeUnit.MINUTES)
+                            .setConstraints(
+                                Constraints.Builder()
+                                    .setRequiredNetworkType(NetworkType.CONNECTED) // Ensure network is available
+                                    .build()
+                            )
+                            .build()
+                    val uniqueName = "location_downloader"//_${UUID.randomUUID()}"
 
-        WorkManager.getInstance(this@MainActivity)
-            .enqueueUniquePeriodicWork(
-                uniqueName,  // unique name to avoid duplicates
-                ExistingPeriodicWorkPolicy.KEEP,   // KEEP = don't run again if already enqueued
-                workRequest
-            )
-
-
-        CoroutineScope(Dispatchers.IO).launch {
-
-
-            Sync.periodicSync<FhirSyncWorker>(
-                this@MainActivity,
-                periodicSyncConfiguration =
-                    PeriodicSyncConfiguration(
-                        syncConstraints = androidx.work.Constraints.Builder().build(),
-                        repeat = RepeatInterval(interval = 15, timeUnit = TimeUnit.MINUTES)
-                    )
-            )
-                .shareIn(this, SharingStarted.Eagerly, 10)
-                .collect { /**Handle SyncJobStatus Here*/ }
-
-//            createRequiredResourcesOnAppFirstLaunch()
-
+                    WorkManager.getInstance(this@MainActivity)
+                        .enqueueUniquePeriodicWork(
+                            uniqueName,  // unique name to avoid duplicates
+                            ExistingPeriodicWorkPolicy.KEEP,   // KEEP = don't run again if already enqueued
+                            workRequest
+                        )
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
+
 
         appUpdateManager = AppUpdateManagerFactory.create(this)
         checkForAppUpdate()

@@ -111,6 +111,16 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     url = "supervisor_checklist"
                     setValue(responseType)
                 }
+                val facility = FormatterClass().getSharedPref("facility", context)
+                if (facility != null) {
+                    questionnaireResponse.addExtension(
+                        sourceExtension(
+                            "questionnaire",
+                            facility,
+                            context
+                        )
+                    )
+                }
 //                questionnaireResponse.addExtension(extension)
                 fhirEngine.create(questionnaireResponse)
             }
@@ -202,11 +212,17 @@ class AddClientViewModel(application: Application, private val state: SavedState
             if (facility != null) {
 //                patient.managingOrganization = Reference("Organization/$facility")
                 patient.addExtension(
-                    sourceExtension(facility, context)
+                    sourceExtension("patient", facility, context)
                 )
-                enc.addExtension(sourceExtension(facility, context))
-                measure.addExtension(sourceExtension(facility, context))
-                questionnaireResponse.addExtension(sourceExtension(facility, context))
+                enc.addExtension(sourceExtension("encounter", facility, context))
+                measure.addExtension(sourceExtension("measure", facility, context))
+                questionnaireResponse.addExtension(
+                    sourceExtension(
+                        "questionnaire",
+                        facility,
+                        context
+                    )
+                )
 //                enc.locationFirstRep.location = Reference("Location/$facility")
 //                measure.reporter = Reference("Organization/$facility")
 //                questionnaireResponse.source = Reference("Organization/$facility")
@@ -498,7 +514,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                                         otherSpecifyEntry.linkId,
                                         otherDateEntry.answer,
                                         otherSpecifyEntry.answer,
-                                        subjectReference
+                                        subjectReference,context
                                     )
                                 }
                             }
@@ -515,7 +531,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                                     specimenEntry.linkId,
                                     dateEntry.answer,
                                     config.type,
-                                    subjectReference
+                                    subjectReference,context
                                 )
                             }
                         }
@@ -614,7 +630,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                             specimenDateEntry.linkId,
                             specimenDateEntry.answer,
                             "Stool",
-                            subjectReference
+                            subjectReference,context
                         )
                     }
 
@@ -909,9 +925,9 @@ class AddClientViewModel(application: Application, private val state: SavedState
         }
     }
 
-    private fun sourceExtension(facility: String, context: Context): Extension {
+    private fun sourceExtension(resource: String, facility: String, context: Context): Extension {
         return Extension().apply {
-            url = "http://example.org/fhir/StructureDefinition/patient-managingLocation"
+            url = "http://example.org/fhir/StructureDefinition/$resource-managingLocation"
             setValue(
                 Reference().apply {
                     reference = "Location/$facility"
@@ -921,7 +937,11 @@ class AddClientViewModel(application: Application, private val state: SavedState
     }
 
     private suspend fun createSpecimenResource(
-        linkId: String, dateAnswer: String, string: String, subjectReference: Reference
+        linkId: String,
+        dateAnswer: String,
+        string: String,
+        subjectReference: Reference,
+        context: Context
     ) {
         val specimenCoding = Coding()
         specimenCoding.code = linkId
@@ -960,6 +980,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
             specimen.subject = subjectReference
             specimen.type = specimenType
             specimen.collection = collection
+            val facility = FormatterClass().getSharedPref("facility", context)
+            if (facility != null) {
+                specimen.addExtension(sourceExtension("specimen", facility, context))
+            }
             fhirEngine.create(specimen)
 
         } catch (e: Exception) {
@@ -1053,6 +1077,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
                 obs.performerFirstRep.reference = "Practitioner/$practitioner"
             }
             obs.issued = Date()
+            val facility = FormatterClass().getSharedPref("facility", context)
+            if (facility != null) {
+                obs.addExtension(sourceExtension("observation", facility, context))
+            }
             fhirEngine.create(obs)
 
             println("Observation created: ${obs.id}")

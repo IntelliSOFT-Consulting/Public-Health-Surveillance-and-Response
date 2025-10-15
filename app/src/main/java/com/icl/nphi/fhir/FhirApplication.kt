@@ -15,6 +15,8 @@ import com.google.android.fhir.datacapture.DataCaptureConfig
 import com.google.android.fhir.datacapture.XFhirQueryResolver
 import com.google.android.fhir.search.search // Import the local fhir
 import com.google.android.fhir.sync.HttpAuthenticationMethod
+import com.google.android.fhir.sync.PeriodicSyncConfiguration
+import com.google.android.fhir.sync.RepeatInterval
 import com.google.android.fhir.sync.Sync
 import com.google.android.fhir.sync.remote.HttpLogger
 import com.icl.nphi.network.Constants.BASE_URL
@@ -23,7 +25,10 @@ import com.icl.nphi.utils.ContribQuestionnaireItemViewHolderFactoryMatchersProvi
 import com.icl.nphi.utils.FormatterClass
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 
 class FhirApplication : Application(), DataCaptureConfig.Provider, Configuration.Provider {
@@ -38,6 +43,7 @@ class FhirApplication : Application(), DataCaptureConfig.Provider, Configuration
 
 
     override fun onCreate() {
+
         super.onCreate()
 
         FhirEngineProvider.init(
@@ -72,6 +78,16 @@ class FhirApplication : Application(), DataCaptureConfig.Provider, Configuration
 
             CoroutineScope(Dispatchers.IO).launch {
                 Sync.oneTimeSync<FhirSyncWorker>(this@FhirApplication)
+//                Sync.periodicSync<FhirSyncWorker>(
+//                    this@FhirApplication,
+//                    periodicSyncConfiguration = PeriodicSyncConfiguration(
+//                        syncConstraints = Constraints.Builder().build(),
+//                        repeat = RepeatInterval(interval = 15, timeUnit = TimeUnit.MINUTES)
+//                    )
+//                ).shareIn(this, SharingStarted.Eagerly, 10)
+//                    .collect {
+//                        // Handle SyncJobStatus here (optional)
+//                    }
             }
         } catch (e: Exception) {
             e.printStackTrace()
