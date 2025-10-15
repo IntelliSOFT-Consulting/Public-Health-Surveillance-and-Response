@@ -1,5 +1,6 @@
 package com.icl.nphi.fhir
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ca.uhn.fhir.context.FhirContext
@@ -31,28 +32,28 @@ class MpoxUploadViewModel(
     private var hasMoreUpload = true
     private var isUploadLoading = false
 
-    fun prepareUploadData(slug: String) {
+    fun prepareUploadData(slug: String, context: Context) {
         viewModelScope.launch {
             while (hasMoreUpload) {
                 when (slug) {
                     "patients" -> {
-                        prepareListInBatches()
+                        prepareListInBatches(context)
                     }
 
                     "encounters" -> {
-                        prepareEncountersBatches(slug)
+                        prepareEncountersBatches(slug, context)
                     }
 
                     "observations" -> {
-                        prepareObsBatches(slug)
+                        prepareObsBatches(slug, context)
                     }
 
                     "measureReports" -> {
-                        prepareMeasureReportBatches(slug)
+                        prepareMeasureReportBatches(slug, context)
                     }
 
                     "questionnaireResponses" -> {
-                        prepareQuestionnaireResponseBatches(slug)
+                        prepareQuestionnaireResponseBatches(slug, context)
                     }
 
                     else -> {
@@ -64,7 +65,7 @@ class MpoxUploadViewModel(
         }
     }
 
-    fun prepareListInBatches() {
+    fun prepareListInBatches(context: Context) {
 
         if (!hasMoreUpload || isUploadLoading) return
         isUploadLoading = true
@@ -97,13 +98,13 @@ class MpoxUploadViewModel(
                         "Patient/${patientResource.idElement.idPart}"
                     bundle.addEntry(bundleEntry)
                 }
-                sendBundleToServer(jsonParser, bundle)
+                sendBundleToServer(jsonParser, bundle, context)
             }
             isUploadLoading = false
         }
     }
 
-    fun prepareEncountersBatches(nameQuery: String) {
+    fun prepareEncountersBatches(nameQuery: String, context: Context) {
         val isSummary = nameQuery.contains("mpox")
         if (!hasMoreUpload || isUploadLoading) return
         isUploadLoading = true
@@ -135,13 +136,13 @@ class MpoxUploadViewModel(
                         "Encounter/${patientResource.idElement.idPart}"
                     bundle.addEntry(bundleEntry)
                 }
-                sendBundleToServer(jsonParser, bundle)
+                sendBundleToServer(jsonParser, bundle, context)
             }
             isUploadLoading = false
         }
     }
 
-    fun prepareObsBatches(nameQuery: String) {
+    fun prepareObsBatches(nameQuery: String, context: Context) {
         val isSummary = nameQuery.contains("mpox")
         if (!hasMoreUpload || isUploadLoading) return
         isUploadLoading = true
@@ -173,13 +174,13 @@ class MpoxUploadViewModel(
                         "Observation/${patientResource.idElement.idPart}"
                     bundle.addEntry(bundleEntry)
                 }
-                sendBundleToServer(jsonParser, bundle)
+                sendBundleToServer(jsonParser, bundle, context)
             }
             isUploadLoading = false
         }
     }
 
-    fun prepareQuestionnaireResponseBatches(nameQuery: String) {
+    fun prepareQuestionnaireResponseBatches(nameQuery: String, context: Context) {
         val isSummary = nameQuery.contains("mpox")
         if (!hasMoreUpload || isUploadLoading) return
         isUploadLoading = true
@@ -212,13 +213,13 @@ class MpoxUploadViewModel(
                         "QuestionnaireResponse/${patientResource.idElement.idPart}"
                     bundle.addEntry(bundleEntry)
                 }
-                sendBundleToServer(jsonParser, bundle)
+                sendBundleToServer(jsonParser, bundle, context)
             }
             isUploadLoading = false
         }
     }
 
-    fun prepareMeasureReportBatches(nameQuery: String) {
+    fun prepareMeasureReportBatches(nameQuery: String, context: Context) {
         val isSummary = nameQuery.contains("mpox")
         if (!hasMoreUpload || isUploadLoading) return
         isUploadLoading = true
@@ -250,7 +251,7 @@ class MpoxUploadViewModel(
                         "MeasureReport/${patientResource.idElement.idPart}"
                     bundle.addEntry(bundleEntry)
                 }
-                sendBundleToServer(jsonParser, bundle)
+                sendBundleToServer(jsonParser, bundle, context)
             }
             isUploadLoading = false
         }
@@ -258,7 +259,8 @@ class MpoxUploadViewModel(
 
     private fun sendBundleToServer(
         jsonParser: IParser,
-        bundle: Bundle
+        bundle: Bundle,
+        context: Context
     ) {
         viewModelScope.launch {
             println("API Response:::: Preparing data")
@@ -266,7 +268,7 @@ class MpoxUploadViewModel(
             val apiCall = RetrofitCallsAuthentication()
             val json = jsonParser.encodeResourceToString(bundle)
             val requestBody = json.toRequestBody("application/json".toMediaType())
-            apiCall.sendBundleToServer(requestBody)
+            apiCall.sendBundleToServer(requestBody, context)
         }
     }
 

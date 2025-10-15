@@ -1,6 +1,7 @@
 package com.icl.nphi.ui.patients
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -79,7 +80,7 @@ class PatientListViewModel(
     private var hasMoreUpload = true
     private var isUploadLoading = false
 
-    fun prepareListInBatches(nameQuery: String) {
+    fun prepareListInBatches(nameQuery: String, context: Context) {
         val isSummary = nameQuery.contains("mpox")
         if (!hasMoreUpload || isUploadLoading) return
         isUploadLoading = true
@@ -112,13 +113,13 @@ class PatientListViewModel(
                         "Patient/${patientResource.idElement.idPart}"
                     bundle.addEntry(bundleEntry)
                 }
-                sendBundleToServer(jsonParser, bundle)
+                sendBundleToServer(jsonParser, bundle,context)
             }
             isUploadLoading = false
         }
     }
 
-    fun prepareEncountersBatches(nameQuery: String) {
+    fun prepareEncountersBatches(nameQuery: String, context: Context) {
         val isSummary = nameQuery.contains("mpox")
         if (!hasMoreUpload || isUploadLoading) return
         isUploadLoading = true
@@ -150,13 +151,13 @@ class PatientListViewModel(
                         "Encounter/${patientResource.idElement.idPart}"
                     bundle.addEntry(bundleEntry)
                 }
-                sendBundleToServer(jsonParser, bundle)
+                sendBundleToServer(jsonParser, bundle,context)
             }
             isUploadLoading = false
         }
     }
 
-    fun prepareObsBatches(nameQuery: String) {
+    fun prepareObsBatches(nameQuery: String, context: Context) {
         val isSummary = nameQuery.contains("mpox")
         if (!hasMoreUpload || isUploadLoading) return
         isUploadLoading = true
@@ -188,13 +189,13 @@ class PatientListViewModel(
                         "Observation/${patientResource.idElement.idPart}"
                     bundle.addEntry(bundleEntry)
                 }
-                sendBundleToServer(jsonParser, bundle)
+                sendBundleToServer(jsonParser, bundle,context)
             }
             isUploadLoading = false
         }
     }
 
-    fun prepareQuestionnaireResponseBatches(nameQuery: String) {
+    fun prepareQuestionnaireResponseBatches(nameQuery: String, context: Context) {
         val isSummary = nameQuery.contains("mpox")
         if (!hasMoreUpload || isUploadLoading) return
         isUploadLoading = true
@@ -227,13 +228,13 @@ class PatientListViewModel(
                         "QuestionnaireResponse/${patientResource.idElement.idPart}"
                     bundle.addEntry(bundleEntry)
                 }
-                sendBundleToServer(jsonParser, bundle)
+                sendBundleToServer(jsonParser, bundle, context)
             }
             isUploadLoading = false
         }
     }
 
-    fun prepareMeasureReportBatches(nameQuery: String) {
+    fun prepareMeasureReportBatches(nameQuery: String, context: Context) {
         val isSummary = nameQuery.contains("mpox")
         if (!hasMoreUpload || isUploadLoading) return
         isUploadLoading = true
@@ -265,13 +266,13 @@ class PatientListViewModel(
                         "MeasureReport/${patientResource.idElement.idPart}"
                     bundle.addEntry(bundleEntry)
                 }
-                sendBundleToServer(jsonParser, bundle)
+                sendBundleToServer(jsonParser, bundle, context)
             }
             isUploadLoading = false
         }
     }
 
-    fun loadAllPatients() {
+    fun loadAllPatients(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
             val results = fhirEngine.search<Patient> {
@@ -304,25 +305,26 @@ class PatientListViewModel(
                 // handle API call
                 val payload = jsonParser.encodeResourceToString(bundle)
                 println("API Response:::: Ready to send bundle $payload")
-                sendBundleToServer(jsonParser, bundle)
+                sendBundleToServer(jsonParser, bundle, context)
             }
         }
     }
 
-    private fun sendSingleEntry(jsonParser: IParser, patientResource: Patient) {
+    private fun sendSingleEntry(jsonParser: IParser, patientResource: Patient, context: Context) {
         viewModelScope.launch {
             val payload = jsonParser.encodeResourceToString(patientResource)
             val apiCall = RetrofitCallsAuthentication()
 
             val json = jsonParser.encodeResourceToString(patientResource)
             val requestBody = json.toRequestBody("application/json".toMediaType())
-            apiCall.sendPatientToServer(patientResource.idElement.idPart, requestBody)
+            apiCall.sendPatientToServer(patientResource.idElement.idPart, requestBody, context)
         }
     }
 
     private fun sendBundleToServer(
         jsonParser: IParser,
-        bundle: Bundle
+        bundle: Bundle,
+        context: Context
     ) {
         viewModelScope.launch {
             println("API Response:::: Preparing data")
@@ -330,42 +332,10 @@ class PatientListViewModel(
             val apiCall = RetrofitCallsAuthentication()
             val json = jsonParser.encodeResourceToString(bundle)
             val requestBody = json.toRequestBody("application/json".toMediaType())
-            apiCall.sendBundleToServer(requestBody)
+            apiCall.sendBundleToServer(requestBody, context)
         }
     }
 
-    fun prepareUploadData(slug: String) {
-        viewModelScope.launch {
-            while (hasMoreUpload) {
-                when (slug) {
-                    "patients" -> {
-                        prepareListInBatches(slug)
-                    }
-
-                    "encounters" -> {
-                        prepareEncountersBatches(slug)
-                    }
-
-                    "observations" -> {
-                        prepareObsBatches(slug)
-                    }
-
-                    "measureReports" -> {
-                        prepareMeasureReportBatches(slug)
-                    }
-
-                    "questionnaireResponses" -> {
-                        prepareQuestionnaireResponseBatches(slug)
-                    }
-
-                    else -> {
-
-                    }
-                }
-                delay(500L) // optional pause to mimic scrolling
-            }
-        }
-    }
 
     fun simulateScrollUntilEnd(slug: String, onFinished: (List<PatientItem>) -> Unit) {
         viewModelScope.launch {

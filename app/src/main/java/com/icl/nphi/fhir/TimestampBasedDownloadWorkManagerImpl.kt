@@ -34,18 +34,31 @@ class TimestampBasedDownloadWorkManagerImpl(
     private val dataStore: DemoDataStore, val context: Context, val fhirEngine: FhirEngine
 ) : DownloadWorkManager {
     private val resourceTypeList = ResourceType.values().map { it.name }
-    private var urls: LinkedList<String> = LinkedList()
-    private val locationAndOrganizationUrls = LinkedList(listOf("Location", "Organization"))
+
+    //    private var urls: LinkedList<String> = LinkedList()
+    private val locationAndOrganizationUrls = LinkedList(
+        listOf(
+            "Patient?_sort=_lastUpdated",
+            "QuestionnaireResponse?_sort=_lastUpdated",
+            "MeasureReport?_sort=_lastUpdated",
+            "Practitioner?_sort=_lastUpdated",
+            "Organization?_sort=_lastUpdated",
+            "Location?_sort=_lastUpdated"
+        )
+    )
+    private val urls = LinkedList<String>().apply {
+        addAll(locationAndOrganizationUrls)
+//        addAll(filteredUrls)
+    }
 
     init {
         getRespectiveFilteredResources(context) { filteredUrls ->
-            urls = LinkedList<String>().apply {
+//            urls = LinkedList<String>().apply {
 //                addAll(locationAndOrganizationUrls)
-                addAll(filteredUrls)
-            }
+//                addAll(filteredUrls)
+//            }
             // ✅ urls is now ready for use
             println("Filtered resources: $urls")
-            println("Total Wards:::: Filtered resources: $urls")
         }
     }
 

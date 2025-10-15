@@ -2,33 +2,39 @@ package com.icl.nphi.fhir
 
 import android.content.Context
 import androidx.work.CoroutineWorker
+import androidx.work.Worker
 import androidx.work.WorkerParameters
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 class MpoxSyncWorker(
     appContext: Context,
     workerParams: WorkerParameters,
-    private val repo: FhirRepository
-) : CoroutineWorker(appContext, workerParams) {
+) : Worker(appContext, workerParams) {
+    private val repo = FhirRepository(appContext)
 
-    override suspend fun doWork(): Result {
+    override fun doWork(): Result {
         return try {
-            // Step 1: Upload Patients
-            prepareListInBatches("patients")
-            // Wait until done (since suspending)
+            runBlocking {
+                // Step 1: Upload Patients
+                prepareListInBatches("patients", applicationContext)
+                // Wait until done (since suspending)
 
-            // Step 2: Upload Encounters
-            prepareEncountersBatches("encounters")
+                // Step 2: Upload Encounters
+                prepareEncountersBatches("encounters", applicationContext)
 
-            // Step 3: Upload Observations
-            prepareObsBatches("observations")
+                // Step 3: Upload Observations
+                prepareObsBatches("observations", applicationContext)
 
-            // Step 4: Upload Measure Reports
-            prepareMeasureReportsBatches("measureReports")
+                // Step 4: Upload Measure Reports
+                prepareMeasureReportsBatches("measureReports", applicationContext)
 
-            // Step 5: Upload Questionnaire Responses
-            prepareQuestionnaireResponsesBatches("questionnaireResponses")
-
+                // Step 5: Upload Questionnaire Responses
+                prepareQuestionnaireResponsesBatches("questionnaireResponses", applicationContext)
+            }
             Result.success()
         } catch (e: Exception) {
             e.printStackTrace()
@@ -36,28 +42,38 @@ class MpoxSyncWorker(
         }
     }
 
-    private suspend fun prepareListInBatches(nameQuery: String) {
+    private fun prepareListInBatches(nameQuery: String, context: Context) {
         // move your code here but make it suspend-friendly
-        repo.handleDataUpload(nameQuery)
+        CoroutineScope(Dispatchers.IO).launch {
+            repo.handleDataUpload(nameQuery, context)
+        }
     }
 
-    private suspend fun prepareEncountersBatches(nameQuery: String) {
+    private fun prepareEncountersBatches(nameQuery: String, context: Context) {
         // move your code here but make it suspend-friendly
-        repo.handleDataUpload(nameQuery)
+        CoroutineScope(Dispatchers.IO).launch {
+            repo.handleDataUpload(nameQuery, context)
+        }
     }
 
-    private suspend fun prepareObsBatches(nameQuery: String) {
+    private fun prepareObsBatches(nameQuery: String, context: Context) {
         // move your code here but make it suspend-friendly
-        repo.handleDataUpload(nameQuery)
+        CoroutineScope(Dispatchers.IO).launch {
+            repo.handleDataUpload(nameQuery, context)
+        }
     }
 
-    private suspend fun prepareMeasureReportsBatches(nameQuery: String) {
+    private fun prepareMeasureReportsBatches(nameQuery: String, context: Context) {
         // move your code here but make it suspend-friendly
-        repo.handleDataUpload(nameQuery)
+        CoroutineScope(Dispatchers.IO).launch {
+            repo.handleDataUpload(nameQuery, context)
+        }
     }
 
-    private suspend fun prepareQuestionnaireResponsesBatches(nameQuery: String) {
+    private fun prepareQuestionnaireResponsesBatches(nameQuery: String, context: Context) {
         // move your code here but make it suspend-friendly
-        repo.handleDataUpload(nameQuery)
+        CoroutineScope(Dispatchers.IO).launch {
+            repo.handleDataUpload(nameQuery, context)
+        }
     }
 }

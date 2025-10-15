@@ -1,10 +1,14 @@
 package com.icl.nphi.fhir
 
+import android.content.Context
+
 
 class FhirRepository(
-    private val viewModel: MpoxUploadViewModel,
+    private val context: Context
 ) {
-    fun handleDataUpload(slug: String) {
-        viewModel.prepareUploadData(slug)
+    private val fhirEngine = FhirApplication.fhirEngine(context)
+    private val viewModel = MpoxUploadViewModel(fhirEngine)
+    fun handleDataUpload(slug: String, context: Context) {
+        viewModel.prepareUploadData(slug, context)
     }
 }

@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserratbold"
-            android:text="Good Afternoon"
+
             android:textColor="@android:color/white"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -35,7 +35,7 @@
             android:layout_below="@id/greetingText"
             android:layout_marginTop="4dp"
             android:fontFamily="@font/montserratregular"
-            android:text="John Doe"
+
             android:textColor="@android:color/white"
             android:textSize="16sp" />
 

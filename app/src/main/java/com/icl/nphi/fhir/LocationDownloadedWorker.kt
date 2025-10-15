@@ -4,6 +4,7 @@ package com.icl.nphi.fhir
 import android.content.Context
 import android.util.Log
 import androidx.work.CoroutineWorker
+import androidx.work.Worker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.google.android.fhir.FhirEngine
@@ -14,11 +15,14 @@ import com.icl.nphi.network.Constants.BASE_URL
 import com.icl.nphi.network.Constants.LOCATION_STARTER
 import com.icl.nphi.network.Interface
 import com.icl.nphi.network.RetrofitBuilder
+import com.icl.nphi.utils.FormatterClass
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.CodeableConcept
 import org.hl7.fhir.r4.model.Coding
 import org.hl7.fhir.r4.model.Location
@@ -34,10 +38,10 @@ import java.util.TimeZone
 class LocationDownloadedWorker(
     context: Context,
     workerParams: WorkerParameters
-) : CoroutineWorker(context, workerParams) {
+) : Worker(context, workerParams) {
 
 
-    override suspend fun doWork(): Result = try {
+    override fun doWork(): Result = try {
         val context = applicationContext
         val fhirEngine = FhirApplication.fhirEngine(context)
         val currentUrl = Constants.getNextUrl(context) ?: LOCATION_STARTER
@@ -86,51 +90,60 @@ class LocationDownloadedWorker(
         return location
     }
 
-    private suspend fun fetchAllPages(
+    private fun fetchAllPages(
         startUrl: String,
         context: Context,
         fhirEngine: FhirEngine
     ) {
+        CoroutineScope(Dispatchers.IO).launch {
         val apiService = RetrofitBuilder.getRetrofit(BASE_URL).create(Interface::class.java)
         var nextUrl: String? = startUrl
         var page = 1
         while (!nextUrl.isNullOrEmpty()) {
             try {
                 Log.d("LocationWorker", "Fetching page $page: $nextUrl")
-                val bundle = apiService.fetchBundle(nextUrl)
-                val entries = bundle.entry ?: emptyList()
-                coroutineScope {
-                    entries.map { entry ->
-                        async(Dispatchers.IO) {
-                            try {
-                                val location = createLocationResource(entry)
-                                val exists = fhirEngine.search<Location> {
-                                    filter(Resource.RES_ID, { value = of(location.id) })
+                val token = FormatterClass().getSharedPref("access_token", context)
+                if (token != null) {
+                    val bundle = apiService.fetchBundle(nextUrl, token)
+                    val entries = bundle.entry ?: emptyList()
+                    coroutineScope {
+                        entries.map { entry ->
+                            async(Dispatchers.IO) {
+                                try {
+                                    val location = createLocationResource(entry)
+                                    val exists = fhirEngine.search<Location> {
+                                        filter(Resource.RES_ID, { value = of(location.id) })
+                                    }
+                                    if (exists.isEmpty()) {
+                                        fhirEngine.create(location)
+                                    }
+                                } catch (e: Exception) {
+                                    Log.e(
+                                        "LocationWorker",
+                                        "Failed to save: ${entry.resource.id}",
+                                        e
+                                    )
                                 }
-                                if (exists.isEmpty()) {
-                                    fhirEngine.create(location)
-                                }
-                            } catch (e: Exception) {
-                                Log.e("LocationWorker", "Failed to save: ${entry.resource.id}", e)
                             }
-                        }
-                    }.awaitAll()
+                        }.awaitAll()
+                    }
+                    nextUrl = bundle.link?.firstOrNull { it.relation == "next" }?.url
+                    if (nextUrl != null) {
+                        Constants.saveNextUrl(context, nextUrl)
+                    } else {
+                        Constants.clear(context)
+                    }
+                    Log.d("LocationWorker", "Next URL: $nextUrl")
+                    delay(200) // prevent rapid fire requests
+                    page++
                 }
-                nextUrl = bundle.link?.firstOrNull { it.relation == "next" }?.url
-                if (nextUrl != null) {
-                    Constants.saveNextUrl(context, nextUrl)
-                } else {
-                    Constants.clear(context)
-                }
-                Log.d("LocationWorker", "Next URL: $nextUrl")
-                delay(200) // prevent rapid fire requests
-                page++
             } catch (e: Exception) {
                 Log.e("LocationWorker", "Error fetching page: $nextUrl", e)
                 break // Prevent infinite loop
             }
         }
     }
+}
 
 
 }

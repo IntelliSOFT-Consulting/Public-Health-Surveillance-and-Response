@@ -3,6 +3,8 @@ package com.icl.nphi.fhir
 import android.app.Application
 import android.content.Context
 import android.util.Log
+import androidx.work.Configuration
+import androidx.work.Constraints
 import com.google.android.fhir.DatabaseErrorStrategy
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.FhirEngineConfiguration
@@ -13,22 +15,26 @@ import com.google.android.fhir.datacapture.DataCaptureConfig
 import com.google.android.fhir.datacapture.XFhirQueryResolver
 import com.google.android.fhir.search.search // Import the local fhir
 import com.google.android.fhir.sync.HttpAuthenticationMethod
-import com.google.android.fhir.sync.Sync
 import com.google.android.fhir.sync.remote.HttpLogger
 import com.icl.nphi.network.Constants.BASE_URL
+import com.icl.nphi.network.Constants.TEST_TOKEN
 import com.icl.nphi.utils.ContribQuestionnaireItemViewHolderFactoryMatchersProviderFactory
 import com.icl.nphi.utils.FormatterClass
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class FhirApplication : Application(), DataCaptureConfig.Provider {
+
+class FhirApplication : Application(), DataCaptureConfig.Provider, Configuration.Provider {
+    private val repo by lazy { FhirRepository(this) }
+
     // Only initiate the FhirEngine when used for the first time, not when the app is created.
     private val fhirEngine: FhirEngine by lazy { constructFhirEngine() }
 
     private var dataCaptureConfig: DataCaptureConfig? = null
 
     private val dataStore by lazy { DemoDataStore(this) }
+
 
     override fun onCreate() {
         super.onCreate()
@@ -47,7 +53,7 @@ class FhirApplication : Application(), DataCaptureConfig.Provider {
                         ) {
                             Log.e("App-HttpLog", it)
                         },
-                    networkConfiguration = NetworkConfiguration(uploadWithGzip = false),
+                    networkConfiguration = NetworkConfiguration(uploadWithGzip = true),
                     authenticator = { HttpAuthenticationMethod.Bearer(retrieveStoredToken()) }
                 ),
             ),
@@ -66,42 +72,21 @@ class FhirApplication : Application(), DataCaptureConfig.Provider {
             e.printStackTrace()
         }
 
-        CoroutineScope(Dispatchers.IO).launch {
-            Sync.oneTimeSync<FhirSyncWorker>(this@FhirApplication)
-//            val workRequest =
-//                PeriodicWorkRequestBuilder<LocationDownloadedWorker>(15, TimeUnit.MINUTES)
-//                    .setConstraints(
-//                        Constraints.Builder()
-//                            .setRequiredNetworkType(NetworkType.CONNECTED) // Ensure network is available
-//                            .build()
-//                    )
-//                    .build()
-//            val uniqueName = "location_downloader"//${UUID.randomUUID()}"
-//
-//            WorkManager.getInstance(this@FhirApplication)
-//                .enqueueUniquePeriodicWork(
-//                    uniqueName,  // unique name to avoid duplicates
-//                    ExistingPeriodicWorkPolicy.KEEP,   // KEEP = don't run again if already enqueued
-//                    workRequest
-//                )
-            createRequiredResourcesOnAppFirstLaunch()
-
-        }
     }
 
     fun retrieveStoredToken(): String {
-        var token = ""
-        val accessToken = FormatterClass().getSharedPref("access_token", this@FhirApplication)
-        if (accessToken != null) {
-            token = accessToken
-        }
-        return token
-
+        return FormatterClass()
+            .getSharedPref("access_token", this@FhirApplication)
+            ?: TEST_TOKEN
     }
+
 
     fun createRequiredResourcesOnAppFirstLaunch() {
         CoroutineScope(Dispatchers.IO).launch {
-            if (FormatterClass().isFirstLaunch(this@FhirApplication)) {
+            val isFirstLaunch = FormatterClass().isFirstLaunch(this@FhirApplication)
+            println("isFirstLaunch :::: $isFirstLaunch")
+            if (isFirstLaunch) {
+                FormatterClass().setFirstLaunchCompleted(this@FhirApplication)
                 println("Creating Locations & Organizations on first launch")
                 ResourceCreationHelper().createLocations(this@FhirApplication)
                     .forEach {
@@ -130,4 +115,10 @@ class FhirApplication : Application(), DataCaptureConfig.Provider {
 
     override fun getDataCaptureConfig(): DataCaptureConfig =
         dataCaptureConfig ?: DataCaptureConfig()
+
+    override val workManagerConfiguration: Configuration
+        get() = Configuration.Builder()
+            .setWorkerFactory(MpoxWorkerFactory(repo))
+            .build()
+
 }

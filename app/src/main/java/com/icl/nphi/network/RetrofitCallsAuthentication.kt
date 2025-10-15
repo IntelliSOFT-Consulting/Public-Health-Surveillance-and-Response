@@ -42,7 +42,8 @@ class RetrofitCallsAuthentication {
 
     fun sendPatientToServer(
         id: String,
-        payload: RequestBody
+        payload: RequestBody,
+        context: Context
     ) {
         backgroundProcessingScope.launch {
             val baseUrl = BASE_URL//"https://hapi.fhir.org/baseR4/"
@@ -50,23 +51,26 @@ class RetrofitCallsAuthentication {
                 RetrofitBuilder.getRetrofit(baseUrl).create(Interface::class.java)
             println("API Response:::: Started posting data $id -> payload $payload")
             try {
-                val apiInterface = apiService.sendPatientToServer(id, payload)
-                if (apiInterface.isSuccessful) {
-                    val statusCode = apiInterface.code()
-                    val body = apiInterface.body()
-                    if (statusCode == 200 || statusCode == 201) {
-                        if (body != null) {
-                            println("API Response::::Success $body")
+                val token = FormatterClass().getSharedPref("access_token", context)
+                if (token != null) {
+                    val apiInterface = apiService.sendPatientToServer(id, payload, "Bearer $token")
+                    if (apiInterface.isSuccessful) {
+                        val statusCode = apiInterface.code()
+                        val body = apiInterface.body()
+                        if (statusCode == 200 || statusCode == 201) {
+                            if (body != null) {
+                                println("API Response::::Success $body")
 
+                            } else {
+                                println("API Response:::: Body is null")
+                            }
                         } else {
-                            println("API Response:::: Body is null")
+                            println("API Response:::: Error Status Code: $statusCode")
                         }
                     } else {
-                        println("API Response:::: Error Status Code: $statusCode")
+                        val errorBody = apiInterface.errorBody()?.string()
+                        println("API Response:::: Error Response for $id")
                     }
-                } else {
-                    val errorBody = apiInterface.errorBody()?.string()
-                    println("API Response:::: Error Response for $id")
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -75,28 +79,31 @@ class RetrofitCallsAuthentication {
         }
     }
 
-    fun sendBundleToServer(payload: RequestBody) {
+    fun sendBundleToServer(payload: RequestBody, context: Context) {
         backgroundProcessingScope.launch {
             val baseUrl = BASE_URL
             val apiService =
                 RetrofitBuilder.getRetrofit(baseUrl).create(Interface::class.java)
             println("API Response:::: Started posting data")
             try {
-                val apiInterface = apiService.sendBundleToServer(payload)
-                if (apiInterface.isSuccessful) {
-                    val statusCode = apiInterface.code()
-                    val body = apiInterface.body()
-                    if (statusCode == 200 || statusCode == 201) {
-                        if (body != null) {
-                            println("API Response:::: $body")
+                val token = FormatterClass().getSharedPref("access_token", context)
+                if (token != null) {
+                    val apiInterface = apiService.sendBundleToServer(payload, "Bearer $token")
+                    if (apiInterface.isSuccessful) {
+                        val statusCode = apiInterface.code()
+                        val body = apiInterface.body()
+                        if (statusCode == 200 || statusCode == 201) {
+                            if (body != null) {
+                                println("API Response:::: $body")
+                            } else {
+                                println("API Response:::: Body is null")
+                            }
                         } else {
-                            println("API Response:::: Body is null")
+                            println("API Response:::: Error Status Code: $statusCode")
                         }
                     } else {
-                        println("API Response:::: Error Status Code: $statusCode")
+                        println("API Response:::: Error Response: ${apiInterface.code()} ")
                     }
-                } else {
-                    println("API Response:::: Error Response: ${apiInterface.code()} ")
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -198,13 +205,7 @@ class RetrofitCallsAuthentication {
         }
     }
 
-    fun getUser(context: Context, dbSignIn: DbSignIn) {
 
-        CoroutineScope(Dispatchers.Main).launch {
-            val job = Job()
-            CoroutineScope(Dispatchers.IO + job).launch { getUserDetails(context) }.join()
-        }
-    }
 
     private suspend fun getUserDetails(context: Context) {
 

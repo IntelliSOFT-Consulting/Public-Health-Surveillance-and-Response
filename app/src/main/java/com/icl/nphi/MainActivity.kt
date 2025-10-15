@@ -18,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.Constraints
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -27,6 +28,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.fhir.sync.CurrentSyncJobStatus
+import com.google.android.fhir.sync.PeriodicSyncConfiguration
+import com.google.android.fhir.sync.RepeatInterval
+import com.google.android.fhir.sync.Sync
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -44,9 +48,15 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.icl.nphi.auth.LoginActivity
 import com.icl.nphi.fhir.DemoDataStore
+import com.icl.nphi.fhir.FhirSyncWorker
 import com.icl.nphi.viewmodels.PeriodicSyncViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.ResourceType
+import java.util.concurrent.TimeUnit
 import kotlin.getValue
 import kotlin.jvm.java
 
@@ -108,10 +118,36 @@ class MainActivity : AppCompatActivity() {
 
             insets
         }
-//        periodicViewModel.collectPeriodicSyncJobStatus()
-//        lifecycleScope.launch {
-//            periodicViewModel.initializePeriodicSync()
-//        }
+        CoroutineScope(Dispatchers.IO).launch {
+            Sync.periodicSync<FhirSyncWorker>(
+                this@MainActivity,
+                periodicSyncConfiguration =
+                    PeriodicSyncConfiguration(
+                        syncConstraints = androidx.work.Constraints.Builder().build(),
+                        repeat = RepeatInterval(interval = 15, timeUnit = TimeUnit.MINUTES)
+                    )
+            )
+                .shareIn(this, SharingStarted.Eagerly, 10)
+                .collect { /**Handle SyncJobStatus Here*/ }
+//            val workRequest =
+//                PeriodicWorkRequestBuilder<LocationDownloadedWorker>(15, TimeUnit.MINUTES)
+//                    .setConstraints(
+//                        Constraints.Builder()
+//                            .setRequiredNetworkType(NetworkType.CONNECTED) // Ensure network is available
+//                            .build()
+//                    )
+//                    .build()
+//            val uniqueName = "location_downloader"//${UUID.randomUUID()}"
+//
+//            WorkManager.getInstance(this@FhirApplication)
+//                .enqueueUniquePeriodicWork(
+//                    uniqueName,  // unique name to avoid duplicates
+//                    ExistingPeriodicWorkPolicy.KEEP,   // KEEP = don't run again if already enqueued
+//                    workRequest
+//                )
+//            createRequiredResourcesOnAppFirstLaunch()
+
+        }
 
         appUpdateManager = AppUpdateManagerFactory.create(this)
         checkForAppUpdate()

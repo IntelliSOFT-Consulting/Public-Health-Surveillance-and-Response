@@ -6,6 +6,7 @@ import com.icl.nphi.models.DbSignIn
 import com.icl.nphi.models.DbSignInResponse
 import com.icl.nphi.models.FhirBundle
 import com.icl.nphi.models.UserResponse
+import com.icl.nphi.network.Constants.BASE_URL
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -24,18 +25,25 @@ interface Interface {
     suspend fun signInUser(@Body dbSignIn: DbSignIn): Response<DbSignInResponse>
 
     @GET
-    suspend fun fetchBundle(@Url url: String): FhirBundle
+    suspend fun fetchBundle(
+        @Url url: String,
+        @Header("Authorization") token: String,
+    ): FhirBundle
 
     @PUT("Patient/{id}")
     @Headers("Content-Type: application/json")
     suspend fun sendPatientToServer(
         @Path("id") id: String,
-        @Body payload: RequestBody
+        @Body payload: RequestBody,
+        @Header("Authorization") token: String,
     ): Response<Any>
 
-    @POST("https://hapi.fhir.org/baseR4/")
+    @POST(BASE_URL)
     @Headers("Content-Type: application/json")
-    suspend fun sendBundleToServer(@Body payload: RequestBody): Response<Any>
+    suspend fun sendBundleToServer(
+        @Body payload: RequestBody,
+        @Header("Authorization") token: String,
+    ): Response<Any>
 
     @GET("provider/me")
     suspend fun getUserInfo(

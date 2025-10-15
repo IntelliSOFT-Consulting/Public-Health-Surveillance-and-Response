@@ -231,12 +231,20 @@ class ProfileFragment : Fragment() {
         val activityManager =
             requireActivity().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         activityManager.clearApplicationUserData()
+        startActivity(
+            Intent(requireContext(), LoginActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        )
+        requireActivity().finish()
     }
 
     private fun logoutUser() {
         FormatterClass().clearCache(requireContext())
         FormatterClass().deleteSharedPref("isLoggedIn", requireContext())
-        startActivity(Intent(requireContext(), LoginActivity::class.java))
+        startActivity(
+            Intent(requireContext(), LoginActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        )
         requireActivity().finish()
     }
 
