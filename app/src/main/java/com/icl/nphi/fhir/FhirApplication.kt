@@ -15,6 +15,7 @@ import com.google.android.fhir.datacapture.DataCaptureConfig
 import com.google.android.fhir.datacapture.XFhirQueryResolver
 import com.google.android.fhir.search.search // Import the local fhir
 import com.google.android.fhir.sync.HttpAuthenticationMethod
+import com.google.android.fhir.sync.Sync
 import com.google.android.fhir.sync.remote.HttpLogger
 import com.icl.nphi.network.Constants.BASE_URL
 import com.icl.nphi.network.Constants.TEST_TOKEN
@@ -68,6 +69,10 @@ class FhirApplication : Application(), DataCaptureConfig.Provider, Configuration
                         fhirEngine.search(it).map { it.resource }
                     }
                 }
+
+            CoroutineScope(Dispatchers.IO).launch {
+                Sync.oneTimeSync<FhirSyncWorker>(this@FhirApplication)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }

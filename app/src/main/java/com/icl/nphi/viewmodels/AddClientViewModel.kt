@@ -200,10 +200,16 @@ class AddClientViewModel(application: Application, private val state: SavedState
             val encounterReference = Reference("Encounter/$encounterId")
             val measure = MeasureReport()
             if (facility != null) {
-                patient.managingOrganization = Reference("Organization/$facility")
-                enc.locationFirstRep.location = Reference("Location/$facility")
-                measure.reporter = Reference("Organization/$facility")
-                questionnaireResponse.source = Reference("Organization/$facility")
+//                patient.managingOrganization = Reference("Organization/$facility")
+                patient.addExtension(
+                    sourceExtension(facility, context)
+                )
+                enc.addExtension(sourceExtension(facility, context))
+                measure.addExtension(sourceExtension(facility, context))
+                questionnaireResponse.addExtension(sourceExtension(facility, context))
+//                enc.locationFirstRep.location = Reference("Location/$facility")
+//                measure.reporter = Reference("Organization/$facility")
+//                questionnaireResponse.source = Reference("Organization/$facility")
             }
             val practitionerId = formatter.getSharedPref("fhirPractitionerId", context)
             if (practitionerId != null) {
@@ -321,7 +327,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-RTT-"
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
-                    createResource(obs, subjectReference, encounterReference,context)
+                    createResource(obs, subjectReference, encounterReference, context)
                 }
 
                 "measles-case-information" -> {
@@ -460,7 +466,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-$linked"
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
-                    createResource(obs, subjectReference, encounterReference,context)
+                    createResource(obs, subjectReference, encounterReference, context)
 
                     try {
                         if (dobEntry != null) {
@@ -599,7 +605,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-AFP-"
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
-                    createResource(obs, subjectReference, encounterReference,context)
+                    createResource(obs, subjectReference, encounterReference, context)
 
 
                     if (specimenDateEntry != null) {
@@ -692,7 +698,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-VL-"
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
-                    createResource(obs, subjectReference, encounterReference,context)
+                    createResource(obs, subjectReference, encounterReference, context)
                     try {
                         if (dobEntry != null) {
                             patient.birthDate =
@@ -758,7 +764,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-$linked"
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
-                    createResource(obs, subjectReference, encounterReference,context)
+                    createResource(obs, subjectReference, encounterReference, context)
 
                 }
 
@@ -797,7 +803,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-$linked"
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
-                    createResource(obs, subjectReference, encounterReference,context)
+                    createResource(obs, subjectReference, encounterReference, context)
 
                 }
 
@@ -873,7 +879,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                             it.linkId, it.text, it.answer
                         )
 
-                        createResource(obs, subjectReference, encounterReference,context)
+                        createResource(obs, subjectReference, encounterReference, context)
                     }
                     when (case) {
                         "moh-505-reporting-form" -> {
@@ -900,6 +906,17 @@ class AddClientViewModel(application: Application, private val state: SavedState
                 }
                 withContext(Dispatchers.Main) { isPatientSaved.value = true }
             }
+        }
+    }
+
+    private fun sourceExtension(facility: String, context: Context): Extension {
+        return Extension().apply {
+            url = "http://example.org/fhir/StructureDefinition/patient-managingLocation"
+            setValue(
+                Reference().apply {
+                    reference = "Location/$facility"
+                    display = FormatterClass().getSharedPref("facilityName", context)
+                })
         }
     }
 

@@ -96,54 +96,54 @@ class LocationDownloadedWorker(
         fhirEngine: FhirEngine
     ) {
         CoroutineScope(Dispatchers.IO).launch {
-        val apiService = RetrofitBuilder.getRetrofit(BASE_URL).create(Interface::class.java)
-        var nextUrl: String? = startUrl
-        var page = 1
-        while (!nextUrl.isNullOrEmpty()) {
-            try {
-                Log.d("LocationWorker", "Fetching page $page: $nextUrl")
-                val token = FormatterClass().getSharedPref("access_token", context)
-                if (token != null) {
-                    val bundle = apiService.fetchBundle(nextUrl, token)
-                    val entries = bundle.entry ?: emptyList()
-                    coroutineScope {
-                        entries.map { entry ->
-                            async(Dispatchers.IO) {
-                                try {
-                                    val location = createLocationResource(entry)
-                                    val exists = fhirEngine.search<Location> {
-                                        filter(Resource.RES_ID, { value = of(location.id) })
+            val apiService = RetrofitBuilder.getRetrofit(BASE_URL).create(Interface::class.java)
+            var nextUrl: String? = startUrl
+            var page = 1
+            while (!nextUrl.isNullOrEmpty()) {
+                try {
+                    Log.d("LocationWorker", "Fetching page $page: $nextUrl")
+                    val token = FormatterClass().getSharedPref("access_token", context)
+                    if (token != null) {
+                        val bundle = apiService.fetchBundle(nextUrl, "Bearer $token")
+                        val entries = bundle.entry ?: emptyList()
+                        coroutineScope {
+                            entries.map { entry ->
+                                async(Dispatchers.IO) {
+                                    try {
+                                        val location = createLocationResource(entry)
+                                        val exists = fhirEngine.search<Location> {
+                                            filter(Resource.RES_ID, { value = of(location.id) })
+                                        }
+                                        if (exists.isEmpty()) {
+                                            fhirEngine.create(location)
+                                        }
+                                    } catch (e: Exception) {
+                                        Log.e(
+                                            "LocationWorker",
+                                            "Failed to save: ${entry.resource.id}",
+                                            e
+                                        )
                                     }
-                                    if (exists.isEmpty()) {
-                                        fhirEngine.create(location)
-                                    }
-                                } catch (e: Exception) {
-                                    Log.e(
-                                        "LocationWorker",
-                                        "Failed to save: ${entry.resource.id}",
-                                        e
-                                    )
                                 }
-                            }
-                        }.awaitAll()
+                            }.awaitAll()
+                        }
+                        nextUrl = bundle.link?.firstOrNull { it.relation == "next" }?.url
+                        if (nextUrl != null) {
+                            Constants.saveNextUrl(context, nextUrl)
+                        } else {
+                            Constants.clear(context)
+                        }
+                        Log.d("LocationWorker", "Next URL: $nextUrl")
+                        delay(400) // prevent rapid fire requests
+                        page++
                     }
-                    nextUrl = bundle.link?.firstOrNull { it.relation == "next" }?.url
-                    if (nextUrl != null) {
-                        Constants.saveNextUrl(context, nextUrl)
-                    } else {
-                        Constants.clear(context)
-                    }
-                    Log.d("LocationWorker", "Next URL: $nextUrl")
-                    delay(200) // prevent rapid fire requests
-                    page++
+                } catch (e: Exception) {
+                    Log.e("LocationWorker", "Error fetching page: $nextUrl", e)
+                    break // Prevent infinite loop
                 }
-            } catch (e: Exception) {
-                Log.e("LocationWorker", "Error fetching page: $nextUrl", e)
-                break // Prevent infinite loop
             }
         }
     }
-}
 
 
 }
