@@ -9,8 +9,10 @@ import com.google.android.fhir.sync.upload.HttpCreateMethod
 import com.google.android.fhir.sync.upload.HttpUpdateMethod
 import com.google.android.fhir.sync.upload.UploadStrategy
 
-class FhirSyncWorker(appContext: Context, workerParams: WorkerParameters) :
+class AppFhirSyncWorker(appContext: Context, workerParams: WorkerParameters) :
     FhirSyncWorker(appContext, workerParams) {
+
+
 
     override fun getDownloadWorkManager(): DownloadWorkManager {
         val engine = FhirApplication.fhirEngine(applicationContext)
@@ -30,6 +32,6 @@ class FhirSyncWorker(appContext: Context, workerParams: WorkerParameters) :
             methodForCreate = HttpCreateMethod.PUT,
             methodForUpdate = HttpUpdateMethod.PATCH,
             squash = true,
-            bundleSize = 500,
+            bundleSize = 300,
         )
 }

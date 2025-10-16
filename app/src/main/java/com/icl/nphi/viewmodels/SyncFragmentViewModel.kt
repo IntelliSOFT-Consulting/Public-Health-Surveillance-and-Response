@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.android.fhir.sync.CurrentSyncJobStatus
 import com.google.android.fhir.sync.Sync
-import com.icl.nphi.fhir.FhirSyncWorker
+import com.icl.nphi.fhir.AppFhirSyncWorker
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -34,7 +34,7 @@ class SyncFragmentViewModel(application: Application) : AndroidViewModel(applica
     val pollState: SharedFlow<CurrentSyncJobStatus> =
         _oneTimeSyncTrigger
             .flatMapLatest {
-                Sync.oneTimeSync<FhirSyncWorker>(
+                Sync.oneTimeSync<AppFhirSyncWorker>(
                     context = application.applicationContext,
                 )
             }
@@ -46,7 +46,7 @@ class SyncFragmentViewModel(application: Application) : AndroidViewModel(applica
     }
 
     fun cancelOneTimeSyncWork() {
-        viewModelScope.launch { Sync.cancelOneTimeSync<FhirSyncWorker>(getApplication()) }
+        viewModelScope.launch { Sync.cancelOneTimeSync<AppFhirSyncWorker>(getApplication()) }
     }
 
     /** Emits last sync time. */

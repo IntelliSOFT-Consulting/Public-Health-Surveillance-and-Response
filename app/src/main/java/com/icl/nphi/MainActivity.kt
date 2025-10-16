@@ -32,9 +32,6 @@ import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.google.android.fhir.sync.CurrentSyncJobStatus
-import com.google.android.fhir.sync.PeriodicSyncConfiguration
-import com.google.android.fhir.sync.RepeatInterval
-import com.google.android.fhir.sync.Sync
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -52,16 +49,10 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.icl.nphi.auth.LoginActivity
 import com.icl.nphi.fhir.DemoDataStore
-import com.icl.nphi.fhir.FhirSyncWorker
 import com.icl.nphi.fhir.LocationDownloadedWorker
 import com.icl.nphi.viewmodels.PeriodicSyncViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.ResourceType
-import java.util.UUID
 import java.util.concurrent.TimeUnit
 import kotlin.getValue
 import kotlin.jvm.java
@@ -431,7 +422,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 // Display toast to show sync has started
                 Toast.makeText(this, "Sync Started ... ", Toast.LENGTH_SHORT).show()
-                //  startActivity(Intent(this@MainActivity, SyncActivity::class.java))
+//                  startActivity(Intent(this@MainActivity, SyncActivity::class.java))
                 true
             }
 

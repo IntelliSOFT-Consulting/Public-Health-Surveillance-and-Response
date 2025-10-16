@@ -14,7 +14,7 @@ import com.google.android.fhir.sync.Sync
 import com.google.android.fhir.sync.SyncJobStatus
 import com.icl.nphi.R
 import com.icl.nphi.fhir.FhirApplication
-import com.icl.nphi.fhir.FhirSyncWorker
+import com.icl.nphi.fhir.AppFhirSyncWorker
 import com.icl.nphi.fhir.ProgressHelper
 import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import android.text.format.DateFormat
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
@@ -37,11 +36,10 @@ class PeriodicSyncViewModel(application: Application) : AndroidViewModel(applica
         viewModelScope.launch { initializePeriodicSync() }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     suspend fun initializePeriodicSync() {
 
         val periodicSyncJobStatusFlow =
-            Sync.periodicSync<FhirSyncWorker>(
+            Sync.periodicSync<AppFhirSyncWorker>(
                 context = getApplication<Application>().applicationContext,
                 periodicSyncConfiguration =
                     PeriodicSyncConfiguration(
@@ -82,7 +80,7 @@ class PeriodicSyncViewModel(application: Application) : AndroidViewModel(applica
 
     fun cancelPeriodicSyncJob() {
         viewModelScope.launch {
-            Sync.cancelPeriodicSync<FhirSyncWorker>(
+            Sync.cancelPeriodicSync<AppFhirSyncWorker>(
                 getApplication<FhirApplication>().applicationContext,
             )
         }

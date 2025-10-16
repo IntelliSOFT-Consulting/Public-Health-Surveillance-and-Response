@@ -39,6 +39,7 @@ import org.hl7.fhir.r4.model.HumanName
 import org.hl7.fhir.r4.model.Identifier
 import org.hl7.fhir.r4.model.MeasureReport
 import org.hl7.fhir.r4.model.MeasureReport.MeasureReportGroupPopulationComponent
+import org.hl7.fhir.r4.model.Meta
 import org.hl7.fhir.r4.model.Observation
 import org.hl7.fhir.r4.model.Patient
 import org.hl7.fhir.r4.model.Questionnaire
@@ -196,6 +197,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
             }
 
+
             val codeableConcept = CodeableConcept()
             codeableConcept.codingFirstRep.code = "case-information"
             codeableConcept.codingFirstRep.display = "case-information"
@@ -210,12 +212,32 @@ class AddClientViewModel(application: Application, private val state: SavedState
             val encounterReference = Reference("Encounter/$encounterId")
             val measure = MeasureReport()
             if (facility != null) {
-//                patient.managingOrganization = Reference("Organization/$facility")
                 patient.addExtension(
                     sourceExtension("patient", facility, context)
                 )
+                patient.meta = Meta().apply {
+                    tag = listOf(
+                        sourceMetaTag("patient", facility, context)
+                    )
+                }
                 enc.addExtension(sourceExtension("encounter", facility, context))
-                measure.addExtension(sourceExtension("measure", facility, context))
+                enc.meta = Meta().apply {
+                    tag = listOf(
+                        sourceMetaTag("encounter", facility, context)
+                    )
+                }
+                measure.addExtension(
+                    sourceExtension(
+                        "measure",
+                        facility,
+                        context
+                    )
+                )
+                measure.meta = Meta().apply {
+                    tag = listOf(
+                        sourceMetaTag("measure", facility, context)
+                    )
+                }
                 questionnaireResponse.addExtension(
                     sourceExtension(
                         "questionnaire",
@@ -223,12 +245,16 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         context
                     )
                 )
-//                enc.locationFirstRep.location = Reference("Location/$facility")
-//                measure.reporter = Reference("Organization/$facility")
-//                questionnaireResponse.source = Reference("Organization/$facility")
+                questionnaireResponse.meta = Meta().apply {
+                    tag = listOf(
+                        sourceMetaTag("questionnaire", facility, context)
+                    )
+                }
             }
             val practitionerId = formatter.getSharedPref("fhirPractitionerId", context)
             if (practitionerId != null) {
+                questionnaireResponse.author = Reference("Practitioner/$practitionerId")
+                measure.reporter = Reference("Practitioner/$practitionerId")
                 patient.generalPractitionerFirstRep.reference = "Practitioner/$practitionerId"
                 enc.participantFirstRep.individual = Reference("Practitioner/$practitionerId")
             }
@@ -236,9 +262,12 @@ class AddClientViewModel(application: Application, private val state: SavedState
             when (case) {
 
                 "mpox-register" -> {
-                    val patientFNameEntry = extractedAnswers.find { it.linkId == "873240407472" }
-                    val patientMNameEntry = extractedAnswers.find { it.linkId == "246751846436" }
-                    val patientLNameEntry = extractedAnswers.find { it.linkId == "486402457213" }
+                    val patientFNameEntry =
+                        extractedAnswers.find { it.linkId == "873240407472" }
+                    val patientMNameEntry =
+                        extractedAnswers.find { it.linkId == "246751846436" }
+                    val patientLNameEntry =
+                        extractedAnswers.find { it.linkId == "486402457213" }
                     if (patientLNameEntry != null) {
                         patient.nameFirstRep.family = patientLNameEntry.answer
                     }
@@ -253,7 +282,8 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val dobEntry = extractedAnswers.find { it.linkId == "257830485990" }
                     val genderEntry = extractedAnswers.find { it.linkId == "929966324957" }
                     val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
-                    val centerEntry = extractedAnswers.find { it.linkId == "vaccination_center" }
+                    val centerEntry =
+                        extractedAnswers.find { it.linkId == "vaccination_center" }
                     val countyEntry = extractedAnswers.find { it.linkId == "a4-county" }
                     var county = ""
                     var subCounty = ""
@@ -357,9 +387,12 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val pSubCountyEntry = extractedAnswers.find { it.linkId == "885995384353" }
                     val pCountyEntry = extractedAnswers.find { it.linkId == "301322368614" }
                     val pPhoneEntry = extractedAnswers.find { it.linkId == "754217593839" }
-                    val patientFNameEntry = extractedAnswers.find { it.linkId == "873240407472" }
-                    val patientMNameEntry = extractedAnswers.find { it.linkId == "246751846436" }
-                    val patientLNameEntry = extractedAnswers.find { it.linkId == "486402457213" }
+                    val patientFNameEntry =
+                        extractedAnswers.find { it.linkId == "873240407472" }
+                    val patientMNameEntry =
+                        extractedAnswers.find { it.linkId == "246751846436" }
+                    val patientLNameEntry =
+                        extractedAnswers.find { it.linkId == "486402457213" }
                     val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
                     val countyEntry = extractedAnswers.find { it.linkId == "a4-county" }
                     val linkedEntry = extractedAnswers.find { it.linkId == "865158268604" }
@@ -500,7 +533,8 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         SpecimenConfig("Respiratory Sample", "270749570400", "183705125522"),
                     )
 
-                    val otherSpecimenEntry = extractedAnswers.find { it.linkId == "258912872921" }
+                    val otherSpecimenEntry =
+                        extractedAnswers.find { it.linkId == "258912872921" }
                     if (otherSpecimenEntry != null) {
 
                         if (otherSpecimenEntry.answer.lowercase() == "yes") {
@@ -514,7 +548,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                                         otherSpecifyEntry.linkId,
                                         otherDateEntry.answer,
                                         otherSpecifyEntry.answer,
-                                        subjectReference,context
+                                        subjectReference, context
                                     )
                                 }
                             }
@@ -525,13 +559,14 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         val specimenEntry =
                             extractedAnswers.find { it.linkId == config.entryLinkId }
                         if (specimenEntry?.answer?.lowercase() == "yes") {
-                            val dateEntry = extractedAnswers.find { it.linkId == config.dateLinkId }
+                            val dateEntry =
+                                extractedAnswers.find { it.linkId == config.dateLinkId }
                             if (dateEntry != null) {
                                 createSpecimenResource(
                                     specimenEntry.linkId,
                                     dateEntry.answer,
                                     config.type,
-                                    subjectReference,context
+                                    subjectReference, context
                                 )
                             }
                         }
@@ -548,7 +583,8 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val dobEntry = extractedAnswers.find { it.linkId == "257830485990" }
                     val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
                     val countyEntry = extractedAnswers.find { it.linkId == "a4-county" }
-                    val specimenDateEntry = extractedAnswers.find { it.linkId == "737703942433" }
+                    val specimenDateEntry =
+                        extractedAnswers.find { it.linkId == "737703942433" }
 
 
                     if (genderEntry != null) {
@@ -630,7 +666,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                             specimenDateEntry.linkId,
                             specimenDateEntry.answer,
                             "Stool",
-                            subjectReference,context
+                            subjectReference, context
                         )
                     }
 
@@ -655,7 +691,8 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val dobEntry = extractedAnswers.find { it.linkId == "257830485990" }
                     val phoneEntry = extractedAnswers.find { it.linkId == "760016167907" }
                     val contactNameEntry = extractedAnswers.find { it.linkId == "657999955440" }
-                    val contactPhoneEntry = extractedAnswers.find { it.linkId == "354738003178" }
+                    val contactPhoneEntry =
+                        extractedAnswers.find { it.linkId == "354738003178" }
 
                     val casePhone = ContactPoint()
                     val parentPhone = ContactPoint()
@@ -869,7 +906,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
                         if (it.linkId == WEEK_ENDING_DATE) {
                             val date =
-                                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(it.answer)
+                                SimpleDateFormat(
+                                    "yyyy-MM-dd",
+                                    Locale.getDefault()
+                                ).parse(it.answer)
                             if (date != null) {
                                 measure.date = date
                             }
@@ -925,7 +965,11 @@ class AddClientViewModel(application: Application, private val state: SavedState
         }
     }
 
-    private fun sourceExtension(resource: String, facility: String, context: Context): Extension {
+    private fun sourceExtension(
+        resource: String,
+        facility: String,
+        context: Context
+    ): Extension {
         return Extension().apply {
             url = "http://example.org/fhir/StructureDefinition/$resource-managingLocation"
             setValue(
@@ -933,6 +977,18 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     reference = "Location/$facility"
                     display = FormatterClass().getSharedPref("facilityName", context)
                 })
+        }
+    }
+
+    private fun sourceMetaTag(
+        resource: String,
+        facility: String,
+        context: Context
+    ): Coding {
+        return Coding().apply {
+            system = "http://example.org/fhir/StructureDefinition/$resource-managingLocation"
+            code = "Location/$facility"
+            display = FormatterClass().getSharedPref("facilityName", context)
         }
     }
 
@@ -982,6 +1038,11 @@ class AddClientViewModel(application: Application, private val state: SavedState
             specimen.collection = collection
             val facility = FormatterClass().getSharedPref("facility", context)
             if (facility != null) {
+                specimen.meta = Meta().apply {
+                    tag = listOf(
+                        sourceMetaTag("measure", facility, context)
+                    )
+                }
                 specimen.addExtension(sourceExtension("specimen", facility, context))
             }
             fhirEngine.create(specimen)
@@ -1009,14 +1070,26 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
                         val value = when {
                             answerObj.has("valueString") -> answerObj.getString("valueString")
-                            answerObj.has("valueInteger") -> answerObj.optString("valueInteger", "")
+                            answerObj.has("valueInteger") -> answerObj.optString(
+                                "valueInteger",
+                                ""
+                            )
+
                             answerObj.has("valueDate") -> answerObj.optString("valueDate", "")
                             answerObj.has("valueDateTime") -> answerObj.optString(
                                 "valueDateTime", ""
                             )
 
-                            answerObj.has("valueBoolean") -> answerObj.optString("valueBoolean", "")
-                            answerObj.has("valueDecimal") -> answerObj.optString("valueDecimal", "")
+                            answerObj.has("valueBoolean") -> answerObj.optString(
+                                "valueBoolean",
+                                ""
+                            )
+
+                            answerObj.has("valueDecimal") -> answerObj.optString(
+                                "valueDecimal",
+                                ""
+                            )
+
                             answerObj.has("valueCoding") -> {
                                 val coding = answerObj.getJSONObject("valueCoding")
                                 coding.optString("display", coding.optString("code", ""))
@@ -1037,7 +1110,13 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
                     if (valueList.isNotEmpty()) {
                         // Join multiple values with comma
-                        results.add(QuestionnaireAnswer(linkId, text, valueList.joinToString(", ")))
+                        results.add(
+                            QuestionnaireAnswer(
+                                linkId,
+                                text,
+                                valueList.joinToString(", ")
+                            )
+                        )
                     }
                 }
 
@@ -1079,6 +1158,11 @@ class AddClientViewModel(application: Application, private val state: SavedState
             obs.issued = Date()
             val facility = FormatterClass().getSharedPref("facility", context)
             if (facility != null) {
+                obs.meta = Meta().apply {
+                    tag = listOf(
+                        sourceMetaTag("measure", facility, context)
+                    )
+                }
                 obs.addExtension(sourceExtension("observation", facility, context))
             }
             fhirEngine.create(obs)

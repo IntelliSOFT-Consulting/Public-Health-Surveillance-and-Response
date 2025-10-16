@@ -38,6 +38,8 @@ import com.icl.nphi.utils.FormatterClass
 import com.icl.nphi.viewmodels.ClientDetailsViewModel
 import com.icl.nphi.viewmodels.factories.PatientDetailsViewModelFactory
 import kotlinx.coroutines.launch
+import org.hl7.fhir.r4.model.Patient
+import org.hl7.fhir.r4.model.ResourceType
 import java.time.LocalDate
 import java.time.Period
 import java.time.ZonedDateTime
@@ -245,6 +247,13 @@ class SummarizedActivity : AppCompatActivity() {
                     .setContentText("You Won't be able to recover this record!")
                     .setConfirmText("Yes,delete it!")
                     .setConfirmClickListener { sDialog ->
+                        val patientId =
+                            FormatterClass().getSharedPref("patientId", this@SummarizedActivity)
+                        if (patientId != null) {
+                            lifecycleScope.launch {
+                                fhirEngine.delete(ResourceType.Patient, patientId)
+                            }
+                        }
                         Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show()
                         sDialog.dismissWithAnimation()
                     }
@@ -266,7 +275,11 @@ class SummarizedActivity : AppCompatActivity() {
                                 "mpox-tally-sheet.json",
                                 this@SummarizedActivity
                             )
-                            Toast.makeText(this@SummarizedActivity,"Coming soon", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this@SummarizedActivity,
+                                "Coming soon",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
 
                         "mpox-register" -> {
@@ -291,7 +304,11 @@ class SummarizedActivity : AppCompatActivity() {
                         }
 
                         else -> {
-                            Toast.makeText(this@SummarizedActivity,"Coming soon", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this@SummarizedActivity,
+                                "Coming soon",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
 

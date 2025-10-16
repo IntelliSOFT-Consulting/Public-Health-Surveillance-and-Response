@@ -286,3 +286,9 @@ data class LocalPartOf(
     val reference: String,
     val display: String?
 )
+
+data class FailedSyncResource(
+    val resourceType: String,
+    val resourceId: String,
+    val errorMessage: String? = null
+)

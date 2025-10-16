@@ -17,7 +17,9 @@ import com.google.android.fhir.search.search // Import the local fhir
 import com.google.android.fhir.sync.HttpAuthenticationMethod
 import com.google.android.fhir.sync.PeriodicSyncConfiguration
 import com.google.android.fhir.sync.RepeatInterval
+import com.google.android.fhir.sync.ResourceSyncException
 import com.google.android.fhir.sync.Sync
+import com.google.android.fhir.sync.SyncJobStatus
 import com.google.android.fhir.sync.remote.HttpLogger
 import com.icl.nphi.network.Constants.BASE_URL
 import com.icl.nphi.network.Constants.TEST_TOKEN
@@ -25,6 +27,7 @@ import com.icl.nphi.utils.ContribQuestionnaireItemViewHolderFactoryMatchersProvi
 import com.icl.nphi.utils.FormatterClass
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
@@ -76,23 +79,32 @@ class FhirApplication : Application(), DataCaptureConfig.Provider, Configuration
                     }
                 }
 
-            CoroutineScope(Dispatchers.IO).launch {
-                Sync.oneTimeSync<FhirSyncWorker>(this@FhirApplication)
-//                Sync.periodicSync<FhirSyncWorker>(
-//                    this@FhirApplication,
-//                    periodicSyncConfiguration = PeriodicSyncConfiguration(
-//                        syncConstraints = Constraints.Builder().build(),
-//                        repeat = RepeatInterval(interval = 15, timeUnit = TimeUnit.MINUTES)
-//                    )
-//                ).shareIn(this, SharingStarted.Eagerly, 10)
-//                    .collect {
-//                        // Handle SyncJobStatus here (optional)
-//                    }
+            val appScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+            appScope.launch {
+                Sync.periodicSync<AppFhirSyncWorker>(
+                    this@FhirApplication,
+                    periodicSyncConfiguration = PeriodicSyncConfiguration(
+                        syncConstraints = Constraints.Builder().build(),
+                        repeat = RepeatInterval(interval = 10, timeUnit = TimeUnit.MINUTES)
+                    )
+                ).collect { status ->
+                    when (status) {
+                        is SyncJobStatus.Started -> Log.d("FHIR_SYNC", "Started")
+                        is SyncJobStatus.InProgress -> Log.d("FHIR_SYNC", "In progress")
+                        is SyncJobStatus.Succeeded -> Log.d("FHIR_SYNC", "Success")
+                        is SyncJobStatus.Failed -> Log.e(
+                            "FHIR_SYNC",
+                            "Failed: ${status.exceptions}"
+                        )
+                        else -> Log.d("FHIR_SYNC", "Other: ${status::class.simpleName}")
+                    }
+
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
     }
 
     fun retrieveStoredToken(): String {
@@ -100,28 +112,6 @@ class FhirApplication : Application(), DataCaptureConfig.Provider, Configuration
             .getSharedPref("access_token", this@FhirApplication)
             ?: TEST_TOKEN
     }
-
-
-    fun createRequiredResourcesOnAppFirstLaunch() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val isFirstLaunch = FormatterClass().isFirstLaunch(this@FhirApplication)
-            println("isFirstLaunch :::: $isFirstLaunch")
-            if (isFirstLaunch) {
-                FormatterClass().setFirstLaunchCompleted(this@FhirApplication)
-                println("Creating Locations & Organizations on first launch")
-                ResourceCreationHelper().createLocations(this@FhirApplication)
-                    .forEach {
-                        println("Creating location ${it.name}")
-                        fhirEngine.create(it)
-                    }
-                ResourceCreationHelper().createRespectiveOrganization(this@FhirApplication)
-                    .forEach { fhirEngine.create(it) }
-                FormatterClass().setFirstLaunchCompleted(this@FhirApplication)
-                println("Locations & Organizations created on first launch")
-            }
-        }
-    }
-
 
     private fun constructFhirEngine(): FhirEngine {
         return FhirEngineProvider.getInstance(this)
