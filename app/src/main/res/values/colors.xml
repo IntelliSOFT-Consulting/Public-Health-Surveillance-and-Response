@@ -22,6 +22,11 @@
     <color name="activeTabText">#0288D1</color>
     <color name="inactiveTabText">#757575</color>
     <color name="activeTabPressed">#3700B3</color>
-
-
+    <!-- Sync Status Colors -->
+    <color name="sync_pending">#FF9800</color>
+    <color name="sync_syncing">#2196F3</color>
+    <color name="sync_failed">#F44336</color>
+    <color name="sync_success">#4CAF50</color>
+    <color name="material_outline">#1F000000</color>
+    <color name="spinner_border">#E0E0E0</color>
 </resources>

@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import androidx.work.Configuration
 import androidx.work.Constraints
+import androidx.work.NetworkType
 import com.google.android.fhir.DatabaseErrorStrategy
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.FhirEngineConfiguration
@@ -14,6 +15,7 @@ import com.google.android.fhir.ServerConfiguration
 import com.google.android.fhir.datacapture.DataCaptureConfig
 import com.google.android.fhir.datacapture.XFhirQueryResolver
 import com.google.android.fhir.search.search // Import the local fhir
+import com.google.android.fhir.sync.CurrentSyncJobStatus
 import com.google.android.fhir.sync.HttpAuthenticationMethod
 import com.google.android.fhir.sync.PeriodicSyncConfiguration
 import com.google.android.fhir.sync.RepeatInterval
@@ -28,7 +30,9 @@ import com.icl.nphi.utils.FormatterClass
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -43,6 +47,8 @@ class FhirApplication : Application(), DataCaptureConfig.Provider, Configuration
     private var dataCaptureConfig: DataCaptureConfig? = null
 
     private val dataStore by lazy { DemoDataStore(this) }
+
+    private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
 
     override fun onCreate() {
@@ -69,6 +75,8 @@ class FhirApplication : Application(), DataCaptureConfig.Provider, Configuration
             ),
         )
         try {
+
+
             dataCaptureConfig =
                 DataCaptureConfig().apply {
                     urlResolver = ReferenceUrlResolver(this@FhirApplication as Context)
@@ -78,33 +86,79 @@ class FhirApplication : Application(), DataCaptureConfig.Provider, Configuration
                         fhirEngine.search(it).map { it.resource }
                     }
                 }
-
-            val appScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-
-            appScope.launch {
-                Sync.periodicSync<AppFhirSyncWorker>(
-                    this@FhirApplication,
-                    periodicSyncConfiguration = PeriodicSyncConfiguration(
-                        syncConstraints = Constraints.Builder().build(),
-                        repeat = RepeatInterval(interval = 10, timeUnit = TimeUnit.MINUTES)
-                    )
-                ).collect { status ->
-                    when (status) {
-                        is SyncJobStatus.Started -> Log.d("FHIR_SYNC", "Started")
-                        is SyncJobStatus.InProgress -> Log.d("FHIR_SYNC", "In progress")
-                        is SyncJobStatus.Succeeded -> Log.d("FHIR_SYNC", "Success")
-                        is SyncJobStatus.Failed -> Log.e(
-                            "FHIR_SYNC",
-                            "Failed: ${status.exceptions}"
-                        )
-                        else -> Log.d("FHIR_SYNC", "Other: ${status::class.simpleName}")
-                    }
-
-                }
-            }
+            setupPeriodicSync()
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    private fun setupPeriodicSync() {
+        appScope.launch {
+            try {
+                Sync.periodicSync<AppFhirSyncWorker>(
+                    this@FhirApplication,
+                    periodicSyncConfiguration = PeriodicSyncConfiguration(
+                        syncConstraints = Constraints.Builder()
+                            .setRequiredNetworkType(NetworkType.CONNECTED)
+                            .build(),
+                        repeat = RepeatInterval(interval = 15, timeUnit = TimeUnit.MINUTES)
+                    )
+
+                ).catch { throwable ->
+                    Log.e(
+                        "FHIR_SYNC",
+                        "Error setting up periodic sync: ${throwable.message}",
+                        throwable
+                    )
+                }
+                    .collect { syncJobStatus ->
+//                        when (syncJobStatus) {
+//                            is SyncJobStatus.Started -> {
+//                                Log.d("FHIR_SYNC", "Sync job enqueued")
+//                            }
+//
+//                            is SyncJobStatus.InProgress -> {
+//                                Log.d(
+//                                    "FHIR_SYNC",
+//                                    "Sync in progress: ${syncJobStatus.currentSyncJobStatus}"
+//                                )
+//                            }
+//
+//                            is SyncJobStatus.Succeeded -> {
+//                                Log.d("FHIR_SYNC", "Sync completed successfully")
+//                            }
+//
+//                            is SyncJobStatus.Failed -> {
+//                                Log.e("FHIR_SYNC", "Periodic sync run FAILED at: ${syncJobStatus.timestamp}")
+//                                val failureStatus = syncJobStatus.currentSyncJobStatus
+//                                if (failureStatus is CurrentSyncJobStatus.Failed) {
+//                                    // Log the specific exceptions for easier debugging.
+//                                    failureStatus.timestamp
+//                                        .forEach { info ->
+//                                        Log.e("FHIR_SYNC_FAILURE", "Failure on resource '${info.resourceType}':", info.exception)
+//                                    }
+//                                } else {
+//                                    Log.e("FHIR_SYNC_FAILURE", "Sync failed with an unexpected status: ${failureStatus::class.simpleName}")
+//                                }
+//                            }
+//
+//                            else -> {
+//                                Log.d(
+//                                    "FHIR_SYNC",
+//                                    "Other sync status: ${syncJobStatus::class.simpleName}"
+//                                )
+//                            }
+//                        }
+                    }
+            } catch (e: Exception) {
+                Log.e("FHIR_SYNC", "Error setting up periodic sync: ${e.message}", e)
+            }
+        }
+    }
+
+    override fun onTerminate() {
+        super.onTerminate()
+        appScope.cancel()
     }
 
     fun retrieveStoredToken(): String {

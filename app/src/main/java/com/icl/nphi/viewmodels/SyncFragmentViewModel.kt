@@ -13,6 +13,7 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
@@ -20,31 +21,47 @@ import kotlinx.coroutines.launch
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
+
 class SyncFragmentViewModel(application: Application) : AndroidViewModel(application) {
     private val _lastSyncTimestampLiveData = MutableLiveData<String>()
     val lastSyncTimestampLiveData: LiveData<String>
         get() = _lastSyncTimestampLiveData
 
-    private val _oneTimeSyncTrigger =
-        MutableSharedFlow<Boolean>(
-            extraBufferCapacity = 1,
-            onBufferOverflow = BufferOverflow.DROP_OLDEST,
-        )
+    // Change this to a simple MutableLiveData to signal UI state (e.g., show a spinner)
+    private val _syncState = MutableLiveData<SyncState>()
+    val syncState: LiveData<SyncState>
+        get() = _syncState
 
-    val pollState: SharedFlow<CurrentSyncJobStatus> =
-        _oneTimeSyncTrigger
-            .flatMapLatest {
-                Sync.oneTimeSync<AppFhirSyncWorker>(
-                    context = application.applicationContext,
-                )
-            }
-            .map { it }
-            .shareIn(viewModelScope, SharingStarted.Eagerly, replay = 0)
+    // A SharedFlow to emit the results of a one-time sync
+    private val _oneTimeSyncResult = MutableLiveData<CurrentSyncJobStatus>()
+    val oneTimeSyncResult: LiveData<CurrentSyncJobStatus>
+        get() = _oneTimeSyncResult
 
+    // This function is now the single point of action to start a sync
     fun triggerOneTimeSync() {
-        viewModelScope.launch { _oneTimeSyncTrigger.emit(true) }
+        viewModelScope.launch {
+            // Set initial state for UI
+            _syncState.value = SyncState.Running
+
+            Sync.oneTimeSync<AppFhirSyncWorker>(getApplication())
+                .catch { exception ->
+                    // Catch fatal exceptions from the flow itself
+                    _syncState.value = SyncState.Error(exception)
+                }
+                .collect { status ->
+                    // Update the result LiveData as status changes
+                    _oneTimeSyncResult.value = status
+
+                    // Update the overall state when the sync is finished
+                    if (status is CurrentSyncJobStatus.Succeeded || status is CurrentSyncJobStatus.Failed) {
+                        updateLastSyncTimestamp()
+                        _syncState.value = SyncState.Finished
+                    }
+                }
+        }
     }
 
+    // This function is not the issue, but it's good to have
     fun cancelOneTimeSyncWork() {
         viewModelScope.launch { Sync.cancelOneTimeSync<AppFhirSyncWorker>(getApplication()) }
     }
@@ -65,4 +82,12 @@ class SyncFragmentViewModel(application: Application) : AndroidViewModel(applica
         private const val formatString24 = "yyyy-MM-dd HH:mm:ss"
         private const val formatString12 = "yyyy-MM-dd hh:mm:ss a"
     }
+}
+
+// A helper sealed class to manage UI state more cleanly
+sealed class SyncState {
+    object Idle : SyncState()
+    object Running : SyncState()
+    object Finished : SyncState()
+    data class Error(val exception: Throwable) : SyncState()
 }

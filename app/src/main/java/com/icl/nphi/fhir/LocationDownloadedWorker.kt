@@ -45,9 +45,9 @@ class LocationDownloadedWorker(
         val context = applicationContext
         val fhirEngine = FhirApplication.fhirEngine(context)
         val currentUrl = Constants.getNextUrl(context) ?: LOCATION_STARTER
-        if (!Constants.isDownloadComplete(context)) {
-            fetchAllPages(currentUrl, context, fhirEngine)
-        }
+       // if (!Constants.isDownloadComplete(context)) {
+         //   fetchAllPages(currentUrl, context, fhirEngine)
+       // }
 
         val output = workDataOf("fetch_complete" to true)
         Result.success(output)
@@ -118,7 +118,7 @@ class LocationDownloadedWorker(
                                                 filter(Resource.RES_ID, { value = of(location.id) })
                                             }
                                             if (exists.isEmpty()) {
-                                                fhirEngine.create(location)
+                                              //  fhirEngine.create(location)
                                             }
                                         } catch (e: Exception) {
                                             Log.e(

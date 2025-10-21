@@ -25,7 +25,7 @@
     <string name="welcome_back">Welcome Back</string>
     <string name="last_sync_timestamp">Last sync time: %1$s</string>
     <string name="current_status">Current sync status: %1$s</string>
-<!--    <string name="base_url">https://dsrkeycloak.intellisoftkenya.com/auth/</string>-->
+    <!--    <string name="base_url">https://dsrkeycloak.intellisoftkenya.com/auth/</string>-->
     <string name="base_url">https://auth.nphiis.nphl.go.ke/</string>
     <string name="cancel_questionnaire_message">Are you sure you want to cancel?</string>
     <string name="lab_results_not_captured">Lab results not captured</string>
@@ -140,4 +140,10 @@
     <string name="no_notifications">No notifications</string>
     <string name="no_notifications_yet">No notifications yet</string>
     <string name="you_re_all_caught_up">You\'re all caught up.</string>
+    <string name="nav_resources">Resources</string>
+    <string name="sync_pending">Pending Sync</string>
+    <string name="sync_syncing">Syncing…</string>
+    <string name="sync_failed">Sync Failed</string>
+    <string name="sync_success">Synced</string>
+    <string name="retry">Retry</string>
 </resources>

@@ -44,7 +44,7 @@ class PeriodicSyncViewModel(application: Application) : AndroidViewModel(applica
                 periodicSyncConfiguration =
                     PeriodicSyncConfiguration(
                         syncConstraints = Constraints.Builder().build(),
-                        repeat = RepeatInterval(interval = 15, timeUnit = TimeUnit.MINUTES),
+                        repeat = RepeatInterval(interval = 10, timeUnit = TimeUnit.MINUTES),
                     ),
             )
 
@@ -88,6 +88,7 @@ class PeriodicSyncViewModel(application: Application) : AndroidViewModel(applica
 
     private fun getLastSyncStatus(lastSyncJobStatus: LastSyncJobStatus?): String? {
         return when (lastSyncJobStatus) {
+
             is LastSyncJobStatus.Succeeded ->
                 getApplication<FhirApplication>()
                     .getString(
@@ -96,7 +97,7 @@ class PeriodicSyncViewModel(application: Application) : AndroidViewModel(applica
                     )
 
             is LastSyncJobStatus.Failed -> {
-                println("Failed last sync status: ${lastSyncJobStatus.timestamp}")
+                println("Failed last sync status: ${lastSyncJobStatus.timestamp} $lastSyncJobStatus")
                 getApplication<FhirApplication>()
                     .getString(
                         R.string.last_sync_status,

@@ -29,6 +29,7 @@ import org.hl7.fhir.r4.model.Encounter
 import org.hl7.fhir.r4.model.Enumerations
 import org.hl7.fhir.r4.model.Extension
 import org.hl7.fhir.r4.model.Identifier
+import org.hl7.fhir.r4.model.Meta
 import org.hl7.fhir.r4.model.Observation
 import org.hl7.fhir.r4.model.Patient
 import org.hl7.fhir.r4.model.Questionnaire
@@ -60,6 +61,17 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
      * @param questionnaireResponse screener encounter questionnaire response
      */
 
+    private fun sourceMetaTag(
+        resource: String,
+        facility: String,
+        context: Context
+    ): Coding {
+        return Coding().apply {
+            system = "http://example.org/fhir/StructureDefinition/$resource-managingLocation"
+            code = "Location/$facility"
+            display = FormatterClass().getSharedPref("facilityName", context)
+        }
+    }
 
     private fun sourceExtension(resource: String, facility: String, context: Context): Extension {
         return Extension().apply {
@@ -192,12 +204,41 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     if (facility != null) {
                         contact.addExtension(sourceExtension("patient", facility, appContext))
                         enc.addExtension(sourceExtension("encounter", facility, appContext))
+                        contact.meta = Meta().apply {
+                            tag = listOf(
+                                sourceMetaTag("patient", facility, appContext)
+                            )
+                        }
+                        enc.meta = Meta().apply {
+                            tag = listOf(
+                                sourceMetaTag("encounter", facility, appContext)
+                            )
+                        }
+                        questionnaireResponse.meta = Meta().apply {
+                            tag = listOf(
+                                sourceMetaTag("questionnaire", facility, appContext)
+                            )
+                        }
+
+                        questionnaireResponse.addExtension(
+                            sourceExtension(
+                                "questionnaire",
+                                facility,
+                                appContext
+                            )
+                        )
 
                     }
+                    val encounterReference = Reference("Encounter/$encounterId")
+
                     fhirEngine.create(contact)
                     fhirEngine.create(enc)
 
-                    val encounterReference = Reference("Encounter/$encounterId")
+                    questionnaireResponse.id = generateUuid()
+                    questionnaireResponse.subject = subjectReference
+                    questionnaireResponse.encounter = encounterReference
+                    fhirEngine.create(questionnaireResponse)
+
                     var county = ""
                     var subCounty = ""
                     val currentYear = LocalDate.now().year
@@ -281,11 +322,42 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                     enc.identifier.add(identifierSystem0)
                     val facility = FormatterClass().getSharedPref("facility", appContext)
                     if (facility != null) {
+                        questionnaireResponse.meta = Meta().apply {
+                            tag = listOf(
+                                sourceMetaTag("questionnaire", facility, appContext)
+                            )
+                        }
+                        enc.meta = Meta().apply {
+                            tag = listOf(
+                                sourceMetaTag("encounter", facility, appContext)
+                            )
+                        }
+                        questionnaireResponse.addExtension(
+                            sourceExtension(
+                                "questionnaire",
+                                facility,
+                                appContext
+                            )
+                        )
                         enc.addExtension(sourceExtension("encounter", facility, appContext))
                     }
+
+                    val practitionerId =
+                        FormatterClass().getSharedPref("fhirPractitionerId", appContext)
+                    if (practitionerId != null) {
+                        questionnaireResponse.author = Reference("Practitioner/$practitionerId")
+                        enc.participantFirstRep.individual =
+                            Reference("Practitioner/$practitionerId")
+                    }
+
                     fhirEngine.create(enc)
 
                     val encounterReference = Reference("Encounter/$encounterId")
+                    questionnaireResponse.id = generateUuid()
+                    questionnaireResponse.subject = subjectReference
+                    questionnaireResponse.encounter = encounterReference
+                    fhirEngine.create(questionnaireResponse)
+
                     extractedAnswers.forEach {
                         val obs = qh.codingQuestionnaire(
                             it.linkId, it.text,
@@ -375,12 +447,22 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         context: Context
     ) {
         try {
+            val practitioner = FormatterClass().getSharedPref("fhirPractitionerId", context)
+
             obs.id = generateUuid()
             obs.subject = subjectReference
             obs.encounter = encounterReference
+            if (practitioner != null) {
+                obs.performerFirstRep.reference = "Practitioner/$practitioner"
+            }
             obs.issued = Date()
             val facility = FormatterClass().getSharedPref("facility", context)
             if (facility != null) {
+                obs.meta = Meta().apply {
+                    tag = listOf(
+                        sourceMetaTag("observation", facility, context)
+                    )
+                }
                 obs.addExtension(sourceExtension("observation", facility, context))
             }
             fhirEngine.create(obs)

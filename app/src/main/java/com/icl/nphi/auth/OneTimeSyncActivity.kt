@@ -17,7 +17,6 @@ import com.icl.nphi.MainActivity
 import com.icl.nphi.R
 import com.icl.nphi.databinding.ActivityOneTimeSyncBinding
 import com.icl.nphi.fhir.LocationDownloadViewModel
-import com.icl.nphi.fhir.LocationDownloadedWorker
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -76,6 +75,7 @@ class OneTimeSyncActivity : AppCompatActivity() {
     }
 
     private fun initWorkManager() {
+        /*
         lifecycleScope.launch {
             val workRequest =
                 PeriodicWorkRequestBuilder<LocationDownloadedWorker>(15, TimeUnit.MINUTES)
@@ -119,6 +119,6 @@ class OneTimeSyncActivity : AppCompatActivity() {
                         }
                     }
                 }
-        }
+        }*/
     }
 }

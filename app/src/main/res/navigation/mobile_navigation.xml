@@ -69,7 +69,7 @@
         android:id="@+id/childFragment"
         android:name="com.icl.nphi.ui.home.ChildFragment"
         android:label=""
-        tools:layout="@layout/fragment_child" >
+        tools:layout="@layout/fragment_child">
         <action
             android:id="@+id/action_childFragment_to_singleCaseFragment"
             app:destination="@id/singleCaseFragment" />
@@ -77,4 +77,9 @@
             android:id="@+id/action_childFragment_to_caseSelectionFragment"
             app:destination="@id/caseSelectionFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/nav_resources"
+        android:name="com.icl.nphi.monitor.ResourceListFragment"
+        android:label="Resource List"
+        tools:layout="@layout/fragment_resource_list" />
 </navigation>

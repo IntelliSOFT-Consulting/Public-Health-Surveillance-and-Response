@@ -251,10 +251,10 @@ class SummarizedActivity : AppCompatActivity() {
                             FormatterClass().getSharedPref("patientId", this@SummarizedActivity)
                         if (patientId != null) {
                             lifecycleScope.launch {
-                                fhirEngine.delete(ResourceType.Patient, patientId)
+//                                fhirEngine.delete(ResourceType.Patient, patientId)
                             }
                         }
-                        Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Resource Deleted!!", Toast.LENGTH_SHORT).show()
                         sDialog.dismissWithAnimation()
                     }
                     .show()

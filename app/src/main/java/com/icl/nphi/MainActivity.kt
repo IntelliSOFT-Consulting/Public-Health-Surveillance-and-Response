@@ -49,7 +49,6 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.icl.nphi.auth.LoginActivity
 import com.icl.nphi.fhir.DemoDataStore
-import com.icl.nphi.fhir.LocationDownloadedWorker
 import com.icl.nphi.viewmodels.PeriodicSyncViewModel
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.ResourceType
@@ -115,7 +114,7 @@ class MainActivity : AppCompatActivity() {
 
             insets
         }
-        lifecycleScope.launch {
+       /* lifecycleScope.launch {
             try {
                 val workManager = WorkManager.getInstance(this@MainActivity)
                 val existing = workManager.getWorkInfosByTag("location_downloader").get()
@@ -141,7 +140,7 @@ class MainActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-        }
+        }*/
 
 
         appUpdateManager = AppUpdateManagerFactory.create(this)
@@ -157,7 +156,7 @@ class MainActivity : AppCompatActivity() {
             AppBarConfiguration(
                 setOf(
                     R.id.navigation_home,
-                    R.id.navigation_dashboard,
+                    R.id.nav_resources,
                     R.id.navigation_notifications
                 )
             )
@@ -171,9 +170,9 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.navigation_dashboard -> {
+                R.id.nav_resources -> {
                     // Do something when Dashboard is clicked
-                    navController.navigate(R.id.navigation_dashboard)
+                    navController.navigate(R.id.nav_resources)
                     true
                 }
 
@@ -413,13 +412,7 @@ class MainActivity : AppCompatActivity() {
 
             R.id.action_refresh -> {
                 viewModel.triggerOneTimeSync()
-                try {
-                    launchAndRepeatStarted(
-                        { viewModel.pollState.collect(::currentSyncJobStatus) },
-                    )
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+
                 // Display toast to show sync has started
                 Toast.makeText(this, "Sync Started ... ", Toast.LENGTH_SHORT).show()
 //                  startActivity(Intent(this@MainActivity, SyncActivity::class.java))
@@ -430,29 +423,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun currentSyncJobStatus(currentSyncJobStatus: CurrentSyncJobStatus) {
-
-        // Update view states based on sync status
-        when (currentSyncJobStatus) {
-            is CurrentSyncJobStatus.Running -> {
-                println("Sync Running ")
-            }
-
-            is CurrentSyncJobStatus.Succeeded -> {
-                println("Sync Succeeded ")
-            }
-
-            is CurrentSyncJobStatus.Failed,
-            is CurrentSyncJobStatus.Cancelled,
-                -> {
-                println("Sync Failed vs Cancelled")
-            }
-
-            is CurrentSyncJobStatus.Enqueued,
-            is CurrentSyncJobStatus.Blocked,
-                -> {
-                println("Sync Enqueued vs Blocked")
-            }
-        }
-    }
 }

@@ -39,6 +39,7 @@ class TimestampBasedDownloadWorkManagerImpl(
     private val generalResources = LinkedList(
         listOf(
             "Practitioner?_sort=_lastUpdated",
+            "Location?_sort=_lastUpdated",
         )
     )
 
@@ -308,11 +309,11 @@ class TimestampBasedDownloadWorkManagerImpl(
                 val facilityId = formatter.getSharedPref("facility", context)
                 val urls = if (facilityId != null) {
                     listOf(
-                        "Patient?managingLocation=Location/$facilityId&_sort=_lastUpdated",
-                        "QuestionnaireResponse?managingLocation=Location/$facilityId&_sort=_lastUpdated",
-                        "MeasureReport?managingLocation=Location/$facilityId&_sort=_lastUpdated",
-                        "Encounter?managingLocation=Location/$facilityId&_sort=_lastUpdated&_count=500",
-                        "Observation?managingLocation=Location/$facilityId&_sort=_lastUpdated&_count=500"
+                        "Patient?_tag=Location/$facilityId&_sort=_lastUpdated",
+                        "QuestionnaireResponse?_tag=Location/$facilityId&_sort=_lastUpdated",
+                        "MeasureReport?_tag=Location/$facilityId&_sort=_lastUpdated",
+                        "Encounter?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
+                        "Observation?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
                     )
                 } else emptyList()
 
@@ -324,11 +325,11 @@ class TimestampBasedDownloadWorkManagerImpl(
                 if (subCounty != null) {
                     getFacilitiesByLevel(subCounty, LocationLevel.SUB_COUNTY) { facilities ->
                         val patientQueries = facilities.map { facilityId ->
-                            "Patient?managingLocation=Location/$facilityId&_sort=_lastUpdated&_count=500"
-                            "QuestionnaireResponse?managingLocation=Location/$facilityId&_sort=_lastUpdated&_count=500"
-                            "MeasureReport?managingLocation=Location/$facilityId&_sort=_lastUpdated&_count=500"
-                            "Encounter?managingLocation=Location/$facilityId&_sort=_lastUpdated&_count=500"
-                            "Observation?managingLocation=Location/$facilityId&_sort=_lastUpdated&_count=500"
+                            "Patient?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
+                            "QuestionnaireResponse?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
+                            "MeasureReport?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
+                            "Encounter?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
+                            "Observation?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
                         }
                         val combinedResources = LinkedList(patientQueries)
                         onResult(combinedResources)
@@ -343,11 +344,11 @@ class TimestampBasedDownloadWorkManagerImpl(
                 if (subCounty != null) {
                     getFacilitiesByLevel(subCounty, LocationLevel.COUNTY) { facilities ->
                         val patientQueries = facilities.map { facilityId ->
-                            "Patient?managingLocation=Location/$facilityId&_sort=_lastUpdated&_count=500"
-                            "QuestionnaireResponse?managingLocation=Location/$facilityId&_sort=_lastUpdated&_count=500"
-                            "MeasureReport?managingLocation=Location/$facilityId&_sort=_lastUpdated&_count=500"
-                            "Encounter?managingLocation=Location/$facilityId&_sort=_lastUpdated&_count=500"
-                            "Observation?managingLocation=Location/$facilityId&_sort=_lastUpdated&_count=500"
+                            "Patient?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
+                            "QuestionnaireResponse?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
+                            "MeasureReport?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
+                            "Encounter?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
+                            "Observation?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
                         }
                         val combinedResources = LinkedList(patientQueries)
                         onResult(combinedResources)
