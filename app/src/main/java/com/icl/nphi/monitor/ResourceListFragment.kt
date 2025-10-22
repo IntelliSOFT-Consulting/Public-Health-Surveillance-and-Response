@@ -14,8 +14,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.fhir.FhirEngineProvider
+import com.google.android.material.snackbar.Snackbar
 import com.icl.nphi.R
 import com.icl.nphi.databinding.FragmentResourceListBinding
+import com.icl.nphi.utils.NetworkUtils
 import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
@@ -58,14 +60,106 @@ class ResourceListFragment : Fragment() {
 
         // Load first page
         viewModel.loadFirstPage("Patient")
+        binding.apply {
+            fabUploadOptions.setOnClickListener {
+                showUploadOptionsBottomSheet()
+            }
+        }
+    }
+
+    private fun showUploadOptionsBottomSheet() {
+        val currentType = binding.spinner.selectedItem as String
+
+        val bottomSheet = UploadOptionsBottomSheet.newInstance(
+            currentResourceType = currentType,
+            onUploadCurrentType = {
+                checkInternetAndUploadAllCurrentType()
+            },
+            onUploadAllTypes = {
+                checkInternetAndUploadAllResources()
+            }
+        )
+
+        bottomSheet.show(parentFragmentManager, "UploadOptionsBottomSheet")
+    }
+
+    private fun checkInternetAndUploadAllCurrentType() {
+//        val currentType = binding.spinner.selectedItem as String
+//        lifecycleScope.launch {
+//            val count = viewModel.getPendingResourceCounts()[currentType] ?: 0
+//            if (count > 0) {
+//                if (NetworkUtils.isInternetAvailable(requireContext())) {
+//                    viewModel.uploadAllCurrentType()
+//                    showSnackbar("Started uploading $count $currentType resources as bundle")
+//                } else {
+//                    DialogHelper.showNoInternetDialog(
+//                        context = requireContext(),
+//                        onRetry = {
+//                            viewModel.uploadAllCurrentType()
+//                        }
+//                    )
+//                }
+//            } else {
+//                showSnackbar("No $currentType resources to upload")
+//            }
+//        }
+    }
+
+    private fun checkInternetAndUploadAllResources() {
+        lifecycleScope.launch {
+//            val counts = viewModel.getPendingResourceCounts()
+//            val total = counts.values.sum()
+//            if (total > 0) {
+//                if (NetworkUtils.isInternetAvailable(requireContext())) {
+//                    viewModel.uploadAllResources()
+//                    showSnackbar("Started uploading $total total resources as bundle")
+//                } else {
+//                    DialogHelper.showNoInternetDialog(
+//                        context = requireContext(),
+//                        onRetry = {
+//                            viewModel.uploadAllResources()
+//                        }
+//                    )
+//                }
+//            } else {
+//                showSnackbar("No resources to upload")
+//            }
+        }
+    }
+
+    private fun checkInternetAndUpload(resourceId: String, isRetry: Boolean) {
+        if (NetworkUtils.isInternetAvailable(requireContext())) {
+            viewModel.uploadSingleResource(resourceId)
+        } else {
+            DialogHelper.showNoInternetDialog(
+                context = requireContext(),
+                onRetry = {
+                    if (isRetry) {
+                        viewModel.retryUpload(resourceId)
+                    } else {
+                        viewModel.uploadSingleResource(resourceId)
+                    }
+                },
+                onCancel = {
+                    // User cancelled due to no internet
+                    showSnackbar("Upload cancelled - No internet connection")
+                }
+            )
+        }
+    }
+
+    private fun showSnackbar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun setupRecyclerView() {
 
         adapter = ResourceAdapter(onUploadClick = { resourceId ->
-            viewModel.uploadSingleResource(resourceId)
+
+            checkInternetAndUpload(resourceId, false)
         }, onRetryClick = { resourceId ->
-            viewModel.retryUpload(resourceId)
+
+            checkInternetAndUpload(resourceId, true)
         })
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -91,10 +185,42 @@ class ResourceListFragment : Fragment() {
         })
     }
 
+    private fun updateLoadMoreButtonVisibility() {
+        val hasResources = !viewModel.resources.value.isEmpty()
+        val hasMore = viewModel.hasMore.value
+        val isLoading = viewModel.isLoading.value
+
+        // Show load more button only when:
+        // - There are resources displayed
+        // - There are more resources to load
+        // - Not currently loading
+        if (hasResources && hasMore && !isLoading) {
+            binding.loadMoreButton.visibility = View.VISIBLE
+        } else {
+            binding.loadMoreButton.visibility = View.GONE
+        }
+    }
+
+    private fun updateEmptyState(isEmpty: Boolean) {
+        if (isEmpty) {
+            // Show empty state, hide list and load more button
+            binding.emptyState.visibility = View.VISIBLE
+            binding.recyclerView.visibility = View.GONE
+            binding.loadMoreButton.visibility = View.GONE
+        } else {
+            // Show list, hide empty state
+            binding.emptyState.visibility = View.GONE
+            binding.recyclerView.visibility = View.VISIBLE
+            updateLoadMoreButtonVisibility()
+        }
+    }
+
     private fun setupObservers() {
         lifecycleScope.launch {
             viewModel.resources.collect { resources ->
                 adapter.submitList(resources)
+                updateEmptyState(resources.isEmpty())
+                updateLoadMoreButtonVisibility()
             }
         }
 
@@ -116,7 +242,7 @@ class ResourceListFragment : Fragment() {
 
     private fun setupUI() {
         val resourceTypes =
-            arrayOf("Patient", "QuestionnaireResponse", "MeasureReport", "Observation", "Encounter")
+            arrayOf("Patient", "QuestionnaireResponse", "MeasureReport", "Encounter", "Observation")
 
         // Create custom adapter with forced black text
         val adapter = object : ArrayAdapter<String>(
@@ -158,48 +284,23 @@ class ResourceListFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
-        // Set initial selection
-        binding.spinner.setSelection(0)
+        binding.apply {
 
-        // Force initial text color
-        binding.spinner.post {
-            (binding.spinner.selectedView as? TextView)?.setTextColor(
-                ContextCompat.getColor(requireContext(), R.color.black)
-            )
-        }
-    }
+            // Set initial selection
+            spinner.setSelection(0)
 
-    private fun setupUIOld() {
-        // Resource type selector
-        val resourceTypes =
-            arrayOf("Patient", "QuestionnaireResponse", "MeasureReport", "Observation", "Encounter")
-        binding.spinner.adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, resourceTypes)
-
-        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                val selectedType = resourceTypes[position]
-                viewModel.changeResourceType(selectedType)
+            // Force initial text color
+            spinner.post {
+                (binding.spinner.selectedView as? TextView)?.setTextColor(
+                    ContextCompat.getColor(requireContext(), R.color.black)
+                )
             }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {}
-        }
-
-        // Manual load more button (optional)
-        binding.loadMoreButton.setOnClickListener {
-            viewModel.loadNextPage()
-        }
-
-        // Refresh button
-        binding.refreshButton.setOnClickListener {
-            viewModel.loadFirstPage(binding.spinner.selectedItem as String)
+            loadMoreButton.setOnClickListener {
+                viewModel.loadNextPage()
+            }
         }
     }
+
 
     private fun showNoMoreItems() {
         Toast.makeText(requireContext(), "All items loaded", Toast.LENGTH_SHORT).show()

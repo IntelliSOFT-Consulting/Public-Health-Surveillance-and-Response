@@ -15,7 +15,13 @@
         <item name="android:fontFamily">@font/montserratregular</item>
     </style>
 
-
+    <style name="CustomOutlinedButton" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:textColor">@color/button_text_light</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="strokeColor">@color/button_outline_light</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
     <style name="Theme.Surveillance.NoActionBar">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>

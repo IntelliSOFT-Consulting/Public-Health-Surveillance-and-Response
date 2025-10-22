@@ -45,6 +45,8 @@ class PaginatedViewModel(private val fhirEngine: FhirEngine) : ViewModel() {
         loadFirstPage("Patient")
     }
 
+
+
     fun loadFirstPage(resourceType: String) {
         currentResourceType = resourceType
         viewModelScope.launch {

@@ -133,12 +133,13 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnClearCache"
-                    style="@style/Widget.Material3.Button.IconButton.Outlined"
+                    style="@style/CustomOutlinedButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
                     android:fontFamily="@font/montserratregular"
-                    android:text="@string/clear_cache" />
+                    android:text="@string/clear_cache"
+                    android:textColor="@color/black" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnClearData"

@@ -29,4 +29,8 @@
     <color name="sync_success">#4CAF50</color>
     <color name="material_outline">#1F000000</color>
     <color name="spinner_border">#E0E0E0</color>
+    <color name="button_text_light">#000000</color>
+    <color name="button_outline_light">#79747E</color>
+    <color name="button_text_dark">#FFFFFF</color>
+    <color name="button_outline_dark">#938F99</color>
 </resources>

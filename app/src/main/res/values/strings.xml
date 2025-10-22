@@ -146,4 +146,8 @@
     <string name="sync_failed">Sync Failed</string>
     <string name="sync_success">Synced</string>
     <string name="retry">Retry</string>
+    <string name="upload_all_bundles">Upload All Bundles</string>
+    <string name="close">Close</string>
+    <string name="upload_all_pending_resources_from_all_types_as_a_single_bundle">Upload all pending resources from all types as a single bundle</string>
+    <string name="upload_all_resource_types">Upload All Resource Types</string>
 </resources>
