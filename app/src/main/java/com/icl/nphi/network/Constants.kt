@@ -6,8 +6,8 @@ import android.content.SharedPreferences
 import com.icl.nphi.R
 
 object Constants {
-            const val BASE_URL = "https://dsrfhir.intellisoftkenya.com/hapi/fhir/"
-//    const val BASE_URL = "http://45.79.161.190:8085/fhir/"
+//            const val BASE_URL = "https://dsrfhir.intellisoftkenya.com/hapi/fhir/"
+    const val BASE_URL = "http://45.79.161.190:8085/fhir/"
 
     //    const val BASE_URL ="https://auth.nphiis.nphl.go.ke/fhir/"
     const val LOCATION_STARTER = "${BASE_URL}Location?_count=200&_offset=0"

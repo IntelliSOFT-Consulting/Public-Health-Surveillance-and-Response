@@ -150,4 +150,12 @@
     <string name="close">Close</string>
     <string name="upload_all_pending_resources_from_all_types_as_a_single_bundle">Upload all pending resources from all types as a single bundle</string>
     <string name="upload_all_resource_types">Upload All Resource Types</string>
+    <string name="upload_options">Upload Options</string>
+    <string name="upload_current_resource_type">Upload Current Resource Type</string>
+    <string name="upload_all_resources_of_the_selected_type_as_a_single_bundle">Upload all resources of the selected type as a single bundle</string>
+
+    <color name="snackbar_success">#4CAF50</color> <!-- Green -->
+    <color name="snackbar_error">#F44336</color>   <!-- Red -->
+    <color name="snackbar_text">#FFFFFF</color>    <!-- White -->
+    <color name="snackbar_warning">#FF9800</color> <!-- Orange -->
 </resources>

@@ -19,14 +19,14 @@ class FhirBundleService(private val fhirEngine: FhirEngine) {
 
         val allResources = getAllResourcesWithoutLastUpdated(resourceType)
 
-        allResources.forEach { resource ->
+        allResources.forEach { response ->
             val entry = Bundle.BundleEntryComponent().apply {
-                fullUrl = "Resource/${resource.logicalId}"
-                this.resource = resource
+                fullUrl = "$resourceType/${response.logicalId}"
+                resource = response
 
                 val request = Bundle.BundleEntryRequestComponent().apply {
                     method = Bundle.HTTPVerb.PUT
-                    url = "${resource.resourceType.name}/${resource.id}"
+                    url = "$resourceType/${response.logicalId}"
                 }
                 this.request = request
             }
@@ -52,7 +52,7 @@ class FhirBundleService(private val fhirEngine: FhirEngine) {
             val resources = getAllResourcesWithoutLastUpdated(resourceType)
             resources.forEach { resource ->
                 val entry = Bundle.BundleEntryComponent().apply {
-                    fullUrl = "Resource/${resource.logicalId}"
+                    fullUrl = "$resourceType/${resource.logicalId}"
                     this.resource = resource
 
                     val request = Bundle.BundleEntryRequestComponent().apply {

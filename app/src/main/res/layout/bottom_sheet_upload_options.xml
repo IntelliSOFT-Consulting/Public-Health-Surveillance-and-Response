@@ -12,7 +12,7 @@
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/montserratregular"
         android:gravity="center"
-        android:text="Upload Options"
+        android:text="@string/upload_options"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserratregular"
-                android:text="Upload Current Resource Type"
+                android:text="@string/upload_current_resource_type"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -45,13 +45,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:fontFamily="@font/montserratregular"
-                android:text="Upload all resources of the selected type as a single bundle"
+                android:text="@string/upload_all_resources_of_the_selected_type_as_a_single_bundle"
                 android:textColor="@color/gray"
                 android:textSize="12sp" />
 
+            <!-- FIXED: Use standard Material 3 style -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnUploadCurrentType"
-                style="@style/CustomOutlinedButton"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -92,9 +93,10 @@
                 android:textColor="@color/gray"
                 android:textSize="12sp" />
 
+            <!-- FIXED: Use standard Material 3 style -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnUploadAllTypes"
-                style="@style/CustomOutlinedButton"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -104,10 +106,10 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Close Button -->
+    <!-- Close Button - Use TextButton style -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCloseSheet"
-        style="@style/CustomOutlinedButton"
+        style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

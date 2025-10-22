@@ -13,12 +13,17 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ca.uhn.fhir.context.FhirContext
+import ca.uhn.fhir.context.FhirVersionEnum
 import com.google.android.fhir.FhirEngineProvider
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import com.icl.nphi.R
 import com.icl.nphi.databinding.FragmentResourceListBinding
 import com.icl.nphi.utils.NetworkUtils
 import kotlinx.coroutines.launch
+import org.hl7.fhir.instance.model.api.IBaseResource
+import org.hl7.fhir.r4.model.Resource
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,6 +40,7 @@ class ResourceListFragment : Fragment() {
     private lateinit var binding: FragmentResourceListBinding
     private lateinit var viewModel: PaginatedViewModel
     private lateinit var adapter: ResourceAdapter
+    private lateinit var fhirBundleService: FhirBundleService
 
 
     // onCreateView is where you inflate the layout
@@ -53,6 +59,8 @@ class ResourceListFragment : Fragment() {
 
         val fhirEngine = FhirEngineProvider.getInstance(requireContext())
         viewModel = PaginatedViewModel(fhirEngine)
+        fhirBundleService = FhirBundleService(fhirEngine)
+
 
         setupRecyclerView()
         setupObservers()
@@ -84,26 +92,29 @@ class ResourceListFragment : Fragment() {
     }
 
     private fun checkInternetAndUploadAllCurrentType() {
-//        val currentType = binding.spinner.selectedItem as String
-//        lifecycleScope.launch {
-//            val count = viewModel.getPendingResourceCounts()[currentType] ?: 0
-//            if (count > 0) {
-//                if (NetworkUtils.isInternetAvailable(requireContext())) {
-//                    viewModel.uploadAllCurrentType()
-//                    showSnackbar("Started uploading $count $currentType resources as bundle")
-//                } else {
-//                    DialogHelper.showNoInternetDialog(
-//                        context = requireContext(),
-//                        onRetry = {
-//                            viewModel.uploadAllCurrentType()
-//                        }
-//                    )
-//                }
-//            } else {
-//                showSnackbar("No $currentType resources to upload")
-//            }
-//        }
+        val currentType = binding.spinner.selectedItem as String
+        lifecycleScope.launch {
+            val bundleSource = fhirBundleService.createUploadBundle(currentType)
+            if (!bundleSource.hasEntry()) {
+                showSnackbar("No $currentType resources to upload")
+                return@launch
+            }
+            if (NetworkUtils.isInternetAvailable(requireContext())) {
+                viewModel.uploadBundle(bundleSource)
+
+                showSnackbar("Started uploading $currentType resources as bundle")
+            } else {
+                DialogHelper.showNoInternetDialog(
+                    context = requireContext(),
+                    onRetry = {
+                        viewModel.uploadBundle(bundleSource)
+                    }
+                )
+            }
+
+        }
     }
+
 
     private fun checkInternetAndUploadAllResources() {
         lifecycleScope.launch {
@@ -148,8 +159,29 @@ class ResourceListFragment : Fragment() {
         }
     }
 
-    private fun showSnackbar(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+    private fun showSnackbar(message: String, isError: Boolean = false) {
+        val snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
+
+        // Set background color based on success/error
+        val backgroundColor = if (isError) {
+            ContextCompat.getColor(requireContext(), R.color.snackbar_error)
+        } else {
+            ContextCompat.getColor(requireContext(), R.color.snackbar_success)
+        }
+
+        // Set text color for better contrast
+        val textColor = ContextCompat.getColor(requireContext(), R.color.snackbar_text)
+
+        snackbar.view.setBackgroundColor(backgroundColor)
+        snackbar.setTextColor(textColor)
+
+        // Optional: Add an icon
+        val iconRes =
+            if (isError) R.drawable.baseline_error_24 else R.drawable.baseline_check_circle_24
+        snackbar.setAction("") { /* Empty action for icon */ }
+//        snackbar.ic(iconRes,null)
+
+        snackbar.show()
     }
 
     private fun setupRecyclerView() {

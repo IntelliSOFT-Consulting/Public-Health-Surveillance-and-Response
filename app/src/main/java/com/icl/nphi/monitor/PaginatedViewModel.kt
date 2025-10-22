@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.hl7.fhir.r4.model.Bundle
 import org.hl7.fhir.r4.model.Resource
 import java.time.Instant
 
@@ -44,7 +45,6 @@ class PaginatedViewModel(private val fhirEngine: FhirEngine) : ViewModel() {
     init {
         loadFirstPage("Patient")
     }
-
 
 
     fun loadFirstPage(resourceType: String) {
@@ -192,6 +192,123 @@ class PaginatedViewModel(private val fhirEngine: FhirEngine) : ViewModel() {
         }
     }
 
+
+    fun uploadBundle(bundle: Bundle, bundleDescription: String = "Bundle") {
+        viewModelScope.launch {
+            val resourceIdsInBundle = bundle.entry.mapNotNull { it.resource?.logicalId }
+
+            if (resourceIdsInBundle.isEmpty()) {
+                Log.w("Upload :: @", "Bundle is empty, nothing to upload")
+                return@launch
+            }
+
+            Log.d(
+                "Upload :: @",
+                "Starting bundle upload: $bundleDescription with ${resourceIdsInBundle.size} resources"
+            )
+
+            try {
+                // Step 1: Update all resources to SYNCING
+                resourceIdsInBundle.forEach { resourceId ->
+                    updateResourceStatus(resourceId, SyncStatus.SYNCING)
+                }
+                _syncInProgress.value = _syncInProgress.value + resourceIdsInBundle
+
+                // Step 2: Upload the bundle
+                val result = fhirSyncService.uploadBundle(bundle)
+
+                // Step 3: Process individual results
+                processBundleUploadResult(result, resourceIdsInBundle, bundleDescription)
+
+            } catch (e: Exception) {
+                Log.d(
+                    "Upload :: @","Bundle upload failed: ${e.message} for $bundleDescription")
+                handleBundleUploadError(e, resourceIdsInBundle, bundleDescription)
+            } finally {
+                _syncInProgress.value = _syncInProgress.value - resourceIdsInBundle.toSet()
+                updateSyncStats()
+            }
+        }
+    }
+
+    private fun processBundleUploadResult(
+        result: BundleUploadResult,
+        resourceIdsInBundle: List<String>,
+        bundleDescription: String
+    ) {
+        val successfulCount = result.successfulUploads.size
+        val failedCount = result.failedUploads.size
+
+        // Process successful uploads
+        result.successfulUploads.forEach { resourceId ->
+            updateResourceStatus(resourceId, SyncStatus.SYNCED)
+            syncFailureManager.clearFailure(resourceId)
+            removeResourceFromList(resourceId)
+            Log.d("Upload", "✓ Bundle upload successful: $resourceId")
+        }
+
+        // Process failed uploads
+        result.failedUploads.forEach { failedUpload ->
+            updateResourceStatus(failedUpload.resourceId, SyncStatus.FAILED, failedUpload.error)
+            syncFailureManager.recordFailure(
+                failedUpload.resourceId,
+                getResourceType(failedUpload.resourceId),
+                failedUpload.error
+            )
+            Log.e(
+                "Upload",
+                "✗ Bundle upload failed: ${failedUpload.resourceId} - ${failedUpload.error}"
+            )
+        }
+
+        // Show summary
+        showBundleUploadSummary(
+            bundleDescription,
+            successfulCount,
+            failedCount,
+            resourceIdsInBundle.size
+        )
+    }
+
+    private fun handleBundleUploadError(
+        e: Exception,
+        resourceIdsInBundle: List<String>,
+        bundleDescription: String
+    ) {
+        val error = "Bundle upload failed: ${e.message}"
+
+        // Mark all resources as failed
+        resourceIdsInBundle.forEach { resourceId ->
+            updateResourceStatus(resourceId, SyncStatus.FAILED, error)
+            syncFailureManager.recordFailure(resourceId, getResourceType(resourceId), error)
+        }
+
+        Log.e("Upload", "Bundle upload error for $bundleDescription: ${e.message}")
+        showBundleUploadError(bundleDescription, error)
+    }
+
+    private fun showBundleUploadSummary(
+        bundleDescription: String,
+        successfulCount: Int,
+        failedCount: Int,
+        totalCount: Int
+    ) {
+        val message = "$bundleDescription: $successfulCount/$totalCount successful"
+        if (failedCount > 0) {
+            Log.w("Upload", "$message ($failedCount failed)")
+            // You could show a Snackbar with the result
+//             showSnackbar("$bundleDescription: $successfulCount/$totalCount uploaded ($failedCount failed)")
+        } else {
+            Log.d("Upload", "$message - All resources uploaded successfully")
+//             showSnackbar("$bundleDescription: All $successfulCount resources uploaded successfully")
+        }
+    }
+
+    private fun showBundleUploadError(bundleDescription: String, error: String) {
+        Log.e("Upload", "$bundleDescription failed: $error")
+//         showSnackbar("$bundleDescription upload failed")
+    }
+
     private fun updateResourceStatus(
         resourceId: String,
         status: SyncStatus,
@@ -242,16 +359,6 @@ class PaginatedViewModel(private val fhirEngine: FhirEngine) : ViewModel() {
         } else {
             false
         }
-    }
-
-    fun getSupportedResourceTypes(): List<String> {
-        return listOf(
-            "Patient",
-            "Observation",
-            "Encounter",
-            "QuestionnaireResponse",
-            "MeasureReport"
-        )
     }
 
 

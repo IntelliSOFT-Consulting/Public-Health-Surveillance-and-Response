@@ -8,10 +8,12 @@ import com.google.android.fhir.datacapture.extensions.logicalId
 import kotlinx.coroutines.delay
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.hl7.fhir.r4.model.Bundle
 import org.hl7.fhir.r4.model.Encounter
 import org.hl7.fhir.r4.model.MeasureReport
 import org.hl7.fhir.r4.model.Meta
 import org.hl7.fhir.r4.model.Observation
+import org.hl7.fhir.r4.model.OperationOutcome
 import org.hl7.fhir.r4.model.Patient
 import org.hl7.fhir.r4.model.QuestionnaireResponse
 import org.hl7.fhir.r4.model.Resource
@@ -45,7 +47,6 @@ class FhirSyncService(
 
     private suspend fun uploadPatient(patient: Patient): SyncResult {
         return try {
-//            let's prepare resource as json string
             val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
             val json = jsonParser.encodeResourceToString(patient)
             val requestBody = json.toRequestBody("application/json".toMediaType())
@@ -58,8 +59,8 @@ class FhirSyncService(
                 updateLocalResourceAfterSync(patient)
                 SyncResult.Success(patient.logicalId)
             } else {
-            SyncResult.Failure("Server returned error:  ")
-             }
+                SyncResult.Failure("Server returned error:  ")
+            }
         } catch (e: Exception) {
             SyncResult.Failure("Patient upload failed: ${e.message}")
         }
@@ -141,18 +142,149 @@ class FhirSyncService(
         }
     }
 
+    suspend fun uploadBundle(bundle: Bundle): BundleUploadResult {
+        return try {
+            Log.d("FhirSync", "Uploading bundle with ${bundle.entry.size} resources")
+            val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
+            val json = jsonParser.encodeResourceToString(bundle)
+            val requestBody = json.toRequestBody("application/json".toMediaType())
+
+            val response = fhirDataSource.sendBundleToServer(requestBody)
+
+            if (response.isSuccessful) {
+                val responseBundle = response.body()
+                processBundleResponse(bundle, responseBundle)
+            } else {
+                // Entire bundle failed - mark all resources as failed
+                val failedUploads = bundle.entry.mapNotNull { entry ->
+                    val resourceId = entry.resource?.logicalId
+                    if (resourceId != null) {
+                        FailedUpload(resourceId, "HTTP ${response.code()}: ${response.message()}")
+                    } else {
+                        null
+                    }
+                }
+
+                BundleUploadResult(
+                    totalResources = bundle.entry.size,
+                    successfulUploads = emptyList(),
+                    failedUploads = failedUploads
+                )
+            }
+        } catch (e: Exception) {
+            Log.e("FhirSync", "Bundle upload failed: ${e.message}")
+
+            // Entire bundle failed due to network error
+            val failedUploads = bundle.entry.mapNotNull { entry ->
+                val resourceId = entry.resource?.logicalId
+                if (resourceId != null) {
+                    FailedUpload(resourceId, "Network error: ${e.message}")
+                } else {
+                    null
+                }
+            }
+
+            BundleUploadResult(
+                totalResources = bundle.entry.size,
+                successfulUploads = emptyList(),
+                failedUploads = failedUploads
+            )
+        }
+    }
+
+    /**
+     * Process the bundle response from the server
+     */
+    private suspend fun processBundleResponse(
+        requestBundle: Bundle,
+        responseBundle: Bundle?
+    ): BundleUploadResult {
+        val successfulUploads = mutableListOf<String>()
+        val failedUploads = mutableListOf<FailedUpload>()
+
+        responseBundle?.entry?.forEachIndexed { index, responseEntry ->
+            val requestEntry = requestBundle.entry.getOrNull(index)
+            val resourceId = requestEntry?.resource?.logicalId ?: "unknown-$index"
+
+            // Check if the individual entry was successful
+            if (isEntrySuccessful(responseEntry)) {
+                successfulUploads.add(resourceId)
+
+                // Update local resource after successful upload
+                requestEntry?.resource?.let { resource ->
+                    updateLocalResourceAfterSync(resource)
+                }
+            } else {
+                val error = getEntryErrorMessage(responseEntry)
+                failedUploads.add(FailedUpload(resourceId, error))
+            }
+        }
+
+        // If response bundle is null or empty, consider all as failed
+        if (responseBundle == null || responseBundle.entry.isEmpty()) {
+            requestBundle.entry.forEach { entry ->
+                val resourceId = entry.resource?.logicalId ?: "unknown"
+                failedUploads.add(FailedUpload(resourceId, "No response from server"))
+            }
+        }
+
+        return BundleUploadResult(
+            totalResources = requestBundle.entry.size,
+            successfulUploads = successfulUploads,
+            failedUploads = failedUploads
+        )
+    }
+
+    /**
+     * Check if a bundle entry was successfully processed
+     */
+    private fun isEntrySuccessful(entry: Bundle.BundleEntryComponent): Boolean {
+        // Check HTTP status code - 2xx means success
+        val status = entry.response?.status
+        if (status?.startsWith("2") == true) {
+            return true
+        }
+
+        // Check OperationOutcome for errors
+        if (entry.response?.outcome is OperationOutcome) {
+            val outcome = entry.response.outcome as OperationOutcome
+            return !outcome.issue.any { it.severity == OperationOutcome.IssueSeverity.ERROR }
+        }
+
+        return false
+    }
+
+    /**
+     * Get error message from a bundle entry response
+     */
+    private fun getEntryErrorMessage(entry: Bundle.BundleEntryComponent): String {
+        val status = entry.response?.status ?: "Unknown status"
+
+        // Try to get error details from OperationOutcome
+        if (entry.response?.outcome is OperationOutcome) {
+            val outcome = entry.response.outcome as OperationOutcome
+            val errors = outcome.issue
+                .filter { it.severity == OperationOutcome.IssueSeverity.ERROR }
+                .joinToString { it.details?.text ?: it.diagnostics ?: "Unknown error" }
+
+            if (errors.isNotEmpty()) {
+                return "$status: $errors"
+            }
+        }
+
+        return "Server returned: $status"
+    }
+
     private suspend fun updateLocalResourceAfterSync(resource: Resource) {
         try {
             // Add sync metadata to the resource
-            resource.meta = resource.meta ?: Meta()
+            if (resource.meta == null) {
+                resource.meta = Meta()
+            }
             resource.meta!!.lastUpdated = Date() // Set sync timestamp
-            resource.meta!!.versionId = "1" // Set version to 1
-
-//            resource.meta!!.addTag().apply {
-//                system = "http://nphi.icl.com/tags"
-//                code = "synced"
-//                display = "Synced with server"
-//            }
+            if (resource.meta!!.versionId == null) {
+                resource.meta!!.versionId = "1"
+            }
 
             // Update the resource in local database
             when (resource) {
