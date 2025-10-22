@@ -82,7 +82,7 @@ class ResourceAdapter(
                 SyncStatus.FAILED -> {
                     showSyncStatus(
                         backgroundColor = R.color.sync_failed,
-                        text = "Upload Failed",
+                        text = "Upload Failed::  ${resource.errorMessage}",
                         showProgress = false,
                         showRetry = true,
                         showBanner = true

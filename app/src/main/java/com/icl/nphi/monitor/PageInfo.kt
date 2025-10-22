@@ -53,3 +53,49 @@ data class BulkSyncResult(
     val failed: Int,
     val individualResults: List<SyncResult>
 )
+
+data class LocalBundleResponse(
+    val resourceType: String,
+    val id: String,
+    val type: String,
+    val link: List<LocalLink>,
+    val entry: List<LocalEntry>
+) {
+    data class LocalLink(
+        val relation: String,
+        val url: String
+    )
+
+    data class LocalEntry(
+        val response: LocalResponse
+    )
+
+    data class LocalResponse(
+        val status: String,
+        val location: String? = null,
+        val etag: String? = null,
+        val outcome: LocalOperationOutcome?
+    )
+
+    data class LocalOperationOutcome(
+        val resourceType: String,
+        val issue: List<LocalIssue>
+    ) {
+        data class LocalIssue(
+            val severity: String,
+            val code: String,
+            val details: LocalDetails? = null,
+            val diagnostics: String? = null
+        ) {
+            data class LocalDetails(
+                val coding: List<LocalCoding>
+            ) {
+                data class LocalCoding(
+                    val system: String,
+                    val code: String,
+                    val display: String
+                )
+            }
+        }
+    }
+}

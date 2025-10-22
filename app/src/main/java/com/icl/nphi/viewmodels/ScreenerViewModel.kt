@@ -286,11 +286,6 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         appContext: Context
     ) {
         viewModelScope.launch {
-            val bundle =
-                ResourceMapper.extract(questionnaireResource, questionnaireResponse)
-            val context = FhirContext.forR4()
-            val questionnaire =
-                context.newJsonParser().encodeResourceToString(questionnaireResponse)
 
             CoroutineScope(Dispatchers.IO).launch {
                 try {

@@ -210,8 +210,6 @@ class LabResultsFragment : Fragment() {
                     when (slug) {
                         "measles-case-information" -> {
 
-//                            showLocalOrRegionalLab()
-
                             FormatterClass()
                                 .saveSharedPref(
                                     "questionnaire",

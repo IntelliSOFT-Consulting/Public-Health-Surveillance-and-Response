@@ -3,6 +3,8 @@ package com.icl.nphi.monitor
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import ca.uhn.fhir.context.FhirContext
+import ca.uhn.fhir.context.FhirVersionEnum
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.extensions.logicalId
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -196,7 +198,10 @@ class PaginatedViewModel(private val fhirEngine: FhirEngine) : ViewModel() {
     fun uploadBundle(bundle: Bundle, bundleDescription: String = "Bundle") {
         viewModelScope.launch {
             val resourceIdsInBundle = bundle.entry.mapNotNull { it.resource?.logicalId }
-
+            val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
+            val json = jsonParser.encodeResourceToString(bundle)
+            Log.d("Upload :: @", "Bundle Prepared here $json")
+            println("Upload :: @  Bundle Prepared here $json")
             if (resourceIdsInBundle.isEmpty()) {
                 Log.w("Upload :: @", "Bundle is empty, nothing to upload")
                 return@launch
@@ -222,7 +227,8 @@ class PaginatedViewModel(private val fhirEngine: FhirEngine) : ViewModel() {
 
             } catch (e: Exception) {
                 Log.d(
-                    "Upload :: @","Bundle upload failed: ${e.message} for $bundleDescription")
+                    "Upload :: @", "Bundle upload failed: ${e.message} for $bundleDescription"
+                )
                 handleBundleUploadError(e, resourceIdsInBundle, bundleDescription)
             } finally {
                 _syncInProgress.value = _syncInProgress.value - resourceIdsInBundle.toSet()

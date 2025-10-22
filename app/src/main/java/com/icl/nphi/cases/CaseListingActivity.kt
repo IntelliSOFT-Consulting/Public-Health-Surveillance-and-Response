@@ -162,7 +162,7 @@ class CaseListingActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         try {
-//            loadData()
+            loadData()
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -211,6 +211,10 @@ class CaseListingActivity : AppCompatActivity() {
         )
         FormatterClass().deleteSharedPref("isCase", this)
         FormatterClass().deleteSharedPref("isVaccinated", this)
+
+        FormatterClass().saveSharedPref("patientIdParent", patientItem.resourceId, this)
+
+        println("Parent Encounter  Clicked ${patientItem.encounterId} and respective Patient ${patientItem.resourceId}")
         if (currentCase != null) {
             val slug = currentCase.toSlug()
 

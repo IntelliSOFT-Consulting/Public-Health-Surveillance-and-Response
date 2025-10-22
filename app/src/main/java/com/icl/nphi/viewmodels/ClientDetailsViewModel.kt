@@ -1192,6 +1192,8 @@ class ClientDetailsViewModel(
         parent: String
     ): List<PatientListViewModel.CaseDiseaseData> {
         val patients: MutableList<PatientListViewModel.CaseDiseaseData> = mutableListOf()
+
+        println("Parent Encounter  Details $parent and respective Patient $patientId")
         fhirEngine
             .search<Encounter> {
                 filter(Encounter.SUBJECT, { value = "Patient/$patientId" })
@@ -1200,6 +1202,8 @@ class ClientDetailsViewModel(
             .mapIndexedNotNull() { index, data ->
                 val code = data.resource.reasonCodeFirstRep.codingFirstRep.code
                 if (code == reason) {
+
+                    println("Parent Encounter  Retrieved ${data.resource.logicalId} and respective Patient $patientId")
                     var loop = createEncounterItemLab(data.resource)
 
                     val obs =

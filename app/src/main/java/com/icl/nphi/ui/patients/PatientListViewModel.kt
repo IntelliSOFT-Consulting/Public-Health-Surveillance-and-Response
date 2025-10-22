@@ -113,7 +113,7 @@ class PatientListViewModel(
                         "Patient/${patientResource.idElement.idPart}"
                     bundle.addEntry(bundleEntry)
                 }
-                sendBundleToServer(jsonParser, bundle,context)
+                sendBundleToServer(jsonParser, bundle, context)
             }
             isUploadLoading = false
         }
@@ -151,7 +151,7 @@ class PatientListViewModel(
                         "Encounter/${patientResource.idElement.idPart}"
                     bundle.addEntry(bundleEntry)
                 }
-                sendBundleToServer(jsonParser, bundle,context)
+                sendBundleToServer(jsonParser, bundle, context)
             }
             isUploadLoading = false
         }
@@ -189,7 +189,7 @@ class PatientListViewModel(
                         "Observation/${patientResource.idElement.idPart}"
                     bundle.addEntry(bundleEntry)
                 }
-                sendBundleToServer(jsonParser, bundle,context)
+                sendBundleToServer(jsonParser, bundle, context)
             }
             isUploadLoading = false
         }
@@ -994,6 +994,7 @@ class PatientListViewModel(
                         // Convert the FHIR Patient resource to your PatientItem model
                         var data = fhirPatient.resource.toPatientItem(index + 1)
                         val logicalId = matchingIdentifier.value
+                        println("Parent Encounter $logicalId and respective Patient ${data.resourceId}")
                         val encounterQuestionnaire = matchingIdentifier.system
                         val obs = fhirEngine.search<Observation> {
                             filter(
@@ -1016,7 +1017,6 @@ class PatientListViewModel(
                         val caseList =
                             obs.firstOrNull { it.resource.code.codingFirstRep.code == "865158268604" }?.resource?.value?.asStringValue()
                                 ?: "Case"
-
 
                         val campaignDay =
                             obs.firstOrNull { it.resource.code.codingFirstRep.code == "campaign_day" }?.resource?.value?.asStringValue()
@@ -1043,7 +1043,7 @@ class PatientListViewModel(
 
                         // Loading Lab Results
                         val childEncounter = loadChildEncounter(data.resourceId, logicalId)
-
+                        println("Current Workflow :::: $nameQuery With Child $childEncounter ")
                         when (nameQuery) {
 
 
@@ -1135,9 +1135,9 @@ class PatientListViewModel(
                             }
 
                             else -> {
-                                var measlesIgm = "Pending"
-                                var finalClassification = "Pending Results"
-                                var maxDays = "No"
+                                var measlesIgm: String
+                                var finalClassification: String
+                                var maxDays: String
                                 val childCaseInfoEncounter = childEncounter.firstOrNull {
                                     it.reasonCode == "Measles Lab Information"
                                 }

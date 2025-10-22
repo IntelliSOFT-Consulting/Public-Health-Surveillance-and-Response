@@ -79,7 +79,7 @@ class AddCaseActivity : AppCompatActivity() {
     }
 
     private fun onSubmitAction() {
-        ProgressDialogManager.show(this, "Please wait.....")
+//        ProgressDialogManager.show(this, "Please wait.....")
         lifecycleScope.launch {
             val questionnaireFragment =
                 supportFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG)
@@ -98,14 +98,14 @@ class AddCaseActivity : AppCompatActivity() {
 
     private fun saveCase(questionnaireResponse: QuestionnaireResponse,questionnaireResponseString: String) {
 
-        val patientId = FormatterClass().getSharedPref("resourceId", this@AddCaseActivity)
+        val patientId = FormatterClass().getSharedPref("patientIdParent", this@AddCaseActivity)
         val questionnaire = FormatterClass().getSharedPref("questionnaire", this@AddCaseActivity)
         val encounter = FormatterClass().getSharedPref("encounterId", this@AddCaseActivity)
 
-        println("Parent Encounter $encounter")
+        println("Parent Encounter $encounter Patient Id $patientId")
         when (questionnaire) {
 
-            "measles-lab-results.json" ->
+            "measles-lab-results.json" -> {
                 viewModel.completeLabAssessment(
                     questionnaireResponse,
                     "$patientId",
@@ -113,7 +113,7 @@ class AddCaseActivity : AppCompatActivity() {
                     "Measles Lab Information",
                     questionnaireResponseString, this@AddCaseActivity
                 )
-
+            }
             "measles-lab-reg-results.json" ->
                 viewModel.completeLabAssessment(
                     questionnaireResponse,

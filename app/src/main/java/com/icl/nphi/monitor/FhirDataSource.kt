@@ -2,10 +2,8 @@ package com.icl.nphi.monitor
 
 import com.icl.nphi.network.Constants.BASE_URL
 import okhttp3.RequestBody
-import org.hl7.fhir.r4.model.Bundle
 import retrofit2.Response
 import retrofit2.http.Body
-import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -51,5 +49,5 @@ interface FhirDataSource {
     @Headers("Content-Type: application/json")
     suspend fun sendBundleToServer(
         @Body payload: RequestBody
-    ): Response<Bundle>
+    ): Response<LocalBundleResponse>
 }

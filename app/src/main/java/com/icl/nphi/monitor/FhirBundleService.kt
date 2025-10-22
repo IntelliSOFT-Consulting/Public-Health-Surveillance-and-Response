@@ -22,13 +22,12 @@ class FhirBundleService(private val fhirEngine: FhirEngine) {
         allResources.forEach { response ->
             val entry = Bundle.BundleEntryComponent().apply {
                 fullUrl = "$resourceType/${response.logicalId}"
-                resource = response
-
-                val request = Bundle.BundleEntryRequestComponent().apply {
+                val requestPayload = Bundle.BundleEntryRequestComponent().apply {
                     method = Bundle.HTTPVerb.PUT
                     url = "$resourceType/${response.logicalId}"
                 }
-                this.request = request
+                request = requestPayload
+                resource = response
             }
             bundle.addEntry(entry)
         }

@@ -5,9 +5,11 @@ import ca.uhn.fhir.context.FhirContext
 import ca.uhn.fhir.context.FhirVersionEnum
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.extensions.logicalId
+import com.icl.nphi.monitor.LocalBundleResponse.LocalEntry
 import kotlinx.coroutines.delay
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.ResponseBody
 import org.hl7.fhir.r4.model.Bundle
 import org.hl7.fhir.r4.model.Encounter
 import org.hl7.fhir.r4.model.MeasureReport
@@ -59,10 +61,45 @@ class FhirSyncService(
                 updateLocalResourceAfterSync(patient)
                 SyncResult.Success(patient.logicalId)
             } else {
-                SyncResult.Failure("Server returned error:  ")
+                val errorMessage = parseOperationOutcome(result.errorBody())
+                    ?: "Server returned error: ${result.code()}"
+                SyncResult.Failure(errorMessage)
             }
         } catch (e: Exception) {
             SyncResult.Failure("Patient upload failed: ${e.message}")
+        }
+    }
+
+    private fun parseOperationOutcome(errorBody: ResponseBody?): String? {
+        return try {
+            if (errorBody == null) return null
+
+            val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
+            val operationOutcome = jsonParser.parseResource(errorBody.string()) as? OperationOutcome
+
+            operationOutcome?.let { outcome ->
+                val errorMessages = mutableListOf<String>()
+
+                // Extract all issue details from OperationOutcome
+                outcome.issue.forEach { issue ->
+                    val severity = issue.severity?.name ?: "ERROR"
+                    val code = issue.code?.name ?: "processing"
+                    val diagnostics = issue.diagnostics ?: "No diagnostic information"
+
+                    // For your specific example, the most useful information is in diagnostics
+                    val issueMessage = "$severity: $diagnostics"
+                    errorMessages.add(issueMessage)
+                }
+
+                if (errorMessages.isNotEmpty()) {
+                    errorMessages.joinToString("; ")
+                } else {
+                    "Unknown server error"
+                }
+            }
+        } catch (e: Exception) {
+            // Fallback if parsing OperationOutcome fails
+            null
         }
     }
 
@@ -78,7 +115,9 @@ class FhirSyncService(
                 updateLocalResourceAfterSync(observation)
                 SyncResult.Success(observation.logicalId)
             } else {
-                SyncResult.Failure("Observation upload failed: ${result.code()}")
+                val errorMessage = parseOperationOutcome(result.errorBody())
+                    ?: "Server returned error: ${result.code()}"
+                SyncResult.Failure(errorMessage)
             }
         } catch (e: Exception) {
             SyncResult.Failure("Observation upload failed: ${e.message}")
@@ -97,7 +136,9 @@ class FhirSyncService(
                 updateLocalResourceAfterSync(encounter)
                 SyncResult.Success(encounter.logicalId)
             } else {
-                SyncResult.Failure("Encounter upload failed: ${result.code()}")
+                val errorMessage = parseOperationOutcome(result.errorBody())
+                    ?: "Server returned error: ${result.code()}"
+                SyncResult.Failure(errorMessage)
             }
         } catch (e: Exception) {
             SyncResult.Failure("Encounter upload failed: ${e.message}")
@@ -116,7 +157,9 @@ class FhirSyncService(
                 updateLocalResourceAfterSync(response)
                 SyncResult.Success(response.logicalId)
             } else {
-                SyncResult.Failure("QuestionnaireResponse upload failed: ${result.code()}")
+                val errorMessage = parseOperationOutcome(result.errorBody())
+                    ?: "Server returned error: ${result.code()}"
+                SyncResult.Failure(errorMessage)
             }
         } catch (e: Exception) {
             SyncResult.Failure("QuestionnaireResponse upload failed: ${e.message}")
@@ -135,7 +178,9 @@ class FhirSyncService(
                 updateLocalResourceAfterSync(report)
                 SyncResult.Success(report.logicalId)
             } else {
-                SyncResult.Failure("MeasureReport upload failed: ${result.code()}")
+                val errorMessage = parseOperationOutcome(result.errorBody())
+                    ?: "Server returned error: ${result.code()}"
+                SyncResult.Failure(errorMessage)
             }
         } catch (e: Exception) {
             SyncResult.Failure("MeasureReport upload failed: ${e.message}")
@@ -197,7 +242,7 @@ class FhirSyncService(
      */
     private suspend fun processBundleResponse(
         requestBundle: Bundle,
-        responseBundle: Bundle?
+        responseBundle: LocalBundleResponse?
     ): BundleUploadResult {
         val successfulUploads = mutableListOf<String>()
         val failedUploads = mutableListOf<FailedUpload>()
@@ -215,7 +260,7 @@ class FhirSyncService(
                     updateLocalResourceAfterSync(resource)
                 }
             } else {
-                val error = getEntryErrorMessage(responseEntry)
+                val error = getEntryErrorMessage(entry = responseEntry)
                 failedUploads.add(FailedUpload(resourceId, error))
             }
         }
@@ -238,18 +283,18 @@ class FhirSyncService(
     /**
      * Check if a bundle entry was successfully processed
      */
-    private fun isEntrySuccessful(entry: Bundle.BundleEntryComponent): Boolean {
+    private fun isEntrySuccessful(entry: LocalEntry): Boolean {
         // Check HTTP status code - 2xx means success
-        val status = entry.response?.status
-        if (status?.startsWith("2") == true) {
+        val status = entry.response.status
+        if (status.startsWith("2")) {
             return true
         }
 
-        // Check OperationOutcome for errors
-        if (entry.response?.outcome is OperationOutcome) {
-            val outcome = entry.response.outcome as OperationOutcome
-            return !outcome.issue.any { it.severity == OperationOutcome.IssueSeverity.ERROR }
-        }
+//        // Check OperationOutcome for errors
+//        if (entry.response.outcome.resourceType.contains("OperationOutcome")) {
+//            val outcome = entry.response.outcome
+//            return !outcome.issue.any { it.severity == OperationOutcome.IssueSeverity.ERROR }
+//        }
 
         return false
     }
@@ -257,20 +302,20 @@ class FhirSyncService(
     /**
      * Get error message from a bundle entry response
      */
-    private fun getEntryErrorMessage(entry: Bundle.BundleEntryComponent): String {
-        val status = entry.response?.status ?: "Unknown status"
-
-        // Try to get error details from OperationOutcome
-        if (entry.response?.outcome is OperationOutcome) {
-            val outcome = entry.response.outcome as OperationOutcome
-            val errors = outcome.issue
-                .filter { it.severity == OperationOutcome.IssueSeverity.ERROR }
-                .joinToString { it.details?.text ?: it.diagnostics ?: "Unknown error" }
-
-            if (errors.isNotEmpty()) {
-                return "$status: $errors"
-            }
-        }
+    private fun getEntryErrorMessage(entry: LocalEntry): String {
+        val status = entry.response.status ?: "Unknown status"
+//
+//        // Try to get error details from OperationOutcome
+//        if (entry.response?.outcome is LocalOperationOutcome) {
+//            val outcome = entry.response.outcome as LocalOperationOutcome
+//            val errors = outcome.issue
+//                .filter { it.severity == OperationOutcome.IssueSeverity.ERROR }
+//                .joinToString { it.details?.text ?: it.diagnostics ?: "Unknown error" }
+//
+//            if (errors.isNotEmpty()) {
+//                return "$status: $errors"
+//            }
+//        }
 
         return "Server returned: $status"
     }
