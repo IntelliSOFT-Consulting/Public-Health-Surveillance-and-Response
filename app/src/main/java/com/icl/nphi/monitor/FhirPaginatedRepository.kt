@@ -15,6 +15,7 @@ class FhirPaginatedRepository(private val fhirEngine: FhirEngine) {
 
     private val currentPage = MutableStateFlow(0)
     private val pageSize = 50
+    private val defaultPageSize = 50
 
     suspend fun getResourcesPage(
         resourceType: String,
@@ -89,6 +90,12 @@ class FhirPaginatedRepository(private val fhirEngine: FhirEngine) {
 
     fun hasMore(resources: List<Resource>): Boolean {
         return resources.size == pageSize
+    }
+    fun getPageSize(resourceType: String): Int {
+        return when (resourceType) {
+            "Encounter", "Observation" -> 500
+            else -> defaultPageSize
+        }
     }
 
     fun resetPagination() {

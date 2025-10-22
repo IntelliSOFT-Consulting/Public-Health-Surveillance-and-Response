@@ -13,34 +13,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="6dp">
 
         <!-- Sync Status Banner -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/syncStatusBanner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="5dp"
+            android:visibility="gone"
             app:cardBackgroundColor="@color/sync_pending"
             app:cardCornerRadius="8dp"
-            app:cardElevation="0dp"
-            android:visibility="gone">
+            app:cardElevation="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:padding="8dp">
+                android:orientation="horizontal"
+                android:padding="2dp">
 
                 <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:id="@+id/syncProgress"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_marginEnd="8dp"
-                    app:indicatorColor="@color/white"
                     android:indeterminate="true"
-                    android:visibility="gone" />
+                    android:visibility="visible"
+                    app:indicatorColor="@color/white" />
 
                 <ImageView
                     android:id="@+id/syncStatusIcon"
@@ -55,11 +55,11 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="@font/montserratregular"
                     android:text="@string/sync_pending"
                     android:textColor="@color/white"
                     android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/montserratregular" />
+                    android:textStyle="bold" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnRetry"
@@ -67,13 +67,13 @@
                     android:layout_height="28dp"
                     android:text="@string/retry"
                     android:textAllCaps="false"
+                    android:textColor="@color/sync_pending"
                     android:textSize="10sp"
+                    android:visibility="visible"
                     app:backgroundTint="@color/white"
                     app:cornerRadius="16dp"
                     app:strokeColor="@color/white"
-                    app:strokeWidth="1dp"
-                    android:textColor="@color/sync_pending"
-                    android:visibility="gone" />
+                    app:strokeWidth="1dp" />
 
             </LinearLayout>
 
@@ -83,8 +83,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -106,7 +106,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserratregular"
-                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="14sp" />
 
             </LinearLayout>
@@ -114,18 +113,18 @@
             <!-- Retry Button in Corner -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnCornerRetry"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:text="@string/retry"
                 android:textAllCaps="false"
                 android:textSize="12sp"
+                android:visibility="visible"
+                app:cornerRadius="18dp"
                 app:icon="@drawable/baseline_sync_24"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
-                app:iconSize="16dp"
-                app:cornerRadius="18dp"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:visibility="visible" />
+                app:iconSize="16dp" />
 
         </LinearLayout>
 

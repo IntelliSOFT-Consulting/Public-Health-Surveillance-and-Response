@@ -23,6 +23,8 @@ import com.google.android.fhir.sync.ResourceSyncException
 import com.google.android.fhir.sync.Sync
 import com.google.android.fhir.sync.SyncJobStatus
 import com.google.android.fhir.sync.remote.HttpLogger
+import com.icl.nphi.monitor.FhirSyncService
+import com.icl.nphi.monitor.NetworkModule
 import com.icl.nphi.network.Constants.BASE_URL
 import com.icl.nphi.network.Constants.TEST_TOKEN
 import com.icl.nphi.utils.ContribQuestionnaireItemViewHolderFactoryMatchersProviderFactory
@@ -50,6 +52,11 @@ class FhirApplication : Application(), DataCaptureConfig.Provider, Configuration
 
     private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
+    val fhirSyncService: FhirSyncService by lazy {
+        val fhirEngine = FhirEngineProvider.getInstance(this)
+        val dataSource = NetworkModule().provideFhirDataSource()
+        FhirSyncService(fhirEngine, dataSource)
+    }
 
     override fun onCreate() {
 
@@ -75,7 +82,9 @@ class FhirApplication : Application(), DataCaptureConfig.Provider, Configuration
             ),
         )
         try {
+//            val fhirDataSource = NetworkModule().provideFhirDataSource()
 
+//            fhirSyncService = FhirSyncService(fhirEngine, fhirDataSource)
 
             dataCaptureConfig =
                 DataCaptureConfig().apply {

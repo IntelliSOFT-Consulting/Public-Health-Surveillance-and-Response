@@ -61,7 +61,12 @@ class ResourceListFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        adapter = ResourceAdapter()
+
+        adapter = ResourceAdapter(onUploadClick = { resourceId ->
+            viewModel.uploadSingleResource(resourceId)
+        }, onRetryClick = { resourceId ->
+            viewModel.retryUpload(resourceId)
+        })
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
 

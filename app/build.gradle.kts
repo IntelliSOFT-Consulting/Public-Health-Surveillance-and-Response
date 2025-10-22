@@ -71,10 +71,11 @@ dependencies {
     implementation(libs.converter.moshi)
     implementation(libs.circleimageview)
     implementation(libs.library)
-    implementation("com.google.android.play:app-update:2.1.0")
-    implementation("com.google.android.play:app-update-ktx:2.1.0")
-    implementation("com.google.android.gms:play-services-location:21.3.0")
-    implementation("com.github.f0ris.sweetalert:library:1.6.2")
-    implementation("com.airbnb.android:lottie:6.6.6")
+    implementation(libs.app.update)
+    implementation(libs.app.update.ktx)
+    implementation(libs.play.services.location)
+    implementation(libs.library)
+    implementation(libs.lottie)
+
 
 }
