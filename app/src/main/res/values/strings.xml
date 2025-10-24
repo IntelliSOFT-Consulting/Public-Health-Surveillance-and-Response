@@ -25,7 +25,7 @@
     <string name="welcome_back">Welcome Back</string>
     <string name="last_sync_timestamp">Last sync time: %1$s</string>
     <string name="current_status">Current sync status: %1$s</string>
-    <!--    <string name="base_url">https://dsrkeycloak.intellisoftkenya.com/auth/</string>-->
+<!--        <string name="base_url">https://dsrkeycloak.intellisoftkenya.com/auth/</string>-->
     <string name="base_url">https://auth.nphiis.nphl.go.ke/</string>
     <string name="cancel_questionnaire_message">Are you sure you want to cancel?</string>
     <string name="lab_results_not_captured">Lab results not captured</string>
@@ -154,8 +154,9 @@
     <string name="upload_current_resource_type">Upload Current Resource Type</string>
     <string name="upload_all_resources_of_the_selected_type_as_a_single_bundle">Upload all resources of the selected type as a single bundle</string>
 
-    <color name="snackbar_success">#4CAF50</color> <!-- Green -->
-    <color name="snackbar_error">#F44336</color>   <!-- Red -->
-    <color name="snackbar_text">#FFFFFF</color>    <!-- White -->
-    <color name="snackbar_warning">#FF9800</color> <!-- Orange -->
+
+    <string name="personal_information">Personal Information</string>
+    <string name="data_management">Data Management</string>
+    <string name="sync_data">Sync Data</string>
+    <string name="edit_profile">Edit Profile</string>
 </resources>

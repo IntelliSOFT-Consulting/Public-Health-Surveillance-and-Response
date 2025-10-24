@@ -33,4 +33,9 @@
     <color name="button_outline_light">#79747E</color>
     <color name="button_text_dark">#FFFFFF</color>
     <color name="button_outline_dark">#938F99</color>
+
+    <color name="snackbar_success">#4CAF50</color> <!-- Green -->
+    <color name="snackbar_error">#F44336</color>   <!-- Red -->
+    <color name="snackbar_text">#FFFFFF</color>    <!-- White -->
+    <color name="snackbar_warning">#FF9800</color> <!-- Orange -->
 </resources>

@@ -13,6 +13,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog
 import com.icl.nphi.auth.LoginActivity
 import com.icl.nphi.databinding.FragmentProfileBinding
 import com.icl.nphi.databinding.ItemLabelValueBinding
+import com.icl.nphi.databinding.ItemLabelValueModernBinding
 import com.icl.nphi.models.UserProfilePrefs
 import com.icl.nphi.models.UserRole
 import com.icl.nphi.utils.FormatterClass
@@ -39,7 +40,7 @@ class ProfileFragment : Fragment() {
         return root
     }
 
-    fun setLabelValue(bindingSection: ItemLabelValueBinding, labelText: String, valueText: String) {
+    fun setLabelValue(bindingSection: ItemLabelValueModernBinding, labelText: String, valueText: String) {
         bindingSection.tvLabel.text = labelText
         bindingSection.tvValue.text = valueText
     }
