@@ -40,7 +40,11 @@ class ProfileFragment : Fragment() {
         return root
     }
 
-    fun setLabelValue(bindingSection: ItemLabelValueModernBinding, labelText: String, valueText: String) {
+    fun setLabelValue(
+        bindingSection: ItemLabelValueModernBinding,
+        labelText: String,
+        valueText: String
+    ) {
         bindingSection.tvLabel.text = labelText
         bindingSection.tvValue.text = valueText
     }
@@ -64,6 +68,10 @@ class ProfileFragment : Fragment() {
         binding.apply {
 
             mapUserData()
+
+            btnSync.setOnClickListener {
+                startActivity(Intent(requireContext(), SyncUploadActivity::class.java))
+            }
 
             btnClearCache.setOnClickListener {
                 showConfirmationDialog(
