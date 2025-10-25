@@ -40,6 +40,7 @@ import com.icl.surveillance.viewmodels.SyncFragmentViewModel
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.google.firebase.messaging.FirebaseMessaging
 import com.icl.surveillance.auth.LoginActivity
 import com.icl.surveillance.fhir.DemoDataStore
 import com.icl.surveillance.viewmodels.PeriodicSyncViewModel
@@ -106,33 +107,46 @@ class MainActivity : AppCompatActivity() {
 
             insets
         }
-       /* lifecycleScope.launch {
-            try {
-                val workManager = WorkManager.getInstance(this@MainActivity)
-                val existing = workManager.getWorkInfosByTag("location_downloader").get()
 
-                if (existing.isEmpty()) {
-                    val workRequest =
-                        PeriodicWorkRequestBuilder<LocationDownloadedWorker>(10, TimeUnit.MINUTES)
-                            .setConstraints(
-                                Constraints.Builder()
-                                    .setRequiredNetworkType(NetworkType.CONNECTED) // Ensure network is available
-                                    .build()
-                            )
-                            .build()
-                    val uniqueName = "location_downloader"//_${UUID.randomUUID()}"
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
 
-                    WorkManager.getInstance(this@MainActivity)
-                        .enqueueUniquePeriodicWork(
-                            uniqueName,  // unique name to avoid duplicates
-                            ExistingPeriodicWorkPolicy.KEEP,   // KEEP = don't run again if already enqueued
-                            workRequest
-                        )
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
+                return@addOnCompleteListener
             }
-        }*/
+            val token = task.result
+            Log.d("FCM", "Current token: $token")
+
+            // Optionally save it or send to your server
+            FormatterClass().saveSharedPref("fcmToken", token, this)
+        }
+
+        /* lifecycleScope.launch {
+             try {
+                 val workManager = WorkManager.getInstance(this@MainActivity)
+                 val existing = workManager.getWorkInfosByTag("location_downloader").get()
+
+                 if (existing.isEmpty()) {
+                     val workRequest =
+                         PeriodicWorkRequestBuilder<LocationDownloadedWorker>(10, TimeUnit.MINUTES)
+                             .setConstraints(
+                                 Constraints.Builder()
+                                     .setRequiredNetworkType(NetworkType.CONNECTED) // Ensure network is available
+                                     .build()
+                             )
+                             .build()
+                     val uniqueName = "location_downloader"//_${UUID.randomUUID()}"
+
+                     WorkManager.getInstance(this@MainActivity)
+                         .enqueueUniquePeriodicWork(
+                             uniqueName,  // unique name to avoid duplicates
+                             ExistingPeriodicWorkPolicy.KEEP,   // KEEP = don't run again if already enqueued
+                             workRequest
+                         )
+                 }
+             } catch (e: Exception) {
+                 e.printStackTrace()
+             }
+         }*/
 
 
         appUpdateManager = AppUpdateManagerFactory.create(this)

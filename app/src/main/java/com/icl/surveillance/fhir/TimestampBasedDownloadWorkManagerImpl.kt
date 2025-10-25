@@ -313,7 +313,8 @@ class TimestampBasedDownloadWorkManagerImpl(
                         "QuestionnaireResponse?_tag=Location/$facilityId&_sort=_lastUpdated",
                         "MeasureReport?_tag=Location/$facilityId&_sort=_lastUpdated",
                         "Encounter?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
-                        "Observation?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
+                        "Observation?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
+                        "Specimen?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
                     )
                 } else emptyList()
 
@@ -330,6 +331,7 @@ class TimestampBasedDownloadWorkManagerImpl(
                             "MeasureReport?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
                             "Encounter?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
                             "Observation?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
+                            "Specimen?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
                         }
                         val combinedResources = LinkedList(patientQueries)
                         onResult(combinedResources)
@@ -349,6 +351,7 @@ class TimestampBasedDownloadWorkManagerImpl(
                             "MeasureReport?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
                             "Encounter?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
                             "Observation?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
+                            "Specimen?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
                         }
                         val combinedResources = LinkedList(patientQueries)
                         onResult(combinedResources)

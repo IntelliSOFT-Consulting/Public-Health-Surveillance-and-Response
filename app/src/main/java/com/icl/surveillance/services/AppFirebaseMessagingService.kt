@@ -5,6 +5,9 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.media.AudioAttributes
+import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -32,10 +35,8 @@ class AppFirebaseMessagingService : FirebaseMessagingService() {
         val body = remoteMessage.notification?.body ?: ""
         sendNotification(title, body)
     }
-
     private fun sendNotification(title: String, message: String) {
         val channelId = "default_channel"
-
 
         // Intent for the main activity when notification is clicked
         val intent = Intent(this, MainActivity::class.java).apply {
@@ -67,24 +68,38 @@ class AppFirebaseMessagingService : FirebaseMessagingService() {
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
+            .setDefaults(NotificationCompat.DEFAULT_ALL) // 🔔 Sound + 💥 Vibration + 💡 Light
 
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        // Create notification channel (required for Android 8+)
+        // 🔧 Create notification channel for Android 8+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+            val attributes = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build()
+
             val channel = NotificationChannel(
                 channelId,
                 "Default Channel",
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
                 description = "General app notifications"
+                enableLights(true)
+                lightColor = Color.BLUE
+                enableVibration(true)
+                vibrationPattern = longArrayOf(0, 400, 200, 400) // wait, vibrate, pause, vibrate
+                setSound(soundUri, attributes)
             }
+
             notificationManager.createNotificationChannel(channel)
         }
 
         // Show the notification
         notificationManager.notify(NOTIFICATION_CODE, notificationBuilder.build())
     }
+
 
 }
