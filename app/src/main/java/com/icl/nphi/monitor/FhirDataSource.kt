@@ -1,6 +1,6 @@
 package com.icl.nphi.monitor
 
-import com.icl.nphi.network.Constants.BASE_URL
+import com.icl.nphi.utils.Constants.BASE_URL
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body

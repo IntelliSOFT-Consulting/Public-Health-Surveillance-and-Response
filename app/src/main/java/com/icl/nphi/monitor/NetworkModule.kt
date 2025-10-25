@@ -3,7 +3,7 @@ package com.icl.nphi.monitor
 import com.google.firebase.sessions.dagger.Provides
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.icl.nphi.network.Constants.BASE_URL
+import com.icl.nphi.utils.Constants.BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.hl7.fhir.r4.model.Resource

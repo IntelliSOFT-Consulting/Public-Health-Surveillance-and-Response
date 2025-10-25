@@ -25,8 +25,8 @@ import com.google.android.fhir.sync.SyncJobStatus
 import com.google.android.fhir.sync.remote.HttpLogger
 import com.icl.nphi.monitor.FhirSyncService
 import com.icl.nphi.monitor.NetworkModule
-import com.icl.nphi.network.Constants.BASE_URL
-import com.icl.nphi.network.Constants.TEST_TOKEN
+import com.icl.nphi.utils.Constants.BASE_URL
+import com.icl.nphi.utils.Constants.TEST_TOKEN
 import com.icl.nphi.utils.ContribQuestionnaireItemViewHolderFactoryMatchersProviderFactory
 import com.icl.nphi.utils.FormatterClass
 import kotlinx.coroutines.CoroutineScope
@@ -82,9 +82,6 @@ class FhirApplication : Application(), DataCaptureConfig.Provider, Configuration
             ),
         )
         try {
-//            val fhirDataSource = NetworkModule().provideFhirDataSource()
-
-//            fhirSyncService = FhirSyncService(fhirEngine, fhirDataSource)
 
             dataCaptureConfig =
                 DataCaptureConfig().apply {

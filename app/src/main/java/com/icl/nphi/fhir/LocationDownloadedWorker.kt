@@ -10,11 +10,11 @@ import androidx.work.workDataOf
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.search.search
 import com.icl.nphi.models.FhirEntry
-import com.icl.nphi.network.Constants
-import com.icl.nphi.network.Constants.BASE_URL
-import com.icl.nphi.network.Constants.LOCATION_STARTER
 import com.icl.nphi.network.Interface
 import com.icl.nphi.network.RetrofitBuilder
+import com.icl.nphi.utils.Constants
+import com.icl.nphi.utils.Constants.BASE_URL
+import com.icl.nphi.utils.Constants.LOCATION_STARTER
 import com.icl.nphi.utils.FormatterClass
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

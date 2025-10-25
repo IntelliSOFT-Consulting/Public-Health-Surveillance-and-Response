@@ -122,6 +122,13 @@
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/Theme.Surveillance.NoActionBar" />
+
+        <!-- Disable auto WorkManager initialization -->
+        <provider
+            android:name="androidx.work.impl.WorkManagerInitializer"
+            android:authorities="${applicationId}.workmanager-init"
+            android:exported="false"
+            tools:node="remove" />
     </application>
 
 </manifest>

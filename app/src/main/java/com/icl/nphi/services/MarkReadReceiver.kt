@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
-import com.icl.nphi.network.Constants.NOTIFICATION_CODE
+import com.icl.nphi.utils.Constants.NOTIFICATION_CODE
 
 class MarkReadReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {

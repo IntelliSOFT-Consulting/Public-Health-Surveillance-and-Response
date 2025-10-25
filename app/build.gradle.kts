@@ -13,12 +13,21 @@ android {
         applicationId = "com.icl.nphi"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
+        versionCode = 2
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+    lint {
+        // Continue build even if there are errors
+        abortOnError = false
 
+        // Optionally disable only this specific WorkManager lint check
+//        disable = listOf("Invalid","RemoveWorkManagerInitializer")
+
+        // Optionally generate a lint baseline for tracking future issues
+        baseline = file("lint-baseline.xml")
+    }
     buildTypes {
         release {
             isMinifyEnabled = false

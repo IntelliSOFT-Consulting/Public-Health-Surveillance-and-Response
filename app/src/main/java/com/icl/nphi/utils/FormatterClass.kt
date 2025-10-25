@@ -6,7 +6,7 @@ import android.content.SharedPreferences
 import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
 import com.icl.nphi.R
-import com.icl.nphi.network.Constants.FIRST_LAUNCH_KEY
+import com.icl.nphi.utils.Constants.FIRST_LAUNCH_KEY
 import org.json.JSONArray
 import org.json.JSONObject
 import java.text.SimpleDateFormat

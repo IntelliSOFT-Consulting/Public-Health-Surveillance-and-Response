@@ -12,7 +12,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.icl.nphi.MainActivity
 import com.icl.nphi.R
-import com.icl.nphi.network.Constants.NOTIFICATION_CODE
+import com.icl.nphi.utils.Constants.NOTIFICATION_CODE
 import com.icl.nphi.utils.FormatterClass
 
 

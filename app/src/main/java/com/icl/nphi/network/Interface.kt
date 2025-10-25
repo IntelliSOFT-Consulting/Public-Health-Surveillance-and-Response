@@ -6,7 +6,7 @@ import com.icl.nphi.models.DbSignIn
 import com.icl.nphi.models.DbSignInResponse
 import com.icl.nphi.models.FhirBundle
 import com.icl.nphi.models.UserResponse
-import com.icl.nphi.network.Constants.BASE_URL
+import com.icl.nphi.utils.Constants.BASE_URL
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body

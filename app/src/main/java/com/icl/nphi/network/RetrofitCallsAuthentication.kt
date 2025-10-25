@@ -15,7 +15,7 @@ import com.icl.nphi.models.DbSetPasswordReq
 import com.icl.nphi.models.DbSignIn
 import com.icl.nphi.models.UrlData
 import com.icl.nphi.models.User
-import com.icl.nphi.network.Constants.BASE_URL
+import com.icl.nphi.utils.Constants.BASE_URL
 import com.icl.nphi.utils.FormatterClass
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
