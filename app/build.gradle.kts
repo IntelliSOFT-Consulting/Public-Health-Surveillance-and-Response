@@ -6,14 +6,14 @@ plugins {
 }
 
 android {
-    namespace = "com.icl.nphi"
+    namespace = "com.icl.surveillance"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.icl.nphi"
+        applicationId = "com.icl.surveillance"
         minSdk = 26
         targetSdk = 35
-        versionCode = 2
+        versionCode = 38
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -61,9 +61,6 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.messaging)
-//    implementation(libs.firebase.crashlytics)
-//    implementation(libs.firebase.messaging.ktx)
-//    implementation(libs.firebase.messaging)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
