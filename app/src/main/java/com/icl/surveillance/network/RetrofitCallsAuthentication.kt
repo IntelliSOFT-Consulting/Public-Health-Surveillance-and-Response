@@ -13,8 +13,10 @@ import com.icl.surveillance.models.DbResetPasswordData
 import com.icl.surveillance.models.DbResponseError
 import com.icl.surveillance.models.DbSetPasswordReq
 import com.icl.surveillance.models.DbSignIn
+import com.icl.surveillance.models.FCMToken
 import com.icl.surveillance.models.UrlData
 import com.icl.surveillance.models.User
+import com.icl.surveillance.utils.Constants.ALERTS_BASE_URL
 import com.icl.surveillance.utils.Constants.BASE_URL
 import com.icl.surveillance.utils.FormatterClass
 import kotlinx.coroutines.CoroutineName
@@ -37,6 +39,27 @@ class RetrofitCallsAuthentication {
         CoroutineScope(Dispatchers.Main).launch {
             val job = Job()
             CoroutineScope(Dispatchers.IO + job).launch { startLogin(context, dbSignIn) }.join()
+        }
+    }
+
+    fun pullUserAlerts(context: Context) {
+
+        CoroutineScope(Dispatchers.Main).launch {
+            val job = Job()
+            CoroutineScope(Dispatchers.IO + job).launch { startPullingUserAlerts(context) }.join()
+        }
+    }
+
+    fun updateOrCreateToken(context: Context, token: String) {
+
+        CoroutineScope(Dispatchers.Main).launch {
+            val job = Job()
+            CoroutineScope(Dispatchers.IO + job).launch {
+                startUpdateOrCreateToken(
+                    context,
+                    FCMToken(token = token)
+                )
+            }.join()
         }
     }
 
@@ -108,6 +131,52 @@ class RetrofitCallsAuthentication {
             } catch (e: Exception) {
                 e.printStackTrace()
                 println("API Response:::: Error -> ${e.message}")
+            }
+        }
+    }
+
+    private fun startUpdateOrCreateToken(context: Context, body: FCMToken) {
+        val job1 = Job()
+        CoroutineScope(Dispatchers.Main + job1).launch {
+            var messageToast = ""
+            val job = Job()
+            CoroutineScope(Dispatchers.IO + job)
+                .launch {
+                    val formatter = FormatterClass()
+                    val baseUrl = context.getString(UrlData.BASE_URL.message)
+                    val apiService =
+                        RetrofitBuilder.getRetrofit(baseUrl).create(Interface::class.java)
+                    try {
+                        val token = formatter.getSharedPref("access_token", context)
+                        if (token != null) {
+                            val apiInterface = apiService.updateFCMToken(body, "Bearer $token")
+                            if (apiInterface.isSuccessful) {
+
+                                val statusCode = apiInterface.code()
+                                val body = apiInterface.body()
+
+                                if (statusCode == 200 || statusCode == 201) {
+
+                                    messageToast = "Success"
+
+                                } else {
+                                    messageToast = "Error: The request was not successful"
+                                }
+                            } else {
+                                apiInterface.errorBody()?.let {
+                                    messageToast =
+                                        "Invalid  credentials. Please try again."
+                                }
+                            }
+                        }
+                    } catch (e: Exception) {
+                        messageToast = "Cannot login user.."
+                    }
+                }
+                .join()
+            CoroutineScope(Dispatchers.Main).launch {
+
+//                Toast.makeText(context, messageToast, Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -205,6 +274,56 @@ class RetrofitCallsAuthentication {
         }
     }
 
+    private fun startPullingUserAlerts(context: Context) {
+
+        val job1 = Job()
+        CoroutineScope(Dispatchers.Main + job1).launch {
+            val progressDialog = ProgressDialog(context)
+//            progressDialog.setTitle("Please wait..")
+            progressDialog.setMessage("Please wait...")
+            progressDialog.setCanceledOnTouchOutside(false)
+            progressDialog.show()
+
+            var messageToast = ""
+            val job = Job()
+            CoroutineScope(Dispatchers.IO + job)
+                .launch {
+                    val formatter = FormatterClass()
+                    val apiService =
+                        RetrofitBuilder.getRetrofit(ALERTS_BASE_URL).create(Interface::class.java)
+                    try {
+
+                        val token = formatter.getSharedPref("access_token", context)
+                        if (token != null) {
+                            val apiInterface = apiService.pullUserAlerts("Bearer $token")
+                            if (apiInterface.isSuccessful) {
+
+                                val statusCode = apiInterface.code()
+                                val body = apiInterface.body()
+
+                                if (statusCode == 200 || statusCode == 201) {
+
+                                } else {
+                                    messageToast = "Error: The request was not successful"
+                                }
+                            } else {
+                                apiInterface.errorBody()?.let {
+                                    messageToast =
+                                        "Invalid login credentials. Please try again."
+                                }
+                            }
+                        }
+                    } catch (e: Exception) {
+                        messageToast = "Cannot login user.."
+                    }
+                }
+                .join()
+            CoroutineScope(Dispatchers.Main).launch {
+                progressDialog.dismiss()
+                Toast.makeText(context, messageToast, Toast.LENGTH_LONG).show()
+            }
+        }
+    }
 
 
     private suspend fun getUserDetails(context: Context) {

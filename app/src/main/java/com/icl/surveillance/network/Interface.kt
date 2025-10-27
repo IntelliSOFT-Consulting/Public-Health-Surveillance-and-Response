@@ -4,7 +4,9 @@ import com.icl.surveillance.models.DbResetPassword
 import com.icl.surveillance.models.DbSetPasswordReq
 import com.icl.surveillance.models.DbSignIn
 import com.icl.surveillance.models.DbSignInResponse
+import com.icl.surveillance.models.FCMToken
 import com.icl.surveillance.models.FhirBundle
+import com.icl.surveillance.models.NotificationResponse
 import com.icl.surveillance.models.UserResponse
 import com.icl.surveillance.utils.Constants.BASE_URL
 import okhttp3.RequestBody
@@ -30,6 +32,13 @@ interface Interface {
         @Header("Authorization") token: String,
     ): FhirBundle
 
+    @POST("provider/fcm/token")
+    @Headers("Content-Type: application/json")
+    suspend fun updateFCMToken(
+        @Body body: FCMToken,
+        @Header("Authorization") token: String,
+    ): Response<Any>
+
     @PUT("Patient/{id}")
     @Headers("Content-Type: application/json")
     suspend fun sendPatientToServer(
@@ -49,6 +58,11 @@ interface Interface {
     suspend fun getUserInfo(
         @Header("Authorization") token: String,
     ): Response<UserResponse>
+
+    @GET("notifications")
+    suspend fun pullUserAlerts(
+        @Header("Authorization") token: String,
+    ): Response<NotificationResponse>
 
     @GET("provider/reset-password")
     suspend fun resetPassword(

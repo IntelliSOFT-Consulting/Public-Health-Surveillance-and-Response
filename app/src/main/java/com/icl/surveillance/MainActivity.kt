@@ -43,6 +43,7 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.messaging.FirebaseMessaging
 import com.icl.surveillance.auth.LoginActivity
 import com.icl.surveillance.fhir.DemoDataStore
+import com.icl.surveillance.network.RetrofitCallsAuthentication
 import com.icl.surveillance.viewmodels.PeriodicSyncViewModel
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.ResourceType
@@ -51,6 +52,7 @@ import kotlin.jvm.java
 
 class MainActivity : AppCompatActivity() {
 
+    private var retrofitCallsAuthentication = RetrofitCallsAuthentication()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
@@ -118,35 +120,9 @@ class MainActivity : AppCompatActivity() {
 
             // Optionally save it or send to your server
             FormatterClass().saveSharedPref("fcmToken", token, this)
+            retrofitCallsAuthentication.updateOrCreateToken(this, token)
         }
 
-        /* lifecycleScope.launch {
-             try {
-                 val workManager = WorkManager.getInstance(this@MainActivity)
-                 val existing = workManager.getWorkInfosByTag("location_downloader").get()
-
-                 if (existing.isEmpty()) {
-                     val workRequest =
-                         PeriodicWorkRequestBuilder<LocationDownloadedWorker>(10, TimeUnit.MINUTES)
-                             .setConstraints(
-                                 Constraints.Builder()
-                                     .setRequiredNetworkType(NetworkType.CONNECTED) // Ensure network is available
-                                     .build()
-                             )
-                             .build()
-                     val uniqueName = "location_downloader"//_${UUID.randomUUID()}"
-
-                     WorkManager.getInstance(this@MainActivity)
-                         .enqueueUniquePeriodicWork(
-                             uniqueName,  // unique name to avoid duplicates
-                             ExistingPeriodicWorkPolicy.KEEP,   // KEEP = don't run again if already enqueued
-                             workRequest
-                         )
-                 }
-             } catch (e: Exception) {
-                 e.printStackTrace()
-             }
-         }*/
 
 
         appUpdateManager = AppUpdateManagerFactory.create(this)

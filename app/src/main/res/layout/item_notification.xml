@@ -2,22 +2,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="5dp"
     android:layout_marginBottom="12dp"
+    android:background="@color/white"
     android:padding="16dp"
+    app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="12dp"
     app:cardElevation="3dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="New Update"
-            android:textAppearance="?attr/textAppearanceTitleMedium"
+            android:textColor="@color/black"
+            android:textSize="12sp"
             android:textStyle="bold" />
 
         <TextView
@@ -25,16 +29,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="We’ve just released a new version of the app"
-            android:textAppearance="?attr/textAppearanceBodyMedium" />
+            android:textColor="@color/black"
+            android:textSize="11sp" />
 
         <TextView
             android:id="@+id/tvTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="2h ago"
-            android:textAppearance="?attr/textAppearanceLabelSmall"
-            android:textColor="@color/gray" />
+            android:textColor="@color/gray"
+            android:textSize="10sp" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

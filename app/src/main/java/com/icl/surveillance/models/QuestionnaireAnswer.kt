@@ -75,6 +75,10 @@ enum class UrlData(var message: Int) {
     BASE_URL(R.string.base_url),
 }
 
+data class FCMToken(
+    val token: String
+)
+
 data class DbSignIn(
     val idNumber: String,
     val password: String,
@@ -156,9 +160,16 @@ data class DbResponseError(
 
 
 data class Notification(
+    val id: String,
+    val practitionerId: String,
+    val encounterId: String,
+    val investigationDate: String,
+    val dueDate: String,
     val title: String,
-    val message: String,
-    val timestamp: String
+    val body: String,
+    val status: String,
+    val createdAt: String,
+    val updatedAt: String
 )
 
 data class CaseOption(
@@ -172,6 +183,13 @@ data class SpecimenConfig(
     val entryLinkId: String,
     val dateLinkId: String
 )
+
+data class NotificationResponse(
+    val status: String? = null,
+    val notifications: List<Notification>? = emptyList(),
+    val total: Int? = 0
+)
+
 
 data class UserResponse(
     val status: String,
