@@ -1,6 +1,7 @@
 package com.icl.surveillance.auth
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -34,12 +35,7 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
-        // Let's check the saved token
-        val token = FormatterClass().getSharedPref("fcmToken", this)
-        if (token != null) {
-            println("Token: $token")
-//            retrofitCallsAuthentication.sendToken(this, token)
-        }
+
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -55,6 +51,9 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.apply {
+            tvForgotPassword.setOnClickListener {
+                startActivity(Intent(this@LoginActivity, ForgotPasswordActivity::class.java))
+            }
             loginCard.apply {
                 animate()
                     .alpha(1f)
