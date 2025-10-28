@@ -442,8 +442,8 @@
         },
         {
           "type": "integer",
-          "linkId": "122072333233",
-          "text": "Age in Years.",
+          "linkId": "492731638700",
+          "text": "Age in Years",
           "enableWhen": [
             {
               "question": "442636360588",
@@ -454,33 +454,24 @@
               }
             }
           ],
-          "item": [
+          "required": true,
+          "extension": [
             {
-              "linkId": "122072333233_helpText",
-              "type": "display",
-              "text": "What is the age of the patient in years?",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "help",
-                        "display": "Help-Button"
-                      }
-                    ],
-                    "text": "Help-Button"
-                  }
-                }
-              ]
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 999
             }
           ]
         },
         {
           "type": "integer",
-          "linkId": "879612276990",
-          "text": "Age in Months.",
+          "linkId": "185726989867",
+          "text": "Age in Months",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 11
+            }
+          ],
           "enableWhen": [
             {
               "question": "442636360588",
@@ -489,35 +480,19 @@
                 "code": "unknown",
                 "display": "Unknown"
               }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "879612276990_helpText",
-              "type": "display",
-              "text": "What is the age of the patient in months?",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "help",
-                        "display": "Help-Button"
-                      }
-                    ],
-                    "text": "Help-Button"
-                  }
-                }
-              ]
             }
           ]
         },
         {
           "type": "integer",
-          "linkId": "296206902941",
-          "text": "Age in Days.",
+          "linkId": "828303331247",
+          "text": "Age in Days",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueInteger": 31
+            }
+          ],
           "enableWhen": [
             {
               "question": "442636360588",
@@ -526,28 +501,6 @@
                 "code": "unknown",
                 "display": "Unknown"
               }
-            }
-          ],
-          "item": [
-            {
-              "linkId": "296206902941_helpText",
-              "type": "display",
-              "text": "What is the age of the patient in days?",
-              "extension": [
-                {
-                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-                  "valueCodeableConcept": {
-                    "coding": [
-                      {
-                        "system": "http://hl7.org/fhir/questionnaire-item-control",
-                        "code": "help",
-                        "display": "Help-Button"
-                      }
-                    ],
-                    "text": "Help-Button"
-                  }
-                }
-              ]
             }
           ]
         },

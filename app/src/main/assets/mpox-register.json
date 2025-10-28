@@ -206,19 +206,68 @@
           ],
           "item": [
             {
-              "linkId": "age-years",
+              "type": "integer",
+              "linkId": "492731638700",
               "text": "Age in Years",
-              "type": "integer"
+              "enableWhen": [
+                {
+                  "question": "442636360588",
+                  "operator": "=",
+                  "answerCoding": {
+                    "code": "unknown",
+                    "display": "Unknown"
+                  }
+                }
+              ],
+              "required": true,
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+                  "valueInteger": 999
+                }
+              ]
             },
             {
-              "linkId": "age-months",
+              "type": "integer",
+              "linkId": "185726989867",
               "text": "Age in Months",
-              "type": "integer"
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+                  "valueInteger": 11
+                }
+              ],
+              "enableWhen": [
+                {
+                  "question": "442636360588",
+                  "operator": "=",
+                  "answerCoding": {
+                    "code": "unknown",
+                    "display": "Unknown"
+                  }
+                }
+              ]
             },
             {
-              "linkId": "age-days",
+              "type": "integer",
+              "linkId": "828303331247",
               "text": "Age in Days",
-              "type": "integer"
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+                  "valueInteger": 31
+                }
+              ],
+              "enableWhen": [
+                {
+                  "question": "442636360588",
+                  "operator": "=",
+                  "answerCoding": {
+                    "code": "unknown",
+                    "display": "Unknown"
+                  }
+                }
+              ]
             }
           ]
         },
