@@ -85,10 +85,7 @@ class PatientsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //    (requireActivity() as AppCompatActivity).supportActionBar?.apply {
-        //      title = resources.getString(R.string.title_patient_list)
-        //      setDisplayHomeAsUpEnabled(true)
-        //    }
+
 
         val titleName = FormatterClass().getSharedPref("listingTitle", requireContext())
         fhirEngine = FhirApplication.fhirEngine(requireContext())

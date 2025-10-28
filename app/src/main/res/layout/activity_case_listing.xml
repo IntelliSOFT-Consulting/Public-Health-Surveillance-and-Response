@@ -113,7 +113,7 @@
             android:layout_marginStart="20dp"
             android:text="Showing 0 Results"
             android:textColor="@color/black"
-            android:visibility="visible" />
+            android:visibility="gone" />
         <!-- Patient List -->
         <include
             android:id="@+id/patient_list_container"

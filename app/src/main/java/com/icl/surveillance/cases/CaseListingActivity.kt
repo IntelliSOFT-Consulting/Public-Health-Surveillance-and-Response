@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -140,7 +141,7 @@ class CaseListingActivity : AppCompatActivity() {
                     recyclerView.adapter = adapter
                     patientListViewModel.liveSearchedCases.observe(this) {
                         binding.apply {
-                            count.text = "Showing ${it.size} Results"
+//                            count.text = "Showing ${it.size} Results"
                             patientListContainer.pbProgress.visibility = View.GONE
                         }
 
@@ -152,7 +153,14 @@ class CaseListingActivity : AppCompatActivity() {
                             binding.apply { patientListContainer.caseCount.visibility = View.GONE }
                         }
 
-                        adapter.submitList(it)
+//                        adapter.submitList(it)
+                        adapter.setData(it)
+
+                        binding.apply {
+                            tvEpidNo.addTextChangedListener { text ->
+                                adapter.filter(text.toString())
+                            }
+                        }
                     }
                 }
             }
