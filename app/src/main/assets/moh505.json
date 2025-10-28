@@ -6,7 +6,6 @@
     ]
   },
   "extension": [
-
     {
       "url": "http://hl7.org/fhir/StructureDefinition/variable",
       "valueExpression": {
@@ -946,9 +945,11 @@
         },
         {
           "type": "choice",
-          "linkId": "neonatal-deaths-summary",
-          "text": "Were any Neonatal Deaths cases reported?",
           "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
               "valueCodeableConcept": {
@@ -960,12 +961,10 @@
                   }
                 ]
               }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-              "valueCode": "horizontal"
             }
           ],
+          "linkId": "neonatal-deaths-summary",
+          "text": "Were any Neonatal Deaths cases reported?",
           "required": true,
           "answerOption": [
             {
@@ -984,50 +983,12 @@
         },
         {
           "type": "integer",
-          "linkId": "neonatal-deaths-cases-under-5",
-          "text": "Under 5 Cases",
-          "enableWhen": [
-            {
-              "question": "neonatal-deaths-summary",
-              "operator": "=",
-              "answerCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
-            }
-          ],
-          "required": true,
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
             }
-          ]
-        },
-        {
-          "type": "integer",
-          "linkId": "neonatal-deaths-cases-over-5",
-          "text": "Over 5 Cases",
-          "enableWhen": [
-            {
-              "question": "neonatal-deaths-summary",
-              "operator": "=",
-              "answerCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
-            }
           ],
-          "required": true,
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueInteger": 999
-            }
-          ]
-        },
-        {
-          "type": "integer",
           "linkId": "neonatal-deaths-deaths-under-5",
           "text": "Under 5 Deaths",
           "enableWhen": [
@@ -1040,129 +1001,18 @@
               }
             }
           ],
-          "required": true,
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueInteger": 999
-            }
-          ]
+          "required": true
         },
         {
           "type": "integer",
-          "linkId": "neonatal-deaths-deaths-over-5",
-          "text": "Over 5 Deaths",
-          "enableWhen": [
-            {
-              "question": "neonatal-deaths-summary",
-              "operator": "=",
-              "answerCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
-            }
-          ],
-          "required": true,
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueInteger": 999
-            }
-          ]
-        },
-        {
-          "type": "integer",
-          "linkId": "neonatal-deaths-summary-cases-under-5-if-no",
-          "text": "Under 5 Cases",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
               "valueBoolean": true
             }
           ],
-          "initial": [
-            {
-              "valueInteger": 0
-            }
-          ],
-          "enableWhen": [
-            {
-              "question": "neonatal-deaths-summary",
-              "operator": "=",
-              "answerCoding": {
-                "code": "no",
-                "display": "No"
-              }
-            }
-          ]
-        },
-        {
-          "type": "integer",
-          "linkId": "neonatal-deaths-summary-cases-over-5-if-no",
-          "text": "Over 5 Cases",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-              "valueBoolean": true
-            }
-          ],
-          "initial": [
-            {
-              "valueInteger": 0
-            }
-          ],
-          "enableWhen": [
-            {
-              "question": "neonatal-deaths-summary",
-              "operator": "=",
-              "answerCoding": {
-                "code": "no",
-                "display": "No"
-              }
-            }
-          ]
-        },
-        {
-          "type": "integer",
           "linkId": "neonatal-deaths-summary-deaths-under-5-if-no",
           "text": "Under 5 Deaths",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-              "valueBoolean": true
-            }
-          ],
-          "initial": [
-            {
-              "valueInteger": 0
-            }
-          ],
-          "enableWhen": [
-            {
-              "question": "neonatal-deaths-summary",
-              "operator": "=",
-              "answerCoding": {
-                "code": "no",
-                "display": "No"
-              }
-            }
-          ]
-        },
-        {
-          "type": "integer",
-          "linkId": "neonatal-deaths-summary-deaths-over-5-if-no",
-          "text": "Over 5 Deaths",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-              "valueBoolean": true
-            }
-          ],
-          "initial": [
-            {
-              "valueInteger": 0
-            }
-          ],
           "enableWhen": [
             {
               "question": "neonatal-deaths-summary",
@@ -1176,9 +1026,11 @@
         },
         {
           "type": "choice",
-          "linkId": "acute-malnutrition-summary",
-          "text": "Were any Acute Malnutrition cases reported?",
           "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
               "valueCodeableConcept": {
@@ -1190,12 +1042,10 @@
                   }
                 ]
               }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-              "valueCode": "horizontal"
             }
           ],
+          "linkId": "acute-malnutrition-summary",
+          "text": "Were any Acute Malnutrition cases reported?",
           "required": true,
           "answerOption": [
             {
@@ -1466,28 +1316,12 @@
         },
         {
           "type": "integer",
-          "linkId": "neonatal-tetanus-cases-over-5",
-          "text": "Over 5 Cases",
-          "enableWhen": [
-            {
-              "question": "neonatal-tetanus-summary",
-              "operator": "=",
-              "answerCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
-            }
-          ],
-          "required": true,
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
             }
-          ]
-        },
-        {
-          "type": "integer",
+          ],
           "linkId": "neonatal-tetanus-deaths-under-5",
           "text": "Under 5 Deaths ",
           "enableWhen": [
@@ -1500,51 +1334,18 @@
               }
             }
           ],
-          "required": true,
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueInteger": 999
-            }
-          ]
+          "required": true
         },
         {
           "type": "integer",
-          "linkId": "neonatal-tetanus-deaths-over-5",
-          "text": "Over 5 Deaths",
-          "enableWhen": [
+          "extension": [
             {
-              "question": "neonatal-tetanus-summary",
-              "operator": "=",
-              "answerCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+              "valueBoolean": true
             }
           ],
-          "required": true,
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueInteger": 999
-            }
-          ]
-        },
-        {
-          "type": "integer",
           "linkId": "neonatal-tetanus-summary-cases-under-5-if-no",
           "text": "Under 5 Cases",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-              "valueBoolean": true
-            }
-          ],
-          "initial": [
-            {
-              "valueInteger": 0
-            }
-          ],
           "enableWhen": [
             {
               "question": "neonatal-tetanus-summary",
@@ -1558,71 +1359,14 @@
         },
         {
           "type": "integer",
-          "linkId": "neonatal-tetanus-summary-cases-over-5-if-no",
-          "text": "Over 5 Cases",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
               "valueBoolean": true
             }
           ],
-          "initial": [
-            {
-              "valueInteger": 0
-            }
-          ],
-          "enableWhen": [
-            {
-              "question": "neonatal-tetanus-summary",
-              "operator": "=",
-              "answerCoding": {
-                "code": "no",
-                "display": "No"
-              }
-            }
-          ]
-        },
-        {
-          "type": "integer",
           "linkId": "neonatal-tetanus-summary-deaths-under-5-if-no",
           "text": "Under 5 Deaths",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-              "valueBoolean": true
-            }
-          ],
-          "initial": [
-            {
-              "valueInteger": 0
-            }
-          ],
-          "enableWhen": [
-            {
-              "question": "neonatal-tetanus-summary",
-              "operator": "=",
-              "answerCoding": {
-                "code": "no",
-                "display": "No"
-              }
-            }
-          ]
-        },
-        {
-          "type": "integer",
-          "linkId": "neonatal-tetanus-summary-deaths-over-5-if-no",
-          "text": "Over 5 Deaths",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-              "valueBoolean": true
-            }
-          ],
-          "initial": [
-            {
-              "valueInteger": 0
-            }
-          ],
           "enableWhen": [
             {
               "question": "neonatal-tetanus-summary",
@@ -1636,9 +1380,11 @@
         },
         {
           "type": "choice",
-          "linkId": "afp-poliomyelitis-summary",
-          "text": "Were any Afp Poliomyelitis cases reported?",
           "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
               "valueCodeableConcept": {
@@ -1650,12 +1396,10 @@
                   }
                 ]
               }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-              "valueCode": "horizontal"
             }
           ],
+          "linkId": "afp-poliomyelitis-summary",
+          "text": "Were any Afp Poliomyelitis cases reported?",
           "required": true,
           "answerOption": [
             {
@@ -6044,50 +5788,12 @@
         },
         {
           "type": "integer",
-          "linkId": "deaths-due-to-malaria-cases-under-5",
-          "text": "Under 5 Cases",
-          "enableWhen": [
-            {
-              "question": "deaths-due-to-malaria-summary",
-              "operator": "=",
-              "answerCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
-            }
-          ],
-          "required": true,
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
             }
-          ]
-        },
-        {
-          "type": "integer",
-          "linkId": "deaths-due-to-malaria-cases-over-5",
-          "text": "Over 5 Cases",
-          "enableWhen": [
-            {
-              "question": "deaths-due-to-malaria-summary",
-              "operator": "=",
-              "answerCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
-            }
           ],
-          "required": true,
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueInteger": 999
-            }
-          ]
-        },
-        {
-          "type": "integer",
           "linkId": "deaths-due-to-malaria-deaths-under-5",
           "text": "Under 5 Deaths",
           "enableWhen": [
@@ -6100,13 +5806,7 @@
               }
             }
           ],
-          "required": true,
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueInteger": 999
-            }
-          ]
+          "required": true
         },
         {
           "type": "integer",
@@ -6132,71 +5832,14 @@
         },
         {
           "type": "integer",
-          "linkId": "deaths-due-to-malaria-summary-cases-under-5-if-no",
-          "text": "Under 5 Cases",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
               "valueBoolean": true
             }
           ],
-          "initial": [
-            {
-              "valueInteger": 0
-            }
-          ],
-          "enableWhen": [
-            {
-              "question": "deaths-due-to-malaria-summary",
-              "operator": "=",
-              "answerCoding": {
-                "code": "no",
-                "display": "No"
-              }
-            }
-          ]
-        },
-        {
-          "type": "integer",
-          "linkId": "deaths-due-to-malaria-summary-cases-over-5-if-no",
-          "text": "Over 5 Cases",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-              "valueBoolean": true
-            }
-          ],
-          "initial": [
-            {
-              "valueInteger": 0
-            }
-          ],
-          "enableWhen": [
-            {
-              "question": "deaths-due-to-malaria-summary",
-              "operator": "=",
-              "answerCoding": {
-                "code": "no",
-                "display": "No"
-              }
-            }
-          ]
-        },
-        {
-          "type": "integer",
           "linkId": "deaths-due-to-malaria-summary-deaths-under-5-if-no",
           "text": "Under 5 Deaths",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-              "valueBoolean": true
-            }
-          ],
-          "initial": [
-            {
-              "valueInteger": 0
-            }
-          ],
           "enableWhen": [
             {
               "question": "deaths-due-to-malaria-summary",
@@ -6630,7 +6273,7 @@
         {
           "type": "integer",
           "linkId": "malaria-tested-under-5",
-          "text": "Malaria Microscopy Tested",
+          "text": "Malaria Microscopy Tested < 5",
           "required": true,
           "enableWhen": [
             {
@@ -6652,7 +6295,7 @@
         {
           "type": "integer",
           "linkId": "malaria-tested-over-5",
-          "text": "Malaria Microscopy Tested \u2265 5 years",
+          "text": "Malaria Microscopy Tested ≥ 5 years",
           "required": true,
           "enableWhen": [
             {
@@ -6674,7 +6317,7 @@
         {
           "type": "integer",
           "linkId": "malaria-positive-under-5",
-          "text": "Malaria Microscopy Positive",
+          "text": "Malaria Microscopy Positive < 5",
           "required": true,
           "enableWhen": [
             {
@@ -6696,7 +6339,7 @@
         {
           "type": "integer",
           "linkId": "malaria-positive-over-5",
-          "text": "Malaria Microscopy Positive \u2265 5 years",
+          "text": "Malaria Microscopy Positive ≥ 5 years",
           "required": true,
           "enableWhen": [
             {
@@ -6718,7 +6361,7 @@
         {
           "type": "integer",
           "linkId": "malaria-total-tested",
-          "text": "Malaria Microscopy Total Tested",
+          "text": "Malaria Microscopy Total Tested < 5",
           "required": true,
           "enableWhen": [
             {
@@ -6740,7 +6383,7 @@
         {
           "type": "integer",
           "linkId": "malaria-mrdt-under-5",
-          "text": "Malaria mRDT",
+          "text": "Malaria mRDT < 5 ",
           "required": true,
           "enableWhen": [
             {
@@ -6762,7 +6405,7 @@
         {
           "type": "integer",
           "linkId": "malaria-mrdt-over-5",
-          "text": "Malaria mRDT \u2265 5 years",
+          "text": "Malaria mRDT ≥ 5 years",
           "required": true,
           "enableWhen": [
             {
@@ -6784,7 +6427,7 @@
         {
           "type": "integer",
           "linkId": "dysentery-tested-under-5",
-          "text": "Dysentery Tested",
+          "text": "Dysentery Tested < 5",
           "required": true,
           "enableWhen": [
             {
@@ -6806,7 +6449,7 @@
         {
           "type": "integer",
           "linkId": "dysentery-tested-over-5",
-          "text": "Dysentery Tested \u2265 5 years",
+          "text": "Dysentery Tested ≥ 5 years",
           "required": true,
           "enableWhen": [
             {
@@ -7170,7 +6813,7 @@
         {
           "type": "integer",
           "linkId": "tuberculosis-mdr-xdr-tested-over-5",
-          "text": "Tuberculosis (MDR/XDR) Tested \u2265 5 years",
+          "text": "Tuberculosis (MDR/XDR) Tested ≥ 5 years",
           "required": true,
           "extension": [
             {
@@ -7182,7 +6825,7 @@
         {
           "type": "integer",
           "linkId": "tuberculosis-mdr-xdr-positive",
-          "text": "Tuberculosis (MDR/XDR) Positive",
+          "text": "Tuberculosis (MDR/XDR) Positive <5 ",
           "required": true,
           "extension": [
             {
@@ -7194,7 +6837,7 @@
         {
           "type": "integer",
           "linkId": "typhoid-tested-under-5",
-          "text": "Typhoid Tested",
+          "text": "Typhoid Tested < 5",
           "required": true,
           "enableWhen": [
             {
@@ -7216,7 +6859,7 @@
         {
           "type": "integer",
           "linkId": "typhoid-tested-over-5",
-          "text": "Typhoid Tested \u2265 5 years",
+          "text": "Typhoid Tested ≥ 5 years",
           "enableWhen": [
             {
               "question": "typhoid-summary",
