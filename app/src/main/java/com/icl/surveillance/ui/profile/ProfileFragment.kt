@@ -99,12 +99,18 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        mapUserData()
+    }
+
     fun getUserPrefs(context: Context): UserProfilePrefs {
         val f = FormatterClass()
+        println("started loading user profile Ready to return data")
         return UserProfilePrefs(
-            f.getSharedPref("firstName", context) ?: "",
-            f.getSharedPref("lastName", context) ?: "",
-            f.getSharedPref("fullNames", context) ?: "",
+            f.getSharedPref("firstName", context) ?: "N/A",
+            f.getSharedPref("lastName", context) ?: "N/A",
+            f.getSharedPref("fullNames", context) ?: "N/A",
             f.getSharedPref("email", context) ?: "",
             f.getSharedPref("phone", context) ?: "-",
             f.getSharedPref("idNumber", context) ?: "",
@@ -120,7 +126,13 @@ class ProfileFragment : Fragment() {
         )
     }
 
-
+    fun safeText(value: String?): String {
+        return if (value.isNullOrBlank() || value == "null" || value.equals("NULL", true)) {
+            "-"
+        } else {
+            value
+        }
+    }
     private fun mapUserData() {
         try {
             binding.apply {
@@ -132,14 +144,14 @@ class ProfileFragment : Fragment() {
                 val email = formatter.getSharedPref("email", requireContext())
                 val role = formatter.getSharedPref("role", requireContext())
 
-                tvUserName.text = "$firstName $lastName"
-                tvEmail.text = " $email"
-                tvPhone.text = " $phone"
+                tvUserName.text = "${safeText(firstName)} ${safeText(lastName)}"
+                tvEmail.text = " ${safeText(email)}"
+                tvPhone.text = " ${safeText(phone)}"
 
 
                 // Set reusable items
                 val user = getUserPrefs(requireContext())
-
+                println("started loading user profile Returned data {$user}")
 
                 setLabelValue(idItem, "ID Number:", user.idNumber)
                 setLabelValue(roleItem, "Role:", user.role)
@@ -160,8 +172,7 @@ class ProfileFragment : Fragment() {
                     "Facility:", user.facilityName
                 )
                 val userRole = UserRole.fromAny(user.role)
-                println("userRole: $userRole")
-                println("userRole: ${user.role}")
+
                 when (userRole) {
                     UserRole.ADMINISTRATOR -> {
                         countyItem.lnParent.visibility = View.GONE
@@ -207,6 +218,7 @@ class ProfileFragment : Fragment() {
 
         } catch (e: Exception) {
             e.printStackTrace()
+            println("started loading user profile Error ${e.message}")
         }
     }
 

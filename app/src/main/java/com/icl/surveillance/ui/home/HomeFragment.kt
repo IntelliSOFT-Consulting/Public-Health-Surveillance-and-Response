@@ -61,6 +61,23 @@ class HomeFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        try {
+            handleUser()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun safeText(value: String?): String {
+        return if (value.isNullOrBlank() || value == "null" || value.equals("NULL", true)) {
+            "-"
+        } else {
+            value
+        }
+    }
+
     private fun handleUser() {
         val name = getUserNameFromDetails()
         val time = FormatterClass().getTimeOfDay()
@@ -69,13 +86,13 @@ class HomeFragment : Fragment() {
 
         binding.apply {
             greetingText.text = time
-            usernameText.text = name
+            usernameText.text = safeText(name)
         }
     }
 
     private fun getUserNameFromDetails(): String {
         val user = FormatterClass().getSharedPref("fullNames", requireContext())
-        return user ?: "John Mdoe"
+        return user ?: ""
     }
 
     private fun onItemClick(layout: HomeViewModel.Layout) {

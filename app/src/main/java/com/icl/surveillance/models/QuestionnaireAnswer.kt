@@ -197,30 +197,31 @@ data class UserResponse(
 )
 
 data class User(
-    val firstName: String,
-    val lastName: String,
-    val fhirPractitionerId: String,
-    val practitionerRole: String,
-    val role: String,
-    val id: String,
-    val idNumber: String,
-    val fullNames: String,
-    val phone: String?, // Nullable
-    val email: String,
-    val locationInfo: LocationInfo
+    val firstName: String?,                // Might not be returned
+    val lastName: String?,                 // Might not be returned
+    val fhirPractitionerId: String?,       // Can be null or missing
+    val practitionerRole: String?,         // e.g. "VACCINATOR"
+    val role: String?,                     // e.g. "VACCINATOR"
+    val id: String?,                       // UUID
+    val idNumber: String?,                 // e.g. "400300"
+    val fullNames: String?,                // Sometimes missing
+    val phone: String?,                    // Nullable (confirmed)
+    val email: String?,                    // Nullable (confirmed)
+    val status: Boolean?,                  // Present in API
+    val locationInfo: LocationInfo?
 )
 
 data class LocationInfo(
-    val facility: String,
-    val facilityName: String,
-    val ward: String,
-    val wardName: String,
-    val subCounty: String,
-    val subCountyName: String,
-    val county: String,
-    val countyName: String,
-    val country: String,
-    val countryName: String
+    val facility: String?,
+    val facilityName: String?,
+    val ward: String?,
+    val wardName: String?,
+    val subCounty: String?,
+    val subCountyName: String?,
+    val county: String?,
+    val countyName: String?,
+    val country: String?,
+    val countryName: String?
 )
 
 data class UserProfilePrefs(

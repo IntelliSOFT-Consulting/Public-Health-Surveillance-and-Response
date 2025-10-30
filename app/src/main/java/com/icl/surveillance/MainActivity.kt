@@ -56,7 +56,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
-
     private val LOCATION_PERMISSION_REQUEST_CODE = 1001
     private lateinit var appUpdateManager: AppUpdateManager
     private val UPDATE_REQUEST_CODE = 123
@@ -109,7 +108,7 @@ class MainActivity : AppCompatActivity() {
 
             insets
         }
-
+        getUserProfile()
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (!task.isSuccessful) {
 
@@ -168,6 +167,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
         checkLocationPermission()
+    }
+
+    private fun getUserProfile() {
+        retrofitCallsAuthentication.getUserProfile(this)
     }
 
     private fun checkLocationPermission() {

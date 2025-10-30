@@ -42,6 +42,14 @@ class RetrofitCallsAuthentication {
         }
     }
 
+    fun getUserProfile(context: Context) {
+
+        CoroutineScope(Dispatchers.Main).launch {
+            val job = Job()
+            CoroutineScope(Dispatchers.IO + job).launch { getUserDetails(context) }.join()
+        }
+    }
+
     fun pullUserAlerts(context: Context) {
 
         CoroutineScope(Dispatchers.Main).launch {
@@ -326,14 +334,13 @@ class RetrofitCallsAuthentication {
     }
 
 
-    private suspend fun getUserDetails(context: Context) {
+    private fun getUserDetails(context: Context) {
 
         CoroutineScope(Dispatchers.IO).launch {
             val formatter = FormatterClass()
             val baseUrl = context.getString(UrlData.BASE_URL.message)
             val apiService = RetrofitBuilder.getRetrofit(baseUrl).create(Interface::class.java)
             try {
-
                 val token = formatter.getSharedPref("access_token", context)
                 if (token != null) {
                     val apiInterface = apiService.getUserInfo("Bearer $token")
@@ -341,14 +348,10 @@ class RetrofitCallsAuthentication {
 
                         val statusCode = apiInterface.code()
                         val body = apiInterface.body()
-
                         if (statusCode == 200 || statusCode == 201) {
-
                             if (body != null) {
                                 val user = body.user
-                                if (user != null) {
-                                    saveUserInformation(user, context)
-                                }
+                                saveUserInformation(user, context)
                             }
                         }
                     }
@@ -367,8 +370,7 @@ class RetrofitCallsAuthentication {
         val location = user.locationInfo
         val userDetails =
             mapOf(
-                // User Info
-                "firstName" to user.firstName,
+                "firstName" to user.firstName ,
                 "lastName" to user.lastName,
                 "role" to user.role,
                 "id" to user.id,
@@ -378,22 +380,23 @@ class RetrofitCallsAuthentication {
                 "fullNames" to user.fullNames,
                 "phone" to (user.phone ?: ""),
                 "email" to user.email,
-
-                // Location Info
-                "facility" to location.facility,
-                "facilityName" to location.facilityName,
-                "ward" to location.ward,
-                "wardName" to location.wardName,
-                "subCounty" to location.subCounty,
-                "subCountyName" to location.subCountyName,
-                "county" to location.county,
-                "countyName" to location.countyName,
-                "country" to location.country,
-                "countryName" to location.countryName
+                "facility" to location?.facility,
+                "facilityName" to location?.facilityName,
+                "ward" to location?.ward,
+                "wardName" to location?.wardName,
+                "subCounty" to location?.subCounty,
+                "subCountyName" to location?.subCountyName,
+                "county" to location?.county,
+                "countyName" to location?.countyName,
+                "country" to location?.country,
+                "countryName" to location?.countryName
             )
 
-        userDetails.forEach { (key, value) -> formatter.saveSharedPref(key, value, context) }
-
+        var counter = 0
+        userDetails.forEach { (key, value) ->
+            counter++
+            formatter.saveSharedPref(key, "$value", context)
+        }
         // Optional debug log
         Log.d("UserPrefs", "User info saved to SharedPreferences: $userDetails")
     }
@@ -437,10 +440,6 @@ class RetrofitCallsAuthentication {
                 messageToast = errorResponse?.error ?: "Cannot reset user password! Try again"
             }
         } catch (e: Exception) {
-
-            Log.e("******", "")
-            Log.e("******", e.toString())
-            Log.e("******", "")
 
             messageToast = "Cannot reset user password.."
         }
@@ -501,9 +500,6 @@ class RetrofitCallsAuthentication {
             }
         } catch (e: Exception) {
 
-            Log.e("******", "")
-            Log.e("******", e.toString())
-            Log.e("******", "")
 
             messageToast = "Cannot set new password.."
         }
