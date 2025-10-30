@@ -46,6 +46,7 @@ import org.hl7.fhir.r4.model.Questionnaire
 import org.hl7.fhir.r4.model.QuestionnaireResponse
 import org.hl7.fhir.r4.model.Reference
 import org.hl7.fhir.r4.model.Specimen
+import org.hl7.fhir.r4.model.StringType
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.Calendar
@@ -132,12 +133,55 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
     }
 
+    // Returns a NEW QuestionnaireResponse (immutable approach)
+    private fun populateReportingSiteAnswers(
+        originalResponse: QuestionnaireResponse,
+        context: Context
+    ): QuestionnaireResponse {
+        // Create a deep copy first
+        val updatedResponse = originalResponse.copy()
+
+        val reportingSiteGroup = updatedResponse.item.firstOrNull { item ->
+            item.linkId == "151479012557" && item.text == "Reporting Site"
+        }
+
+        // Modify the copy
+        reportingSiteGroup?.item?.forEach { question ->
+            question.answer.clear()
+            when (question.linkId) {
+
+                "294367770999" -> question.addAnswer().apply {
+                    value = StringType(FormatterClass().getSharedPref("countyName",context))
+                }
+
+                "819946803642" -> question.addAnswer().apply {
+                    value = StringType(FormatterClass().getSharedPref("subCountyName",context))
+                }
+
+                "819943434" -> question.addAnswer().apply {
+                    value = StringType(FormatterClass().getSharedPref("wardName",context))
+                }
+
+                "819946803677" -> question.addAnswer().apply {
+                    value = StringType(FormatterClass().getSharedPref("facilityName",context))
+                }
+
+                "438862163919" -> question.addAnswer().apply {
+                    value = StringType(FormatterClass().getSharedPref("countyName",context))
+                }
+            }
+        }
+
+        return updatedResponse // Return the modified copy
+    }
+
     fun savePatientData(
-        questionnaireResponse: QuestionnaireResponse,
-        questionnaireResponseString: String,
+        updatedResponse: QuestionnaireResponse,
         context: Context
     ) {
         viewModelScope.launch {
+            val questionnaireResponse = populateReportingSiteAnswers(updatedResponse,context)
+
             if (QuestionnaireResponseValidator.validateQuestionnaireResponse(
                     questionnaire,
                     questionnaireResponse,
@@ -147,7 +191,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
                 isPatientSaved.value = false
                 return@launch
             }
-
+            // Print the response to the log
+            val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
+            val questionnaireResponseString =
+                jsonParser.encodeResourceToString(questionnaireResponse)
 
             val identifierSystem0 = Identifier()
             val typeCodeableConcept0 = CodeableConcept()

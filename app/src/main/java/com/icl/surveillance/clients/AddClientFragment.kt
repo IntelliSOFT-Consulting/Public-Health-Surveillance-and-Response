@@ -101,7 +101,6 @@ class AddClientFragment : Fragment(R.layout.fragment_add_client) {
 
         viewModel.savePatientData(
             questionnaireResponse,
-            questionnaireResponseString,
             requireContext()
         )
     }

@@ -83,7 +83,6 @@ class HomeFragment : Fragment() {
         val time = FormatterClass().getTimeOfDay()
         val fullText = "$time, \n\n$name"
 
-
         binding.apply {
             greetingText.text = time
             usernameText.text = safeText(name)

@@ -185,13 +185,8 @@ class AddParentCaseActivity : AppCompatActivity() {
                 supportFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG)
                         as QuestionnaireFragment
 
-            val questionnaireResponse = questionnaireFragment.getQuestionnaireResponse()
-            // Print the response to the log
-            val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
-            val questionnaireResponseString =
-                jsonParser.encodeResourceToString(questionnaireResponse)
 
-            saveCase(questionnaireFragment.getQuestionnaireResponse(), questionnaireResponseString)
+            saveCase(questionnaireFragment.getQuestionnaireResponse(), )
         }
     }
 
@@ -210,8 +205,7 @@ class AddParentCaseActivity : AppCompatActivity() {
     }
 
     private fun saveCase(
-        questionnaireResponse: QuestionnaireResponse,
-        questionnaireResponseString: String
+        questionnaireResponse: QuestionnaireResponse
     ) {
         val case = FormatterClass().getSharedPref("currentCase", this@AddParentCaseActivity)
         // print case
@@ -225,7 +219,6 @@ class AddParentCaseActivity : AppCompatActivity() {
             else -> {
                 viewModel.savePatientData(
                     questionnaireResponse,
-                    questionnaireResponseString,
                     this@AddParentCaseActivity
                 )
             }

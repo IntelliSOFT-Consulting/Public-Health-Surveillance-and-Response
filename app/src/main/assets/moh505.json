@@ -200,7 +200,32 @@
             }
           ],
           "definition": "http://example.org/sdh/dtr/aslp/StructureDefinition/aslp-bmi#Observation.value[x]"
+        }
+      ],
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+          "valueBoolean": true
         },
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "306799299376",
+      "text": "Reporting Site Information"
+    },
+    {
+      "item": [
         {
           "type": "date",
           "linkId": "728034137219",
@@ -231,28 +256,7 @@
           ],
           "text": "Week Ending Date",
           "definition": "http://example.org/sdh/dtr/aslp/StructureDefinition/aslp-bmi#Observation.value[x]"
-        }
-      ],
-      "type": "group",
-      "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-          "valueCodeableConcept": {
-            "coding": [
-              {
-                "system": "http://hl7.org/fhir/questionnaire-item-control",
-                "code": "page",
-                "display": "Page"
-              }
-            ]
-          }
-        }
-      ],
-      "linkId": "306799299376",
-      "text": "Reporting Site Information"
-    },
-    {
-      "item": [
+        },
         {
           "type": "choice",
           "linkId": "aefi-summary",
