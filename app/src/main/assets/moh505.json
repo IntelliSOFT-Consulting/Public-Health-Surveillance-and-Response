@@ -45,6 +45,8 @@
           "text": "Hospital/Facility Location"
         },
         {
+          "linkId": "294367770999",
+          "text": "County ",
           "type": "reference",
           "extension": [
             {
@@ -67,14 +69,12 @@
                 }
               ]
             }
-          ],
-          "linkId": "a4-county",
-          "text": "County ",
-          "required": true,
-          "definition": "http://example.org/sdh/dtr/aslp/StructureDefinition/aslp-bmi#Observation.value[x]"
+          ]
         },
         {
           "type": "reference",
+          "linkId": "819946803642",
+          "text": "Subcounty ",
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
@@ -96,17 +96,12 @@
                 }
               ]
             }
-          ],
-          "linkId": "a3-sub-county",
-          "text": "Sub County ",
-          "required": true,
-          "definition": "http://example.org/sdh/dtr/aslp/StructureDefinition/aslp-bmi#Observation.value[x]"
+          ]
         },
         {
           "type": "reference",
           "linkId": "819943434",
           "text": "Ward ",
-          "required": true,
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
@@ -128,14 +123,12 @@
                 }
               ]
             }
-          ],
-          "definition": "http://example.org/sdh/dtr/aslp/StructureDefinition/aslp-bmi#Observation.value[x]"
+          ]
         },
         {
           "type": "reference",
           "linkId": "819946803677",
           "text": "Health Facility",
-          "required": true,
           "extension": [
             {
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
@@ -157,8 +150,7 @@
                 }
               ]
             }
-          ],
-          "definition": "http://example.org/sdh/dtr/aslp/StructureDefinition/aslp-bmi#Observation.value[x]"
+          ]
         },
         {
           "type": "choice",
@@ -178,7 +170,6 @@
           ],
           "linkId": "438862163919",
           "text": "Type of health facility",
-          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -198,8 +189,7 @@
                 "display": "Faith Based"
               }
             }
-          ],
-          "definition": "http://example.org/sdh/dtr/aslp/StructureDefinition/aslp-bmi#Observation.value[x]"
+          ]
         }
       ],
       "type": "group",
@@ -221,8 +211,8 @@
           }
         }
       ],
-      "linkId": "306799299376",
-      "text": "Reporting Site Information"
+      "linkId": "151479012557",
+      "text": "Reporting Site"
     },
     {
       "item": [

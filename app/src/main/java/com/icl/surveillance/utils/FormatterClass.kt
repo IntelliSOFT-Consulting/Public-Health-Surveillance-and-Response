@@ -72,7 +72,54 @@ class FormatterClass {
             .replace("-+".toRegex(), "-") // collapse multiple hyphens
     }
 
+    fun generateInitials(source: String): String {
+        if (source.isEmpty()) return "XXX"
 
+        val customAbbreviations = mapOf(
+            "LOITOKITOK" to "LTK",
+        )
+
+        val words = source.trim().split("\\s+".toRegex())
+
+        // Single word case
+        if (words.size == 1) {
+            val word = words[0].uppercase()
+            return customAbbreviations[word] ?: word.take(3).padEnd(3, 'X')
+        }
+
+        // Multiple words - check for custom words
+        val customWordIndex = words.indexOfFirst { it.uppercase() in customAbbreviations }
+
+        return if (customWordIndex != -1) {
+            // We found a custom word - use its abbreviation
+            val customWord = words[customWordIndex]
+            val abbreviation = customAbbreviations[customWord.uppercase()]!!
+
+            // Combine abbreviation with other words
+            val otherWords = words.filterIndexed { index, _ -> index != customWordIndex }
+            buildWithCustomAbbreviation(abbreviation, otherWords)
+        } else {
+            // No custom words - use normal logic
+            buildNormalInitials(words)
+        }.uppercase()
+
+
+    }
+    private fun buildWithCustomAbbreviation(abbreviation: String, otherWords: List<String>): String {
+        return when {
+            otherWords.isEmpty() -> abbreviation.take(3)
+            otherWords.size == 1 -> (abbreviation.take(2) + otherWords[0].take(1)).take(3)
+            else -> (abbreviation.take(1) + otherWords[0].take(1) + otherWords[1].take(1)).take(3)
+        }.padEnd(3, 'X')
+    }
+
+    private fun buildNormalInitials(words: List<String>): String {
+        return when (words.size) {
+            1 -> words[0].take(3)
+            2 -> (words[0].take(2) + words[1].take(1))
+            else -> words.take(3).joinToString("") { it.first().toString() }
+        }.padEnd(3, 'X')
+    }
     fun saveSharedPref(key: String, value: String, context: Context) {
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences(context.getString(R.string.app_name), MODE_PRIVATE)
@@ -94,6 +141,7 @@ class FormatterClass {
         editor.remove(key)
         editor.apply()
     }
+
     fun clearCache(context: Context) {
         val prefsLocal = context.getSharedPreferences(PREFNAME, Context.MODE_PRIVATE)
         prefs(context).edit().clear().apply()

@@ -151,23 +151,23 @@ class AddClientViewModel(application: Application, private val state: SavedState
             when (question.linkId) {
 
                 "294367770999" -> question.addAnswer().apply {
-                    value = StringType(FormatterClass().getSharedPref("countyName",context))
+                    value = StringType(FormatterClass().getSharedPref("countyName", context))
                 }
 
                 "819946803642" -> question.addAnswer().apply {
-                    value = StringType(FormatterClass().getSharedPref("subCountyName",context))
+                    value = StringType(FormatterClass().getSharedPref("subCountyName", context))
                 }
 
                 "819943434" -> question.addAnswer().apply {
-                    value = StringType(FormatterClass().getSharedPref("wardName",context))
+                    value = StringType(FormatterClass().getSharedPref("wardName", context))
                 }
 
                 "819946803677" -> question.addAnswer().apply {
-                    value = StringType(FormatterClass().getSharedPref("facilityName",context))
+                    value = StringType(FormatterClass().getSharedPref("facilityName", context))
                 }
 
                 "438862163919" -> question.addAnswer().apply {
-                    value = StringType(FormatterClass().getSharedPref("countyName",context))
+                    value = StringType(FormatterClass().getSharedPref("countyName", context))
                 }
             }
         }
@@ -180,7 +180,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
         context: Context
     ) {
         viewModelScope.launch {
-            val questionnaireResponse = populateReportingSiteAnswers(updatedResponse,context)
+            val questionnaireResponse = populateReportingSiteAnswers(updatedResponse, context)
 
             if (QuestionnaireResponseValidator.validateQuestionnaireResponse(
                     questionnaire,
@@ -382,8 +382,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
                             center.padEnd(3, 'X').take(3).uppercase()
                         }-$currentYear-MPOVAC-"
                     } else {
-                        val countyCode = county.padEnd(3, 'X').take(3).uppercase()
-                        val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
+                        val countyCode =
+                            FormatterClass().generateInitials(county)// county.padEnd(3, 'X').take(3).uppercase()
+                        val subCountyCode =
+                            FormatterClass().generateInitials(subCounty)//.padEnd(3, 'X').take(3).uppercase()
                         "KEN-$countyCode-$subCountyCode-$currentYear-MPOVAC-"
                     }
 
@@ -413,8 +415,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         patient.addressFirstRep.addLine(county)
                     }
 
-                    val countyCode = county.padEnd(3, 'X').take(3).uppercase()
-                    val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
+                    val countyCode =
+                        FormatterClass().generateInitials(county)///padEnd(3, 'X').take(3).uppercase()
+                    val subCountyCode =
+                        FormatterClass().generateInitials(subCounty)//.padEnd(3, 'X').take(3).uppercase()
 
 
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-RTT-"
@@ -548,8 +552,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         patient.addressFirstRep.addLine(county)
                     }
 
-                    val countyCode = county.padEnd(3, 'X').take(3).uppercase()
-                    val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
+                    val countyCode =
+                        FormatterClass().generateInitials(county)//.padEnd(3, 'X').take(3).uppercase()
+                    val subCountyCode =
+                        FormatterClass().generateInitials(subCounty)//.padEnd(3, 'X').take(3).uppercase()
                     var linked = "MEA-"
 
                     if (linkedEntry != null) {
@@ -697,8 +703,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         patient.addressFirstRep.addLine(county)
                     }
 
-                    val countyCode = county.padEnd(3, 'X').take(3).uppercase()
-                    val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
+                    val countyCode =
+                        FormatterClass().generateInitials(county)//.padEnd(3, 'X').take(3).uppercase()
+                    val subCountyCode =
+                        FormatterClass().generateInitials(subCounty)//.padEnd(3, 'X').take(3).uppercase()
 
 
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-AFP-"
@@ -791,8 +799,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         patient.addressFirstRep.addLine(county)
                     }
 
-                    val countyCode = county.padEnd(3, 'X').take(3).uppercase()
-                    val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
+                    val countyCode =
+                        FormatterClass().generateInitials(county)//.padEnd(3, 'X').take(3).uppercase()
+                    val subCountyCode =
+                        FormatterClass().generateInitials(subCounty)//.padEnd(3, 'X').take(3).uppercase()
 
 
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-VL-"
@@ -858,8 +868,8 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         patient.addressFirstRep.addLine(county)
                     }
 
-                    val countyCode = county.padEnd(3, 'X').take(3).uppercase()
-                    val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
+                    val countyCode = FormatterClass().generateInitials(county)//.padEnd(3, 'X').take(3).uppercase()
+                    val subCountyCode = FormatterClass().generateInitials(subCounty)//.padEnd(3, 'X').take(3).uppercase()
                     var linked = "MOH-505-"
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-$linked"
 
@@ -897,8 +907,8 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         patient.addressFirstRep.addLine(county)
                     }
 
-                    val countyCode = county.padEnd(3, 'X').take(3).uppercase()
-                    val subCountyCode = subCounty.padEnd(3, 'X').take(3).uppercase()
+                    val countyCode = FormatterClass().generateInitials(county)//.padEnd(3, 'X').take(3).uppercase()
+                    val subCountyCode = FormatterClass().generateInitials(subCounty)//.padEnd(3, 'X').take(3).uppercase()
                     val linked = "Mpox-"
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-$linked"
 
