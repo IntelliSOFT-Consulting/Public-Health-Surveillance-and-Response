@@ -5,8 +5,6 @@
       "http://hl7.org/fhir/4.0/StructureDefinition/Questionnaire"
     ]
   },
-  "title": "MOH 502",
-  "status": "draft",
   "extension": [
     {
       "url": "http://hl7.org/fhir/StructureDefinition/variable",
@@ -49,6 +47,8 @@
       }
     }
   ],
+  "title": "MOH 502",
+  "status": "draft",
   "item": [
     {
       "item": [
@@ -178,7 +178,6 @@
           ],
           "linkId": "438862163919",
           "text": "Type of health facility",
-
           "answerOption": [
             {
               "valueCoding": {
@@ -204,6 +203,10 @@
       "type": "group",
       "extension": [
         {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
+          "valueBoolean": true
+        },
+        {
           "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
           "valueCodeableConcept": {
             "coding": [
@@ -214,10 +217,6 @@
               }
             ]
           }
-        },
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-          "valueBoolean": true
         }
       ],
       "linkId": "151479012557",
@@ -1266,57 +1265,30 @@
       "item": [
         {
           "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "radio-button",
-                    "display": "Radio Button"
-                  }
-                ]
-              }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-              "valueCode": "horizontal"
-            }
-          ],
-          "linkId": "918495737998",
-          "text": "Blood specimen collected?",
+          "linkId": "412689284625",
+          "text": "Please select specimen collected",
           "required": true,
+          "repeats": true,
           "answerOption": [
             {
               "valueCoding": {
-                "code": "yes",
-                "display": "Yes"
+                "code": "Blood",
+                "display": "Blood"
               }
             },
             {
               "valueCoding": {
-                "code": "no",
-                "display": "No (Specify)"
+                "code": "Urine",
+                "display": "Urine"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "Respiratory Sample",
+                "display": "Respiratory Sample"
               }
             }
           ]
-        },
-        {
-          "type": "string",
-          "linkId": "752178052107",
-          "text": "If no, why?",
-          "enableWhen": [
-            {
-              "question": "918495737998",
-              "operator": "=",
-              "answerCoding": {
-                "code": "no",
-                "display": "No (Specify)"
-              }
-            }
-          ],
-          "required": true
         },
         {
           "type": "date",
@@ -1341,15 +1313,12 @@
             }
           ],
           "linkId": "8962468583341",
-          "text": "Date of blood specimen collection",
+          "text": "Date of specimen collection",
           "enableWhen": [
             {
-              "question": "918495737998",
-              "operator": "=",
-              "answerCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
+              "question": "412689284625",
+              "operator": "exists",
+              "answerBoolean": true
             }
           ],
           "required": true
@@ -1357,6 +1326,10 @@
         {
           "type": "choice",
           "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
+              "valueCode": "horizontal"
+            },
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
               "valueCodeableConcept": {
@@ -1368,190 +1341,6 @@
                   }
                 ]
               }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-              "valueCode": "horizontal"
-            }
-          ],
-          "linkId": "433195098993",
-          "text": "Urine specimen collected?",
-          "required": true,
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "no",
-                "display": "No "
-              }
-            }
-          ]
-        },
-        {
-          "type": "date",
-          "extension": [
-            {
-              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-              "valueString": "Cannot be a date in the future"
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueDate": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-                    "valueExpression": {
-                      "language": "text/fhirpath",
-                      "expression": "today()"
-                    }
-                  }
-                ]
-              }
-            }
-          ],
-          "linkId": "915783129731",
-          "text": "Date of urine specimen collection",
-          "enableWhen": [
-            {
-              "question": "433195098993",
-              "operator": "=",
-              "answerCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
-            }
-          ],
-          "required": true
-        },
-        {
-          "type": "string",
-          "linkId": "329542687751",
-          "text": "If no, why?",
-          "enableWhen": [
-            {
-              "question": "433195098993",
-              "operator": "=",
-              "answerCoding": {
-                "code": "no",
-                "display": "No"
-              }
-            }
-          ],
-          "required": true
-        },
-        {
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "radio-button",
-                    "display": "Radio Button"
-                  }
-                ]
-              }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-              "valueCode": "horizontal"
-            }
-          ],
-          "linkId": "270749570400",
-          "text": "Respiratory sample collected?",
-          "required": true,
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "no",
-                "display": "No "
-              }
-            }
-          ]
-        },
-        {
-          "type": "date",
-          "extension": [
-            {
-              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-              "valueString": "Cannot be a date in the future"
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueDate": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-                    "valueExpression": {
-                      "language": "text/fhirpath",
-                      "expression": "today()"
-                    }
-                  }
-                ]
-              }
-            }
-          ],
-          "linkId": "183705125522",
-          "text": "Date of respiratory sample collection",
-          "enableWhen": [
-            {
-              "question": "270749570400",
-              "operator": "=",
-              "answerCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
-            }
-          ],
-          "required": true
-        },
-        {
-          "type": "string",
-          "linkId": "427973727975",
-          "text": "If no, why?",
-          "enableWhen": [
-            {
-              "question": "270749570400",
-              "operator": "=",
-              "answerCoding": {
-                "code": "no",
-                "display": "No"
-              }
-            }
-          ],
-          "required": true
-        },
-        {
-          "type": "choice",
-          "extension": [
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
-              "valueCodeableConcept": {
-                "coding": [
-                  {
-                    "system": "http://hl7.org/fhir/questionnaire-item-control",
-                    "code": "radio-button",
-                    "display": "Radio Button"
-                  }
-                ]
-              }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-choiceOrientation",
-              "valueCode": "horizontal"
             }
           ],
           "linkId": "258912872921",
