@@ -21,7 +21,8 @@
         "language": "text/fhirpath",
         "expression": "%resource.descendants().where(linkId='a4-county').answer.value.reference"
       }
-    },{
+    },
+    {
       "url": "http://hl7.org/fhir/StructureDefinition/variable",
       "valueExpression": {
         "name": "patientSubCountyName",
@@ -544,7 +545,8 @@
               ]
             }
           ]
-        }, {
+        },
+        {
           "type": "reference",
           "linkId": "a2-ward",
           "text": "Ward",
@@ -667,6 +669,9 @@
       "item": [
         {
           "type": "date",
+          "linkId": "554231819382",
+          "text": "Date 1st seen at health facility",
+          "required": true,
           "extension": [
             {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
@@ -686,10 +691,7 @@
                 ]
               }
             }
-          ],
-          "linkId": "554231819382",
-          "text": "Date 1st seen at health facility",
-          "required": true
+          ]
         },
         {
           "type": "choice",
@@ -749,6 +751,35 @@
                   }
                 ]
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
+              "extension": [
+                {
+                  "url": "key",
+                  "valueId": "constraint-1"
+                },
+                {
+                  "url": "requirements",
+                  "valueString": "Date of Admission should be after the date 1st seen at the facility"
+                },
+                {
+                  "url": "severity",
+                  "valueCode": "error"
+                },
+                {
+                  "url": "expression",
+                  "valueString": "%context.answer.value >= %resource.descendants().where(linkId='554231819382').answer.value"
+                },
+                {
+                  "url": "human",
+                  "valueString": "Date of Admission should be after date 1st seen at the facility"
+                },
+                {
+                  "url": "location",
+                  "valueString": "554231819382"
+                }
+              ]
             }
           ],
           "linkId": "340908984116",
@@ -839,7 +870,7 @@
         {
           "type": "date",
           "linkId": "728034137219",
-          "text": "Date of onset of illnes",
+          "text": "Date of onset of illness",
           "required": true,
           "extension": [
             {
@@ -859,6 +890,35 @@
                   }
                 ]
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
+              "extension": [
+                {
+                  "url": "key",
+                  "valueId": "constraint-1"
+                },
+                {
+                  "url": "requirements",
+                  "valueString": "Date of Onset of illness should be before the date 1st seen at the facility"
+                },
+                {
+                  "url": "severity",
+                  "valueCode": "error"
+                },
+                {
+                  "url": "expression",
+                  "valueString": "%context.answer.value <= %resource.descendants().where(linkId='554231819382').answer.value"
+                },
+                {
+                  "url": "human",
+                  "valueString": "Date of Onset of illness should be before the date 1st seen at the facility"
+                },
+                {
+                  "url": "location",
+                  "valueString": "554231819382"
+                }
+              ]
             }
           ]
         },
@@ -934,6 +994,35 @@
                   }
                 ]
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
+              "extension": [
+                {
+                  "url": "key",
+                  "valueId": "constraint-1"
+                },
+                {
+                  "url": "requirements",
+                  "valueString": "Date of Onset of rash should be after the onset of illness"
+                },
+                {
+                  "url": "severity",
+                  "valueCode": "error"
+                },
+                {
+                  "url": "expression",
+                  "valueString": "%context.answer.value >= %resource.descendants().where(linkId='728034137219').answer.value"
+                },
+                {
+                  "url": "human",
+                  "valueString": "Date of Onset of rash should be after the onset of illness"
+                },
+                {
+                  "url": "location",
+                  "valueString": "728034137219"
+                }
+              ]
             }
           ],
           "linkId": "576528567552",
@@ -1086,6 +1175,35 @@
                   }
                 ]
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
+              "extension": [
+                {
+                  "url": "key",
+                  "valueId": "constraint-1"
+                },
+                {
+                  "url": "requirements",
+                  "valueString": "Date of Home visit should be after the date 1st seen at the facility"
+                },
+                {
+                  "url": "severity",
+                  "valueCode": "error"
+                },
+                {
+                  "url": "expression",
+                  "valueString": "%context.answer.value >= %resource.descendants().where(linkId='554231819382').answer.value"
+                },
+                {
+                  "url": "human",
+                  "valueString": "Date of Home visit should be after the date 1st seen at the facility"
+                },
+                {
+                  "url": "location",
+                  "valueString": "554231819382"
+                }
+              ]
             }
           ]
         },
@@ -1220,6 +1338,42 @@
           "required": true
         },
         {
+          "type": "date",
+          "linkId": "544290619304",
+          "text": "Date of last vaccination",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "517772812375",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
+              }
+            }
+          ]
+        },
+        {
           "type": "choice",
           "extension": [
             {
@@ -1253,42 +1407,6 @@
               "valueCoding": {
                 "code": "no",
                 "display": "No"
-              }
-            }
-          ]
-        },
-        {
-          "type": "date",
-          "linkId": "544290619304",
-          "text": "Date of last vaccination",
-          "required": true,
-          "extension": [
-            {
-              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-              "valueString": "Cannot be a date in the future"
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueDate": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-                    "valueExpression": {
-                      "language": "text/fhirpath",
-                      "expression": "today()"
-                    }
-                  }
-                ]
-              }
-            }
-          ],
-          "enableWhen": [
-            {
-              "question": "517772812375",
-              "operator": "=",
-              "answerCoding": {
-                "code": "yes",
-                "display": "Yes"
               }
             }
           ]
@@ -1344,6 +1462,35 @@
                   }
                 ]
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
+              "extension": [
+                {
+                  "url": "key",
+                  "valueId": "constraint-1"
+                },
+                {
+                  "url": "requirements",
+                  "valueString": "Date of Specimen Collection should be after the date 1st seen at the facility"
+                },
+                {
+                  "url": "severity",
+                  "valueCode": "error"
+                },
+                {
+                  "url": "expression",
+                  "valueString": "%context.answer.value >= %resource.descendants().where(linkId='554231819382').answer.value"
+                },
+                {
+                  "url": "human",
+                  "valueString": "Date of Specimen Collection should be after the date 1st seen at the facility"
+                },
+                {
+                  "url": "location",
+                  "valueString": "554231819382"
+                }
+              ]
             }
           ],
           "linkId": "8962468583341",
@@ -1431,6 +1578,35 @@
                   }
                 ]
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
+              "extension": [
+                {
+                  "url": "key",
+                  "valueId": "constraint-1"
+                },
+                {
+                  "url": "requirements",
+                  "valueString": "Date of Specimen Collection should be after the date 1st seen at the facility"
+                },
+                {
+                  "url": "severity",
+                  "valueCode": "error"
+                },
+                {
+                  "url": "expression",
+                  "valueString": "%context.answer.value >= %resource.descendants().where(linkId='554231819382').answer.value"
+                },
+                {
+                  "url": "human",
+                  "valueString": "Date of Specimen Collection should be after the date 1st seen at the facility"
+                },
+                {
+                  "url": "location",
+                  "valueString": "554231819382"
+                }
+              ]
             }
           ],
           "linkId": "699353598445",
@@ -1467,6 +1643,36 @@
                   }
                 ]
               }
+            },
+
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
+              "extension": [
+                {
+                  "url": "key",
+                  "valueId": "constraint-1"
+                },
+                {
+                  "url": "requirements",
+                  "valueString": "The date should be after the specimen collection date"
+                },
+                {
+                  "url": "severity",
+                  "valueCode": "error"
+                },
+                {
+                  "url": "expression",
+                  "valueString": "%context.answer.value >= %resource.descendants().where(linkId='8962468583341').answer.value"
+                },
+                {
+                  "url": "human",
+                  "valueString": "The date should be after the specimen collection date"
+                },
+                {
+                  "url": "location",
+                  "valueString": "8962468583341"
+                }
+              ]
             }
           ],
           "linkId": "718251724172",
