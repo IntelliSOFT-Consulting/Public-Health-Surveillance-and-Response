@@ -38,7 +38,6 @@
                 app:cornerRadius="20dp" />
         </LinearLayout>
 
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/patient_list"
             android:layout_width="match_parent"
