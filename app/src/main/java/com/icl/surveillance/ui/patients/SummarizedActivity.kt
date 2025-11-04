@@ -121,7 +121,7 @@ class SummarizedActivity : AppCompatActivity() {
                 "measles-case-information" -> {
                     listOf(
                         "Laboratory Information" to LabResultsFragment(),
-                        "Regional Laboratory Information" to RegionalLabResultsFragment()
+//                        "Regional Laboratory Information" to RegionalLabResultsFragment()
                     )
 
                 }

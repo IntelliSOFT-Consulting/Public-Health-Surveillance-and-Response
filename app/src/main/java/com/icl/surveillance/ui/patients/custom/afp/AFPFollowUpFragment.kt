@@ -108,7 +108,7 @@ class AFPFollowUpFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val patientId = FormatterClass().getSharedPref("resourceId", requireContext())
+        val patientId = FormatterClass().getSharedPref("patientIdParent", requireContext())
         val encounterId = FormatterClass().getSharedPref("encounterId", requireContext())
         val currentCase = FormatterClass().getSharedPref("currentCase", requireContext())
 

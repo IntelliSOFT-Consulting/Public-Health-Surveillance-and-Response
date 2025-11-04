@@ -1920,7 +1920,7 @@
             }
           ],
           "linkId": "610048088023",
-          "text": "We there any vaccines given in last 30 days?",
+          "text": "Were there any vaccines given in last 30 days?",
           "enableWhen": [
             {
               "question": "970455623029",

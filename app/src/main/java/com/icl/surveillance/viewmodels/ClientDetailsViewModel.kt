@@ -1128,6 +1128,7 @@ class ClientDetailsViewModel(
         parent: String
     ): List<PatientListViewModel.LabResults> {
         val encounters: MutableList<PatientListViewModel.LabResults> = mutableListOf()
+        println("Dealing with case:::: starter patient $patientId")
         fhirEngine
             .search<Encounter> {
                 filter(Encounter.SUBJECT, { value = "Patient/$patientId" })
