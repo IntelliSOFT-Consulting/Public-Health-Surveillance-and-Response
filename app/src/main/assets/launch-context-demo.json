@@ -1,0 +1,90 @@
+{
+  "resourceType": "Questionnaire",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/4.0/StructureDefinition/Questionnaire"
+    ]
+  },
+  "status": "active",
+  "title": "Launch Context Demo",
+  "description": "Demonstrates resolving launch context variables supplied by the host app.",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-launchContext",
+      "extension": [
+        {
+          "url": "name",
+          "valueCoding": {
+            "system": "http://hl7.org/fhir/uv/sdc/CodeSystem/launchContext",
+            "code": "client",
+            "display": "Client as a QuestionnaireResponse"
+          }
+        },
+        {
+          "url": "type",
+          "valueCode": "QuestionnaireResponse"
+        }
+      ]
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
+        "name": "facilityReference",
+        "language": "text/fhirpath",
+        "expression": "%launchContext['client'].item.where(linkId='819946803677').answer.value"
+      }
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
+        "name": "facilityDisplay",
+        "language": "text/fhirpath",
+        "expression": "%launchContext['client'].item.where(linkId='819946803677').answer.value.display"
+      }
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
+        "name": "countyDisplay",
+        "language": "text/fhirpath",
+        "expression": "%launchContext['client'].item.where(linkId='294367770999').answer.value.display"
+      }
+    }
+  ],
+  "item": [
+    {
+      "linkId": "context-summary",
+      "text": "Launch Context Summary",
+      "type": "display",
+      "_text": {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/cqf-expression",
+            "valueExpression": {
+              "language": "text/fhirpath",
+              "expression": "'County: ' & coalesce(%countyDisplay, 'Unknown') & '\\nFacility: ' & coalesce(%facilityDisplay, 'Unknown')"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "linkId": "facility-name",
+      "text": "Facility (from launch context)",
+      "type": "string",
+      "initialExpression": {
+        "language": "text/fhirpath",
+        "expression": "coalesce(%facilityDisplay, '')"
+      }
+    },
+    {
+      "linkId": "facility-reference",
+      "text": "Facility Reference",
+      "type": "reference",
+      "initialExpression": {
+        "language": "text/fhirpath",
+        "expression": "%facilityReference"
+      }
+    }
+  ]
+}

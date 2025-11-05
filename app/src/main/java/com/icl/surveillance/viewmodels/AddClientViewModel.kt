@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import ca.uhn.fhir.context.FhirContext
 import ca.uhn.fhir.context.FhirVersionEnum
 import com.google.android.fhir.FhirEngine
+import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.google.android.fhir.datacapture.validation.Invalid
 import com.google.android.fhir.datacapture.validation.QuestionnaireResponseValidator
 import com.ibm.icu.text.SimpleDateFormat
@@ -22,6 +23,9 @@ import com.icl.surveillance.utils.Constants.ALL_MPOX_LINK_IDS
 import com.icl.surveillance.utils.Constants.WEEK_ENDING_DATE
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.utils.QuestionnaireHelper
+import com.icl.surveillance.utils.QuestionnaireLaunchContextEntry
+import com.icl.surveillance.utils.QuestionnaireLaunchContextEntry.Companion.toLaunchContexts
+import com.icl.surveillance.utils.QuestionnaireLaunchContextKeys.QUESTIONNAIRE_LAUNCH_CONTEXTS_KEY
 import java.time.LocalDate
 import java.util.Date
 import java.util.UUID
@@ -60,6 +64,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
         get() = fetchQuestionnaireJson()
 
     val isPatientSaved = MutableLiveData<Boolean>()
+
+    val questionnaireLaunchContexts: List<QuestionnaireFragment.QuestionnaireLaunchContext>
+        get() = state.get<ArrayList<QuestionnaireLaunchContextEntry>>(QUESTIONNAIRE_LAUNCH_CONTEXTS_KEY)
+            ?.let { toLaunchContexts(it) } ?: emptyList()
 
     private val questionnaire: Questionnaire
         get() = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()

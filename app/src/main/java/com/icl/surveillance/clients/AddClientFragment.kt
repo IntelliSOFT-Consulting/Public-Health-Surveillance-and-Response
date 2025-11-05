@@ -14,6 +14,8 @@ import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.icl.surveillance.R
 import com.icl.surveillance.utils.ProgressDialogManager
+import com.icl.surveillance.utils.QuestionnaireLaunchContextFactory
+import com.icl.surveillance.utils.QuestionnaireLaunchContextKeys.QUESTIONNAIRE_LAUNCH_CONTEXTS_KEY
 import com.icl.surveillance.viewmodels.AddClientViewModel
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.QuestionnaireResponse
@@ -67,17 +69,31 @@ class AddClientFragment : Fragment(R.layout.fragment_add_client) {
 
     private fun updateArguments() {
         requireArguments().putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-case.json")
+        if (!requireArguments().containsKey(QUESTIONNAIRE_LAUNCH_CONTEXTS_KEY)) {
+            val launchContexts =
+                QuestionnaireLaunchContextFactory.defaultLocationLaunchContexts(requireContext())
+            if (launchContexts.isNotEmpty()) {
+                requireArguments().putSerializable(
+                    QUESTIONNAIRE_LAUNCH_CONTEXTS_KEY,
+                    ArrayList(launchContexts)
+                )
+            }
+        }
     }
 
     private fun addQuestionnaireFragment() {
         childFragmentManager.commit {
             add(
                 R.id.add_patient_container,
-                QuestionnaireFragment.builder()
-                    .setQuestionnaire(viewModel.questionnaireJson)
-                    .setShowCancelButton(true)
-                    .setSubmitButtonText("Submit")
-                    .build(),
+                QuestionnaireFragment.builder().apply {
+                    setQuestionnaire(viewModel.questionnaireJson)
+                    setShowCancelButton(true)
+                    setSubmitButtonText("Submit")
+                    val launchContexts = viewModel.questionnaireLaunchContexts
+                    if (launchContexts.isNotEmpty()) {
+                        setQuestionnaireLaunchContext(launchContexts)
+                    }
+                }.build(),
                 QUESTIONNAIRE_FRAGMENT_TAG,
             )
         }

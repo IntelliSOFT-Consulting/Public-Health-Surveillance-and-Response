@@ -21,6 +21,10 @@ import com.icl.surveillance.databinding.ActivityEditChecklistBinding
 import com.icl.surveillance.utils.ContribQuestionnaireItemViewHolderFactoryMatchersProviderFactory
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.utils.ProgressDialogManager
+import com.icl.surveillance.utils.QuestionnaireLaunchContextEntry
+import com.icl.surveillance.utils.QuestionnaireLaunchContextEntry.Companion.toLaunchContexts
+import com.icl.surveillance.utils.QuestionnaireLaunchContextFactory
+import com.icl.surveillance.utils.QuestionnaireLaunchContextKeys.QUESTIONNAIRE_LAUNCH_CONTEXTS_KEY
 import com.icl.surveillance.viewmodels.EditSupervisorChecklistViewModel
 import com.icl.surveillance.viewmodels.factories.EditSupervisorChecklistViewModelFactory
 import kotlinx.coroutines.launch
@@ -119,6 +123,12 @@ class EditChecklistActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             supportFragmentManager.commit {
+                val launchContexts =
+                    toLaunchContexts(
+                        QuestionnaireLaunchContextFactory.defaultLocationLaunchContexts(
+                            this@EditChecklistActivity
+                        )
+                    )
                 add(
                     R.id.add_patient_container,
                     QuestionnaireFragment.builder().apply {
@@ -126,6 +136,9 @@ class EditChecklistActivity : AppCompatActivity() {
                             ContribQuestionnaireItemViewHolderFactoryMatchersProviderFactory
                                 .LOCATION_WIDGET_PROVIDER,
                         )
+                        if (launchContexts.isNotEmpty()) {
+                            setQuestionnaireLaunchContext(launchContexts)
+                        }
                     }
                         .setQuestionnaire(pair.first)
                         .setQuestionnaireResponse(pair.second)
@@ -178,6 +191,15 @@ class EditChecklistActivity : AppCompatActivity() {
     private fun updateArguments() {
         val json = FormatterClass().getSharedPref("questionnaire", this)
         intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, json)
+        if (!intent.hasExtra(QUESTIONNAIRE_LAUNCH_CONTEXTS_KEY)) {
+            val launchContexts = QuestionnaireLaunchContextFactory.defaultLocationLaunchContexts(this)
+            if (launchContexts.isNotEmpty()) {
+                intent.putExtra(
+                    QUESTIONNAIRE_LAUNCH_CONTEXTS_KEY,
+                    ArrayList(launchContexts)
+                )
+            }
+        }
     }
 
     companion object {

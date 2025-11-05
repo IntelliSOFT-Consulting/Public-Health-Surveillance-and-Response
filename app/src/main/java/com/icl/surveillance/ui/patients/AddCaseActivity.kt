@@ -23,6 +23,8 @@ import com.icl.surveillance.utils.ContribQuestionnaireItemViewHolderFactoryMatch
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.utils.LocationUtils
 import com.icl.surveillance.utils.ProgressDialogManager
+import com.icl.surveillance.utils.QuestionnaireLaunchContextFactory
+import com.icl.surveillance.utils.QuestionnaireLaunchContextKeys.QUESTIONNAIRE_LAUNCH_CONTEXTS_KEY
 import com.icl.surveillance.viewmodels.ScreenerViewModel
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.QuestionnaireResponse
@@ -207,6 +209,10 @@ class AddCaseActivity : AppCompatActivity() {
                                     .LOCATION_WIDGET_PROVIDER,
                             )
                             setQuestionnaire(viewModel.questionnaire)
+                            val launchContexts = viewModel.questionnaireLaunchContexts
+                            if (launchContexts.isNotEmpty()) {
+                                setQuestionnaireLaunchContext(launchContexts)
+                            }
                         }
                     add(
                         R.id.add_patient_container,
@@ -258,6 +264,15 @@ class AddCaseActivity : AppCompatActivity() {
     private fun updateArguments() {
         val json = FormatterClass().getSharedPref("questionnaire", this@AddCaseActivity)
         intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, json)
+        if (!intent.hasExtra(QUESTIONNAIRE_LAUNCH_CONTEXTS_KEY)) {
+            val launchContexts = QuestionnaireLaunchContextFactory.defaultLocationLaunchContexts(this)
+            if (launchContexts.isNotEmpty()) {
+                intent.putExtra(
+                    QUESTIONNAIRE_LAUNCH_CONTEXTS_KEY,
+                    ArrayList(launchContexts)
+                )
+            }
+        }
     }
 
     override fun onBackPressed() {

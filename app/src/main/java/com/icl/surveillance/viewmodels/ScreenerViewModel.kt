@@ -10,12 +10,16 @@ import androidx.lifecycle.viewModelScope
 import ca.uhn.fhir.context.FhirContext
 import ca.uhn.fhir.context.FhirVersionEnum
 import com.google.android.fhir.FhirEngine
+import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.google.android.fhir.datacapture.mapping.ResourceMapper
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.models.QuestionnaireAnswer
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.utils.QuestionnaireHelper
+import com.icl.surveillance.utils.QuestionnaireLaunchContextEntry
+import com.icl.surveillance.utils.QuestionnaireLaunchContextEntry.Companion.toLaunchContexts
+import com.icl.surveillance.utils.QuestionnaireLaunchContextKeys.QUESTIONNAIRE_LAUNCH_CONTEXTS_KEY
 import java.util.Date
 import java.util.UUID
 import kotlinx.coroutines.CoroutineScope
@@ -42,6 +46,10 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         get() = getQuestionnaireJson()
 
     val isResourcesSaved = MutableLiveData<Boolean>()
+
+    val questionnaireLaunchContexts: List<QuestionnaireFragment.QuestionnaireLaunchContext>
+        get() = state.get<ArrayList<QuestionnaireLaunchContextEntry>>(QUESTIONNAIRE_LAUNCH_CONTEXTS_KEY)
+            ?.let { toLaunchContexts(it) } ?: emptyList()
 
     private val questionnaireResource: Questionnaire
         get() =

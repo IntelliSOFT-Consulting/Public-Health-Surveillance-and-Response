@@ -31,6 +31,8 @@ import com.icl.surveillance.utils.ContribQuestionnaireItemViewHolderFactoryMatch
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.utils.LocationUtils
 import com.icl.surveillance.utils.ProgressDialogManager
+import com.icl.surveillance.utils.QuestionnaireLaunchContextFactory
+import com.icl.surveillance.utils.QuestionnaireLaunchContextKeys.QUESTIONNAIRE_LAUNCH_CONTEXTS_KEY
 import com.icl.surveillance.viewmodels.AddClientViewModel
 import kotlinx.coroutines.launch
 import org.hl7.fhir.r4.model.Questionnaire
@@ -254,6 +256,10 @@ class AddParentCaseActivity : AppCompatActivity() {
                                     .LOCATION_WIDGET_PROVIDER,
                             )
                             setQuestionnaire(viewModel.questionnaireJson)
+                            val launchContexts = viewModel.questionnaireLaunchContexts
+                            if (launchContexts.isNotEmpty()) {
+                                setQuestionnaireLaunchContext(launchContexts)
+                            }
                         }
 //                    LayoutListViewModel.questionnaireLambdaMap[args.questionnaireLambdaKey ?: ""]!!.invoke(
 //                        questionnaireFragmentBuilder,
@@ -319,6 +325,15 @@ class AddParentCaseActivity : AppCompatActivity() {
     private fun updateArguments() {
         val json = FormatterClass().getSharedPref("questionnaire", this@AddParentCaseActivity)
         intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, json)
+        if (!intent.hasExtra(QUESTIONNAIRE_LAUNCH_CONTEXTS_KEY)) {
+            val launchContexts = QuestionnaireLaunchContextFactory.defaultLocationLaunchContexts(this)
+            if (launchContexts.isNotEmpty()) {
+                intent.putExtra(
+                    QUESTIONNAIRE_LAUNCH_CONTEXTS_KEY,
+                    ArrayList(launchContexts)
+                )
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
