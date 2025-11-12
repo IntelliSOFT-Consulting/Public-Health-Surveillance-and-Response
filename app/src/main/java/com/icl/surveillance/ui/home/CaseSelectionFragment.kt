@@ -646,7 +646,7 @@ class CaseSelectionFragment : Fragment() {
     fun checkIfUserIsAllowedToAction(): Boolean {
         val hasFacility = FormatterClass().getSharedPref("facility", requireContext())
         println("Facility Selection: $hasFacility")
-        return !hasFacility.isNullOrEmpty()
+        return true //!hasFacility.isNullOrEmpty()
     }
 
 

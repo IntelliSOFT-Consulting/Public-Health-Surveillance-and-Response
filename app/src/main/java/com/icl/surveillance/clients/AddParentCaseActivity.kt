@@ -186,7 +186,7 @@ class AddParentCaseActivity : AppCompatActivity() {
                         as QuestionnaireFragment
 
 
-            saveCase(questionnaireFragment.getQuestionnaireResponse(), )
+            saveCase(questionnaireFragment.getQuestionnaireResponse())
         }
     }
 
@@ -243,12 +243,19 @@ class AddParentCaseActivity : AppCompatActivity() {
     }
 
     private fun addQuestionnaireFragment() {
+
+        val launchContextMap: Map<String, String> = mapOf(
+            "userId" to "42",
+            "sessionId" to "abc123"
+        )
         lifecycleScope.launch {
             if (supportFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) == null) {
                 supportFragmentManager.commit {
                     setReorderingAllowed(true)
                     val questionnaireFragmentBuilder =
                         QuestionnaireFragment.builder().apply {
+                            setShowSubmitAnywayButton(false)
+                            setQuestionnaireLaunchContextMap(launchContextMap = launchContextMap)
                             setCustomQuestionnaireItemViewHolderFactoryMatchersProvider(
                                 ContribQuestionnaireItemViewHolderFactoryMatchersProviderFactory
                                     .LOCATION_WIDGET_PROVIDER,

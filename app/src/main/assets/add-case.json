@@ -7,6 +7,22 @@
   },
   "extension": [
     {
+      "extension": [
+        {
+          "url": "name",
+          "valueCoding": {
+            "system": "http://hl7.org/fhir/uv/sdc/CodeSystem/launchContext",
+            "code": "patient"
+          }
+        },
+        {
+          "url": "type",
+          "valueCode": "Patient"
+        }
+      ],
+      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-launchContext"
+    },
+    {
       "url": "http://hl7.org/fhir/StructureDefinition/variable",
       "valueExpression": {
         "name": "countyName",
@@ -395,7 +411,7 @@
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueInteger": 999
+              "valueInteger": 120
             }
           ]
         },
@@ -577,24 +593,18 @@
         {
           "type": "string",
           "linkId": "242811643559",
-          "text": "Residence (Village/Hse No)"
+          "text": "Residence or Village"
         },
         {
           "type": "string",
           "linkId": "946232932304",
-          "text": "Neighborhood major landmark:",
+          "text": "Neighborhood major landmark",
           "required": true
         },
         {
           "type": "string",
           "linkId": "424111786438",
           "text": "Street/Plot/Estate/S. location",
-          "required": true
-        },
-        {
-          "type": "string",
-          "linkId": "110761799063",
-          "text": "Town/City/Location",
           "required": true
         },
         {
@@ -615,11 +625,11 @@
               }
             },
             {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxLength",
+              "url": "http://hl7.org/fhir/StructureDefinition/minLength",
               "valueInteger": 10
             },
             {
-              "url": "http://hl7.org/fhir/StructureDefinition/minLength",
+              "url": "http://hl7.org/fhir/StructureDefinition/maxLength",
               "valueInteger": 10
             }
           ],
@@ -1644,7 +1654,6 @@
                 ]
               }
             },
-
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
               "extension": [
