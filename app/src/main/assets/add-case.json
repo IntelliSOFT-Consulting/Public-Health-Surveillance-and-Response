@@ -77,8 +77,32 @@
     {
       "item": [
         {
+          "linkId": "user_county",
+          "text": "County",
+          "type": "string",
+          "readOnly": true
+        },
+        {
+          "linkId": "user_sub_county",
+          "text": "Sub County",
+          "type": "string",
+          "readOnly": true
+        },
+        {
+          "linkId": "user_ward",
+          "text": "Ward",
+          "readOnly": true,
+          "type": "string"
+        },
+        {
+          "linkId": "user_facility",
+          "text": "Facility",
+          "readOnly": true,
+          "type": "string"
+        },
+        {
           "linkId": "294367770999",
-          "text": "County ",
+          "text": "County",
           "type": "reference",
           "extension": [
             {
@@ -226,10 +250,6 @@
       ],
       "type": "group",
       "extension": [
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-          "valueBoolean": true
-        },
         {
           "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
           "valueCodeableConcept": {

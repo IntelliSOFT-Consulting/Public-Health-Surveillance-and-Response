@@ -20,6 +20,7 @@ import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import ca.uhn.fhir.context.FhirContext
 import ca.uhn.fhir.context.FhirVersionEnum
+import com.fasterxml.jackson.databind.type.ReferenceType
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.google.android.fhir.datacapture.mapping.ResourceMapper
 import com.google.android.material.button.MaterialButton
@@ -27,15 +28,19 @@ import com.icl.surveillance.R
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FRAGMENT_TAG
 import com.icl.surveillance.databinding.ActivityAddParentCaseBinding
+import com.icl.surveillance.models.UserRole
 import com.icl.surveillance.utils.ContribQuestionnaireItemViewHolderFactoryMatchersProviderFactory
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.utils.LocationUtils
 import com.icl.surveillance.utils.ProgressDialogManager
 import com.icl.surveillance.viewmodels.AddClientViewModel
 import kotlinx.coroutines.launch
+import org.hl7.fhir.r4.model.DateType
 import org.hl7.fhir.r4.model.Patient
 import org.hl7.fhir.r4.model.Questionnaire
 import org.hl7.fhir.r4.model.QuestionnaireResponse
+import org.hl7.fhir.r4.model.Reference
+import org.hl7.fhir.r4.model.StringType
 
 class AddParentCaseActivity : AppCompatActivity() {
     private val LOCATION_PERMISSION_REQUEST_CODE = 100
@@ -209,8 +214,7 @@ class AddParentCaseActivity : AppCompatActivity() {
         questionnaireResponse: QuestionnaireResponse
     ) {
         val case = FormatterClass().getSharedPref("currentCase", this@AddParentCaseActivity)
-        // print case
-        Log.d("Questionnaire Response::::", "$case")
+
         when (case) {
             "Mpox - Supervisor Checklist" -> {
                 viewModel.saveUserResponse(questionnaireResponse, case, this@AddParentCaseActivity)
@@ -243,25 +247,78 @@ class AddParentCaseActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun addQuestionnaireFragment() {
+    private fun addUserCountyResponse(userCounty: String,county:String): QuestionnaireResponse.QuestionnaireResponseItemComponent {
+        val formatter = FormatterClass()
+        val facility = formatter.getSharedPref("facility", this@AddParentCaseActivity)
+        val facilityName = formatter.getSharedPref("facilityName", this@AddParentCaseActivity)
+        val ward = formatter.getSharedPref("ward", this@AddParentCaseActivity)
+        val wardName = formatter.getSharedPref("wardName", this@AddParentCaseActivity)
+        val subCounty = formatter.getSharedPref("subCounty", this@AddParentCaseActivity)
+        val subCountyName = formatter.getSharedPref("subCountyName", this@AddParentCaseActivity)
+        val county = formatter.getSharedPref(county, this@AddParentCaseActivity)
+        val countyName = formatter.getSharedPref("countyName", this@AddParentCaseActivity)
+        val country = formatter.getSharedPref("country", this@AddParentCaseActivity)
+        val countryName = formatter.getSharedPref("countryName", this@AddParentCaseActivity)
+        val item =
+            QuestionnaireResponse.QuestionnaireResponseItemComponent()
 
+        item.linkId = userCounty
+        item.answerFirstRep.value = StringType(county)
+        return item
+
+    }
+
+    private fun addQuestionnaireFragment() {
+        val resource = QuestionnaireResponse()
+        val formatter = FormatterClass()
+        val storedRole = formatter.getSharedPref("practitionerRole", this@AddParentCaseActivity)
+        val userRole = UserRole.fromAny(storedRole ?: "")
+
+        when (userRole) {
+            UserRole.ADMINISTRATOR -> {
+
+            }
+
+            UserRole.COUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
+
+            }
+
+            UserRole.SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
+
+            }
+
+            UserRole.FACILITY_SURVEILLANCE_FOCAL_PERSON, UserRole.SUPERVISOR, UserRole.VACCINATOR -> {
+
+                val userCounty = addUserCountyResponse("user_county","county")
+                resource.addItem(userCounty)
+            }
+
+            else -> {
+
+            }
+        }
 
         lifecycleScope.launch {
+
+            resource.item.forEach{
+                println("Item added ${it.answerFirstRep.value}")
+            }
             if (supportFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) == null) {
                 supportFragmentManager.commit {
                     setReorderingAllowed(true)
                     val questionnaireFragmentBuilder =
                         QuestionnaireFragment.builder().apply {
                             setShowSubmitAnywayButton(false)
+                            setQuestionnaireResponse(
+                                FhirContext.forR4Cached().newJsonParser()
+                                    .encodeResourceToString(resource)
+                            )
                             setCustomQuestionnaireItemViewHolderFactoryMatchersProvider(
                                 ContribQuestionnaireItemViewHolderFactoryMatchersProviderFactory
                                     .LOCATION_WIDGET_PROVIDER,
                             )
                             setQuestionnaire(viewModel.questionnaireJson)
                         }
-//                    LayoutListViewModel.questionnaireLambdaMap[args.questionnaireLambdaKey ?: ""]!!.invoke(
-//                        questionnaireFragmentBuilder,
-//                    )
                     add(
                         R.id.add_patient_container,
                         questionnaireFragmentBuilder.build(),
