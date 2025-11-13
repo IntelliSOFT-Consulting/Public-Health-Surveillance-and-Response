@@ -12,7 +12,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.google.android.fhir.FhirEngine
+import com.google.android.fhir.search.search
 import com.google.gson.Gson
 import com.icl.surveillance.R
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
@@ -27,6 +29,9 @@ import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
+import kotlinx.coroutines.launch
+import org.hl7.fhir.r4.model.QuestionnaireResponse
+import org.hl7.fhir.r4.model.Resource
 import kotlin.String
 import kotlin.jvm.java
 
@@ -208,55 +213,97 @@ class LabResultsFragment : Fragment() {
             fab.setOnClickListener {
                 if (currentCase != null) {
                     val slug = currentCase.toSlug()
-                    when (slug) {
-                        "measles-case-information" -> {
 
-                            FormatterClass()
-                                .saveSharedPref(
-                                    "questionnaire",
-                                    "measles-lab-results.json",
+                    val patientId = FormatterClass().getSharedPref("patientId", requireContext())
+                    val resourceId = FormatterClass().getSharedPref(
+                        "resourceId",
+                        requireContext()
+                    ) // aka Questionnaire
+                    val encounterId =
+                        FormatterClass().getSharedPref("encounterId", requireContext())
+                    if (resourceId != null) {
+                        when (slug) {
+
+                            "measles-case-information" -> {
+                                // Let's get the specific parent QuestionnaireResponse
+                                lifecycleScope.launch {
+                                    val searchResult =
+                                        fhirEngine.search<QuestionnaireResponse> {
+                                            filter(Resource.RES_ID, { value = of(resourceId) })
+
+                                        }
+                                    if (searchResult.isEmpty()) {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            "Please try again later",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        return@launch
+                                    }
+                                    searchResult.first().let {
+
+                                    }
+
+
+
+                                    FormatterClass()
+                                        .saveSharedPref(
+                                            "questionnaire",
+                                            "measles-lab-results.json",
+                                            requireContext()
+                                        )
+                                    FormatterClass().saveSharedPref(
+                                        "title",
+                                        "Measles Lab Results",
+                                        requireContext()
+                                    )
+                                    val intent =
+                                        Intent(requireContext(), AddCaseActivity::class.java)
+                                    intent.putExtra(
+                                        QUESTIONNAIRE_FILE_PATH_KEY,
+                                        "measles-lab-results.json"
+                                    )
+                                    startActivity(intent)
+                                }
+                            }
+
+                            "afp-case-information" -> {
+                                FormatterClass()
+                                    .saveSharedPref(
+                                        "questionnaire",
+                                        "afp-case-stool-lab-results.json",
+                                        requireContext()
+                                    )
+                                FormatterClass().saveSharedPref(
+                                    "title",
+                                    "AFP Lab Results",
                                     requireContext()
                                 )
-                            FormatterClass().saveSharedPref(
-                                "title",
-                                "Measles Lab Results",
-                                requireContext()
-                            )
-                            val intent = Intent(requireContext(), AddCaseActivity::class.java)
-                            intent.putExtra(
-                                QUESTIONNAIRE_FILE_PATH_KEY,
-                                "measles-lab-results.json"
-                            )
-                            startActivity(intent)
-
-                        }
-
-                        "afp-case-information" -> {
-                            FormatterClass()
-                                .saveSharedPref(
-                                    "questionnaire",
-                                    "afp-case-stool-lab-results.json",
-                                    requireContext()
+                                val intent = Intent(requireContext(), AddCaseActivity::class.java)
+                                intent.putExtra(
+                                    QUESTIONNAIRE_FILE_PATH_KEY,
+                                    "afp-case-stool-lab-results.json"
                                 )
-                            FormatterClass().saveSharedPref(
-                                "title",
-                                "AFP Lab Results",
-                                requireContext()
-                            )
-                            val intent = Intent(requireContext(), AddCaseActivity::class.java)
-                            intent.putExtra(
-                                QUESTIONNAIRE_FILE_PATH_KEY,
-                                "afp-case-stool-lab-results.json"
-                            )
-                            startActivity(intent)
-                        }
+                                startActivity(intent)
+                            }
 
-                        else -> {
-                            Toast.makeText(requireContext(), "Coming Soon!!", Toast.LENGTH_SHORT)
-                                .show()
-                        }
+                            else -> {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Coming Soon!!",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                            }
 
+                        }
                     }
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "Please try again later",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 
 

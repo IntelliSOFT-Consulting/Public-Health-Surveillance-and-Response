@@ -10,7 +10,11 @@ import com.icl.surveillance.utils.Constants.FIRST_LAUNCH_KEY
 import org.json.JSONArray
 import org.json.JSONObject
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.LocalTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.temporal.TemporalQueries.localDate
 import java.util.Date
 import java.util.Locale
 
@@ -18,6 +22,8 @@ import java.util.Locale
 class FormatterClass {
     private val dateInverseFormatSeconds: SimpleDateFormat =
         SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
+    private val genericDate: SimpleDateFormat =
+        SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH)
 
 
     private val PREFSNAME = "facility_cache"
@@ -105,7 +111,11 @@ class FormatterClass {
 
 
     }
-    private fun buildWithCustomAbbreviation(abbreviation: String, otherWords: List<String>): String {
+
+    private fun buildWithCustomAbbreviation(
+        abbreviation: String,
+        otherWords: List<String>
+    ): String {
         return when {
             otherWords.isEmpty() -> abbreviation.take(3)
             otherWords.size == 1 -> (abbreviation.take(2) + otherWords[0].take(1)).take(3)
@@ -120,6 +130,7 @@ class FormatterClass {
             else -> words.take(3).joinToString("") { it.first().toString() }
         }.padEnd(3, 'X')
     }
+
     fun saveSharedPref(key: String, value: String, context: Context) {
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences(context.getString(R.string.app_name), MODE_PRIVATE)
@@ -176,6 +187,21 @@ class FormatterClass {
         return dateInverseFormatSeconds.format(date)
     }
 
+    fun formatProvidedDate(sourceDate: Date): Date {
+        val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.US)
+
+        // Step 1: Format to string
+        val formattedString = formatter.format(sourceDate)
+
+        // Step 2: Parse back into Date
+        return formatter.parse(formattedString)!!
+    }
+    fun formatToMMddyyyy(date: Date): Date {
+        val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.US)
+
+        val formatted = formatter.format(date)        // String
+        return formatter.parse(formatted)!!           // back to Date
+    }
     fun getTimeOfDay(): String {
 
         val currentTime = LocalTime.now()

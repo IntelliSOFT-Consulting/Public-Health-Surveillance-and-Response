@@ -301,6 +301,27 @@ class SummarizedActivity : AppCompatActivity() {
                             startActivity(intent)
                         }
 
+                        "measles-cases-information" -> {
+                            FormatterClass().saveSharedPref(
+                                "questionnaire",
+                                "add-case.json",
+                                this@SummarizedActivity
+                            )
+                            val patientId =
+                                FormatterClass().getSharedPref(
+                                    "resourceId",
+                                    this@SummarizedActivity
+                                )
+
+                            val intent = Intent(
+                                this@SummarizedActivity,
+                                EditChecklistActivity::class.java
+                            ).apply {
+                                putExtra("questionnaire_id", patientId)
+                            }
+                            startActivity(intent)
+                        }
+
                         else -> {
                             Toast.makeText(
                                 this@SummarizedActivity,

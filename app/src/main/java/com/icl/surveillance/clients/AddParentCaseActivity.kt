@@ -33,6 +33,7 @@ import com.icl.surveillance.utils.LocationUtils
 import com.icl.surveillance.utils.ProgressDialogManager
 import com.icl.surveillance.viewmodels.AddClientViewModel
 import kotlinx.coroutines.launch
+import org.hl7.fhir.r4.model.Patient
 import org.hl7.fhir.r4.model.Questionnaire
 import org.hl7.fhir.r4.model.QuestionnaireResponse
 
@@ -244,10 +245,7 @@ class AddParentCaseActivity : AppCompatActivity() {
 
     private fun addQuestionnaireFragment() {
 
-        val launchContextMap: Map<String, String> = mapOf(
-            "userId" to "42",
-            "sessionId" to "abc123"
-        )
+
         lifecycleScope.launch {
             if (supportFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) == null) {
                 supportFragmentManager.commit {
@@ -255,7 +253,6 @@ class AddParentCaseActivity : AppCompatActivity() {
                     val questionnaireFragmentBuilder =
                         QuestionnaireFragment.builder().apply {
                             setShowSubmitAnywayButton(false)
-                            setQuestionnaireLaunchContextMap(launchContextMap = launchContextMap)
                             setCustomQuestionnaireItemViewHolderFactoryMatchersProvider(
                                 ContribQuestionnaireItemViewHolderFactoryMatchersProviderFactory
                                     .LOCATION_WIDGET_PROVIDER,

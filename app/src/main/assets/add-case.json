@@ -256,11 +256,6 @@
         },
         {
           "type": "string",
-          "linkId": "246751846436",
-          "text": "Patient's middle name"
-        },
-        {
-          "type": "string",
           "linkId": "486402457213",
           "text": "Patients' family name",
           "required": true
@@ -503,7 +498,7 @@
         {
           "type": "string",
           "linkId": "parent",
-          "text": "Parent / Guardian",
+          "text": "Parent / Guardian Name",
           "required": true
         },
         {
