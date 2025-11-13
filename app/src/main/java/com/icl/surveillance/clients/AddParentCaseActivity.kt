@@ -270,52 +270,79 @@ class AddParentCaseActivity : AppCompatActivity() {
 
         when (userRole) {
             UserRole.ADMINISTRATOR -> {
+                // 2. Create child group
+                val childGroup = QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                    linkId = "151479012557"
+                    text = "Reporting Site"
+                }
+                childGroup.addItem(
+                    QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                        linkId = "user_role"
+                        text = "User Role"
+                        answerFirstRep.value = StringType("ADMINISTRATOR")
+                    })
 
+                resource.addItem(childGroup)
             }
 
             UserRole.COUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
+                // 2. Create child group
+                val childGroup = QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                    linkId = "151479012557"
+                    text = "Reporting Site"
+                }
+                childGroup.addItem(
+                    QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                        linkId = "user_role"
+                        text = "User Role"
+                        answerFirstRep.value = StringType("VACCINATOR")
+                    })
 
+                // 3. Add your custom location items to the group
+                val userCounty = addUserCountyResponse("user_county", "county")
+                childGroup.addItem(userCounty)
+
+                resource.addItem(childGroup)
             }
 
             UserRole.SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
 
-            }
-
-            UserRole.FACILITY_SURVEILLANCE_FOCAL_PERSON, UserRole.SUPERVISOR, UserRole.VACCINATOR -> {
-
-//                val parentSection =
-//                    QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
-//                        linkId = "151479012557"
-//                        text = "Reporting Site"
-//                    }
-//
-//                val firstSection = resource.addItem()
-//                val innerItems = firstSection//.addItem()
-//                val userCounty = addUserCountyResponse("user_county", "county")
-//                innerItems.addItem(userCounty)
-//                val userSubCounty = addUserCountyResponse("user_sub_county", "subCounty")
-//                innerItems.addItem(userSubCounty)
-//                val userWard = addUserCountyResponse("user_ward", "ward")
-//                innerItems.addItem(userWard)
-//                val userFacility = addUserCountyResponse("user_facility", "facility")
-//                innerItems.addItem(userFacility)
-//                parentSection.addItem(innerItems)
-//                resource.item.add(parentSection)
-
-                // 1. Create parent section
-                val parentSection = QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
-                    linkId = "section-1"
-                    text = "User Administrative Details"
-                }
 
                 // 2. Create child group
                 val childGroup = QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
                     linkId = "151479012557"
                     text = "Reporting Site"
                 }
+                childGroup.addItem(
+                    QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                        linkId = "user_role"
+                        text = "User Role"
+                        answerFirstRep.value = StringType("VACCINATOR")
+                    })
 
-                // Attach group to parent
-                parentSection.addItem(childGroup)
+                // 3. Add your custom location items to the group
+                val userCounty = addUserCountyResponse("user_county", "county")
+                childGroup.addItem(userCounty)
+
+                val userSubCounty = addUserCountyResponse("user_sub_county", "subCounty")
+                childGroup.addItem(userSubCounty)
+
+                resource.addItem(childGroup)
+            }
+
+            UserRole.FACILITY_SURVEILLANCE_FOCAL_PERSON, UserRole.SUPERVISOR, UserRole.VACCINATOR -> {
+
+                // 2. Create child group
+                val childGroup = QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                    linkId = "151479012557"
+                    text = "Reporting Site"
+                }
+                childGroup.addItem(
+                    QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                        linkId = "user_role"
+                        text = "User Role"
+                        answerFirstRep.value = StringType("VACCINATOR")
+                    })
 
                 // 3. Add your custom location items to the group
                 val userCounty = addUserCountyResponse("user_county", "county")
@@ -329,9 +356,7 @@ class AddParentCaseActivity : AppCompatActivity() {
 
                 val userFacility = addUserCountyResponse("user_facility", "facility")
                 childGroup.addItem(userFacility)
-
-                // 4. Add the parent section to the QuestionnaireResponse
-                resource.addItem(parentSection)
+                resource.addItem(childGroup)
             }
 
             else -> {
@@ -339,6 +364,9 @@ class AddParentCaseActivity : AppCompatActivity() {
             }
         }
 
+        val data = FhirContext.forR4Cached().newJsonParser()
+            .encodeResourceToString(resource)
+        println("Item added Top-level items: $data")
         lifecycleScope.launch {
             println("Item added Top-level items: ${resource.item.size}")
             println("Item added First section items: ${resource.item.firstOrNull()?.item?.size}")
@@ -373,19 +401,6 @@ class AddParentCaseActivity : AppCompatActivity() {
             }
         }
     }
-//    private fun addQuestionnaireFragment() {
-//        supportFragmentManager.commit {
-//            add(
-//                R.id.add_patient_container,
-//                QuestionnaireFragment.builder()
-//                    .setQuestionnaire(viewModel.questionnaireJson)
-//                    .setShowCancelButton(true)
-//                    .setSubmitButtonText("Submit")
-//                    .build(),
-//                QUESTIONNAIRE_FRAGMENT_TAG,
-//            )
-//        }
-//    }
 
     private fun observePatientSaveAction() {
         viewModel.isPatientSaved.observe(this) {
