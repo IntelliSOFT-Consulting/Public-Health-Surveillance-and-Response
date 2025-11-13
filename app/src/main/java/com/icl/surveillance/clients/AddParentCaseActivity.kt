@@ -247,18 +247,12 @@ class AddParentCaseActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun addUserCountyResponse(userCounty: String,county:String): QuestionnaireResponse.QuestionnaireResponseItemComponent {
+    private fun addUserCountyResponse(
+        userCounty: String,
+        county: String
+    ): QuestionnaireResponse.QuestionnaireResponseItemComponent {
         val formatter = FormatterClass()
-        val facility = formatter.getSharedPref("facility", this@AddParentCaseActivity)
-        val facilityName = formatter.getSharedPref("facilityName", this@AddParentCaseActivity)
-        val ward = formatter.getSharedPref("ward", this@AddParentCaseActivity)
-        val wardName = formatter.getSharedPref("wardName", this@AddParentCaseActivity)
-        val subCounty = formatter.getSharedPref("subCounty", this@AddParentCaseActivity)
-        val subCountyName = formatter.getSharedPref("subCountyName", this@AddParentCaseActivity)
         val county = formatter.getSharedPref(county, this@AddParentCaseActivity)
-        val countyName = formatter.getSharedPref("countyName", this@AddParentCaseActivity)
-        val country = formatter.getSharedPref("country", this@AddParentCaseActivity)
-        val countryName = formatter.getSharedPref("countryName", this@AddParentCaseActivity)
         val item =
             QuestionnaireResponse.QuestionnaireResponseItemComponent()
 
@@ -289,8 +283,55 @@ class AddParentCaseActivity : AppCompatActivity() {
 
             UserRole.FACILITY_SURVEILLANCE_FOCAL_PERSON, UserRole.SUPERVISOR, UserRole.VACCINATOR -> {
 
-                val userCounty = addUserCountyResponse("user_county","county")
-                resource.addItem(userCounty)
+//                val parentSection =
+//                    QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+//                        linkId = "151479012557"
+//                        text = "Reporting Site"
+//                    }
+//
+//                val firstSection = resource.addItem()
+//                val innerItems = firstSection//.addItem()
+//                val userCounty = addUserCountyResponse("user_county", "county")
+//                innerItems.addItem(userCounty)
+//                val userSubCounty = addUserCountyResponse("user_sub_county", "subCounty")
+//                innerItems.addItem(userSubCounty)
+//                val userWard = addUserCountyResponse("user_ward", "ward")
+//                innerItems.addItem(userWard)
+//                val userFacility = addUserCountyResponse("user_facility", "facility")
+//                innerItems.addItem(userFacility)
+//                parentSection.addItem(innerItems)
+//                resource.item.add(parentSection)
+
+                // 1. Create parent section
+                val parentSection = QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                    linkId = "section-1"
+                    text = "User Administrative Details"
+                }
+
+                // 2. Create child group
+                val childGroup = QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                    linkId = "151479012557"
+                    text = "Reporting Site"
+                }
+
+                // Attach group to parent
+                parentSection.addItem(childGroup)
+
+                // 3. Add your custom location items to the group
+                val userCounty = addUserCountyResponse("user_county", "county")
+                childGroup.addItem(userCounty)
+
+                val userSubCounty = addUserCountyResponse("user_sub_county", "subCounty")
+                childGroup.addItem(userSubCounty)
+
+                val userWard = addUserCountyResponse("user_ward", "ward")
+                childGroup.addItem(userWard)
+
+                val userFacility = addUserCountyResponse("user_facility", "facility")
+                childGroup.addItem(userFacility)
+
+                // 4. Add the parent section to the QuestionnaireResponse
+                resource.addItem(parentSection)
             }
 
             else -> {
@@ -299,9 +340,13 @@ class AddParentCaseActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-
-            resource.item.forEach{
-                println("Item added ${it.answerFirstRep.value}")
+            println("Item added Top-level items: ${resource.item.size}")
+            println("Item added First section items: ${resource.item.firstOrNull()?.item?.size}")
+            resource.item.forEach {
+                println("Item added ${it.linkId} -> ${it.answerFirstRep.value}")
+                it.item.forEach { k ->
+                    println("Item added ${k.linkId} -> ${k.answerFirstRep.value}")
+                }
             }
             if (supportFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) == null) {
                 supportFragmentManager.commit {
