@@ -163,26 +163,6 @@ class AddParentCaseActivity : AppCompatActivity() {
         )
     }
 
-    private fun onSubmitActionSubmit() {
-        lifecycleScope.launch {
-            val fragment = supportFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG)
-                    as QuestionnaireFragment
-            val questionnaireResponse = fragment.getQuestionnaireResponse()
-
-            val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
-            val questionnaireResponseString =
-                jsonParser.encodeResourceToString(questionnaireResponse)
-            Log.d("extraction response", questionnaireResponseString)
-
-            val questionnaire =
-                jsonParser.parseResource(viewModel.questionnaireJson) as Questionnaire
-
-            Log.d("Questionnaire Response::::", "$questionnaire")
-            Log.d("Questionnaire Response::::: ", "$questionnaireResponse")
-            val bundle = ResourceMapper.extract(questionnaire, questionnaireResponse)
-            Log.d("Questionnaire Response::::", jsonParser.encodeResourceToString(bundle))
-        }
-    }
 
     private fun onSubmitAction() {
         ProgressDialogManager.show(this, "Please Wait.....")
@@ -261,6 +241,26 @@ class AddParentCaseActivity : AppCompatActivity() {
         return item
 
     }
+
+    fun createCountyAnswer(
+        ref: String,
+        dis: String,
+        id: String,
+        label: String
+    ): QuestionnaireResponse.QuestionnaireResponseItemComponent {
+
+        val reference = Reference().apply {
+            reference = "Location/$ref"
+            display = dis
+        }
+
+        return QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+            linkId = id
+            text = label
+            answerFirstRep.value = reference
+        }
+    }
+
 
     private fun addQuestionnaireFragment() {
         val resource = QuestionnaireResponse()
@@ -343,19 +343,33 @@ class AddParentCaseActivity : AppCompatActivity() {
                         text = "User Role"
                         answerFirstRep.value = StringType("VACCINATOR")
                     })
+                val county =
+                    createCountyAnswer(
+                        getAssignedLocation("county"),
+                        getAssignedLocation("countyName"),
+                        "294367770999",
+                        "County"
+                    )
+                val subCounty = createCountyAnswer(
+                    getAssignedLocation("subCounty"),
+                    getAssignedLocation("subCountyName"), "819946803642", "Sub County"
+                )
+                val ward = createCountyAnswer(
+                    getAssignedLocation("ward"),
+                    getAssignedLocation("wardName"), "819943434", "Ward"
+                )
+                val facility = createCountyAnswer(
+                    getAssignedLocation("facility"),
+                    getAssignedLocation("facilityName"), "819946803677", "Health Facility"
+                )
 
-                // 3. Add your custom location items to the group
-                val userCounty = addUserCountyResponse("user_county", "county")
-                childGroup.addItem(userCounty)
+                childGroup.addItem(county)
+                childGroup.addItem(subCounty)
+                childGroup.addItem(ward)
+                childGroup.addItem(facility)
 
-                val userSubCounty = addUserCountyResponse("user_sub_county", "subCounty")
-                childGroup.addItem(userSubCounty)
 
-                val userWard = addUserCountyResponse("user_ward", "ward")
-                childGroup.addItem(userWard)
 
-                val userFacility = addUserCountyResponse("user_facility", "facility")
-                childGroup.addItem(userFacility)
                 resource.addItem(childGroup)
             }
 
@@ -366,16 +380,10 @@ class AddParentCaseActivity : AppCompatActivity() {
 
         val data = FhirContext.forR4Cached().newJsonParser()
             .encodeResourceToString(resource)
-        println("Item added Top-level items: $data")
+        println("Starter Response:::: $data")
+
         lifecycleScope.launch {
-            println("Item added Top-level items: ${resource.item.size}")
-            println("Item added First section items: ${resource.item.firstOrNull()?.item?.size}")
-            resource.item.forEach {
-                println("Item added ${it.linkId} -> ${it.answerFirstRep.value}")
-                it.item.forEach { k ->
-                    println("Item added ${k.linkId} -> ${k.answerFirstRep.value}")
-                }
-            }
+
             if (supportFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) == null) {
                 supportFragmentManager.commit {
                     setReorderingAllowed(true)
@@ -400,6 +408,16 @@ class AddParentCaseActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    fun getAssignedLocation(type: String): String {
+        var value = ""
+        val source = FormatterClass().getSharedPref(type, this@AddParentCaseActivity)
+        if (source != null) {
+            value = source
+        }
+
+        return value
     }
 
     private fun observePatientSaveAction() {
