@@ -445,7 +445,7 @@
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueInteger": 999
+              "valueInteger": 15
             }
           ]
         },
@@ -1607,6 +1607,12 @@
                 "code": "no",
                 "display": "No"
               }
+            },
+            {
+              "valueCoding": {
+                "code": "unknown",
+                "display": "Unknown"
+              }
             }
           ],
           "item": [
@@ -1762,6 +1768,35 @@
                   }
                 ]
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
+              "extension": [
+                {
+                  "url": "key",
+                  "valueId": "constraint-1"
+                },
+                {
+                  "url": "requirements",
+                  "valueString": "The date should be after the date of the 1st dose"
+                },
+                {
+                  "url": "severity",
+                  "valueCode": "error"
+                },
+                {
+                  "url": "expression",
+                  "valueString": "%context.answer.value >= %resource.descendants().where(linkId='671158128551').answer.value"
+                },
+                {
+                  "url": "human",
+                  "valueString": "The date should be after the date of the 1st dose"
+                },
+                {
+                  "url": "location",
+                  "valueString": "671158128551"
+                }
+              ]
             }
           ],
           "linkId": "286826008175",
@@ -1796,6 +1831,36 @@
                   }
                 ]
               }
+            },
+
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
+              "extension": [
+                {
+                  "url": "key",
+                  "valueId": "constraint-1"
+                },
+                {
+                  "url": "requirements",
+                  "valueString": "The date should be after the date of the 2nd dose"
+                },
+                {
+                  "url": "severity",
+                  "valueCode": "error"
+                },
+                {
+                  "url": "expression",
+                  "valueString": "%context.answer.value >= %resource.descendants().where(linkId='286826008175').answer.value"
+                },
+                {
+                  "url": "human",
+                  "valueString": "The date should be after the date of the 2nd dose"
+                },
+                {
+                  "url": "location",
+                  "valueString": "286826008175"
+                }
+              ]
             }
           ],
           "linkId": "705067672267",
@@ -1830,6 +1895,36 @@
                   }
                 ]
               }
+            },
+
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
+              "extension": [
+                {
+                  "url": "key",
+                  "valueId": "constraint-1"
+                },
+                {
+                  "url": "requirements",
+                  "valueString": "The date should be after the date of the 3rd dose"
+                },
+                {
+                  "url": "severity",
+                  "valueCode": "error"
+                },
+                {
+                  "url": "expression",
+                  "valueString": "%context.answer.value >= %resource.descendants().where(linkId='705067672267').answer.value"
+                },
+                {
+                  "url": "human",
+                  "valueString": "The date should be after the date of the 3rd dose"
+                },
+                {
+                  "url": "location",
+                  "valueString": "705067672267"
+                }
+              ]
             }
           ],
           "linkId": "974686716540",
@@ -1864,6 +1959,36 @@
                   }
                 ]
               }
+            },
+
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
+              "extension": [
+                {
+                  "url": "key",
+                  "valueId": "constraint-1"
+                },
+                {
+                  "url": "requirements",
+                  "valueString": "The date should be after the date of the 4th dose"
+                },
+                {
+                  "url": "severity",
+                  "valueCode": "error"
+                },
+                {
+                  "url": "expression",
+                  "valueString": "%context.answer.value >= %resource.descendants().where(linkId='974686716540').answer.value"
+                },
+                {
+                  "url": "human",
+                  "valueString": "The date should be after the date of the 4th dose"
+                },
+                {
+                  "url": "location",
+                  "valueString": "974686716540"
+                }
+              ]
             }
           ],
           "linkId": "597572769623",
@@ -1942,6 +2067,12 @@
               "valueCoding": {
                 "code": "no",
                 "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "unknown",
+                "display": "Unknown"
               }
             }
           ],
@@ -2296,6 +2427,12 @@
               "valueCoding": {
                 "code": "recall",
                 "display": "Recall"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "unknown",
+                "display": "Unknown"
               }
             }
           ],
