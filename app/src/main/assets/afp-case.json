@@ -768,6 +768,35 @@
                   }
                 ]
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
+              "extension": [
+                {
+                  "url": "key",
+                  "valueId": "constraint-1"
+                },
+                {
+                  "url": "requirements",
+                  "valueString": "The date should be before the date of Investigation"
+                },
+                {
+                  "url": "severity",
+                  "valueCode": "error"
+                },
+                {
+                  "url": "expression",
+                  "valueString": "%context.answer.value <= %resource.descendants().where(linkId='502488184403').answer.value"
+                },
+                {
+                  "url": "human",
+                  "valueString": "The date should be before the date of Investigation"
+                },
+                {
+                  "url": "location",
+                  "valueString": "502488184403"
+                }
+              ]
             }
           ],
           "item": [
@@ -1024,6 +1053,36 @@
                   }
                 ]
               }
+            },
+
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
+              "extension": [
+                {
+                  "url": "key",
+                  "valueId": "constraint-1"
+                },
+                {
+                  "url": "requirements",
+                  "valueString": "The date should be before the date of Investigation"
+                },
+                {
+                  "url": "severity",
+                  "valueCode": "error"
+                },
+                {
+                  "url": "expression",
+                  "valueString": "%context.answer.value <= %resource.descendants().where(linkId='502488184403').answer.value"
+                },
+                {
+                  "url": "human",
+                  "valueString": "The date should be before the date of Investigation"
+                },
+                {
+                  "url": "location",
+                  "valueString": "502488184403"
+                }
+              ]
             }
           ],
           "required": true
@@ -1832,7 +1891,6 @@
                 ]
               }
             },
-
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
               "extension": [
@@ -1896,7 +1954,6 @@
                 ]
               }
             },
-
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
               "extension": [
@@ -1960,7 +2017,6 @@
                 ]
               }
             },
-
             {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
               "extension": [
@@ -2546,6 +2602,35 @@
                   }
                 ]
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
+              "extension": [
+                {
+                  "url": "key",
+                  "valueId": "constraint-1"
+                },
+                {
+                  "url": "requirements",
+                  "valueString": "The date should be on or after the date of Investigation"
+                },
+                {
+                  "url": "severity",
+                  "valueCode": "error"
+                },
+                {
+                  "url": "expression",
+                  "valueString": "%context.answer.value >= %resource.descendants().where(linkId='502488184403').answer.value"
+                },
+                {
+                  "url": "human",
+                  "valueString": "The date should be one or after the date of Investigation"
+                },
+                {
+                  "url": "location",
+                  "valueString": "502488184403"
+                }
+              ]
             }
           ],
           "item": [
@@ -2593,6 +2678,35 @@
                   }
                 ]
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
+              "extension": [
+                {
+                  "url": "key",
+                  "valueId": "constraint-1"
+                },
+                {
+                  "url": "requirements",
+                  "valueString": "The date should be on or after the date of 1st specimen collection"
+                },
+                {
+                  "url": "severity",
+                  "valueCode": "error"
+                },
+                {
+                  "url": "expression",
+                  "valueString": "%context.answer.value >= %resource.descendants().where(linkId='737703942433').answer.value"
+                },
+                {
+                  "url": "human",
+                  "valueString": "The date should be on or after the date of 1st specimen collection"
+                },
+                {
+                  "url": "location",
+                  "valueString": "737703942433"
+                }
+              ]
             }
           ],
           "required": true
@@ -2619,6 +2733,35 @@
                   }
                 ]
               }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
+              "extension": [
+                {
+                  "url": "key",
+                  "valueId": "constraint-1"
+                },
+                {
+                  "url": "requirements",
+                  "valueString": "The date should be on or after the date of 2nd specimen collection"
+                },
+                {
+                  "url": "severity",
+                  "valueCode": "error"
+                },
+                {
+                  "url": "expression",
+                  "valueString": "%context.answer.value >= %resource.descendants().where(linkId='711388438654').answer.value"
+                },
+                {
+                  "url": "human",
+                  "valueString": "The date should be on or after the date of 2nd specimen collection"
+                },
+                {
+                  "url": "location",
+                  "valueString": "711388438654"
+                }
+              ]
             }
           ],
           "required": true
