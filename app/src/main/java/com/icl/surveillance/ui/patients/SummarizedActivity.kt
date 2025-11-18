@@ -13,10 +13,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.fhir.FhirEngine
+import com.google.android.fhir.search.search
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 import com.icl.surveillance.R
 import com.icl.surveillance.adapters.GroupPagerAdapter
+import com.icl.surveillance.cases.GeneralEditorActivity
 import com.icl.surveillance.databinding.ActivitySummarizedBinding
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.models.ChildItem
@@ -38,6 +40,7 @@ import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
 import kotlinx.coroutines.launch
+import org.hl7.fhir.r4.model.QuestionnaireResponse
 import java.time.LocalDate
 import java.time.Period
 import java.time.ZonedDateTime
@@ -267,6 +270,46 @@ class SummarizedActivity : AppCompatActivity() {
                     val slug = currentCase.toSlug()
 
                     when (slug) {
+                        "moh-505-reporting-form" -> {
+                            lifecycleScope.launch {
+                                val patientId =
+                                    FormatterClass().getSharedPref(
+                                        "patientIdParent",
+                                        this@SummarizedActivity
+                                    )
+                                if (patientId != null) {
+                                    val res = fhirEngine.search<QuestionnaireResponse> {
+                                        filter(
+                                            QuestionnaireResponse.SUBJECT,
+                                            { value = "Patient/$patientId" })
+                                    }.take(5)
+                                    if (res.isNotEmpty()) {
+                                        val response = res.first().resource
+                                        FormatterClass().saveSharedPref(
+                                            "questionnaire",
+                                            "moh505.json", this@SummarizedActivity
+                                        )
+                                        startActivity(
+                                            Intent(
+                                                this@SummarizedActivity,
+                                                GeneralEditorActivity::class.java
+                                            ).apply {
+
+                                            }
+                                        )
+
+                                    }
+                                } else {
+                                    Toast.makeText(
+                                        this@SummarizedActivity,
+                                        "Patient Id not found",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+
+                        }
+
                         "mpox-tally-sheet" -> {
                             FormatterClass().saveSharedPref(
                                 "questionnaire",

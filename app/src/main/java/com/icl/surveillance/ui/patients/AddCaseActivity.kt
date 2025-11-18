@@ -375,6 +375,7 @@ class AddCaseActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         showCancelScreenerQuestionnaireAlertDialog()
+        super.onBackPressed()
     }
 
 }

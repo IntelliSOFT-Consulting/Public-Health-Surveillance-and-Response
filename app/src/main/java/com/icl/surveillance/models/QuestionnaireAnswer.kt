@@ -224,6 +224,7 @@ data class LocationInfo(
     val countryName: String?
 )
 
+
 data class UserProfilePrefs(
     val firstName: String,
     val lastName: String,

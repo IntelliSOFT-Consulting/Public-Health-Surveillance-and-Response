@@ -175,6 +175,58 @@ class AddClientViewModel(application: Application, private val state: SavedState
         return updatedResponse // Return the modified copy
     }
 
+    fun updatePatientData(
+        updatedResponse: QuestionnaireResponse,
+        context: Context
+    ) {
+        viewModelScope.launch {
+            val formatter = FormatterClass()
+            val facility = formatter.getSharedPref("facility", context)
+            val questionnaireResponse = populateReportingSiteAnswers(updatedResponse, context)
+            if (QuestionnaireResponseValidator.validateQuestionnaireResponse(
+                    questionnaire,
+                    questionnaireResponse,
+                    getApplication(),
+                ).values.flatten().any { it is Invalid }
+            ) {
+                isPatientSaved.value = false
+                return@launch
+            }
+            // Print the response to the log
+            val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
+            val questionnaireResponseString =
+                jsonParser.encodeResourceToString(questionnaireResponse)
+
+            if (facility != null) {
+                questionnaireResponse.addExtension(
+                    sourceExtension(
+                        "questionnaire",
+                        facility,
+                        context
+                    )
+                )
+                questionnaireResponse.meta = Meta().apply {
+                    tag = listOf(
+                        sourceMetaTag("questionnaire", facility, context)
+                    )
+                }
+            }
+            val idPart = FormatterClass().getSharedPref(
+                "activeResponse", context
+            )
+            questionnaireResponse.id = idPart
+            val practitionerId = formatter.getSharedPref("fhirPractitionerId", context)
+            if (practitionerId != null) {
+                questionnaireResponse.author = Reference("Practitioner/$practitionerId")
+            }
+            fhirEngine.update(questionnaireResponse)
+
+            withContext(Dispatchers.Main) { isPatientSaved.value = true }
+        }
+
+
+    }
+
     fun savePatientData(
         updatedResponse: QuestionnaireResponse,
         context: Context
@@ -218,7 +270,8 @@ class AddClientViewModel(application: Application, private val state: SavedState
             val facility = formatter.getSharedPref("facility", context)
 
             val jsonObject = JSONObject(questionnaireResponseString)
-            val extractedAnswers = extractStructuredAnswersOnlyFromItems(jsonObject)
+            val extractedAnswers =
+                FormatterClass().extractStructuredAnswersOnlyFromItems(jsonObject)
 
 
             val reasonCode = FormatterClass().getSharedPref(
@@ -868,8 +921,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         patient.addressFirstRep.addLine(county)
                     }
 
-                    val countyCode = FormatterClass().generateInitials(county)//.padEnd(3, 'X').take(3).uppercase()
-                    val subCountyCode = FormatterClass().generateInitials(subCounty)//.padEnd(3, 'X').take(3).uppercase()
+                    val countyCode =
+                        FormatterClass().generateInitials(county)//.padEnd(3, 'X').take(3).uppercase()
+                    val subCountyCode =
+                        FormatterClass().generateInitials(subCounty)//.padEnd(3, 'X').take(3).uppercase()
                     var linked = "MOH-505-"
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-$linked"
 
@@ -907,8 +962,10 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         patient.addressFirstRep.addLine(county)
                     }
 
-                    val countyCode = FormatterClass().generateInitials(county)//.padEnd(3, 'X').take(3).uppercase()
-                    val subCountyCode = FormatterClass().generateInitials(subCounty)//.padEnd(3, 'X').take(3).uppercase()
+                    val countyCode =
+                        FormatterClass().generateInitials(county)//.padEnd(3, 'X').take(3).uppercase()
+                    val subCountyCode =
+                        FormatterClass().generateInitials(subCounty)//.padEnd(3, 'X').take(3).uppercase()
                     val linked = "Mpox-"
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-$linked"
 
@@ -1107,87 +1164,6 @@ class AddClientViewModel(application: Application, private val state: SavedState
         } catch (e: Exception) {
             e.printStackTrace()
         }
-    }
-
-    fun extractStructuredAnswersOnlyFromItems(json: JSONObject): List<QuestionnaireAnswer> {
-        val results = mutableListOf<QuestionnaireAnswer>()
-
-        fun processItems(items: JSONArray) {
-            for (i in 0 until items.length()) {
-                val item = items.getJSONObject(i)
-                val linkId = item.optString("linkId", "")
-                val text = item.optString("text", "")
-
-                if (item.has("answer")) {
-                    val answers = item.getJSONArray("answer")
-                    val valueList = mutableListOf<String>()
-
-                    for (j in 0 until answers.length()) {
-                        val answerObj = answers.getJSONObject(j)
-
-                        val value = when {
-                            answerObj.has("valueString") -> answerObj.getString("valueString")
-                            answerObj.has("valueInteger") -> answerObj.optString(
-                                "valueInteger",
-                                ""
-                            )
-
-                            answerObj.has("valueDate") -> answerObj.optString("valueDate", "")
-                            answerObj.has("valueDateTime") -> answerObj.optString(
-                                "valueDateTime", ""
-                            )
-
-                            answerObj.has("valueBoolean") -> answerObj.optString(
-                                "valueBoolean",
-                                ""
-                            )
-
-                            answerObj.has("valueDecimal") -> answerObj.optString(
-                                "valueDecimal",
-                                ""
-                            )
-
-                            answerObj.has("valueCoding") -> {
-                                val coding = answerObj.getJSONObject("valueCoding")
-                                coding.optString("display", coding.optString("code", ""))
-                            }
-
-                            answerObj.has("valueReference") -> {
-                                val ref = answerObj.getJSONObject("valueReference")
-                                ref.optString("display", ref.optString("reference", ""))
-                            }
-
-                            else -> null
-                        }
-
-                        if (!value.isNullOrBlank()) {
-                            valueList.add(value)
-                        }
-                    }
-
-                    if (valueList.isNotEmpty()) {
-                        // Join multiple values with comma
-                        results.add(
-                            QuestionnaireAnswer(
-                                linkId,
-                                text,
-                                valueList.joinToString(", ")
-                            )
-                        )
-                    }
-                }
-
-                if (item.has("item")) {
-                    processItems(item.getJSONArray("item"))
-                }
-            }
-        }
-
-        if (json.has("item")) {
-            processItems(json.getJSONArray("item"))
-        }
-
-        return results
     }
 
 

@@ -21,6 +21,7 @@ import com.google.android.fhir.search.count
 import com.google.android.fhir.search.revInclude
 import com.google.android.fhir.search.search
 import com.icl.surveillance.network.RetrofitCallsAuthentication
+import com.icl.surveillance.utils.FormatterClass
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -55,6 +56,7 @@ import org.hl7.fhir.r4.model.ResourceType
 import org.hl7.fhir.r4.model.StringType
 import org.hl7.fhir.r4.model.TimeType
 import org.hl7.fhir.r4.model.UriType
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
 import java.util.Date
@@ -1005,10 +1007,10 @@ class PatientListViewModel(
                             if (epidIdenfifier != null) epidIdenfifier.value else obs.firstOrNull { it.resource.code.codingFirstRep.code == "EPID" }?.resource?.value?.asStringValue()
                                 ?: ""
 
-                        val county =
+                        var county =
                             if (fhirPatient.resource.hasAddress()) if (fhirPatient.resource.addressFirstRep.hasCity()) fhirPatient.resource.addressFirstRep.city else "" else obs.firstOrNull { it.resource.code.codingFirstRep.code == "a4-county" }?.resource?.value?.asStringValue()
                                 ?: ""
-                        val subCounty =
+                        var subCounty =
                             if (fhirPatient.resource.hasAddress()) if (fhirPatient.resource.addressFirstRep.hasState()) fhirPatient.resource.addressFirstRep.state else "" else obs.firstOrNull { it.resource.code.codingFirstRep.code == "a3-sub-county" }?.resource?.value?.asStringValue()
                                 ?: ""
                         val onset =
@@ -1041,13 +1043,45 @@ class PatientListViewModel(
                             obs.firstOrNull { it.resource.code.codingFirstRep.code == "vaccination_center" }?.resource?.value?.asStringValue()
                                 ?: ""
 
-                        // Loading Lab Results
+
                         val childEncounter = loadChildEncounter(data.resourceId, logicalId)
                         println("Current Workflow :::: $nameQuery With Child $childEncounter ")
                         when (nameQuery) {
 
 
                             "moh-505-reporting-form" -> {
+                                println("Current Workflow :::: Started 505")
+                                val res = fhirEngine.search<QuestionnaireResponse> {
+                                    filter(
+                                        QuestionnaireResponse.SUBJECT,
+                                        { value = "Patient/${data.resourceId}" })
+                                }.take(5)
+
+                                if (res.isNotEmpty()) {
+                                    val response = res.first().resource
+                                    val data = FhirContext.forR4Cached().newJsonParser()
+                                        .encodeResourceToString(response)
+                                    println(" Current Workflow :::: Starter Response:::: $data")
+                                    val jsonParser =
+                                        FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
+                                    val questionnaireResponseString =
+                                        jsonParser.encodeResourceToString(response)
+                                    val jsonObject = JSONObject(questionnaireResponseString)
+                                    val extractedAnswers =
+                                        FormatterClass().extractStructuredAnswersOnlyFromItems(
+                                            jsonObject
+                                        )
+
+                                    try {
+                                        county =
+                                            extractedAnswers.find { it.linkId == "294367770999" }?.answer
+                                        subCounty =
+                                            extractedAnswers.find { it.linkId == "819946803642" }?.answer
+                                    } catch (e: Exception) {
+                                        e.printStackTrace()
+                                    }
+
+                                }
 
                             }
 
