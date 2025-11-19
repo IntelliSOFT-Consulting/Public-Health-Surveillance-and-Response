@@ -12,10 +12,10 @@ import ca.uhn.fhir.context.FhirVersionEnum
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.validation.Invalid
 import com.google.android.fhir.datacapture.validation.QuestionnaireResponseValidator
+import com.google.android.fhir.search.search
 import com.ibm.icu.text.SimpleDateFormat
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.fhir.FhirApplication
-import com.icl.surveillance.models.QuestionnaireAnswer
 import com.icl.surveillance.models.SpecimenConfig
 import com.icl.surveillance.utils.Constants.ALL_LINK_IDS
 import com.icl.surveillance.utils.Constants.ALL_MPOX_LINK_IDS
@@ -47,7 +47,6 @@ import org.hl7.fhir.r4.model.QuestionnaireResponse
 import org.hl7.fhir.r4.model.Reference
 import org.hl7.fhir.r4.model.Specimen
 import org.hl7.fhir.r4.model.StringType
-import org.json.JSONArray
 import org.json.JSONObject
 import java.util.Calendar
 import java.util.Locale
@@ -177,9 +176,11 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
     fun updatePatientData(
         updatedResponse: QuestionnaireResponse,
-        context: Context
+        context: Context,
+        measureReport: MeasureReport
     ) {
         viewModelScope.launch {
+            val qh = QuestionnaireHelper()
             val formatter = FormatterClass()
             val facility = formatter.getSharedPref("facility", context)
             val questionnaireResponse = populateReportingSiteAnswers(updatedResponse, context)
@@ -219,7 +220,80 @@ class AddClientViewModel(application: Application, private val state: SavedState
             if (practitionerId != null) {
                 questionnaireResponse.author = Reference("Practitioner/$practitionerId")
             }
+            val jsonObject = JSONObject(questionnaireResponseString)
+            val extractedAnswers =
+                FormatterClass().extractStructuredAnswersOnlyFromItems(jsonObject)
+
+
+            // Extract Patient & Encounter Ids
+            val patientId = questionnaireResponse.subject.reference.split("/")[1]
+            val encounterId = questionnaireResponse.encounter.reference.split("/")[1]
+
+            val subjectReference = Reference("Patient/$patientId")
+            val encounterReference = Reference("Encounter/$encounterId")
+
+            withContext(Dispatchers.IO) {
+                try {
+                    val observations = fhirEngine.search<Observation> {
+                        filter(
+                            Observation.SUBJECT,
+                            { value = "Patient/$patientId" })
+                        filter(
+                            Observation.ENCOUNTER,
+                            { value = "Encounter/$encounterId" })
+
+                    }.take(500)
+
+                    observations.forEach { d ->
+                        println("Existing Observation: ${d.resource.code.codingFirstRep.code}")
+                    }
+
+
+                    extractedAnswers.forEach {
+                        val measureCodeableConcept = CodeableConcept()
+                        measureCodeableConcept.codingFirstRep.code = it.linkId
+                        measureCodeableConcept.codingFirstRep.display = it.text
+                        measureCodeableConcept.codingFirstRep.system = "questionnaire-answers"
+                        measureCodeableConcept.text = it.text
+
+                        val compo = MeasureReportGroupPopulationComponent()
+                        compo.code = measureCodeableConcept
+
+                        if (it.linkId == WEEK_ENDING_DATE) {
+                            val date =
+                                SimpleDateFormat(
+                                    "yyyy-MM-dd",
+                                    Locale.getDefault()
+                                ).parse(it.answer)
+                            if (date != null) {
+                                measureReport.date = date
+                            }
+
+                        }
+                        compo.id = it.linkId
+
+                        try {
+                            compo.count = it.answer.toInt()
+                        } catch (e: Exception) {
+                            compo.count = 0
+                        }
+                        if (!ALL_LINK_IDS.contains(it.linkId)) {
+                            measureReport.groupFirstRep.addPopulation(compo)
+                        }
+                        // Create new Observations
+                        val obs = qh.codingQuestionnaire(
+                            it.linkId, it.text, it.answer
+                        )
+                        createResource(obs, subjectReference, encounterReference, context)
+
+                    }
+
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
             fhirEngine.update(questionnaireResponse)
+            fhirEngine.update(measureReport)
 
             withContext(Dispatchers.Main) { isPatientSaved.value = true }
         }

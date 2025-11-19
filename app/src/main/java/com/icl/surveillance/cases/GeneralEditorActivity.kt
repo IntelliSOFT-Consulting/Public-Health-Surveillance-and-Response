@@ -21,7 +21,6 @@ import com.google.android.material.button.MaterialButton
 import com.icl.surveillance.R
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FRAGMENT_TAG
-import com.icl.surveillance.databinding.ActivityAddParentCaseBinding
 import com.icl.surveillance.databinding.ActivityGeneralEditorBinding
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.utils.ContribQuestionnaireItemViewHolderFactoryMatchersProviderFactory
@@ -29,9 +28,9 @@ import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.utils.ProgressDialogManager
 import com.icl.surveillance.viewmodels.AddClientViewModel
 import kotlinx.coroutines.launch
+import org.hl7.fhir.r4.model.MeasureReport
 import org.hl7.fhir.r4.model.QuestionnaireResponse
 import org.hl7.fhir.r4.model.Reference
-import org.hl7.fhir.r4.model.StringType
 import org.json.JSONObject
 import kotlin.getValue
 
@@ -86,10 +85,27 @@ class GeneralEditorActivity : AppCompatActivity() {
     }
 
     private fun saveCase(questionnaireResponse: QuestionnaireResponse) {
-        viewModel.updatePatientData(
-            questionnaireResponse,
-            this@GeneralEditorActivity
-        )
+
+        // Let's get the respective MeasureReport
+        val patientId =
+            FormatterClass().getSharedPref("patientId", this@GeneralEditorActivity)
+        if (patientId != null) {
+            lifecycleScope.launch {
+                val res = fhirEngine.search<MeasureReport> {
+                    filter(
+                        MeasureReport.SUBJECT,
+                        { value = "Patient/$patientId" })
+                }.take(5)
+                if (res.isNotEmpty()) {
+                    val response = res.first().resource
+
+                    viewModel.updatePatientData(
+                        questionnaireResponse,
+                        this@GeneralEditorActivity,response
+                    )
+                }
+            }
+        }
     }
 
     private fun observePatientSaveAction() {
