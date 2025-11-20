@@ -34,7 +34,9 @@ import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.utils.LocationUtils
 import com.icl.surveillance.utils.ProgressDialogManager
 import com.icl.surveillance.viewmodels.AddClientViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.hl7.fhir.r4.model.DateType
 import org.hl7.fhir.r4.model.Patient
 import org.hl7.fhir.r4.model.Questionnaire
@@ -261,154 +263,308 @@ class AddParentCaseActivity : AppCompatActivity() {
         }
     }
 
-
     private fun addQuestionnaireFragment() {
-        val resource = QuestionnaireResponse()
-        val formatter = FormatterClass()
-        val storedRole = formatter.getSharedPref("practitionerRole", this@AddParentCaseActivity)
-        val userRole = UserRole.fromAny(storedRole ?: "")
+        lifecycleScope.launch(Dispatchers.Default) {
 
-        when (userRole) {
-            UserRole.ADMINISTRATOR -> {
-                // 2. Create child group
-                val childGroup = QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
-                    linkId = "151479012557"
-                    text = "Reporting Site"
+            // Prepare FHIR context ONCE in background
+            val fhirContext = FhirContext.forR4Cached()
+            val jsonParser = fhirContext.newJsonParser()
+
+            // 1. Build QuestionnaireResponse object
+            val resource = QuestionnaireResponse()
+            val formatter = FormatterClass()
+            val storedRole = formatter.getSharedPref("practitionerRole", this@AddParentCaseActivity)
+            val userRole = UserRole.fromAny(storedRole ?: "")
+
+            when (userRole) {
+
+                UserRole.ADMINISTRATOR -> {
+                    val childGroup = QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                        linkId = "151479012557"
+                        text = "Reporting Site"
+                    }
+                    childGroup.addItem(
+                        QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                            linkId = "user_role"
+                            text = "User Role"
+                            answerFirstRep.value = StringType("ADMINISTRATOR")
+                        }
+                    )
+                    resource.addItem(childGroup)
                 }
-                childGroup.addItem(
-                    QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
-                        linkId = "user_role"
-                        text = "User Role"
-                        answerFirstRep.value = StringType("ADMINISTRATOR")
-                    })
 
-                resource.addItem(childGroup)
-            }
+                UserRole.COUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
+                    val childGroup = QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                        linkId = "151479012557"
+                        text = "Reporting Site"
+                    }
+                    childGroup.addItem(
+                        QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                            linkId = "user_role"
+                            text = "User Role"
+                            answerFirstRep.value = StringType("VACCINATOR")
+                        }
+                    )
 
-            UserRole.COUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
-                // 2. Create child group
-                val childGroup = QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
-                    linkId = "151479012557"
-                    text = "Reporting Site"
+                    val userCounty = addUserCountyResponse("user_county", "county")
+                    childGroup.addItem(userCounty)
+                    resource.addItem(childGroup)
                 }
-                childGroup.addItem(
-                    QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
-                        linkId = "user_role"
-                        text = "User Role"
-                        answerFirstRep.value = StringType("VACCINATOR")
-                    })
 
-                // 3. Add your custom location items to the group
-                val userCounty = addUserCountyResponse("user_county", "county")
-                childGroup.addItem(userCounty)
+                UserRole.SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
+                    val childGroup = QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                        linkId = "151479012557"
+                        text = "Reporting Site"
+                    }
+                    childGroup.addItem(
+                        QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                            linkId = "user_role"
+                            text = "User Role"
+                            answerFirstRep.value = StringType("VACCINATOR")
+                        }
+                    )
 
-                resource.addItem(childGroup)
-            }
+                    childGroup.addItem(addUserCountyResponse("user_county", "county"))
+                    childGroup.addItem(addUserCountyResponse("user_sub_county", "subCounty"))
 
-            UserRole.SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
-
-
-                // 2. Create child group
-                val childGroup = QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
-                    linkId = "151479012557"
-                    text = "Reporting Site"
+                    resource.addItem(childGroup)
                 }
-                childGroup.addItem(
-                    QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
-                        linkId = "user_role"
-                        text = "User Role"
-                        answerFirstRep.value = StringType("VACCINATOR")
-                    })
 
-                // 3. Add your custom location items to the group
-                val userCounty = addUserCountyResponse("user_county", "county")
-                childGroup.addItem(userCounty)
+                UserRole.FACILITY_SURVEILLANCE_FOCAL_PERSON,
+                UserRole.SUPERVISOR,
+                UserRole.VACCINATOR -> {
 
-                val userSubCounty = addUserCountyResponse("user_sub_county", "subCounty")
-                childGroup.addItem(userSubCounty)
+                    val childGroup = QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                        linkId = "151479012557"
+                        text = "Reporting Site"
+                    }
 
-                resource.addItem(childGroup)
-            }
+                    childGroup.addItem(
+                        QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                            linkId = "user_role"
+                            text = "User Role"
+                            answerFirstRep.value = StringType("VACCINATOR")
+                        }
+                    )
 
-            UserRole.FACILITY_SURVEILLANCE_FOCAL_PERSON, UserRole.SUPERVISOR, UserRole.VACCINATOR -> {
-
-                // 2. Create child group
-                val childGroup = QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
-                    linkId = "151479012557"
-                    text = "Reporting Site"
-                }
-                childGroup.addItem(
-                    QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
-                        linkId = "user_role"
-                        text = "User Role"
-                        answerFirstRep.value = StringType("VACCINATOR")
-                    })
-                val county =
-                    createCountyAnswer(
+                    val county = createCountyAnswer(
                         getAssignedLocation("county"),
                         getAssignedLocation("countyName"),
-                        "294367770999",
-                        "County"
+                        "294367770999", "County"
                     )
-                val subCounty = createCountyAnswer(
-                    getAssignedLocation("subCounty"),
-                    getAssignedLocation("subCountyName"), "819946803642", "Sub County"
-                )
-                val ward = createCountyAnswer(
-                    getAssignedLocation("ward"),
-                    getAssignedLocation("wardName"), "819943434", "Ward"
-                )
-                val facility = createCountyAnswer(
-                    getAssignedLocation("facility"),
-                    getAssignedLocation("facilityName"), "819946803677", "Health Facility"
-                )
 
-                childGroup.addItem(county)
-                childGroup.addItem(subCounty)
-                childGroup.addItem(ward)
-                childGroup.addItem(facility)
+                    val subCounty = createCountyAnswer(
+                        getAssignedLocation("subCounty"),
+                        getAssignedLocation("subCountyName"),
+                        "819946803642", "Sub County"
+                    )
 
+                    val ward = createCountyAnswer(
+                        getAssignedLocation("ward"),
+                        getAssignedLocation("wardName"),
+                        "819943434", "Ward"
+                    )
 
+                    val facility = createCountyAnswer(
+                        getAssignedLocation("facility"),
+                        getAssignedLocation("facilityName"),
+                        "819946803677", "Health Facility"
+                    )
 
-                resource.addItem(childGroup)
+                    childGroup.addItem(county)
+                    childGroup.addItem(subCounty)
+                    childGroup.addItem(ward)
+                    childGroup.addItem(facility)
+
+                    resource.addItem(childGroup)
+                }
+
+                else -> { /* No-op */ }
             }
 
-            else -> {
+            // 2. Serialize resource INTO JSON (expensive → done on background thread)
+            val questionnaireResponseJson = jsonParser.encodeResourceToString(resource)
 
-            }
-        }
+            // 3. Prepare questionnaire JSON (if it’s very large)
+            val questionnaireJson = viewModel.questionnaireJson
 
-        val data = FhirContext.forR4Cached().newJsonParser()
-            .encodeResourceToString(resource)
-        println("Starter Response:::: $data")
+            // 4. Return to main thread for fragment transaction
+            withContext(Dispatchers.Main) {
 
-        lifecycleScope.launch {
+                println("Starter Response: $questionnaireResponseJson")
 
-            if (supportFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) == null) {
-                supportFragmentManager.commit {
-                    setReorderingAllowed(true)
-                    val questionnaireFragmentBuilder =
-                        QuestionnaireFragment.builder().apply {
+                if (supportFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) == null) {
+                    supportFragmentManager.commit {
+                        setReorderingAllowed(true)
+
+                        val fragmentBuilder = QuestionnaireFragment.builder().apply {
                             setShowSubmitAnywayButton(false)
-                            setQuestionnaireResponse(
-                                FhirContext.forR4Cached().newJsonParser()
-                                    .encodeResourceToString(resource)
-                            )
+                            setQuestionnaireResponse(questionnaireResponseJson)
                             setCustomQuestionnaireItemViewHolderFactoryMatchersProvider(
                                 ContribQuestionnaireItemViewHolderFactoryMatchersProviderFactory
-                                    .LOCATION_WIDGET_PROVIDER,
+                                    .LOCATION_WIDGET_PROVIDER
                             )
-                            setQuestionnaire(viewModel.questionnaireJson)
+                            setQuestionnaire(questionnaireJson)
                         }
-                    add(
-                        R.id.add_patient_container,
-                        questionnaireFragmentBuilder.build(),
-                        QUESTIONNAIRE_FRAGMENT_TAG
-                    )
+
+                        add(
+                            R.id.add_patient_container,
+                            fragmentBuilder.build(),
+                            QUESTIONNAIRE_FRAGMENT_TAG
+                        )
+                    }
                 }
             }
         }
     }
+
+    /* private fun addQuestionnaireFragment() {
+         val resource = QuestionnaireResponse()
+         val formatter = FormatterClass()
+         val storedRole = formatter.getSharedPref("practitionerRole", this@AddParentCaseActivity)
+         val userRole = UserRole.fromAny(storedRole ?: "")
+
+         when (userRole) {
+             UserRole.ADMINISTRATOR -> {
+                 // 2. Create child group
+                 val childGroup = QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                     linkId = "151479012557"
+                     text = "Reporting Site"
+                 }
+                 childGroup.addItem(
+                     QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                         linkId = "user_role"
+                         text = "User Role"
+                         answerFirstRep.value = StringType("ADMINISTRATOR")
+                     })
+
+                 resource.addItem(childGroup)
+             }
+
+             UserRole.COUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
+                 // 2. Create child group
+                 val childGroup = QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                     linkId = "151479012557"
+                     text = "Reporting Site"
+                 }
+                 childGroup.addItem(
+                     QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                         linkId = "user_role"
+                         text = "User Role"
+                         answerFirstRep.value = StringType("VACCINATOR")
+                     })
+
+                 // 3. Add your custom location items to the group
+                 val userCounty = addUserCountyResponse("user_county", "county")
+                 childGroup.addItem(userCounty)
+
+                 resource.addItem(childGroup)
+             }
+
+             UserRole.SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
+
+
+                 // 2. Create child group
+                 val childGroup = QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                     linkId = "151479012557"
+                     text = "Reporting Site"
+                 }
+                 childGroup.addItem(
+                     QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                         linkId = "user_role"
+                         text = "User Role"
+                         answerFirstRep.value = StringType("VACCINATOR")
+                     })
+
+                 // 3. Add your custom location items to the group
+                 val userCounty = addUserCountyResponse("user_county", "county")
+                 childGroup.addItem(userCounty)
+
+                 val userSubCounty = addUserCountyResponse("user_sub_county", "subCounty")
+                 childGroup.addItem(userSubCounty)
+
+                 resource.addItem(childGroup)
+             }
+
+             UserRole.FACILITY_SURVEILLANCE_FOCAL_PERSON, UserRole.SUPERVISOR, UserRole.VACCINATOR -> {
+
+                 // 2. Create child group
+                 val childGroup = QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                     linkId = "151479012557"
+                     text = "Reporting Site"
+                 }
+                 childGroup.addItem(
+                     QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                         linkId = "user_role"
+                         text = "User Role"
+                         answerFirstRep.value = StringType("VACCINATOR")
+                     })
+                 val county =
+                     createCountyAnswer(
+                         getAssignedLocation("county"),
+                         getAssignedLocation("countyName"),
+                         "294367770999",
+                         "County"
+                     )
+                 val subCounty = createCountyAnswer(
+                     getAssignedLocation("subCounty"),
+                     getAssignedLocation("subCountyName"), "819946803642", "Sub County"
+                 )
+                 val ward = createCountyAnswer(
+                     getAssignedLocation("ward"),
+                     getAssignedLocation("wardName"), "819943434", "Ward"
+                 )
+                 val facility = createCountyAnswer(
+                     getAssignedLocation("facility"),
+                     getAssignedLocation("facilityName"), "819946803677", "Health Facility"
+                 )
+
+                 childGroup.addItem(county)
+                 childGroup.addItem(subCounty)
+                 childGroup.addItem(ward)
+                 childGroup.addItem(facility)
+
+
+
+                 resource.addItem(childGroup)
+             }
+
+             else -> {
+
+             }
+         }
+
+         val data = FhirContext.forR4Cached().newJsonParser()
+             .encodeResourceToString(resource)
+         println("Starter Response:::: $data")
+
+         lifecycleScope.launch {
+
+             if (supportFragmentManager.findFragmentByTag(QUESTIONNAIRE_FRAGMENT_TAG) == null) {
+                 supportFragmentManager.commit {
+                     setReorderingAllowed(true)
+                     val questionnaireFragmentBuilder =
+                         QuestionnaireFragment.builder().apply {
+                             setShowSubmitAnywayButton(false)
+                             setQuestionnaireResponse(
+                                 FhirContext.forR4Cached().newJsonParser()
+                                     .encodeResourceToString(resource)
+                             )
+                             setCustomQuestionnaireItemViewHolderFactoryMatchersProvider(
+                                 ContribQuestionnaireItemViewHolderFactoryMatchersProviderFactory
+                                     .LOCATION_WIDGET_PROVIDER,
+                             )
+                             setQuestionnaire(viewModel.questionnaireJson)
+                         }
+                     add(
+                         R.id.add_patient_container,
+                         questionnaireFragmentBuilder.build(),
+                         QUESTIONNAIRE_FRAGMENT_TAG
+                     )
+                 }
+             }
+         }
+     }*/
 
     fun getAssignedLocation(type: String): String {
         var value = ""
