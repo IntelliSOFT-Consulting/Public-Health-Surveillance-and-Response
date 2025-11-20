@@ -131,14 +131,15 @@ class ClientDetailsViewModel(
             .map { it.resource }
     }
 
-    suspend fun checkIfResourceHasQuestionnaireResponse(patientId: String): String {
-        val searchResult = fhirEngine.search<QuestionnaireResponse> {
-            filter(QuestionnaireResponse.SUBJECT, { value = "Patient/$patientId" })
+    suspend fun checkIfResourceHasQuestionnaireResponse(patientId: String): String =
+        withContext(Dispatchers.IO) {
+            val searchResult = fhirEngine.search<QuestionnaireResponse> {
+                filter(QuestionnaireResponse.SUBJECT, { value = "Patient/$patientId" })
+            }
+            val logicalId = searchResult.firstOrNull()?.resource?.logicalId ?: ""
+            println("Logical Id $logicalId")
+            logicalId
         }
-        val logicalId = searchResult.firstOrNull()?.resource?.logicalId ?: ""
-        println("Logical Id $logicalId")
-        return logicalId
-    }
 
     private suspend fun epidSummary(slug: String): PatientListViewModel.CaseId {
         var logicalId = ""

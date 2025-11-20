@@ -39,7 +39,9 @@ import com.icl.surveillance.ui.patients.responses.EditChecklistActivity
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.viewmodels.ClientDetailsViewModel
 import com.icl.surveillance.viewmodels.factories.PatientDetailsViewModelFactory
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.hl7.fhir.r4.model.QuestionnaireResponse
 import java.time.LocalDate
 import java.time.Period
@@ -94,114 +96,124 @@ class SummarizedActivity : AppCompatActivity() {
         val isCase = FormatterClass().getSharedPref("isCase", this)
 
         if (latestEncounter != null) {
-
             checkIfResourceHasQuestionnaireResponse(this, patientId)
-            groups = parseFromAssets(this, latestEncounter).toMutableList()// this = Context
-
-
-            val viewPager = binding.viewPager
-            val tabLayout = binding.tabLayout
-
-            if (currentCase != null) {
-                val slug = currentCase.toSlug()
-                val key = when (slug) {
-                    "rcce" -> {
-                        val encounterQuestionnaire = FormatterClass().getSharedPref(
-                            "encounterQuestionnaire",
-                            this@SummarizedActivity
-                        )
-                        "$encounterQuestionnaire"
-                    }
-
-                    "mpox-information" -> "mpox-tally-sheet"
-
-                    else -> slug
-                }
-                patientDetailsViewModel.getPatientInfoSummaryData(key)
+            lifecycleScope.launch {
+                val parsedGroups = withContext(Dispatchers.IO) {
+                    parseFromAssets(this@SummarizedActivity, latestEncounter)
+                }.toMutableList()
+                configureTabs(parsedGroups, currentCase, latestEncounter, isCase)
             }
-
-            var customFragments = when (latestEncounter) {
-                "measles-case-information" -> {
-                    listOf(
-                        "Laboratory Information" to LabResultsFragment(),
-//                        "Regional Laboratory Information" to RegionalLabResultsFragment()
-                    )
-
-                }
-
-                "afp-case-information" -> {
-                    listOf(
-                        "Stool Specimen Results" to LocalLabFragment(),
-                        "ITD Lab Results" to ITDLabFragment(),
-                        "Final Laboratory Results" to RegionalLabFragment(),
-                        "60 Day Follow Up" to AFPFollowUpFragment(),
-                        "Contact Information" to ContactInformationFragment()
-                    )
-                }
-
-                "vl-case-information" -> {
-                    listOf(
-                        "Laboratory Examination" to VlLabFragment(),
-                        "Treatment/Hospitalization" to VlTreatmentFragment(),
-                        "Six months followup examinations" to VlFollowupFragment()
-                    )
-                }
-
-                else -> emptyList()
-            }
-
-            if (isCase != null) {
-                if (isCase != "Case") {
-                    val itemToRemove = groups.find { it.linkId == "271053545237" }
-                    if (itemToRemove != null) {
-                        groups.remove(itemToRemove)
-                        customFragments = emptyList()
-
-                    }
-                }
-            }
-            patientDetailsViewModel.liveSummaryData.observe(this) { data ->
-                groups.forEach { group ->
-                    // For each item inside the group
-                    group.items.forEach { outputItem ->
-                        // Try to find a matching observation
-                        val matchingObservation = data.observations.find { obs ->
-                            obs.code == outputItem.linkId
-                        }
-                        when (outputItem.linkId) {
-                            "992818778559" -> { // Retrieve EPID No.
-                                outputItem.value = data.epidNo
-                            }
-
-                            "920645761660" -> { // Calculate Days since onset
-                                outputItem.value = calculateDaysSinceOnset(data.observations)
-                            }
-
-                            "calculated_age" -> { // Calculate Days since onset
-                                outputItem.value = calculatePatientAge(data.observations)
-                            }
-
-                            "age-at-onset" -> {  // Calculate Age at Onset
-                                outputItem.value = calculateAgeAtOnset(data.observations)
-                            }
-
-                            else ->
-                                if (matchingObservation != null) {
-                                    outputItem.value = matchingObservation.value
-                                }
-                        }
-                    }
-                }
-                val adapter = GroupPagerAdapter(this, groups, customFragments)
-                viewPager.adapter = adapter
-
-                TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-                    tab.text = adapter.getTabTitle(position)
-                }.attach()
-            }
-
         } else {
             Toast.makeText(this, "Please try again later!!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun configureTabs(
+        parsedGroups: MutableList<OutputGroup>,
+        currentCase: String?,
+        latestEncounter: String,
+        isCase: String?
+    ) {
+        groups = parsedGroups
+        val viewPager = binding.viewPager
+        val tabLayout = binding.tabLayout
+
+        if (currentCase != null) {
+            val slug = currentCase.toSlug()
+            val key = when (slug) {
+                "rcce" -> {
+                    val encounterQuestionnaire = FormatterClass().getSharedPref(
+                        "encounterQuestionnaire",
+                        this@SummarizedActivity
+                    )
+                    "$encounterQuestionnaire"
+                }
+
+                "mpox-information" -> "mpox-tally-sheet"
+
+                else -> slug
+            }
+            patientDetailsViewModel.getPatientInfoSummaryData(key)
+        }
+
+        var customFragments = when (latestEncounter) {
+            "measles-case-information" -> {
+                listOf(
+                    "Laboratory Information" to LabResultsFragment(),
+//                        "Regional Laboratory Information" to RegionalLabResultsFragment()
+                )
+
+            }
+
+            "afp-case-information" -> {
+                listOf(
+                    "Stool Specimen Results" to LocalLabFragment(),
+                    "ITD Lab Results" to ITDLabFragment(),
+                    "Final Laboratory Results" to RegionalLabFragment(),
+                    "60 Day Follow Up" to AFPFollowUpFragment(),
+                    "Contact Information" to ContactInformationFragment()
+                )
+            }
+
+            "vl-case-information" -> {
+                listOf(
+                    "Laboratory Examination" to VlLabFragment(),
+                    "Treatment/Hospitalization" to VlTreatmentFragment(),
+                    "Six months followup examinations" to VlFollowupFragment()
+                )
+            }
+
+            else -> emptyList()
+        }
+
+        if (isCase != null) {
+            if (isCase != "Case") {
+                val itemToRemove = groups.find { it.linkId == "271053545237" }
+                if (itemToRemove != null) {
+                    groups.remove(itemToRemove)
+                    customFragments = emptyList()
+
+                }
+            }
+        }
+        patientDetailsViewModel.liveSummaryData.observe(this) { data ->
+            groups.forEach { group ->
+                // For each item inside the group
+                group.items.forEach { outputItem ->
+                    // Try to find a matching observation
+                    val matchingObservation = data.observations.find { obs ->
+                        obs.code == outputItem.linkId
+                    }
+                    when (outputItem.linkId) {
+                        "992818778559" -> { // Retrieve EPID No.
+                            outputItem.value = data.epidNo
+                        }
+
+                        "920645761660" -> { // Calculate Days since onset
+                            outputItem.value = calculateDaysSinceOnset(data.observations)
+                        }
+
+                        "calculated_age" -> { // Calculate Days since onset
+                            outputItem.value = calculatePatientAge(data.observations)
+                        }
+
+                        "age-at-onset" -> {  // Calculate Age at Onset
+                            outputItem.value = calculateAgeAtOnset(data.observations)
+                        }
+
+                        else ->
+                            if (matchingObservation != null) {
+                                outputItem.value = matchingObservation.value
+                            }
+                    }
+                }
+            }
+            val adapter = GroupPagerAdapter(this, groups, customFragments)
+            viewPager.adapter = adapter
+
+            TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+                tab.text = adapter.getTabTitle(position)
+            }.attach()
         }
     }
 
