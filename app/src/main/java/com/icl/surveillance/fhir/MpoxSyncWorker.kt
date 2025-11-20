@@ -1,26 +1,23 @@
 package com.icl.surveillance.fhir
 
 import android.content.Context
-import androidx.work.Worker
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 
 class MpoxSyncWorker(
     appContext: Context,
     workerParams: WorkerParameters,
-) : Worker(appContext, workerParams) {
+) : CoroutineWorker(appContext, workerParams) {
     private val repo = FhirRepository(appContext)
 
-    override fun doWork(): Result {
+    override suspend fun doWork(): Result {
         return try {
-            runBlocking {
+            withContext(Dispatchers.IO) {
                 // Step 1: Upload Patients
                 prepareListInBatches("patients", applicationContext)
-                // Wait until done (since suspending)
 
                 // Step 2: Upload Encounters
                 prepareEncountersBatches("encounters", applicationContext)
@@ -43,36 +40,26 @@ class MpoxSyncWorker(
 
     private fun prepareListInBatches(nameQuery: String, context: Context) {
         // move your code here but make it suspend-friendly
-        CoroutineScope(Dispatchers.IO).launch {
-            repo.handleDataUpload(nameQuery, context)
-        }
+        repo.handleDataUpload(nameQuery, context)
     }
 
     private fun prepareEncountersBatches(nameQuery: String, context: Context) {
         // move your code here but make it suspend-friendly
-        CoroutineScope(Dispatchers.IO).launch {
-            repo.handleDataUpload(nameQuery, context)
-        }
+        repo.handleDataUpload(nameQuery, context)
     }
 
     private fun prepareObsBatches(nameQuery: String, context: Context) {
         // move your code here but make it suspend-friendly
-        CoroutineScope(Dispatchers.IO).launch {
-            repo.handleDataUpload(nameQuery, context)
-        }
+        repo.handleDataUpload(nameQuery, context)
     }
 
     private fun prepareMeasureReportsBatches(nameQuery: String, context: Context) {
         // move your code here but make it suspend-friendly
-        CoroutineScope(Dispatchers.IO).launch {
-            repo.handleDataUpload(nameQuery, context)
-        }
+        repo.handleDataUpload(nameQuery, context)
     }
 
     private fun prepareQuestionnaireResponsesBatches(nameQuery: String, context: Context) {
         // move your code here but make it suspend-friendly
-        CoroutineScope(Dispatchers.IO).launch {
-            repo.handleDataUpload(nameQuery, context)
-        }
+        repo.handleDataUpload(nameQuery, context)
     }
 }

@@ -179,7 +179,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
         context: Context,
         measureReport: MeasureReport
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val qh = QuestionnaireHelper()
             val formatter = FormatterClass()
             val facility = formatter.getSharedPref("facility", context)
@@ -305,7 +305,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
         updatedResponse: QuestionnaireResponse,
         context: Context
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val questionnaireResponse = populateReportingSiteAnswers(updatedResponse, context)
 
             if (QuestionnaireResponseValidator.validateQuestionnaireResponse(

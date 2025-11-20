@@ -58,8 +58,9 @@ class ClientDetailsViewModel(
 
     /** Emits list of [PatientDetailData]. */
     fun getPatientDetailData(category: String, parent: String?) {
-        viewModelScope.launch {
-            livePatientData.value = getPatientDetailDataModel(category, parent)
+        viewModelScope.launch(Dispatchers.IO) {
+            val patientDetails = getPatientDetailDataModel(category, parent)
+            withContext(Dispatchers.Main) { livePatientData.value = patientDetails }
         }
     }
 

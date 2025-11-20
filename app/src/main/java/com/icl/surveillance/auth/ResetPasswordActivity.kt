@@ -8,15 +8,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.icl.surveillance.R
 import com.icl.surveillance.databinding.ActivityResetPasswordBinding
 import com.icl.surveillance.models.DbSetPasswordReq
 import com.icl.surveillance.network.RetrofitCallsAuthentication
 import com.icl.surveillance.utils.FormatterClass
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ResetPasswordActivity : AppCompatActivity() {
     private lateinit var binding: ActivityResetPasswordBinding
@@ -75,7 +75,7 @@ class ResetPasswordActivity : AppCompatActivity() {
                     binding.confirmPasswordInputLayout.error = null
                 }
 
-                CoroutineScope(Dispatchers.Main).launch {
+                lifecycleScope.launch {
 
                     val progressDialog = ProgressDialog(this@ResetPasswordActivity)
                     progressDialog.setTitle("Please wait..")
@@ -83,32 +83,29 @@ class ResetPasswordActivity : AppCompatActivity() {
                     progressDialog.setCanceledOnTouchOutside(false)
                     progressDialog.show()
 
-                    val job = Job()
-                    CoroutineScope(Dispatchers.IO + job).launch {
-                        val idNumber =
-                            FormatterClass().getSharedPref("idNumber", this@ResetPasswordActivity)
-                        val dbSetPasswordReq = DbSetPasswordReq(code, "$idNumber", password)
-                        val pairReturn = retrofitCallsAuthentication
-                            .setPassword(this@ResetPasswordActivity, dbSetPasswordReq)
-
-                        val messageCode = pairReturn.first
-                        val messageToast = pairReturn.second
-
-                        CoroutineScope(Dispatchers.Main).launch {
-                            Toast.makeText(
-                                this@ResetPasswordActivity, messageToast,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            if (messageCode == 200 || messageCode == 201) {
-                                val intent = Intent(
-                                    this@ResetPasswordActivity,
-                                    LoginActivity::class.java
-                                )
-                                startActivity(intent)
-                            }
+                    try {
+                        val (messageCode, messageToast) = withContext(Dispatchers.IO) {
+                            val idNumber =
+                                FormatterClass().getSharedPref("idNumber", this@ResetPasswordActivity)
+                            val dbSetPasswordReq = DbSetPasswordReq(code, "$idNumber", password)
+                            retrofitCallsAuthentication
+                                .setPassword(this@ResetPasswordActivity, dbSetPasswordReq)
                         }
-                    }.join()
-                    progressDialog.dismiss()
+
+                        Toast.makeText(
+                            this@ResetPasswordActivity, messageToast,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        if (messageCode == 200 || messageCode == 201) {
+                            val intent = Intent(
+                                this@ResetPasswordActivity,
+                                LoginActivity::class.java
+                            )
+                            startActivity(intent)
+                        }
+                    } finally {
+                        progressDialog.dismiss()
+                    }
 
                 }
             }

@@ -30,6 +30,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.ZoneId
 import kotlinx.coroutines.launch
@@ -313,7 +314,7 @@ class PatientListViewModel(
     }
 
     private fun sendSingleEntry(jsonParser: IParser, patientResource: Patient, context: Context) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val payload = jsonParser.encodeResourceToString(patientResource)
             val apiCall = RetrofitCallsAuthentication()
 
@@ -328,7 +329,7 @@ class PatientListViewModel(
         bundle: Bundle,
         context: Context
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             println("API Response:::: Preparing data")
             val payload = jsonParser.encodeResourceToString(bundle)
             val apiCall = RetrofitCallsAuthentication()
@@ -463,16 +464,16 @@ class PatientListViewModel(
     }
 
     fun handleCurrentCaseListing(category: String) {
-        viewModelScope.launch {
-            liveSearchedCases.value = retrieveCasesByDisease(category)
-
+        viewModelScope.launch(Dispatchers.IO) {
+            val results = retrieveCasesByDisease(category)
+            withContext(Dispatchers.Main) { liveSearchedCases.value = results }
         }
     }
 
     fun handleCurrentRumorCaseListing(category: String) {
-        viewModelScope.launch {
-            liveRumorCases.value = retrieveRumorCasesByDisease(category)
-//            patientCount.value = count()
+        viewModelScope.launch(Dispatchers.IO) {
+            val results = retrieveRumorCasesByDisease(category)
+            withContext(Dispatchers.Main) { liveRumorCases.value = results }
         }
     }
 
@@ -1246,9 +1247,13 @@ class PatientListViewModel(
         search: suspend () -> List<PatientItem>,
         count: suspend () -> Long,
     ) {
-        viewModelScope.launch {
-            liveSearchedPatients.value = search()
-            patientCount.value = count()
+        viewModelScope.launch(Dispatchers.IO) {
+            val patients = search()
+            val total = count()
+            withContext(Dispatchers.Main) {
+                liveSearchedPatients.value = patients
+                patientCount.value = total
+            }
         }
     }
 

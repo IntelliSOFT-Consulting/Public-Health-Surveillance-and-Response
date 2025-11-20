@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.fhir.sync.CurrentSyncJobStatus
 import com.google.android.fhir.sync.Sync
 import com.icl.surveillance.fhir.AppFhirSyncWorker
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import java.time.OffsetDateTime
@@ -32,7 +33,7 @@ class SyncFragmentViewModel(application: Application) : AndroidViewModel(applica
 
     // This function is now the single point of action to start a sync
     fun triggerOneTimeSync() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             // Set initial state for UI
             _syncState.value = SyncState.Running
 
@@ -56,7 +57,7 @@ class SyncFragmentViewModel(application: Application) : AndroidViewModel(applica
 
     // This function is not the issue, but it's good to have
     fun cancelOneTimeSyncWork() {
-        viewModelScope.launch { Sync.cancelOneTimeSync<AppFhirSyncWorker>(getApplication()) }
+        viewModelScope.launch(Dispatchers.IO) { Sync.cancelOneTimeSync<AppFhirSyncWorker>(getApplication()) }
     }
 
     /** Emits last sync time. */

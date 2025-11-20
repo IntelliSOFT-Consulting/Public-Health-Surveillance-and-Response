@@ -25,7 +25,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import okhttp3.RequestBody
 import retrofit2.Response
 
@@ -401,11 +400,7 @@ class RetrofitCallsAuthentication {
         Log.d("UserPrefs", "User info saved to SharedPreferences: $userDetails")
     }
 
-    fun getResetPassword(context: Context, dbResetPasswordData: DbResetPasswordData) = runBlocking {
-        resetPassword(context, dbResetPasswordData)
-    }
-
-    private suspend fun resetPassword(
+    suspend fun getResetPassword(
         context: Context,
         dbResetPasswordData: DbResetPasswordData
     ): Pair<Int, String> {
@@ -459,11 +454,7 @@ class RetrofitCallsAuthentication {
         }
     }
 
-    fun setPassword(context: Context, dbSetPasswordReq: DbSetPasswordReq) = runBlocking {
-        setPasswordBac(context, dbSetPasswordReq)
-    }
-
-    private suspend fun setPasswordBac(
+    suspend fun setPassword(
         context: Context,
         dbSetPasswordReq: DbSetPasswordReq
     ): Pair<Int, String> {

@@ -9,15 +9,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.icl.surveillance.R
 import com.icl.surveillance.databinding.ActivityForgotPasswordBinding
 import com.icl.surveillance.models.DbResetPasswordData
 import com.icl.surveillance.network.RetrofitCallsAuthentication
 import com.icl.surveillance.utils.FormatterClass
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ForgotPasswordActivity : AppCompatActivity() {
     private lateinit var binding: ActivityForgotPasswordBinding
@@ -55,45 +55,40 @@ class ForgotPasswordActivity : AppCompatActivity() {
                     idNumber = emailAddress,
                     email = emailAddress
                 )
-                CoroutineScope(Dispatchers.Main).launch {
-
+                lifecycleScope.launch {
                     val progressDialog = ProgressDialog(this@ForgotPasswordActivity)
                     progressDialog.setTitle("Please wait..")
                     progressDialog.setMessage("Authentication in progress..")
                     progressDialog.setCanceledOnTouchOutside(false)
                     progressDialog.show()
 
-                    val job = Job()
-                    CoroutineScope(Dispatchers.IO + job).launch {
-                        FormatterClass().saveSharedPref(
-                            "idNumber",
-                            emailAddress,
-                            this@ForgotPasswordActivity
-                        )
-                        val pairReturn = retrofitCallsAuthentication
-                            .getResetPassword(this@ForgotPasswordActivity, payload)
-
-                        val messageCode = pairReturn.first
-                        val messageToast = pairReturn.second
-
-                        CoroutineScope(Dispatchers.Main).launch {
-                            Toast.makeText(
-                                this@ForgotPasswordActivity, messageToast,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            if (messageCode == 200 || messageCode == 201) {
-                                val intent = Intent(
-                                    this@ForgotPasswordActivity,
-                                    ResetPasswordActivity::class.java
-                                )
-                                startActivity(intent)
-                                this@ForgotPasswordActivity.finish()
-                            }
+                    try {
+                        val (messageCode, messageToast) = withContext(Dispatchers.IO) {
+                            FormatterClass().saveSharedPref(
+                                "idNumber",
+                                emailAddress,
+                                this@ForgotPasswordActivity
+                            )
+                            retrofitCallsAuthentication
+                                .getResetPassword(this@ForgotPasswordActivity, payload)
                         }
 
-                    }.join()
-                    progressDialog.dismiss()
-
+                        Toast.makeText(
+                            this@ForgotPasswordActivity,
+                            messageToast,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        if (messageCode == 200 || messageCode == 201) {
+                            val intent = Intent(
+                                this@ForgotPasswordActivity,
+                                ResetPasswordActivity::class.java
+                            )
+                            startActivity(intent)
+                            this@ForgotPasswordActivity.finish()
+                        }
+                    } finally {
+                        progressDialog.dismiss()
+                    }
                 }
 
             }

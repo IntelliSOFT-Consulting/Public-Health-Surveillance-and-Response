@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import android.text.format.DateFormat
 import java.time.OffsetDateTime
@@ -33,7 +34,7 @@ class PeriodicSyncViewModel(application: Application) : AndroidViewModel(applica
     private val _pollPeriodicSyncJobStatus = MutableSharedFlow<PeriodicSyncJobStatus>(replay = 10)
 
     init {
-        viewModelScope.launch { initializePeriodicSync() }
+        viewModelScope.launch(Dispatchers.IO) { initializePeriodicSync() }
     }
 
     suspend fun initializePeriodicSync() {
@@ -53,7 +54,7 @@ class PeriodicSyncViewModel(application: Application) : AndroidViewModel(applica
     }
 
     fun collectPeriodicSyncJobStatus() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _pollPeriodicSyncJobStatus.collect { periodicSyncJobStatus ->
 
                 val lastSyncStatus = getLastSyncStatus(periodicSyncJobStatus.lastSyncJobStatus)
@@ -79,7 +80,7 @@ class PeriodicSyncViewModel(application: Application) : AndroidViewModel(applica
     }
 
     fun cancelPeriodicSyncJob() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             Sync.cancelPeriodicSync<AppFhirSyncWorker>(
                 getApplication<FhirApplication>().applicationContext,
             )

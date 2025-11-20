@@ -18,9 +18,9 @@ import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.utils.QuestionnaireHelper
 import java.util.Date
 import java.util.UUID
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.hl7.fhir.r4.model.CodeableConcept
 import org.hl7.fhir.r4.model.Coding
 import org.hl7.fhir.r4.model.Enumerations
@@ -87,22 +87,21 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         questionnaireResponseString: String,
         appContext: Context
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val bundle =
                 ResourceMapper.extract(questionnaireResource, questionnaireResponse)
             val context = FhirContext.forR4()
             val questionnaire =
                 context.newJsonParser().encodeResourceToString(questionnaireResponse)
 
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    val title = "afp-contact-case-information"
-                    val linkReference = Reference("Patient/$patientId")
-                    val encounterId = generateUuid()
-                    val contactId = generateUuid()
+            try {
+                val title = "afp-contact-case-information"
+                val linkReference = Reference("Patient/$patientId")
+                val encounterId = generateUuid()
+                val contactId = generateUuid()
 
-                    val contact = Patient()
-                    contact.id = contactId
+                val contact = Patient()
+                contact.id = contactId
 
 
                     val identifierSystem0 = Identifier()
@@ -264,10 +263,9 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         println("Data Found LinkId: ${it.linkId}, Text: ${it.text}, Answer: ${it.answer}")
                     }
 
-                    CoroutineScope(Dispatchers.Main).launch { isResourcesSaved.value = true }
+                    withContext(Dispatchers.Main) { isResourcesSaved.value = true }
                 } catch (e: Exception) {
-
-                    CoroutineScope(Dispatchers.Main).launch { isResourcesSaved.value = false }
+                    withContext(Dispatchers.Main) { isResourcesSaved.value = false }
                 }
             }
         }
@@ -281,10 +279,9 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
         questionnaireResponseString: String,
         appContext: Context
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
 
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
+            try {
                     val identifierSystem0 = Identifier()
                     val typeCodeableConcept0 = CodeableConcept()
                     val codingList0 = ArrayList<Coding>()
@@ -357,10 +354,10 @@ class ScreenerViewModel(application: Application, private val state: SavedStateH
                         createResource(obs, subjectReference, encounterReference, appContext)
                     }
 
-                    CoroutineScope(Dispatchers.Main).launch { isResourcesSaved.value = true }
+                    withContext(Dispatchers.Main) { isResourcesSaved.value = true }
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    CoroutineScope(Dispatchers.Main).launch { isResourcesSaved.value = false }
+                    withContext(Dispatchers.Main) { isResourcesSaved.value = false }
                 }
             }
         }

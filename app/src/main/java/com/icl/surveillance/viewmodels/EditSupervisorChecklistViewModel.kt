@@ -22,6 +22,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.hl7.fhir.r4.model.Enumerations
 import org.hl7.fhir.r4.model.Observation
 import org.hl7.fhir.r4.model.Patient
@@ -82,11 +83,11 @@ class EditSupervisorChecklistViewModel(
         questionnaire: String?,
         questionnaireResponseString: String
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             questionnaireResponse.id = questionnaireId
             fhirEngine.update(questionnaireResponse)
 
-            isResourcesSaved.value = true
+            withContext(Dispatchers.Main) { isResourcesSaved.value = true }
 
             // Let's use a supervisor job to further process changes
             when (questionnaire) {
