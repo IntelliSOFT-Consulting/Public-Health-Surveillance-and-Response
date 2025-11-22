@@ -24,6 +24,7 @@ import com.icl.surveillance.clients.AddParentCaseActivity
 import com.icl.surveillance.databinding.FragmentCaseSelectionBinding
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.models.CaseOption
+import com.icl.surveillance.models.UserRole
 import com.icl.surveillance.ui.home.sheet.SelectionBottomSheet
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.utils.FormatterClass
@@ -521,8 +522,10 @@ class CaseSelectionFragment : Fragment() {
                     FormatterClass().saveSharedPref(
                         "AddParentTitle", "Add $titleName Case", requireContext()
                     )
+
+                    val questionnaire = assignRespectiveQuestionnaire()
                     FormatterClass().saveSharedPref(
-                        "questionnaire", "add-case.json", requireContext()
+                        "questionnaire", questionnaire, requireContext()
                     )
 
                     val canPerformAction = checkIfUserIsAllowedToAction()
@@ -532,7 +535,7 @@ class CaseSelectionFragment : Fragment() {
                     }
                     val intent = Intent(requireContext(), AddParentCaseActivity::class.java)
                     intent.putExtra("AddParentTitle", "Add $titleName Case")
-                    intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, "add-case.json")
+                    intent.putExtra(QUESTIONNAIRE_FILE_PATH_KEY, questionnaire)
                     startActivity(intent)
                 }
 
@@ -576,7 +579,7 @@ class CaseSelectionFragment : Fragment() {
                 }
             }
         }
-        println("Case Type: $title")
+
         val caseType = when (title?.trim()) {
             "Measles" -> "measles-case-information"
             "AFP" -> "afp-case-information"
@@ -590,8 +593,6 @@ class CaseSelectionFragment : Fragment() {
             "Mpox Register" -> "mpox-register"
             else -> null
         }
-        println("Case Type: $caseType")
-
         caseType?.let {
             try {
 
@@ -619,6 +620,35 @@ class CaseSelectionFragment : Fragment() {
                 e.printStackTrace()
             }
         }
+    }
+
+    fun assignRespectiveQuestionnaire(): String {
+        var questionnaire: String
+        val formatter = FormatterClass()
+        val storedRole = formatter.getSharedPref("practitionerRole", requireContext())
+        val userRole = UserRole.fromAny(storedRole ?: "")
+
+        when (userRole) {
+
+            UserRole.ADMINISTRATOR -> {
+                questionnaire = "add-case.json"
+            }
+
+            UserRole.COUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
+                questionnaire = "add-county-case.json"
+            }
+
+            UserRole.SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
+                questionnaire = "add-subcounty-case.json"
+            }
+
+            else -> {
+                questionnaire = "add-case.json"
+            }
+        }
+
+        return "add-case.json"
+
     }
 
     /**

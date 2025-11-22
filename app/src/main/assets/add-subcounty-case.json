@@ -117,6 +117,37 @@
     {
       "item": [
         {
+          "linkId": "user_county",
+          "text": "County",
+          "type": "string"
+        },
+        {
+          "linkId": "user_sub_county",
+          "text": "Sub County",
+          "type": "string"
+        }
+      ],
+      "type": "group",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+          "valueCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/questionnaire-item-control",
+                "code": "page",
+                "display": "Page"
+              }
+            ]
+          }
+        }
+      ],
+      "linkId": "variables",
+      "text": "Variables"
+    },
+    {
+      "item": [
+        {
           "linkId": "294367770999",
           "text": "County",
           "type": "reference",
@@ -125,7 +156,7 @@
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
               "valueExpression": {
                 "language": "application/x-fhir-query",
-                "expression": "Location?partof=Location/0&_sort=name"
+                "expression": "Location?_id={{%assignedCounty}}&_sort=name"
               }
             },
             {
@@ -153,7 +184,7 @@
               "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
               "valueExpression": {
                 "language": "application/x-fhir-query",
-                "expression": "Location?partof={{%countyName}}&_sort=name"
+                "expression": "Location?_id={{%assignedSubCounty}}&_sort=name"
               }
             },
             {
@@ -287,10 +318,6 @@
               }
             ]
           }
-        },
-        {
-          "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden",
-          "valueBoolean": true
         }
       ],
       "linkId": "151479012557",
@@ -745,35 +772,6 @@
                   }
                 ]
               }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
-              "extension": [
-                {
-                  "url": "key",
-                  "valueId": "constraint-1"
-                },
-                {
-                  "url": "requirements",
-                  "valueString": "Date 1st seen at the facility should be after date of birth"
-                },
-                {
-                  "url": "severity",
-                  "valueCode": "error"
-                },
-                {
-                  "url": "expression",
-                  "valueString": "%context.answer.value >= %resource.descendants().where(linkId='257830485990').answer.value"
-                },
-                {
-                  "url": "human",
-                  "valueString": "Date 1st seen at the facility should be after date of birth"
-                },
-                {
-                  "url": "location",
-                  "valueString": "257830485990"
-                }
-              ]
             }
           ]
         },
@@ -1001,35 +999,6 @@
                 {
                   "url": "location",
                   "valueString": "554231819382"
-                }
-              ]
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
-              "extension": [
-                {
-                  "url": "key",
-                  "valueId": "constraint-1"
-                },
-                {
-                  "url": "requirements",
-                  "valueString": "Date Date of onset of illness should be after date of birth"
-                },
-                {
-                  "url": "severity",
-                  "valueCode": "error"
-                },
-                {
-                  "url": "expression",
-                  "valueString": "%context.answer.value >= %resource.descendants().where(linkId='257830485990').answer.value"
-                },
-                {
-                  "url": "human",
-                  "valueString": "Date of onset of illness should be after date of birth"
-                },
-                {
-                  "url": "location",
-                  "valueString": "257830485990"
                 }
               ]
             }
