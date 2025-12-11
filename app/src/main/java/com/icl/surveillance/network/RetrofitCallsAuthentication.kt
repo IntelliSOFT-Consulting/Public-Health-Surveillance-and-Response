@@ -9,6 +9,7 @@ import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.icl.surveillance.MainActivity
+import com.icl.surveillance.auth.InitialSyncActivity
 import com.icl.surveillance.models.DbResetPasswordData
 import com.icl.surveillance.models.DbResponseError
 import com.icl.surveillance.models.DbSetPasswordReq
@@ -244,7 +245,7 @@ class RetrofitCallsAuthentication {
                                     getUserDetails(context)
                                     messageToast = "Login successful.."
 
-                                    val intent = Intent(context, MainActivity::class.java)
+                                    val intent = Intent(context, InitialSyncActivity::class.java)
                                     intent.addFlags(
                                         Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     )

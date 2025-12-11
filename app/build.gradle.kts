@@ -10,10 +10,10 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.icl.surveillance"
+        applicationId = "com.icl.nphi"
         minSdk = 26
         targetSdk = 35
-        versionCode = 41
+        versionCode = 3
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

@@ -49,8 +49,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
 
 
-                binding.emailLayout.error = null
-//                    sendResetCode(email)
+                binding.emailLayout.error = null 
                 val payload = DbResetPasswordData(
                     idNumber = emailAddress,
                     email = emailAddress

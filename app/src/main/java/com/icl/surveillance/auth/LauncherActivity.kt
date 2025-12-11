@@ -58,8 +58,13 @@ class LauncherActivity : AppCompatActivity() {
             delay(3000) // 3 seconds
             val loggedIn = FormatterClass().getSharedPref("isLoggedIn", this@LauncherActivity)
             if (loggedIn != null) {
-                val intent = Intent(this@LauncherActivity, MainActivity::class.java)
-                startActivity(intent)
+                if (FormatterClass().isSyncDone(this@LauncherActivity)) {
+                    val intent = Intent(this@LauncherActivity, MainActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    val intent = Intent(this@LauncherActivity, InitialSyncActivity::class.java)
+                    startActivity(intent)
+                }
                 this@LauncherActivity.finish()
             } else {
                 binding.getStartedButton.visibility = View.VISIBLE

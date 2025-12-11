@@ -109,6 +109,10 @@
         "language": "text/fhirpath",
         "expression": "%resource.descendants().where(linkId='user_facility').answer.value"
       }
+    },
+    {
+      "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-entryMode",
+      "valueCode": "prior-edit"
     }
   ],
   "title": "Measles Case Report",
@@ -301,13 +305,18 @@
         {
           "type": "string",
           "linkId": "873240407472",
-          "text": "Patient's first name",
+          "text": "First name",
           "required": true
         },
         {
           "type": "string",
+          "linkId": "246751846436",
+          "text": "Middle name"
+        },
+        {
+          "type": "string",
           "linkId": "486402457213",
-          "text": "Patient's family name",
+          "text": "Surname/Family name",
           "required": true
         },
         {
@@ -369,7 +378,7 @@
             }
           ],
           "linkId": "442636360588",
-          "text": "Date of birth known or unkown",
+          "text": "Date of birth known or unknown",
           "required": true,
           "answerOption": [
             {
@@ -463,7 +472,7 @@
         {
           "type": "integer",
           "linkId": "185726989867",
-          "text": "Age in Months",
+          "text": "Months",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
@@ -484,7 +493,7 @@
         {
           "type": "integer",
           "linkId": "828303331247",
-          "text": "Age in Days",
+          "text": "Days",
           "extension": [
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",

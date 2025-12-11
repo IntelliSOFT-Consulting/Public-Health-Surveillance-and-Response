@@ -121,8 +121,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                             context
                         )
                     )
-                }
-//                questionnaireResponse.addExtension(extension)
+                } 
                 fhirEngine.create(questionnaireResponse)
             }
 

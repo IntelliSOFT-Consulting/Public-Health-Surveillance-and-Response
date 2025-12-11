@@ -139,8 +139,7 @@ class SummarizedActivity : AppCompatActivity() {
         var customFragments = when (latestEncounter) {
             "measles-case-information" -> {
                 listOf(
-                    "Laboratory Information" to LabResultsFragment(),
-//                        "Regional Laboratory Information" to RegionalLabResultsFragment()
+                    "Laboratory Information" to LabResultsFragment(), 
                 )
 
             }
@@ -263,8 +262,7 @@ class SummarizedActivity : AppCompatActivity() {
                         val patientId =
                             FormatterClass().getSharedPref("patientId", this@SummarizedActivity)
                         if (patientId != null) {
-                            lifecycleScope.launch {
-//                                fhirEngine.delete(ResourceType.Patient, patientId)
+                            lifecycleScope.launch { 
                             }
                         }
                         Toast.makeText(this, "Resource Deleted!!", Toast.LENGTH_SHORT).show()

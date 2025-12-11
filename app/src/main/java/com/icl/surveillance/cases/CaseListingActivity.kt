@@ -109,9 +109,7 @@ class CaseListingActivity : AppCompatActivity() {
 
                     lifecycleScope.launch {
                         patientListViewModel.patients.collect { newList ->
-                            adapterRegister.addPatients(newList) // only append new ones
-//                            items.clear()
-//                            items.addAll(newList)
+                            adapterRegister.addPatients(newList)  
                             if (newList.isNotEmpty()) {
                                 binding.apply {
                                     count.text = "Showing ${newList.size} Results"
@@ -140,8 +138,7 @@ class CaseListingActivity : AppCompatActivity() {
                     patientListViewModel.handleCurrentCaseListing(slug)
                     recyclerView.adapter = adapter
                     patientListViewModel.liveSearchedCases.observe(this) {
-                        binding.apply {
-//                            count.text = "Showing ${it.size} Results"
+                        binding.apply { 
                             patientListContainer.pbProgress.visibility = View.GONE
                         }
 
@@ -151,9 +148,7 @@ class CaseListingActivity : AppCompatActivity() {
                             }
                         } else {
                             binding.apply { patientListContainer.caseCount.visibility = View.GONE }
-                        }
-
-//                        adapter.submitList(it)
+                        } 
                         adapter.setData(it)
 
                         binding.apply {

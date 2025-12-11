@@ -53,8 +53,7 @@ class LoginActivity : AppCompatActivity() {
 
         binding.apply {
             tvForgotPassword.setOnClickListener {
-                startActivity(Intent(this@LoginActivity, ForgotPasswordActivity::class.java))
-//                Toast.makeText(this@LoginActivity,"Coming soon", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this@LoginActivity, ForgotPasswordActivity::class.java)) 
             }
             loginCard.apply {
                 animate()
