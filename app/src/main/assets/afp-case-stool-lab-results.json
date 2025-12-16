@@ -22,6 +22,10 @@
           "text": "Date specimen received at the national level",
           "extension": [
             {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "d/M/y"
+            },
+            {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
               "valueString": "Cannot be a date in the future"
             },
@@ -100,6 +104,10 @@
           "text": "Date combined Cell Culture was done",
           "extension": [
             {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "d/M/y"
+            },
+            {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
               "valueString": "Cannot be a date in the future"
             },
@@ -125,6 +133,10 @@
           "text": "Date Results sent to national EPI",
           "extension": [
             {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "d/M/y"
+            },
+            {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
               "valueString": "Cannot be a date in the future"
             },
@@ -149,6 +161,10 @@
           "linkId": "825243480539",
           "text": "Date Results received at national EPI",
           "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "d/M/y"
+            },
             {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
               "valueString": "Cannot be a date in the future"
@@ -220,6 +236,10 @@
           "text": "Date sent from I-C/National laboratory to regional lab results",
           "extension": [
             {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "d/M/y"
+            },
+            {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
               "valueString": "Cannot be a date in the future"
             },
@@ -245,6 +265,10 @@
           "text": "Date I-T differentiation sent to EPI",
           "extension": [
             {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "d/M/y"
+            },
+            {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
               "valueString": "Cannot be a date in the future"
             },
@@ -269,6 +293,10 @@
           "linkId": "227970871286",
           "text": "Date I-T differentiation results received by EPI",
           "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "d/M/y"
+            },
             {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
               "valueString": "Cannot be a date in the future"

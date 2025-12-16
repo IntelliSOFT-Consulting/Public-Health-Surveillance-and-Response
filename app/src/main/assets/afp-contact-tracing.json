@@ -321,6 +321,10 @@
           "type": "date",
           "extension": [
             {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "d/M/y"
+            },
+            {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
               "valueString": "Cannot be a date in the future"
             },
@@ -652,6 +656,10 @@
           "text": "Date of Last OPV dose",
           "extension": [
             {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "d/M/y"
+            },
+            {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
               "valueString": "Cannot be a date in the future"
             },
@@ -716,6 +724,10 @@
           "text": "Date of Specimen Collection",
           "extension": [
             {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "d/M/y"
+            },
+            {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
               "valueString": "Cannot be a date in the future"
             },
@@ -741,6 +753,10 @@
           "linkId": "194068690918",
           "text": "Date specimen sent to the laboratory",
           "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "d/M/y"
+            },
             {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
               "valueString": "Cannot be a date in the future"
@@ -777,6 +793,10 @@
           "linkId": "937239277173",
           "text": "Date specimen received at national lab",
           "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "d/M/y"
+            },
             {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
               "valueString": "Cannot be a date in the future"
@@ -892,6 +912,10 @@
           "linkId": "435728776944",
           "text": "Date final results sent from lab to EPI",
           "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "d/M/y"
+            },
             {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
               "valueString": "Cannot be a date in the future"

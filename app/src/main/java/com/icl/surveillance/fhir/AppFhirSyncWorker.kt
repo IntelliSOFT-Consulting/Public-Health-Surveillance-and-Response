@@ -11,9 +11,6 @@ import com.google.android.fhir.sync.upload.UploadStrategy
 
 class AppFhirSyncWorker(appContext: Context, workerParams: WorkerParameters) :
     FhirSyncWorker(appContext, workerParams) {
-
-
-
     override fun getDownloadWorkManager(): DownloadWorkManager {
         val engine = FhirApplication.fhirEngine(applicationContext)
         return TimestampBasedDownloadWorkManagerImpl(

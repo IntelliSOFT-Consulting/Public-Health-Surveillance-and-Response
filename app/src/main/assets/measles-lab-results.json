@@ -46,6 +46,10 @@
       "type": "date",
       "extension": [
         {
+          "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+          "valueString": "d/M/y"
+        },
+        {
           "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
           "valueString": "Cannot be a date in the future"
         },
@@ -266,6 +270,10 @@
       "type": "date",
       "extension": [
         {
+          "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+          "valueString": "d/M/y"
+        },
+        {
           "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
           "valueString": "Cannot be a date in the future"
         },
@@ -371,6 +379,10 @@
       ],
       "required": true,
       "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+          "valueString": "d/M/y"
+        },
         {
           "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
           "valueString": "Cannot be a date in the future"

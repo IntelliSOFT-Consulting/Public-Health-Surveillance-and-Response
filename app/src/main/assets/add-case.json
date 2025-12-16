@@ -399,6 +399,10 @@
           "type": "date",
           "extension": [
             {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "d/M/y"
+            },
+            {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
               "valueString": "Cannot be a date in the future"
             },
@@ -667,6 +671,14 @@
           "text": "Telephone No of parent/guardian",
           "extension": [
             {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Enter a valid mobile number. Strings and special characters aren't allowed"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/regex",
+              "valueString": "^\\d{10,10}$"
+            },
+            {
               "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
               "valueCodeableConcept": {
                 "coding": [
@@ -677,14 +689,6 @@
                   }
                 ]
               }
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minLength",
-              "valueInteger": 10
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxLength",
-              "valueInteger": 10
             }
           ],
           "item": [
@@ -737,6 +741,10 @@
           "text": "Date 1st seen at health facility",
           "required": true,
           "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "d/M/y"
+            },
             {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
               "valueString": "Cannot be a date in the future"
@@ -827,6 +835,10 @@
         {
           "type": "date",
           "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "d/M/y"
+            },
             {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
               "valueString": "Cannot be a date in the future"
@@ -967,6 +979,10 @@
           "required": true,
           "extension": [
             {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "d/M/y"
+            },
+            {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
               "valueString": "Cannot be a date in the future"
             },
@@ -1063,6 +1079,7 @@
           "linkId": "745196148424",
           "text": "Clinical symptoms",
           "repeats": true,
+          "required": true,
           "answerOption": [
             {
               "valueCoding": {
@@ -1099,6 +1116,10 @@
         {
           "type": "date",
           "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "d/M/y"
+            },
             {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
               "valueString": "Cannot be a date in the future"
@@ -1280,6 +1301,10 @@
           ],
           "required": true,
           "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "d/M/y"
+            },
             {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
               "valueString": "Cannot be a date in the future"
@@ -1463,41 +1488,11 @@
               }
             }
           ],
-          "required": true
-        },
-        {
-          "type": "date",
-          "linkId": "544290619304",
-          "text": "Date of last vaccination",
           "required": true,
           "extension": [
             {
-              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
-              "valueString": "Cannot be a date in the future"
-            },
-            {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
-              "valueDate": {
-                "extension": [
-                  {
-                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
-                    "valueExpression": {
-                      "language": "text/fhirpath",
-                      "expression": "today()"
-                    }
-                  }
-                ]
-              }
-            }
-          ],
-          "enableWhen": [
-            {
-              "question": "517772812375",
-              "operator": "=",
-              "answerCoding": {
-                "code": "yes",
-                "display": "Yes"
-              }
+              "valueInteger": 8
             }
           ]
         },
@@ -1522,7 +1517,7 @@
             }
           ],
           "linkId": "308128177300",
-          "text": "Any vaccination given in the last 30 days?",
+          "text": "MR vaccination given in last 30 days prior to onset of illness",
           "required": true,
           "answerOption": [
             {
@@ -1541,6 +1536,75 @@
               "valueCoding": {
                 "code": "unknown",
                 "display": "Unknown"
+              }
+            }
+          ]
+        },
+        {
+          "type": "date",
+          "linkId": "544290619304",
+          "text": "Date of last vaccination",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "d/M/y"
+            },
+            {
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Cannot be a date in the future"
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
+              "valueDate": {
+                "extension": [
+                  {
+                    "url": "http://hl7.org/fhir/StructureDefinition/cqf-calculatedValue",
+                    "valueExpression": {
+                      "language": "text/fhirpath",
+                      "expression": "today()"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-constraint",
+              "extension": [
+                {
+                  "url": "key",
+                  "valueId": "constraint-1"
+                },
+                {
+                  "url": "requirements",
+                  "valueString": "Date of last vaccination should be before Date of onset of illness"
+                },
+                {
+                  "url": "severity",
+                  "valueCode": "error"
+                },
+                {
+                  "url": "expression",
+                  "valueString": "%context.answer.value <= %resource.descendants().where(linkId='728034137219').answer.value"
+                },
+                {
+                  "url": "human",
+                  "valueString": "Date of last vaccination  should be before Date of onset of illness"
+                },
+                {
+                  "url": "location",
+                  "valueString": "728034137219"
+                }
+              ]
+            }
+          ],
+          "enableWhen": [
+            {
+              "question": "308128177300",
+              "operator": "=",
+              "answerCoding": {
+                "code": "yes",
+                "display": "Yes"
               }
             }
           ]
@@ -1579,6 +1643,10 @@
         {
           "type": "date",
           "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "d/M/y"
+            },
             {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
               "valueString": "Cannot be a date in the future"
@@ -1696,6 +1764,10 @@
           "type": "date",
           "extension": [
             {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "d/M/y"
+            },
+            {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
               "valueString": "Cannot be a date in the future"
             },
@@ -1760,6 +1832,10 @@
         {
           "type": "date",
           "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/entryFormat",
+              "valueString": "d/M/y"
+            },
             {
               "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
               "valueString": "Cannot be a date in the future"
