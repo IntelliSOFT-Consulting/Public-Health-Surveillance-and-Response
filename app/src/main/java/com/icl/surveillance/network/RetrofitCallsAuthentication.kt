@@ -8,7 +8,6 @@ import android.util.Log
 import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.icl.surveillance.MainActivity
 import com.icl.surveillance.auth.InitialSyncActivity
 import com.icl.surveillance.models.DbResetPasswordData
 import com.icl.surveillance.models.DbResponseError
@@ -20,6 +19,7 @@ import com.icl.surveillance.models.User
 import com.icl.surveillance.utils.Constants.ALERTS_BASE_URL
 import com.icl.surveillance.utils.Constants.BASE_URL
 import com.icl.surveillance.utils.FormatterClass
+import com.icl.surveillance.viewmodels.SyncFragmentViewModel
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,19 +35,20 @@ class RetrofitCallsAuthentication {
         SupervisorJob() + Dispatchers.IO + CoroutineName("BackgroundProcessing")
     )
 
-    fun loginUser(context: Context, dbSignIn: DbSignIn) {
-
+    fun loginUser(viewModel: SyncFragmentViewModel, context: Context, dbSignIn: DbSignIn) {
         CoroutineScope(Dispatchers.Main).launch {
             val job = Job()
-            CoroutineScope(Dispatchers.IO + job).launch { startLogin(context, dbSignIn) }.join()
+            CoroutineScope(Dispatchers.IO + job).launch { startLogin(viewModel, context, dbSignIn) }
+                .join()
         }
     }
 
-    fun getUserProfile(context: Context) {
+    fun getUserProfile(viewModel: SyncFragmentViewModel, context: Context) {
 
         CoroutineScope(Dispatchers.Main).launch {
             val job = Job()
-            CoroutineScope(Dispatchers.IO + job).launch { getUserDetails(context) }.join()
+            CoroutineScope(Dispatchers.IO + job).launch { getUserDetails(viewModel, context) }
+                .join()
         }
     }
 
@@ -190,7 +191,7 @@ class RetrofitCallsAuthentication {
         }
     }
 
-    private fun startLogin(context: Context, dbSignIn: DbSignIn) {
+    private fun startLogin(viewModel: SyncFragmentViewModel, context: Context, dbSignIn: DbSignIn) {
 
         val job1 = Job()
         CoroutineScope(Dispatchers.Main + job1).launch {
@@ -228,7 +229,7 @@ class RetrofitCallsAuthentication {
                                     formatter.saveSharedPref("access_token", access_token, context)
                                     formatter.saveSharedPref(
                                         "expires_in",
-                                        expires_in.toString(),
+                                        expires_in,
                                         context
                                     )
                                     formatter.saveSharedPref(
@@ -242,7 +243,7 @@ class RetrofitCallsAuthentication {
                                         context
                                     )
                                     formatter.saveSharedPref("isLoggedIn", "true", context)
-                                    getUserDetails(context)
+                                    getUserDetails(viewModel, context)
                                     messageToast = "Login successful.."
 
                                     val intent = Intent(context, InitialSyncActivity::class.java)
@@ -335,7 +336,7 @@ class RetrofitCallsAuthentication {
     }
 
 
-    private fun getUserDetails(context: Context) {
+    private fun getUserDetails(viewModel: SyncFragmentViewModel, context: Context) {
 
         CoroutineScope(Dispatchers.IO).launch {
             val formatter = FormatterClass()
@@ -346,7 +347,7 @@ class RetrofitCallsAuthentication {
                 if (token != null) {
                     val apiInterface = apiService.getUserInfo("Bearer $token")
                     if (apiInterface.isSuccessful) {
-
+                        viewModel.triggerOneTimeSync()
                         val statusCode = apiInterface.code()
                         val body = apiInterface.body()
                         if (statusCode == 200 || statusCode == 201) {
@@ -358,10 +359,7 @@ class RetrofitCallsAuthentication {
                     }
                 }
             } catch (e: Exception) {
-
-                Log.e("******", "")
-                Log.e("******", e.toString())
-                Log.e("******", "")
+                e.printStackTrace()
             }
         }
     }
@@ -371,7 +369,7 @@ class RetrofitCallsAuthentication {
         val location = user.locationInfo
         val userDetails =
             mapOf(
-                "firstName" to user.firstName ,
+                "firstName" to user.firstName,
                 "lastName" to user.lastName,
                 "role" to user.role,
                 "id" to user.id,

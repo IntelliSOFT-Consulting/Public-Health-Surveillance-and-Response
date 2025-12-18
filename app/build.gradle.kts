@@ -10,7 +10,7 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.icl.nphi"
+        applicationId = "com.icl.surveillance"
         minSdk = 26
         targetSdk = 35
         versionCode = 3

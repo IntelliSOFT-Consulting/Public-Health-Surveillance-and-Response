@@ -336,12 +336,12 @@
               }
             },
             {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxLength",
-              "valueInteger": 10
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Enter a valid mobile number. Strings and special characters aren't allowed"
             },
             {
-              "url": "http://hl7.org/fhir/StructureDefinition/minLength",
-              "valueInteger": 10
+              "url": "http://hl7.org/fhir/StructureDefinition/regex",
+              "valueString": "^\\d{10,10}$"
             }
           ],
           "linkId": "760016167922",
@@ -878,12 +878,12 @@
               }
             },
             {
-              "url": "http://hl7.org/fhir/StructureDefinition/maxLength",
-              "valueInteger": 10
+              "url": "http://ehelse.no/fhir/StructureDefinition/validationtext",
+              "valueString": "Enter a valid mobile number. Strings and special characters aren't allowed"
             },
             {
-              "url": "http://hl7.org/fhir/StructureDefinition/minLength",
-              "valueInteger": 10
+              "url": "http://hl7.org/fhir/StructureDefinition/regex",
+              "valueString": "^\\d{10,10}$"
             }
           ],
           "item": [

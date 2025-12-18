@@ -170,7 +170,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getUserProfile() {
-        retrofitCallsAuthentication.getUserProfile(this)
+        retrofitCallsAuthentication.getUserProfile(viewModel,this)
     }
 
     private fun checkLocationPermission() {

@@ -6,8 +6,8 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -17,13 +17,14 @@ import com.icl.surveillance.R
 import com.icl.surveillance.databinding.ActivityLoginBinding
 import com.icl.surveillance.models.DbSignIn
 import com.icl.surveillance.network.RetrofitCallsAuthentication
-import com.icl.surveillance.utils.FormatterClass
+import com.icl.surveillance.viewmodels.SyncFragmentViewModel
+import kotlin.getValue
 
 class LoginActivity : AppCompatActivity() {
 
     private var retrofitCallsAuthentication = RetrofitCallsAuthentication()
     private lateinit var binding: ActivityLoginBinding
-
+    private val viewModel: SyncFragmentViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +54,7 @@ class LoginActivity : AppCompatActivity() {
 
         binding.apply {
             tvForgotPassword.setOnClickListener {
-                startActivity(Intent(this@LoginActivity, ForgotPasswordActivity::class.java)) 
+                startActivity(Intent(this@LoginActivity, ForgotPasswordActivity::class.java))
             }
             loginCard.apply {
                 animate()
@@ -85,7 +86,11 @@ class LoginActivity : AppCompatActivity() {
                 }
 
                 val dbSignIn = DbSignIn(idNumber = email, password = password, "Facility")
-                retrofitCallsAuthentication.loginUser(this@LoginActivity, dbSignIn)
+                retrofitCallsAuthentication.loginUser(
+                    viewModel = viewModel,
+                    context = this@LoginActivity,
+                    dbSignIn = dbSignIn
+                )
 
             }
         }
