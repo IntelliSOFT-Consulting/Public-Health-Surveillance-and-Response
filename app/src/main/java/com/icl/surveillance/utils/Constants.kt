@@ -7,11 +7,12 @@ import com.icl.surveillance.R
 
 object Constants {
 
-    const val BASE_URL = "https://dsrfhir.intellisoftkenya.com/hapi/fhir/"
-    const val ALERTS_BASE_URL="https://dsrfhir.intellisoftkenya.com/api/"
+    //    const val BASE_URL = "https://dsrfhir.intellisoftkenya.com/hapi/fhir/"
+    const val ALERTS_BASE_URL = "https://dsrfhir.intellisoftkenya.com/api/"
 //    const val BASE_URL = "http://45.79.161.190:8085/fhir/"
 
-//            const val BASE_URL ="https://auth.nphiis.nphl.go.ke/fhir/"
+    const val BASE_URL = "https://auth.nphiis.nphl.go.ke/fhir/"
+
     //MOH 505
     const val COUNTY = "a4-county"
     const val SUB_COUNTY = "a3-sub-county"

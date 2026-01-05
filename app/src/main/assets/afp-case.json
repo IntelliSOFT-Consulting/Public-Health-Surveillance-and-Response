@@ -1902,8 +1902,7 @@
               "answerInteger": 1
             }
           ],
-          "enableBehavior": "all",
-          "required": true
+          "enableBehavior": "all"
         },
         {
           "type": "date",
@@ -1969,8 +1968,7 @@
               "answerInteger": 2
             }
           ],
-          "enableBehavior": "all",
-          "required": true
+          "enableBehavior": "all"
         },
         {
           "type": "date",
@@ -2036,8 +2034,7 @@
               "answerInteger": 3
             }
           ],
-          "enableBehavior": "all",
-          "required": true
+          "enableBehavior": "all"
         },
         {
           "type": "date",
