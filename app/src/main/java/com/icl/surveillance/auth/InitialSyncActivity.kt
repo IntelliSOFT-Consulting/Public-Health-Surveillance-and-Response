@@ -15,7 +15,10 @@ import com.icl.surveillance.databinding.ActivityInitialSyncBinding
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.utils.FhirBundleLoader
 import com.icl.surveillance.utils.FormatterClass
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.yield
 
 class InitialSyncActivity : AppCompatActivity() {
     private lateinit var fhirEngine: FhirEngine
@@ -45,6 +48,7 @@ class InitialSyncActivity : AppCompatActivity() {
             val loader = FhirBundleLoader(this@InitialSyncActivity)
             val status = binding.syncStatusText   // or findViewById
             fun update(msg: String) {
+
                 status.text = msg
             }
 
@@ -104,11 +108,27 @@ class InitialSyncActivity : AppCompatActivity() {
         }
 
         onStatus("Parsing $label…")
+        yield()
         val bundle = loader.parseFhirBundle(json)
 
-        onStatus("Loading ${bundle.entry.size} $label…")
-        loader.createBundleInEngine(engine, bundle)
+        onStatus("Loading ${bundle.entry.size - 1} $label…")
+        yield()
 
-        onStatus("Finished $label.")
+
+        val bundleResult = withContext(Dispatchers.IO) {
+            loader.createBundleInEngine(engine, bundle)
+        }
+        withContext(Dispatchers.Main) {
+            val message = buildString {
+                append("Processed ${bundleResult.processed} / ${bundle.entry.size}")
+                if (bundleResult.skipped > 0) append(", skipped ${bundleResult.skipped}")
+                if (bundleResult.failed > 0) append(", failed ${bundleResult.failed}")
+            }
+            onStatus(message)
+            yield()
+            onStatus("Finished $label.")
+            yield()
+        }
+
     }
 }

@@ -8,8 +8,8 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.icl.nphi" />
-                  <option name="mobileSdkAppId" value="1:775151638897:android:d32d12a88ced219e527ed0" />
+                  <option name="appId" value="com.icl.surveillance" />
+                  <option name="mobileSdkAppId" value="1:775151638897:android:ebdf6269fa8643a9527ed0" />
                   <option name="projectId" value="surveillance-nphiis" />
                   <option name="projectNumber" value="775151638897" />
                 </ConnectionSetting>

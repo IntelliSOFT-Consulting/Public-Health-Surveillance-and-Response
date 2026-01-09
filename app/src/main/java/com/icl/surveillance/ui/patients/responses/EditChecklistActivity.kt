@@ -40,6 +40,7 @@ class EditChecklistActivity : AppCompatActivity() {
             "mpox-register.json" -> "Edit Mpox Register"
             "mpox-tally-sheet.json" -> "Edit Summary Sheet"
             "mpox-supervisor-checklist.json" -> "Edit Supervisor Checklist"
+            "add-case.json" -> "Edit Measles Case"
             else -> ""
         }
         supportActionBar.apply { title = titleText }
@@ -107,11 +108,18 @@ class EditChecklistActivity : AppCompatActivity() {
                         as QuestionnaireFragment
             val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
 
-            val questionnaire= FormatterClass().getSharedPref("questionnaire",this@EditChecklistActivity)
+            val questionnaire =
+                FormatterClass().getSharedPref("questionnaire", this@EditChecklistActivity)
             val questionnaireResponse = questionnaireFragment.getQuestionnaireResponse()
             val questionnaireResponseString =
                 jsonParser.encodeResourceToString(questionnaireResponse)
-            viewModel.updatePatient(this@EditChecklistActivity,questionnaireResponse,questionnaire,questionnaireResponseString)
+
+            viewModel.updatePatient(
+                this@EditChecklistActivity,
+                questionnaireResponse,
+                questionnaire,
+                questionnaireResponseString
+            )
         }
     }
 

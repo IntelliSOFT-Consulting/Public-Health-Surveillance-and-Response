@@ -20,7 +20,7 @@ data class OutputGroup(
 @Serializable
 data class OutputItem(
     val linkId: String,
-    val text: String,
+    var text: String,
     val type: String,
     var value: String? = "",
     var parentOperator: String? = "==",
@@ -77,6 +77,11 @@ enum class UrlData(var message: Int) {
 
 data class FCMToken(
     val token: String
+)
+data class BundleImportResult(
+    val processed: Int,
+    val failed: Int,
+    val skipped: Int
 )
 
 data class DbSignIn(

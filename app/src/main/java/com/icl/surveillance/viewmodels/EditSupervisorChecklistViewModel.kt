@@ -90,6 +90,13 @@ class EditSupervisorChecklistViewModel(
 
             // Let's use a supervisor job to further process changes
             when (questionnaire) {
+                "add-case.json"->{
+                    startBackgroundProcessing(
+                        context,
+                        questionnaireResponseString,
+                        questionnaire
+                    )
+                }
                 "mpox-register.json" -> startBackgroundProcessing(
                     context,
                     questionnaireResponseString,
@@ -113,6 +120,7 @@ class EditSupervisorChecklistViewModel(
         backgroundProcessingScope.launch {
             try {
                 val patientId = FormatterClass().getSharedPref("patientId", context)
+               println("Started working on patient $patientId")
                 val jsonObject = JSONObject(questionnaireResponseString)
                 val extractedAnswers = extractStructuredAnswersOnlyFromItems(jsonObject)
 
@@ -179,7 +187,7 @@ class EditSupervisorChecklistViewModel(
                     val newAnswers = extractedAnswers.filter { answer ->
                         answer.linkId !in existingLinkIds
                     }
-                    val patientId = generateUuid()
+//                    val patientId = generateUuid()
                     val subjectReference = Reference("Patient/$patientId")
                     val encounterReference = Reference("Patient/$patientId")
 
@@ -211,6 +219,7 @@ class EditSupervisorChecklistViewModel(
 
             } catch (e: Exception) {
                 e.printStackTrace()
+                println("Started working on patient  error: ${e.message}")
             }
         }
     }

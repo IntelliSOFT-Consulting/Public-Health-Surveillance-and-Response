@@ -153,9 +153,8 @@ class RetrofitCallsAuthentication {
             CoroutineScope(Dispatchers.IO + job)
                 .launch {
                     val formatter = FormatterClass()
-                    val baseUrl = context.getString(UrlData.BASE_URL.message)
-                    val apiService =
-                        RetrofitBuilder.getRetrofit(baseUrl).create(Interface::class.java)
+                   val apiService =
+                        RetrofitBuilder.getRetrofit(ALERTS_BASE_URL).create(Interface::class.java)
                     try {
                         val token = formatter.getSharedPref("access_token", context)
                         if (token != null) {

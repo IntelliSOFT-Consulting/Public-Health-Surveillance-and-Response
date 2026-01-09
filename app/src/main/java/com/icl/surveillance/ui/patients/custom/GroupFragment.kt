@@ -14,6 +14,13 @@ import com.google.gson.Gson
 import com.icl.surveillance.R
 import com.icl.surveillance.models.OutputGroup
 import com.icl.surveillance.models.OutputItem
+import com.icl.surveillance.utils.Constants.COUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES
+import com.icl.surveillance.utils.Constants.DEFAULT_EXCLUDES
+import com.icl.surveillance.utils.Constants.SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES
+import com.icl.surveillance.utils.Constants.VACCINATOR_EXCLUDES
+import com.icl.surveillance.utils.Constants.VALID_COUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES
+import com.icl.surveillance.utils.Constants.VALID_SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES
+import com.icl.surveillance.utils.Constants.VALID_VACCINATOR_EXCLUDES
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -59,28 +66,59 @@ class GroupFragment : Fragment() {
     }
 
     private fun addChildItems() {
+        val role = group.items.find {
+            it.linkId == "user_role"
+        }
         for (item in group.items) {
             val fieldView = createCustomField(item)
             val labelOnlyView = createCustomLabelField(item)
             var show = true
-            if (!item.enable) {
-                show = false
-                show = checkIfParentAnswerMatches(
-                    item.parentOperator,
-                    item.parentLink, item.parentResponse, group.items
-                )
-            }
-            if (show) {
-                if (item.text.isEmpty() && item.value?.isEmpty() == true) {
-                    // If both text and value are empty, skip this item
-                    continue
-                } else if (item.text.isEmpty() && item.value != null) {
-                    val answerFieldView = createAnswerCustomField(item)
-                    parentLayout.addView(answerFieldView)
-                } else if (item.text.isNotEmpty() && item.value?.isEmpty() == true && item.type == "group") {
-                    parentLayout.addView(labelOnlyView)
-                } else {
-                    parentLayout.addView(fieldView)
+            if (!DEFAULT_EXCLUDES.contains(item.linkId)) {
+
+                if (!item.enable) {
+                    show = checkIfParentAnswerMatches(
+                        item.parentOperator,
+                        item.parentLink, item.parentResponse, group.items
+                    )
+                }
+                println("Showing  --- **** Role $role -> ${item.linkId} -> ${item.text} -> value ${item.value} status ${item.enable} ")
+
+                if (role != null) {
+                    when (role.value) {
+                        "VACCINATOR" -> {
+                            if (VALID_VACCINATOR_EXCLUDES.contains(item.linkId)) {
+                                item.value = ""
+                                item.text = ""
+                            }
+                        }
+
+                        "SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES" -> {
+                            if (VALID_SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES.contains(item.linkId)) {
+                                item.value = ""
+                                item.text = ""
+                            }
+                        }
+
+                        "COUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES" -> {
+                            if (VALID_COUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES.contains(item.linkId)) {
+                                item.value = ""
+                                item.text = ""
+                            }
+                        }
+                    }
+                }
+                if (show) {
+                    if (item.text.isEmpty() && item.value?.isEmpty() == true) {
+                        // If both text and value are empty, skip this item
+                        continue
+                    } else if (item.text.isEmpty() && item.value != null) {
+                        val answerFieldView = createAnswerCustomField(item)
+                        parentLayout.addView(answerFieldView)
+                    } else if (item.text.isNotEmpty() && item.value?.isEmpty() == true && item.type == "group") {
+                        parentLayout.addView(labelOnlyView)
+                    } else {
+                        parentLayout.addView(fieldView)
+                    }
                 }
             }
         }

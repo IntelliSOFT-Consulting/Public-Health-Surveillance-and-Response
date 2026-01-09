@@ -174,7 +174,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
     }
 
     fun updatePatientData(
-        updatedResponse: QuestionnaireResponse,
+        questionnaireResponse: QuestionnaireResponse,
         context: Context,
         measureReport: MeasureReport
     ) {
@@ -182,7 +182,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
             val qh = QuestionnaireHelper()
             val formatter = FormatterClass()
             val facility = formatter.getSharedPref("facility", context)
-            val questionnaireResponse = populateReportingSiteAnswers(updatedResponse, context)
+//            val questionnaireResponse = populateReportingSiteAnswers(updatedResponse, context)
             if (QuestionnaireResponseValidator.validateQuestionnaireResponse(
                     questionnaire,
                     questionnaireResponse,
@@ -301,11 +301,11 @@ class AddClientViewModel(application: Application, private val state: SavedState
     }
 
     fun savePatientData(
-        updatedResponse: QuestionnaireResponse,
+        questionnaireResponse: QuestionnaireResponse,
         context: Context
     ) {
         viewModelScope.launch {
-            val questionnaireResponse = populateReportingSiteAnswers(updatedResponse, context)
+//            val questionnaireResponse = populateReportingSiteAnswers(updatedResponse, context)
 
             if (QuestionnaireResponseValidator.validateQuestionnaireResponse(
                     questionnaire,
@@ -750,8 +750,6 @@ class AddClientViewModel(application: Application, private val state: SavedState
                             }
                         }
                     }
-
-
                 }
 
                 "afp-case-information" -> {

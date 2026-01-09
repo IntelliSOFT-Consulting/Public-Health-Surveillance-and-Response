@@ -24,7 +24,7 @@
             android:id="@+id/animation_view"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:tint="@color/purple_500"
+            android:tint="@color/purple_200"
             app:lottie_autoPlay="true"
             app:lottie_rawRes="@raw/circle"
             app:lottie_repeatCount="1000" />
@@ -51,11 +51,12 @@
         <!-- Status text -->
         <TextView
             android:id="@+id/syncStatusText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="center"
             android:text="@string/preparing_sync"
+            android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="12sp"
             android:textStyle="bold" />

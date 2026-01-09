@@ -279,10 +279,11 @@ class AddParentCaseActivity : AppCompatActivity() {
             when (userRole) {
 
                 UserRole.ADMINISTRATOR -> {
-                    val childGroup = QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
-                        linkId = "151479012557"
-                        text = "Reporting Site"
-                    }
+                    val childGroup =
+                        QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                            linkId = "151479012557"
+                            text = "Reporting Site"
+                        }
                     childGroup.addItem(
                         QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
                             linkId = "user_role"
@@ -294,15 +295,16 @@ class AddParentCaseActivity : AppCompatActivity() {
                 }
 
                 UserRole.COUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
-                    val childGroup = QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
-                        linkId = "151479012557"
-                        text = "Reporting Site"
-                    }
+                    val childGroup =
+                        QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                            linkId = "151479012557"
+                            text = "Reporting Site"
+                        }
                     childGroup.addItem(
                         QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
                             linkId = "user_role"
                             text = "User Role"
-                            answerFirstRep.value = StringType("VACCINATOR")
+                            answerFirstRep.value = StringType("COUNTY_DISEASE_SURVEILLANCE_OFFICER")
                         }
                     )
 
@@ -312,15 +314,17 @@ class AddParentCaseActivity : AppCompatActivity() {
                 }
 
                 UserRole.SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
-                    val childGroup = QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
-                        linkId = "variables"
-                        text = "Variables"
-                    }
+                    val childGroup =
+                        QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                            linkId = "variables"
+                            text = "Variables"
+                        }
                     childGroup.addItem(
                         QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
                             linkId = "user_role"
                             text = "User Role"
-                            answerFirstRep.value = StringType("VACCINATOR")
+                            answerFirstRep.value =
+                                StringType("SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER")
                         }
                     )
 
@@ -334,10 +338,11 @@ class AddParentCaseActivity : AppCompatActivity() {
                 UserRole.SUPERVISOR,
                 UserRole.VACCINATOR -> {
 
-                    val childGroup = QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
-                        linkId = "151479012557"
-                        text = "Reporting Site"
-                    }
+                    val childGroup =
+                        QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                            linkId = "151479012557"
+                            text = "Reporting Site"
+                        }
 
                     childGroup.addItem(
                         QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
@@ -346,6 +351,44 @@ class AddParentCaseActivity : AppCompatActivity() {
                             answerFirstRep.value = StringType("VACCINATOR")
                         }
                     )
+
+                    childGroup.addItem(
+                        QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                            linkId = "user_facility"
+                            text = "User Facility"
+                            answerFirstRep.value = StringType(getAssignedLocation("facility"))
+                        }
+                    )
+
+                    childGroup.addItem(
+                        QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                            linkId = "user_ward"
+                            text = "User Ward"
+                            answerFirstRep.value = StringType(getAssignedLocation("ward"))
+                        }
+                    )
+
+                    childGroup.addItem(
+                        QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                            linkId = "user_sub_county"
+                            text = "User Sub County"
+                            answerFirstRep.value = StringType(getAssignedLocation("subCounty"))
+                        }
+                    )
+
+                    childGroup.addItem(
+                        QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                            linkId = "user_county"
+                            text = "User County"
+                            answerFirstRep.value = StringType(getAssignedLocation("county"))
+                        }
+                    )
+
+                    val facilityLevelGroup =
+                        QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                            linkId = "facility_level"
+                            text = " "
+                        }
 
                     val county = createCountyAnswer(
                         getAssignedLocation("county"),
@@ -371,15 +414,17 @@ class AddParentCaseActivity : AppCompatActivity() {
                         "819946803677", "Health Facility"
                     )
 
-                    childGroup.addItem(county)
-                    childGroup.addItem(subCounty)
-                    childGroup.addItem(ward)
-                    childGroup.addItem(facility)
+                    facilityLevelGroup.addItem(county)
+                    facilityLevelGroup.addItem(subCounty)
+                    facilityLevelGroup.addItem(ward)
+                    facilityLevelGroup.addItem(facility)
+                    childGroup.addItem(facilityLevelGroup)
 
                     resource.addItem(childGroup)
                 }
 
-                else -> { /* No-op */ }
+                else -> { /* No-op */
+                }
             }
 
             // 2. Serialize resource INTO JSON (expensive → done on background thread)

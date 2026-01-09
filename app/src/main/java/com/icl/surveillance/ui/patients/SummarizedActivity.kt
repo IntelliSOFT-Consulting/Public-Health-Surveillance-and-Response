@@ -139,7 +139,7 @@ class SummarizedActivity : AppCompatActivity() {
         var customFragments = when (latestEncounter) {
             "measles-case-information" -> {
                 listOf(
-                    "Laboratory Information" to LabResultsFragment(), 
+                    "Laboratory Information" to LabResultsFragment(),
                 )
 
             }
@@ -262,7 +262,7 @@ class SummarizedActivity : AppCompatActivity() {
                         val patientId =
                             FormatterClass().getSharedPref("patientId", this@SummarizedActivity)
                         if (patientId != null) {
-                            lifecycleScope.launch { 
+                            lifecycleScope.launch {
                             }
                         }
                         Toast.makeText(this, "Resource Deleted!!", Toast.LENGTH_SHORT).show()
@@ -354,7 +354,7 @@ class SummarizedActivity : AppCompatActivity() {
                             startActivity(intent)
                         }
 
-                        "measles-cases-information" -> {
+                        "measles-case-information" -> {
                             FormatterClass().saveSharedPref(
                                 "questionnaire",
                                 "add-case.json",

@@ -5,6 +5,7 @@ import android.util.Log
 import ca.uhn.fhir.context.FhirContext
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.search.search
+import com.icl.surveillance.models.BundleImportResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.hl7.fhir.r4.model.Bundle
@@ -39,11 +40,50 @@ class FhirBundleLoader(private val context: Context) {
         }
     }
 
-    suspend fun createBundleInEngine(engine: FhirEngine, bundle: Bundle) {
+    suspend fun createBundleInEngine(
+        engine: FhirEngine,
+        bundle: Bundle
+    ): BundleImportResult {
+
+        var processed = 0
+        var failed = 0
+        var skipped = 0
+
+        withContext(Dispatchers.IO.limitedParallelism(2)) {
+
+            val existingIds = engine.search<Location> { }
+                .mapNotNull { it.resource.id }
+                .toHashSet()
+
+            bundle.entry.chunked(250).forEach { batch ->
+                batch.forEach { entry ->
+                    val id = entry.resource.id
+                    if (existingIds.contains(id)) {
+                        skipped++
+                        return@forEach
+                    }
+
+                    try {
+                        engine.create(entry.resource)
+                        processed++
+                    } catch (e: Exception) {
+                        failed++
+                        Log.e("FHIR", "Failed to import ${entry.resource.id}: ${e.message}")
+                    }
+                }
+            }
+        }
+
+        return BundleImportResult(processed, failed, skipped)
+    }
+
+
+    suspend fun createBundleInEngineOld(engine: FhirEngine, bundle: Bundle): BundleImportResult {
+        var processed = 0
+        var failed = 0
+        var skipped = 0
         withContext(Dispatchers.IO) {
-            var processed = 0
-            var failed = 0
-            var skipped = 0
+
 
             for (entry in bundle.entry) {
                 try {
@@ -68,6 +108,7 @@ class FhirBundleLoader(private val context: Context) {
             }
 
         }
+        return BundleImportResult(processed, failed, skipped)
     }
 
 }
