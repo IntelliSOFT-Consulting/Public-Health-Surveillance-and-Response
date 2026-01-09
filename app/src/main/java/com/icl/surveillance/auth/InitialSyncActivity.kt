@@ -37,9 +37,10 @@ class InitialSyncActivity : AppCompatActivity() {
         fhirEngine = FhirApplication.fhirEngine(this@InitialSyncActivity)
         if (FormatterClass().isSyncDone(this)) {
             startMain()
-            return
+
+        }else {
+            handleInitialSync()
         }
-        handleInitialSync()
     }
 
 

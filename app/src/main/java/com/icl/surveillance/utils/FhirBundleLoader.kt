@@ -62,7 +62,6 @@ class FhirBundleLoader(private val context: Context) {
                         skipped++
                         return@forEach
                     }
-
                     try {
                         engine.create(entry.resource)
                         processed++
@@ -83,12 +82,10 @@ class FhirBundleLoader(private val context: Context) {
         var failed = 0
         var skipped = 0
         withContext(Dispatchers.IO) {
-
-
             for (entry in bundle.entry) {
                 try {
                     val existing = engine.search<Location> {
-                        filter(Resource.RES_ID, { value = of(entry.resource.idPart) })
+                        filter(Resource.RES_ID, { value = of(entry.resource.id) })
                     }
                     if (existing.isNotEmpty()) {
                         // Already in DB → skip

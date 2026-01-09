@@ -309,6 +309,21 @@ class AddParentCaseActivity : AppCompatActivity() {
                     )
 
                     val userCounty = addUserCountyResponse("user_county", "county")
+
+                    val county = createCountyAnswer(
+                        getAssignedLocation("county"),
+                        getAssignedLocation("countyName"),
+                        "294367770999_county", "County"
+                    )
+                    val countyLevelGroup =
+                        QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                            linkId = "county_level"
+                            text = " "
+                        }
+
+
+                    countyLevelGroup.addItem(county)
+                    childGroup.addItem(countyLevelGroup)
                     childGroup.addItem(userCounty)
                     resource.addItem(childGroup)
                 }
@@ -330,6 +345,7 @@ class AddParentCaseActivity : AppCompatActivity() {
 
                     childGroup.addItem(addUserCountyResponse("user_county", "county"))
                     childGroup.addItem(addUserCountyResponse("user_sub_county", "subCounty"))
+
 
                     resource.addItem(childGroup)
                 }

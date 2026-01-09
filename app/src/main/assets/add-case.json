@@ -111,6 +111,30 @@
       }
     },
     {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
+        "name": "selectedCountyNameCounty",
+        "language": "text/fhirpath",
+        "expression": "%resource.descendants().where(linkId='294367770999_county').answer.value.reference"
+      }
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
+        "name": "selectedSubCountyNameCounty",
+        "language": "text/fhirpath",
+        "expression": "%resource.descendants().where(linkId='819946803642_county').answer.value.reference"
+      }
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
+        "name": "selectedWardNameCounty",
+        "language": "text/fhirpath",
+        "expression": "%resource.descendants().where(linkId='819943434_county').answer.value.reference"
+      }
+    },
+    {
       "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-entryMode",
       "valueCode": "prior-edit"
     }
@@ -362,7 +386,7 @@
                   "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
                   "valueExpression": {
                     "language": "application/x-fhir-query",
-                    "expression": "Location?partof=Location/0&_sort=name"
+                    "expression": "Location?_id={{%assignedCounty}}&_sort=name"
                   }
                 },
                 {
@@ -390,7 +414,7 @@
                   "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
                   "valueExpression": {
                     "language": "application/x-fhir-query",
-                    "expression": "Location?partof={{%countyName}}&_sort=name"
+                    "expression": "Location?partof={{%countyNameCounty}}&_sort=name"
                   }
                 },
                 {
@@ -418,7 +442,7 @@
                   "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
                   "valueExpression": {
                     "language": "application/x-fhir-query",
-                    "expression": "Location?partof={{%selectedSubCountyName}}&_sort=name"
+                    "expression": "Location?partof={{%selectedSubCountyNameSubCounty}}&_sort=name"
                   }
                 },
                 {
@@ -446,7 +470,7 @@
                   "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
                   "valueExpression": {
                     "language": "application/x-fhir-query",
-                    "expression": "Location?partof={{%selectedWardName}}&_sort=name"
+                    "expression": "Location?partof={{%selectedWardNameCounty}}&_sort=name"
                   }
                 },
                 {
@@ -528,7 +552,7 @@
                   "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
                   "valueExpression": {
                     "language": "application/x-fhir-query",
-                    "expression": "Location?partof=Location/0&_sort=name"
+                    "expression": "Location?_id={{%assignedCounty}}&_sort=name"
                   }
                 },
                 {
@@ -548,15 +572,15 @@
               "required": true
             },
             {
-              "type": "reference",
               "linkId": "819946803642_county",
+              "type": "reference",
               "text": "Sub County",
               "extension": [
                 {
                   "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
                   "valueExpression": {
                     "language": "application/x-fhir-query",
-                    "expression": "Location?partof={{%countyName}}&_sort=name"
+                    "expression": "Location?partof={{%selectedCountyNameCounty}}&_sort=name"
                   }
                 },
                 {
@@ -584,7 +608,7 @@
                   "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
                   "valueExpression": {
                     "language": "application/x-fhir-query",
-                    "expression": "Location?partof={{%selectedSubCountyName}}&_sort=name"
+                    "expression": "Location?partof={{%selectedSubCountyNameCounty}}&_sort=name"
                   }
                 },
                 {
@@ -612,7 +636,7 @@
                   "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
                   "valueExpression": {
                     "language": "application/x-fhir-query",
-                    "expression": "Location?partof={{%selectedWardName}}&_sort=name"
+                    "expression": "Location?partof={{%selectedWardNameCounty}}&_sort=name"
                   }
                 },
                 {

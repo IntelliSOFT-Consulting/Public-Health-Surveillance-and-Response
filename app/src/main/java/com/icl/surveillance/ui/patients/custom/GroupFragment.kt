@@ -92,14 +92,14 @@ class GroupFragment : Fragment() {
                             }
                         }
 
-                        "SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES" -> {
+                        "SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER" -> {
                             if (VALID_SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES.contains(item.linkId)) {
                                 item.value = ""
                                 item.text = ""
                             }
                         }
 
-                        "COUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES" -> {
+                        "COUNTY_DISEASE_SURVEILLANCE_OFFICER" -> {
                             if (VALID_COUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES.contains(item.linkId)) {
                                 item.value = ""
                                 item.text = ""
