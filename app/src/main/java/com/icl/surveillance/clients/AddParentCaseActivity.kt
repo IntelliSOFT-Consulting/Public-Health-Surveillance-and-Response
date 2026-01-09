@@ -331,8 +331,8 @@ class AddParentCaseActivity : AppCompatActivity() {
                 UserRole.SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
                     val childGroup =
                         QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
-                            linkId = "variables"
-                            text = "Variables"
+                            linkId = "151479012557"
+                            text = "Reporting Site"
                         }
                     childGroup.addItem(
                         QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
@@ -346,7 +346,26 @@ class AddParentCaseActivity : AppCompatActivity() {
                     childGroup.addItem(addUserCountyResponse("user_county", "county"))
                     childGroup.addItem(addUserCountyResponse("user_sub_county", "subCounty"))
 
+                    val subCountyLevelGroup =
+                        QuestionnaireResponse.QuestionnaireResponseItemComponent().apply {
+                            linkId = "sub_county_level"
+                            text = " "
+                        }
 
+                    val county = createCountyAnswer(
+                        getAssignedLocation("county"),
+                        getAssignedLocation("countyName"),
+                        "294367770999_sub_county", "County"
+                    )
+
+                    val subCounty = createCountyAnswer(
+                        getAssignedLocation("subCounty"),
+                        getAssignedLocation("subCountyName"),
+                        "819946803642_sub_county", "Sub County"
+                    )
+                    subCountyLevelGroup.addItem(county)
+                    subCountyLevelGroup.addItem(subCounty)
+                    childGroup.addItem(subCountyLevelGroup)
                     resource.addItem(childGroup)
                 }
 

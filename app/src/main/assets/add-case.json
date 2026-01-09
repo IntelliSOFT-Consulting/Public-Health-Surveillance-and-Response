@@ -135,6 +135,30 @@
       }
     },
     {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
+        "name": "selectedCountyNameSubCounty",
+        "language": "text/fhirpath",
+        "expression": "%resource.descendants().where(linkId='294367770999_sub_county').answer.value.reference"
+      }
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
+        "name": "selectedSubCountyNameSubCounty",
+        "language": "text/fhirpath",
+        "expression": "%resource.descendants().where(linkId='819946803642_sub_county').answer.value.reference"
+      }
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/variable",
+      "valueExpression": {
+        "name": "selectedWardNameSubCounty",
+        "language": "text/fhirpath",
+        "expression": "%resource.descendants().where(linkId='819943434_sub_county').answer.value.reference"
+      }
+    },
+    {
       "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-entryMode",
       "valueCode": "prior-edit"
     }
@@ -414,7 +438,7 @@
                   "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
                   "valueExpression": {
                     "language": "application/x-fhir-query",
-                    "expression": "Location?partof={{%countyNameCounty}}&_sort=name"
+                    "expression": "Location?_id={{%assignedSubCounty}}&_sort=name"
                   }
                 },
                 {
@@ -470,7 +494,7 @@
                   "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-answerExpression",
                   "valueExpression": {
                     "language": "application/x-fhir-query",
-                    "expression": "Location?partof={{%selectedWardNameCounty}}&_sort=name"
+                    "expression": "Location?partof={{%selectedWardNameSubCounty}}&_sort=name"
                   }
                 },
                 {

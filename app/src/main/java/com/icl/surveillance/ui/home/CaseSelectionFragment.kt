@@ -635,11 +635,11 @@ class CaseSelectionFragment : Fragment() {
             }
 
             UserRole.COUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
-                questionnaire = "add-county-case.json"
+                questionnaire = "add-case.json"
             }
 
             UserRole.SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
-                questionnaire = "add-subcounty-case.json"
+                questionnaire = "add-case.json"
             }
 
             else -> {
