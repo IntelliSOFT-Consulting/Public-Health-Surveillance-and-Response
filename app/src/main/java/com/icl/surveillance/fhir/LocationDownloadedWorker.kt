@@ -22,6 +22,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.hl7.fhir.r4.model.CodeableConcept
 import org.hl7.fhir.r4.model.Coding
 import org.hl7.fhir.r4.model.Location
@@ -44,10 +45,11 @@ class LocationDownloadedWorker(
         val context = applicationContext
         val fhirEngine = FhirApplication.fhirEngine(context)
         val currentUrl = Constants.getNextUrl(context) ?: LOCATION_STARTER
-       // if (!Constants.isDownloadComplete(context)) {
-         //   fetchAllPages(currentUrl, context, fhirEngine)
-       // }
-
+        runBlocking {
+            if (!Constants.isDownloadComplete(context)) {
+                fetchAllPages(currentUrl, context, fhirEngine)
+            }
+        }
         val output = workDataOf("fetch_complete" to true)
         Result.success(output)
     } catch (e: Exception) {
@@ -90,62 +92,71 @@ class LocationDownloadedWorker(
         return location
     }
 
-    private fun fetchAllPages(
+    private suspend fun fetchAllPages(
         startUrl: String,
         context: Context,
         fhirEngine: FhirEngine
     ) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val apiService = RetrofitBuilder.getRetrofit(BASE_URL).create(Interface::class.java)
-            var nextUrl: String? = startUrl
-            var page = 1
+        val apiService = RetrofitBuilder.getRetrofit(BASE_URL).create(Interface::class.java)
+        var nextUrl: String? = startUrl
+        var page = 1
+        var processed = 0
+        var skipped = 0
+        var failed = 0
+        val progressInterval = 50 // update UI every 50 records
 
-            while (!nextUrl.isNullOrEmpty()) {
-                if (!Constants.isDownloadComplete(context)) {
-                    try {
-                        Log.d("LocationWorker", "Fetching page $page: $nextUrl")
-                        val token = FormatterClass().getSharedPref("access_token", context)
-                        if (token != null) {
-                            val bundle = apiService.fetchBundle(nextUrl, "Bearer $token")
-                            val entries = bundle.entry ?: emptyList()
-                            coroutineScope {
-                                entries.map { entry ->
-                                    async(Dispatchers.IO) {
-                                        try {
-                                            val location = createLocationResource(entry)
-                                            val exists = fhirEngine.search<Location> {
-                                                filter(Resource.RES_ID, { value = of(location.id) })
-                                            }
-                                            if (exists.isEmpty()) {
-                                              //  fhirEngine.create(location)
-                                            }
-                                        } catch (e: Exception) {
-                                            Log.e(
-                                                "LocationWorker",
-                                                "Failed to save: ${entry.resource.id}",
-                                                e
-                                            )
-                                        }
-                                    }
-                                }.awaitAll()
+        while (!nextUrl.isNullOrEmpty() && !Constants.isDownloadComplete(context)) {
+            try {
+                Log.d("LocationWorker", "Fetching page $page: $nextUrl")
+                val token = FormatterClass().getSharedPref("access_token", context)
+                if (token != null) {
+                    val bundle = apiService.fetchBundle(nextUrl, "Bearer $token")
+                    val entries = bundle.entry ?: emptyList()
+
+                    entries.forEachIndexed { index, entry ->
+                        try {
+                            val location = createLocationResource(entry)
+                            val exists = fhirEngine.search<Location> {
+                                filter(Resource.RES_ID, { value = of(location.id) })
                             }
-                            nextUrl = bundle.link?.firstOrNull { it.relation == "next" }?.url
-                            if (nextUrl != null) {
-                                Constants.saveNextUrl(context, nextUrl)
-                                Constants.markActionComplete(context, false)
+                            if (exists.isEmpty()) {
+                                fhirEngine.create(location)
                             } else {
-                                Constants.clear(context)
-                                Constants.markActionComplete(context, true)
+                                skipped++
                             }
-                            Log.d("LocationWorker", "Next URL: $nextUrl")
-                            delay(400) // prevent rapid fire requests
-                            page++
+                            processed++
+                        } catch (e: Exception) {
+                            failed++
+                            Log.e("LocationWorker", "Failed to save: ${entry.resource.id}", e)
                         }
-                    } catch (e: Exception) {
-                        Log.e("LocationWorker", "Error fetching page: $nextUrl", e)
-                        break // Prevent infinite loop
+
+                        // Update progress every `progressInterval` entries
+                        if ((processed % progressInterval == 0) || (index == entries.lastIndex)) {
+                            val progressData = workDataOf(
+                                "processed" to processed,
+                                "skipped" to skipped,
+                                "failed" to failed
+                            )
+                            setProgressAsync(progressData)
+                        }
                     }
+
+                    // Handle next page
+                    nextUrl = bundle.link?.firstOrNull { it.relation == "next" }?.url
+                    if (nextUrl != null) {
+                        Constants.saveNextUrl(context, nextUrl)
+                        Constants.markActionComplete(context, false)
+                    } else {
+                        Constants.clear(context)
+                        Constants.markActionComplete(context, true)
+                    }
+                    Log.d("LocationWorker", "Next URL: $nextUrl")
+                    delay(200) // prevent rapid fire requests
+                    page++
                 }
+            } catch (e: Exception) {
+                Log.e("LocationWorker", "Error fetching page: $nextUrl", e)
+                break
             }
         }
     }

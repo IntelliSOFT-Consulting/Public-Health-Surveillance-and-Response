@@ -39,7 +39,6 @@ class TimestampBasedDownloadWorkManagerImpl(
     private val generalResources = LinkedList(
         listOf(
             "Practitioner?_sort=_lastUpdated",
-            "Location?_sort=_lastUpdated",
         )
     )
 

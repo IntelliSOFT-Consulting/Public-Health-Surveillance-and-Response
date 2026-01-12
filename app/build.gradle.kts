@@ -18,9 +18,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        ndk {
-            abiFilters += setOf("arm64-v8a", "x86_64")
-        }
+//        ndk {
+//            abiFilters += setOf("arm64-v8a", "x86_64")
+//        }
         externalNativeBuild {
             // For ndk-build, instead use the ndkBuild block.
             cmake {
@@ -75,6 +75,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.messaging)
+    implementation(libs.androidx.swiperefreshlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

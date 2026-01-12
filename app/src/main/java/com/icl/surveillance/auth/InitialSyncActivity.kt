@@ -3,22 +3,31 @@ package com.icl.surveillance.auth
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.google.android.fhir.FhirEngine
 import com.icl.surveillance.MainActivity
 import com.icl.surveillance.R
 import com.icl.surveillance.databinding.ActivityInitialSyncBinding
 import com.icl.surveillance.fhir.FhirApplication
+import com.icl.surveillance.fhir.LocationDownloadedWorker
 import com.icl.surveillance.utils.FhirBundleLoader
 import com.icl.surveillance.utils.FormatterClass
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
+import java.io.File
+import java.util.concurrent.atomic.AtomicInteger
+import kotlin.collections.emptyList
 
 class InitialSyncActivity : AppCompatActivity() {
     private lateinit var fhirEngine: FhirEngine
@@ -38,11 +47,114 @@ class InitialSyncActivity : AppCompatActivity() {
         if (FormatterClass().isSyncDone(this)) {
             startMain()
 
-        }else {
-            handleInitialSync()
+        } else {
+            handleInitialFHIRLocalSync()
         }
     }
 
+    private fun handleInitialFHIRSync() {
+        val workerRequest = OneTimeWorkRequestBuilder<LocationDownloadedWorker>().build()
+        val workerId = workerRequest.id
+        WorkManager.getInstance(this@InitialSyncActivity).enqueue(workerRequest)
+
+        WorkManager.getInstance(this@InitialSyncActivity)
+            .getWorkInfoByIdLiveData(workerId)
+            .observe(this) { workInfo ->
+                workInfo?.progress?.let { data ->
+                    val processed = data.getInt("processed", 0)
+                    val skipped = data.getInt("skipped", 0)
+                    val failed = data.getInt("failed", 0)
+                    val message = buildString {
+                        if (processed > 0) append("Processed $processed ")
+                        if (skipped > 0) append(", skipped $skipped")
+                        if (failed > 0) append(", failed $failed")
+                    }
+                    binding.syncStatusText.text = message
+                }
+
+                // Optional: handle completion
+                if (workInfo?.state?.isFinished == true) {
+                    Toast.makeText(this, "Import complete", Toast.LENGTH_SHORT).show()
+                    startMain()
+                }
+            }
+
+    }
+
+    private fun handleInitialFHIRLocalSync() {
+        lifecycleScope.launch {
+            val loader = FhirBundleLoader(this@InitialSyncActivity)
+            val status = binding.syncStatusText   // or findViewById
+            fun update(msg: String) {
+
+                status.text = msg
+            }
+
+            update("Preparing data…")
+            val assetManager = assets
+            // List all files in assets/bundles and sort by page number
+            val assetFiles = assetManager.list("bundles")?.sortedBy { fileName ->
+                Regex("bundle_page_(\\d+)\\.json").find(fileName)?.groupValues?.get(1)?.toInt() ?: 0
+            } ?: emptyList()
+
+            val totalProcessed = AtomicInteger(0)
+            val totalSkipped = AtomicInteger(0)
+            val totalFailed = AtomicInteger(0)
+
+            val totalEntries = assetFiles.sumOf { fileName ->
+                assetManager.open("bundles/$fileName").use { loader.parseFhirBundle(it).entry.size }
+            }
+
+            for (fileName in assetFiles) {
+                assetManager.open("bundles/$fileName").use { inputStream ->
+                    val bundle = loader.parseFhirBundle(inputStream)
+
+                    var lastProcessedInBundle = 0
+                    var lastSkippedInBundle = 0
+                    var lastFailedInBundle = 0
+
+                    withContext(Dispatchers.IO) {
+                        loader.createBundleInEngine(
+                            fhirEngine,
+                            bundle
+                        ) { processed, skipped, failed, total ->
+
+                            // Compute only the new entries since last callback
+                            val deltaProcessed = processed - lastProcessedInBundle
+                            val deltaSkipped = skipped - lastSkippedInBundle
+                            val deltaFailed = failed - lastFailedInBundle
+
+                            // Update per-bundle trackers
+                            lastProcessedInBundle = processed
+                            lastSkippedInBundle = skipped
+                            lastFailedInBundle = failed
+
+                            // Increment global totals
+                            totalProcessed.addAndGet(deltaProcessed)
+                            totalSkipped.addAndGet(deltaSkipped)
+                            totalFailed.addAndGet(deltaFailed)
+
+                            val message = buildString {
+                                if (totalProcessed.get() > 0) append("Processed ${totalProcessed.get()} ")
+                                if (totalSkipped.get() > 0) append(", skipped ${totalSkipped.get()}")
+                                if (totalFailed.get() > 0) append(", failed ${totalFailed.get()}")
+                            }
+                            CoroutineScope(Dispatchers.Main).launch {
+                                update(message)
+                            }
+                        }
+                    }
+                }
+            }
+
+            update("All data imported successfully.")
+            FormatterClass().setSyncDone(this@InitialSyncActivity)
+            lifecycleScope.launch {
+                delay(2000)
+                startMain()
+            }
+        }
+    }
 
     private fun handleInitialSync() {
         lifecycleScope.launch {
@@ -103,33 +215,28 @@ class InitialSyncActivity : AppCompatActivity() {
     ) {
         onStatus("Preparing $label…")
 
-        val json = when (fileName) {
-            "fhir-bundle.json" -> loader.loadCompressedBundleJson("fhir-bundle-facilities.json.gz")
-            else -> loader.loadBundleJson(fileName)
+        val inputStream = withContext(Dispatchers.IO) {
+            loader.loadBundleJson(fileName)
         }
 
         onStatus("Parsing $label…")
-        yield()
-        val bundle = loader.parseFhirBundle(json)
 
+        val bundle = withContext(Dispatchers.IO) {
+            loader.parseFhirBundle(inputStream)
+        }
         onStatus("Loading ${bundle.entry.size - 1} $label…")
-        yield()
 
-
-        val bundleResult = withContext(Dispatchers.IO) {
-            loader.createBundleInEngine(engine, bundle)
-        }
-        withContext(Dispatchers.Main) {
-            val message = buildString {
-                append("Processed ${bundleResult.processed} / ${bundle.entry.size}")
-                if (bundleResult.skipped > 0) append(", skipped ${bundleResult.skipped}")
-                if (bundleResult.failed > 0) append(", failed ${bundleResult.failed}")
+        withContext(Dispatchers.IO) {
+            loader.createBundleInEngine(engine, bundle) { processed, skipped, failed, total ->
+                val message = buildString {
+                    append("Processed $processed / $total")
+                    if (skipped > 0) append(", skipped $skipped")
+                    if (failed > 0) append(", failed $failed")
+                }
+                CoroutineScope(Dispatchers.Main).launch {
+                    onStatus(message)
+                }
             }
-            onStatus(message)
-            yield()
-            onStatus("Finished $label.")
-            yield()
         }
-
     }
 }

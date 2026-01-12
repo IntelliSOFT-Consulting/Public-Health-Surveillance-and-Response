@@ -12,11 +12,15 @@ import ca.uhn.fhir.context.FhirVersionEnum
 import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.validation.Invalid
 import com.google.android.fhir.datacapture.validation.QuestionnaireResponseValidator
+import com.google.android.fhir.search.StringFilterModifier
 import com.google.android.fhir.search.search
 import com.ibm.icu.text.SimpleDateFormat
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.fhir.FhirApplication
+import com.icl.surveillance.models.FacilityInfo
+import com.icl.surveillance.models.QuestionnaireAnswer
 import com.icl.surveillance.models.SpecimenConfig
+import com.icl.surveillance.models.UserRole
 import com.icl.surveillance.utils.Constants.ALL_LINK_IDS
 import com.icl.surveillance.utils.Constants.ALL_MPOX_LINK_IDS
 import com.icl.surveillance.utils.Constants.WEEK_ENDING_DATE
@@ -37,6 +41,7 @@ import org.hl7.fhir.r4.model.Enumerations
 import org.hl7.fhir.r4.model.Extension
 import org.hl7.fhir.r4.model.HumanName
 import org.hl7.fhir.r4.model.Identifier
+import org.hl7.fhir.r4.model.Location
 import org.hl7.fhir.r4.model.MeasureReport
 import org.hl7.fhir.r4.model.MeasureReport.MeasureReportGroupPopulationComponent
 import org.hl7.fhir.r4.model.Meta
@@ -45,8 +50,8 @@ import org.hl7.fhir.r4.model.Patient
 import org.hl7.fhir.r4.model.Questionnaire
 import org.hl7.fhir.r4.model.QuestionnaireResponse
 import org.hl7.fhir.r4.model.Reference
+import org.hl7.fhir.r4.model.Resource
 import org.hl7.fhir.r4.model.Specimen
-import org.hl7.fhir.r4.model.StringType
 import org.json.JSONObject
 import java.util.Calendar
 import java.util.Locale
@@ -87,6 +92,14 @@ class AddClientViewModel(application: Application, private val state: SavedState
                 isPatientSaved.value = false
                 return@launch
             }
+            // Print the response to the log
+            val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
+            val questionnaireResponseString =
+                jsonParser.encodeResourceToString(questionnaireResponse)
+            val jsonObject = JSONObject(questionnaireResponseString)
+            val extractedAnswers =
+                FormatterClass().extractStructuredAnswersOnlyFromItems(jsonObject)
+
 
             withContext(Dispatchers.IO) {
 
@@ -113,15 +126,13 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     setValue(responseType)
                 }
                 val facility = FormatterClass().getSharedPref("facility", context)
-                if (facility != null) {
-                    questionnaireResponse.addExtension(
-                        sourceExtension(
-                            "questionnaire",
-                            facility,
-                            context
-                        )
+
+                questionnaireResponse.addExtension(
+                    sourceExtension(
+                        "questionnaire", facility, context, extractedAnswers
                     )
-                } 
+                )
+
                 fhirEngine.create(questionnaireResponse)
             }
 
@@ -131,58 +142,15 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
     }
 
-    // Returns a NEW QuestionnaireResponse (immutable approach)
-    private fun populateReportingSiteAnswers(
-        originalResponse: QuestionnaireResponse,
-        context: Context
-    ): QuestionnaireResponse {
-        // Create a deep copy first
-        val updatedResponse = originalResponse.copy()
-
-        val reportingSiteGroup = updatedResponse.item.firstOrNull { item ->
-            item.linkId == "151479012557" && item.text == "Reporting Site"
-        }
-
-        // Modify the copy
-        reportingSiteGroup?.item?.forEach { question ->
-            question.answer.clear()
-            when (question.linkId) {
-
-                "294367770999" -> question.addAnswer().apply {
-                    value = StringType(FormatterClass().getSharedPref("countyName", context))
-                }
-
-                "819946803642" -> question.addAnswer().apply {
-                    value = StringType(FormatterClass().getSharedPref("subCountyName", context))
-                }
-
-                "819943434" -> question.addAnswer().apply {
-                    value = StringType(FormatterClass().getSharedPref("wardName", context))
-                }
-
-                "819946803677" -> question.addAnswer().apply {
-                    value = StringType(FormatterClass().getSharedPref("facilityName", context))
-                }
-
-                "438862163919" -> question.addAnswer().apply {
-                    value = StringType(FormatterClass().getSharedPref("countyName", context))
-                }
-            }
-        }
-
-        return updatedResponse // Return the modified copy
-    }
 
     fun updatePatientData(
-        questionnaireResponse: QuestionnaireResponse,
-        context: Context,
-        measureReport: MeasureReport
+        questionnaireResponse: QuestionnaireResponse, context: Context, measureReport: MeasureReport
     ) {
         viewModelScope.launch {
             val qh = QuestionnaireHelper()
             val formatter = FormatterClass()
             val facility = formatter.getSharedPref("facility", context)
-//            val questionnaireResponse = populateReportingSiteAnswers(updatedResponse, context)
+
             if (QuestionnaireResponseValidator.validateQuestionnaireResponse(
                     questionnaire,
                     questionnaireResponse,
@@ -196,21 +164,22 @@ class AddClientViewModel(application: Application, private val state: SavedState
             val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
             val questionnaireResponseString =
                 jsonParser.encodeResourceToString(questionnaireResponse)
+            val jsonObject = JSONObject(questionnaireResponseString)
+            val extractedAnswers =
+                FormatterClass().extractStructuredAnswersOnlyFromItems(jsonObject)
 
-            if (facility != null) {
-                questionnaireResponse.addExtension(
-                    sourceExtension(
-                        "questionnaire",
-                        facility,
-                        context
-                    )
+
+            questionnaireResponse.addExtension(
+                sourceExtension(
+                    "questionnaire", facility, context, extractedAnswers
                 )
-                questionnaireResponse.meta = Meta().apply {
-                    tag = listOf(
-                        sourceMetaTag("questionnaire", facility, context)
-                    )
-                }
+            )
+            questionnaireResponse.meta = Meta().apply {
+                tag = listOf(
+                    sourceMetaTag("questionnaire", facility, context, extractedAnswers)
+                )
             }
+
             val idPart = FormatterClass().getSharedPref(
                 "activeResponse", context
             )
@@ -219,10 +188,6 @@ class AddClientViewModel(application: Application, private val state: SavedState
             if (practitionerId != null) {
                 questionnaireResponse.author = Reference("Practitioner/$practitionerId")
             }
-            val jsonObject = JSONObject(questionnaireResponseString)
-            val extractedAnswers =
-                FormatterClass().extractStructuredAnswersOnlyFromItems(jsonObject)
-
 
             // Extract Patient & Encounter Ids
             val patientId = questionnaireResponse.subject.reference.split("/")[1]
@@ -235,17 +200,12 @@ class AddClientViewModel(application: Application, private val state: SavedState
                 try {
                     val observations = fhirEngine.search<Observation> {
                         filter(
-                            Observation.SUBJECT,
-                            { value = "Patient/$patientId" })
+                            Observation.SUBJECT, { value = "Patient/$patientId" })
                         filter(
-                            Observation.ENCOUNTER,
-                            { value = "Encounter/$encounterId" })
+                            Observation.ENCOUNTER, { value = "Encounter/$encounterId" })
 
                     }.take(500)
 
-                    observations.forEach { d ->
-                        println("Existing Observation: ${d.resource.code.codingFirstRep.code}")
-                    }
 
 
                     extractedAnswers.forEach {
@@ -259,11 +219,9 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         compo.code = measureCodeableConcept
 
                         if (it.linkId == WEEK_ENDING_DATE) {
-                            val date =
-                                SimpleDateFormat(
-                                    "yyyy-MM-dd",
-                                    Locale.getDefault()
-                                ).parse(it.answer)
+                            val date = SimpleDateFormat(
+                                "yyyy-MM-dd", Locale.getDefault()
+                            ).parse(it.answer)
                             if (date != null) {
                                 measureReport.date = date
                             }
@@ -283,7 +241,9 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         val obs = qh.codingQuestionnaire(
                             it.linkId, it.text, it.answer
                         )
-                        createResource(obs, subjectReference, encounterReference, context)
+                        createResource(
+                            obs, subjectReference, encounterReference, context, extractedAnswers
+                        )
 
                     }
 
@@ -301,8 +261,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
     }
 
     fun savePatientData(
-        questionnaireResponse: QuestionnaireResponse,
-        context: Context
+        questionnaireResponse: QuestionnaireResponse, context: Context
     ) {
         viewModelScope.launch {
 //            val questionnaireResponse = populateReportingSiteAnswers(updatedResponse, context)
@@ -384,46 +343,47 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
             val encounterReference = Reference("Encounter/$encounterId")
             val measure = MeasureReport()
-            if (facility != null) {
-                patient.addExtension(
-                    sourceExtension("patient", facility, context)
+
+            patient.addExtension(
+                sourceExtension("patient", facility, context, extractedAnswers)
+            )
+            patient.meta = Meta().apply {
+                tag = listOf(
+                    sourceMetaTag("patient", facility, context, extractedAnswers)
                 )
-                patient.meta = Meta().apply {
-                    tag = listOf(
-                        sourceMetaTag("patient", facility, context)
-                    )
-                }
-                enc.addExtension(sourceExtension("encounter", facility, context))
-                enc.meta = Meta().apply {
-                    tag = listOf(
-                        sourceMetaTag("encounter", facility, context)
-                    )
-                }
-                measure.addExtension(
-                    sourceExtension(
-                        "measure",
-                        facility,
-                        context
-                    )
-                )
-                measure.meta = Meta().apply {
-                    tag = listOf(
-                        sourceMetaTag("measure", facility, context)
-                    )
-                }
-                questionnaireResponse.addExtension(
-                    sourceExtension(
-                        "questionnaire",
-                        facility,
-                        context
-                    )
-                )
-                questionnaireResponse.meta = Meta().apply {
-                    tag = listOf(
-                        sourceMetaTag("questionnaire", facility, context)
-                    )
-                }
             }
+            enc.addExtension(sourceExtension("encounter", facility, context, extractedAnswers))
+            enc.meta = Meta().apply {
+                tag = listOf(
+                    sourceMetaTag(
+                        resource = "encounter",
+                        facility = "$facility",
+                        context = context,
+                        extractedAnswers
+                    )
+                )
+            }
+            measure.addExtension(
+                sourceExtension(
+                    "measure", facility, context, extractedAnswers
+                )
+            )
+            measure.meta = Meta().apply {
+                tag = listOf(
+                    sourceMetaTag("measure", facility, context, extractedAnswers)
+                )
+            }
+            questionnaireResponse.addExtension(
+                sourceExtension(
+                    "questionnaire", facility, context, extractedAnswers
+                )
+            )
+            questionnaireResponse.meta = Meta().apply {
+                tag = listOf(
+                    sourceMetaTag("questionnaire", facility, context, extractedAnswers)
+                )
+            }
+
             val practitionerId = formatter.getSharedPref("fhirPractitionerId", context)
             if (practitionerId != null) {
                 questionnaireResponse.author = Reference("Practitioner/$practitionerId")
@@ -435,12 +395,9 @@ class AddClientViewModel(application: Application, private val state: SavedState
             when (case) {
 
                 "mpox-register" -> {
-                    val patientFNameEntry =
-                        extractedAnswers.find { it.linkId == "873240407472" }
-                    val patientMNameEntry =
-                        extractedAnswers.find { it.linkId == "246751846436" }
-                    val patientLNameEntry =
-                        extractedAnswers.find { it.linkId == "486402457213" }
+                    val patientFNameEntry = extractedAnswers.find { it.linkId == "873240407472" }
+                    val patientMNameEntry = extractedAnswers.find { it.linkId == "246751846436" }
+                    val patientLNameEntry = extractedAnswers.find { it.linkId == "486402457213" }
                     if (patientLNameEntry != null) {
                         patient.nameFirstRep.family = patientLNameEntry.answer
                     }
@@ -455,8 +412,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val dobEntry = extractedAnswers.find { it.linkId == "257830485990" }
                     val genderEntry = extractedAnswers.find { it.linkId == "929966324957" }
                     val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
-                    val centerEntry =
-                        extractedAnswers.find { it.linkId == "vaccination_center" }
+                    val centerEntry = extractedAnswers.find { it.linkId == "vaccination_center" }
                     val countyEntry = extractedAnswers.find { it.linkId == "a4-county" }
                     var county = ""
                     var subCounty = ""
@@ -519,7 +475,9 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
-                    createResource(obs, subjectReference, encounterReference, context)
+                    createResource(
+                        obs, subjectReference, encounterReference, context, extractedAnswers
+                    )
                 }
 
                 "social-listening-and-rumor-tracking-tool" -> {
@@ -550,7 +508,9 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-RTT-"
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
-                    createResource(obs, subjectReference, encounterReference, context)
+                    createResource(
+                        obs, subjectReference, encounterReference, context, extractedAnswers
+                    )
                 }
 
                 "measles-case-information" -> {
@@ -564,12 +524,9 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val pSubCountyEntry = extractedAnswers.find { it.linkId == "885995384353" }
                     val pCountyEntry = extractedAnswers.find { it.linkId == "301322368614" }
                     val pPhoneEntry = extractedAnswers.find { it.linkId == "754217593839" }
-                    val patientFNameEntry =
-                        extractedAnswers.find { it.linkId == "873240407472" }
-                    val patientMNameEntry =
-                        extractedAnswers.find { it.linkId == "246751846436" }
-                    val patientLNameEntry =
-                        extractedAnswers.find { it.linkId == "486402457213" }
+                    val patientFNameEntry = extractedAnswers.find { it.linkId == "873240407472" }
+                    val patientMNameEntry = extractedAnswers.find { it.linkId == "246751846436" }
+                    val patientLNameEntry = extractedAnswers.find { it.linkId == "486402457213" }
                     val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
                     val countyEntry = extractedAnswers.find { it.linkId == "a4-county" }
                     val linkedEntry = extractedAnswers.find { it.linkId == "865158268604" }
@@ -694,7 +651,9 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-$linked"
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
-                    createResource(obs, subjectReference, encounterReference, context)
+                    createResource(
+                        obs, subjectReference, encounterReference, context, extractedAnswers
+                    )
 
                     try {
                         if (dobEntry != null) {
@@ -712,8 +671,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         SpecimenConfig("Respiratory Sample", "270749570400", "183705125522"),
                     )
 
-                    val otherSpecimenEntry =
-                        extractedAnswers.find { it.linkId == "258912872921" }
+                    val otherSpecimenEntry = extractedAnswers.find { it.linkId == "258912872921" }
                     if (otherSpecimenEntry != null) {
 
                         if (otherSpecimenEntry.answer.lowercase() == "yes") {
@@ -727,7 +685,9 @@ class AddClientViewModel(application: Application, private val state: SavedState
                                         otherSpecifyEntry.linkId,
                                         otherDateEntry.answer,
                                         otherSpecifyEntry.answer,
-                                        subjectReference, context
+                                        subjectReference,
+                                        context,
+                                        extractedAnswers
                                     )
                                 }
                             }
@@ -738,14 +698,15 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         val specimenEntry =
                             extractedAnswers.find { it.linkId == config.entryLinkId }
                         if (specimenEntry?.answer?.lowercase() == "yes") {
-                            val dateEntry =
-                                extractedAnswers.find { it.linkId == config.dateLinkId }
+                            val dateEntry = extractedAnswers.find { it.linkId == config.dateLinkId }
                             if (dateEntry != null) {
                                 createSpecimenResource(
                                     specimenEntry.linkId,
                                     dateEntry.answer,
                                     config.type,
-                                    subjectReference, context
+                                    subjectReference,
+                                    context,
+                                    extractedAnswers
                                 )
                             }
                         }
@@ -760,8 +721,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val dobEntry = extractedAnswers.find { it.linkId == "257830485990" }
                     val subCountyEntry = extractedAnswers.find { it.linkId == "a3-sub-county" }
                     val countyEntry = extractedAnswers.find { it.linkId == "a4-county" }
-                    val specimenDateEntry =
-                        extractedAnswers.find { it.linkId == "737703942433" }
+                    val specimenDateEntry = extractedAnswers.find { it.linkId == "737703942433" }
 
 
                     if (genderEntry != null) {
@@ -836,7 +796,9 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-AFP-"
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
-                    createResource(obs, subjectReference, encounterReference, context)
+                    createResource(
+                        obs, subjectReference, encounterReference, context, extractedAnswers
+                    )
 
 
                     if (specimenDateEntry != null) {
@@ -845,7 +807,9 @@ class AddClientViewModel(application: Application, private val state: SavedState
                             specimenDateEntry.linkId,
                             specimenDateEntry.answer,
                             "Stool",
-                            subjectReference, context
+                            subjectReference,
+                            context,
+                            extractedAnswers
                         )
                     }
 
@@ -870,8 +834,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val dobEntry = extractedAnswers.find { it.linkId == "257830485990" }
                     val phoneEntry = extractedAnswers.find { it.linkId == "760016167907" }
                     val contactNameEntry = extractedAnswers.find { it.linkId == "657999955440" }
-                    val contactPhoneEntry =
-                        extractedAnswers.find { it.linkId == "354738003178" }
+                    val contactPhoneEntry = extractedAnswers.find { it.linkId == "354738003178" }
 
                     val casePhone = ContactPoint()
                     val parentPhone = ContactPoint()
@@ -932,7 +895,9 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-VL-"
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
-                    createResource(obs, subjectReference, encounterReference, context)
+                    createResource(
+                        obs, subjectReference, encounterReference, context, extractedAnswers
+                    )
                     try {
                         if (dobEntry != null) {
                             patient.birthDate =
@@ -1000,7 +965,9 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-$linked"
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
-                    createResource(obs, subjectReference, encounterReference, context)
+                    createResource(
+                        obs, subjectReference, encounterReference, context, extractedAnswers
+                    )
 
                 }
 
@@ -1041,7 +1008,9 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     val epid = "KEN-$countyCode-$subCountyCode-$currentYear-$linked"
 
                     val obs = qh.codingQuestionnaire("EPID", "EPID No", epid)
-                    createResource(obs, subjectReference, encounterReference, context)
+                    createResource(
+                        obs, subjectReference, encounterReference, context, extractedAnswers
+                    )
 
                 }
 
@@ -1090,11 +1059,9 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         }
 
                         if (it.linkId == WEEK_ENDING_DATE) {
-                            val date =
-                                SimpleDateFormat(
-                                    "yyyy-MM-dd",
-                                    Locale.getDefault()
-                                ).parse(it.answer)
+                            val date = SimpleDateFormat(
+                                "yyyy-MM-dd", Locale.getDefault()
+                            ).parse(it.answer)
                             if (date != null) {
                                 measure.date = date
                             }
@@ -1120,7 +1087,9 @@ class AddClientViewModel(application: Application, private val state: SavedState
                             it.linkId, it.text, it.answer
                         )
 
-                        createResource(obs, subjectReference, encounterReference, context)
+                        createResource(
+                            obs, subjectReference, encounterReference, context, extractedAnswers
+                        )
                     }
                     when (case) {
                         "moh-505-reporting-form" -> {
@@ -1152,24 +1121,90 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
     private fun sourceExtension(
         resource: String,
-        facility: String,
-        context: Context
+        facility: String?,
+        context: Context, extractedAnswers: List<QuestionnaireAnswer>,
     ): Extension {
-        return Extension().apply {
+        // Immediately create a synchronous Extension with fallback values
+        val extension = Extension().apply {
             url = "http://example.org/fhir/StructureDefinition/$resource-managingLocation"
             setValue(
                 Reference().apply {
-                    reference = "Location/$facility"
-                    display = FormatterClass().getSharedPref("facilityName", context)
-                })
+                    reference = "Location/unknown"  // fallback code
+                    display = "Unknown Facility"    // fallback name
+                }
+            )
         }
+
+        // Launch coroutine to resolve real facility info and update the Extension later
+        viewModelScope.launch {
+            val info = resolveFacilityInfo(context, extractedAnswers)
+            info?.let {
+                extension.setValue(
+                    Reference().apply {
+                        reference = "Location/${it.code}"
+                        display = it.name
+                    }
+                )
+            }
+        }
+
+        return extension
+    }
+
+    suspend fun resolveFacilityInfo(
+        context: Context,
+        extractedAnswers: List<QuestionnaireAnswer>,
+
+        ): FacilityInfo? {
+
+        val formatter = FormatterClass()
+        val storedRole = formatter.getSharedPref("practitionerRole", context)
+        val userRole = UserRole.fromAny(storedRole ?: "")
+
+        val facilityLink = when (userRole) {
+            UserRole.COUNTY_DISEASE_SURVEILLANCE_OFFICER ->
+                "819946803677_county"
+
+            UserRole.SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER ->
+                "819946803677_sub_county"
+
+            UserRole.ADMINISTRATOR,
+            UserRole.FACILITY_SURVEILLANCE_FOCAL_PERSON,
+            UserRole.SUPERVISOR,
+            UserRole.VACCINATOR ->
+                819946803677
+
+            else ->
+                "819946803677"
+        }
+
+        val facilityEntry = extractedAnswers.find { it.linkId == facilityLink }
+            ?: return null
+
+        val results = fhirEngine.search<Location> {
+            filter(Location.NAME, {
+                modifier = StringFilterModifier.CONTAINS
+                value = facilityEntry.answer
+            })
+        }
+
+        if (results.isEmpty()) return null
+
+        return FacilityInfo(
+            name = facilityEntry.answer,
+            code = results.first().resource.id
+        )
     }
 
     private fun sourceMetaTag(
         resource: String,
-        facility: String,
-        context: Context
-    ): Coding {
+        facility: String?,
+        context: Context,
+        extractedAnswers: List<QuestionnaireAnswer>,
+
+        ): Coding {
+        // extract selected facility from questionnaire then get it's  id from engine library  by name
+
         return Coding().apply {
             system = "http://example.org/fhir/StructureDefinition/$resource-managingLocation"
             code = "Location/$facility"
@@ -1182,7 +1217,8 @@ class AddClientViewModel(application: Application, private val state: SavedState
         dateAnswer: String,
         string: String,
         subjectReference: Reference,
-        context: Context
+        context: Context,
+        extractedAnswers: List<QuestionnaireAnswer>
     ) {
         val specimenCoding = Coding()
         specimenCoding.code = linkId
@@ -1222,14 +1258,14 @@ class AddClientViewModel(application: Application, private val state: SavedState
             specimen.type = specimenType
             specimen.collection = collection
             val facility = FormatterClass().getSharedPref("facility", context)
-            if (facility != null) {
-                specimen.meta = Meta().apply {
-                    tag = listOf(
-                        sourceMetaTag("measure", facility, context)
-                    )
-                }
-                specimen.addExtension(sourceExtension("specimen", facility, context))
+
+            specimen.meta = Meta().apply {
+                tag = listOf(
+                    sourceMetaTag("measure", facility, context, extractedAnswers)
+                )
             }
+            specimen.addExtension(sourceExtension("specimen", facility, context, extractedAnswers))
+
             fhirEngine.create(specimen)
 
         } catch (e: Exception) {
@@ -1248,8 +1284,11 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
 
     private suspend fun createResource(
-        obs: Observation, subjectReference: Reference, encounterReference: Reference,
-        context: Context
+        obs: Observation,
+        subjectReference: Reference,
+        encounterReference: Reference,
+        context: Context,
+        extractedAnswers: List<QuestionnaireAnswer>
     ) {
         try {
             val practitioner = FormatterClass().getSharedPref("fhirPractitionerId", context)
@@ -1261,14 +1300,14 @@ class AddClientViewModel(application: Application, private val state: SavedState
             }
             obs.issued = Date()
             val facility = FormatterClass().getSharedPref("facility", context)
-            if (facility != null) {
-                obs.meta = Meta().apply {
-                    tag = listOf(
-                        sourceMetaTag("measure", facility, context)
-                    )
-                }
-                obs.addExtension(sourceExtension("observation", facility, context))
+
+            obs.meta = Meta().apply {
+                tag = listOf(
+                    sourceMetaTag("measure", facility, context, extractedAnswers)
+                )
             }
+            obs.addExtension(sourceExtension("observation", facility, context, extractedAnswers))
+
             fhirEngine.create(obs)
 
             println("Observation created: ${obs.id}")

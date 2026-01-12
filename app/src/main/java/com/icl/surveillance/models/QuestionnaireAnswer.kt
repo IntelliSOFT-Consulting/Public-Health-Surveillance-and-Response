@@ -317,3 +317,7 @@ data class FailedSyncResource(
     val resourceId: String,
     val errorMessage: String? = null
 )
+data class FacilityInfo(
+    val name: String,
+    val code: String
+)
