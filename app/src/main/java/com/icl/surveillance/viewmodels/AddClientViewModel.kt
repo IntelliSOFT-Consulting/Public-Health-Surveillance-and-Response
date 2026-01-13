@@ -1138,7 +1138,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
             url = "http://example.org/fhir/StructureDefinition/$resource-managingLocation"
             setValue(
                 Reference().apply {
-                    reference = info.code
+                    reference = "Location/${info.code}"
                     display = info.name
                 }
             )
@@ -1187,7 +1187,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
         return FacilityInfo(
             name = facilityEntry.answer,
-            code = results.first().resource.id
+            code = results.first().resource.idPart
         )
     }
 
@@ -1205,7 +1205,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
             )
         return Coding().apply {
             system = "http://example.org/fhir/StructureDefinition/$resource-managingLocation"
-            code = info.code
+            code = "Location/${info.code}"
             display = info.name
         }
     }

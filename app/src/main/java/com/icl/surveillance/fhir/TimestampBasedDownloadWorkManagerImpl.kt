@@ -11,9 +11,12 @@ import com.google.android.fhir.sync.download.DownloadRequest
 import com.icl.surveillance.models.LocationLevel
 import com.icl.surveillance.models.UserRole
 import com.icl.surveillance.utils.FormatterClass
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -29,32 +32,19 @@ import org.hl7.fhir.r4.model.Reference
 import org.hl7.fhir.r4.model.Resource
 import org.hl7.fhir.r4.model.ResourceType
 import kotlin.collections.emptyList
+import kotlin.coroutines.resume
 
 class TimestampBasedDownloadWorkManagerImpl(
-    private val dataStore: DemoDataStore, val context: Context, val fhirEngine: FhirEngine
+    private val dataStore: DemoDataStore,
+    val context: Context,
+    val fhirEngine: FhirEngine,
+    val scope: CoroutineScope,
+    var urls: LinkedList<String> = LinkedList()
 ) : DownloadWorkManager {
     private val resourceTypeList = ResourceType.values().map { it.name }
 
-    private var urls: LinkedList<String> = LinkedList()
-    private val generalResources = LinkedList(
-        listOf(
-            "Practitioner?_sort=_lastUpdated",
-        )
-    )
-
-
-    init {
-        getRespectiveFilteredResources(context) { filteredUrls ->
-            urls = LinkedList<String>().apply {
-                addAll(generalResources)
-                addAll(filteredUrls)
-            }
-            // ✅ urls is now ready for use
-            println("Filtered resources: $urls")
-        }
-    }
-
     override suspend fun getNextRequest(): DownloadRequest? {
+
         var url = urls.poll() ?: return null
 
         val resourceTypeToDownload =
@@ -68,11 +58,11 @@ class TimestampBasedDownloadWorkManagerImpl(
     override suspend fun getSummaryRequestUrls(): Map<ResourceType, String> {
         return urls.associate { url ->
             val resourceType = ResourceType.fromCode(url.substringBefore("?"))
-            if (resourceType == ResourceType.Patient) {
-                resourceType to url.plus("&${SyncDataParams.SUMMARY_KEY}=${SyncDataParams.SUMMARY_COUNT_VALUE}")
-            } else {
+//            if (resourceType == ResourceType.Patient) {
+//                resourceType to url.plus("&${SyncDataParams.SUMMARY_KEY}=${SyncDataParams.SUMMARY_COUNT_VALUE}")
+//            } else {
                 resourceType to url
-            }
+//            }
         }
     }
 
@@ -138,247 +128,11 @@ class TimestampBasedDownloadWorkManagerImpl(
         }
     }
 
-    fun getFacilitiesByLevel(
-        startId: String,
-        level: LocationLevel,
-        onResult: (List<String>) -> Unit
-    ) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val facilityIds = mutableListOf<String>()
-                val locationIdsToProcess = mutableListOf(startId)
-
-                when (level) {
-                    LocationLevel.FACILITY -> {
-                        // Already at facility level
-                        facilityIds.add(startId)
-                    }
-
-                    LocationLevel.WARD -> {
-                        for (wardId in locationIdsToProcess) {
-                            // Step 1: Try loading from SharedPreferences
-                            val cachedFacilityIds = FormatterClass().getFacilityIds(context, wardId)
-                            if (cachedFacilityIds != null && cachedFacilityIds.isNotEmpty()) {
-                                facilityIds.addAll(cachedFacilityIds)
-                                println("Loaded ${cachedFacilityIds.size} facilities for ward $wardId from cache")
-                                continue
-                            }
-
-                            // Step 2: If not cached, fetch from FHIR engine
-                            val facilities = fhirEngine.search<Location> {
-                                filter(Location.PARTOF, { value = "Location/$wardId" })
-                            }
-                            val fetchedIds = facilities.map { it.resource.logicalId }
-
-                            // Step 3: Save fetched IDs to SharedPreferences
-                            FormatterClass().saveFacilityIds(context, wardId, fetchedIds)
-
-                            facilityIds.addAll(fetchedIds)
-                            println("Fetched ${fetchedIds.size} facilities for ward $wardId from DB")
-                        }
-                    }
-
-                    LocationLevel.SUB_COUNTY -> {
-                        // Check cache first
-                        val cachedFacilities =
-                            FormatterClass().getFacilityIdsForWard(context, startId)
-                        if (cachedFacilities != null && cachedFacilities.isNotEmpty()) {
-                            println("✅ Using cached facilities for SubCounty $startId — ${cachedFacilities.size} records found")
-                            facilityIds.addAll(cachedFacilities)
-                        } else {
-
-                            println("🔍 Cache miss for SubCounty $startId — running FHIR query")
-
-                            // Single FHIR query using revInclude (wards + facilities)
-                            val wards = fhirEngine.search<Location> {
-                                filter(Location.PARTOF, { value = "Location/$startId" })
-                                revInclude<Location>(Location.PARTOF)
-                            }
-
-                            println("Total Wards:::: ${wards.size} for Location $startId")
-
-                            val allFacilityIds = mutableListOf<String>()
-
-                            if (wards.isNotEmpty()) {
-                                wards.forEach { ward ->
-                                    ward.revIncluded?.get(ResourceType.Location to Location.PARTOF.paramName)
-                                        ?.let { facilities ->
-                                            println("🏥 Facilities found under ward ${ward.resource.name}: ${facilities.size}")
-                                            allFacilityIds.addAll(facilities.map { it.logicalId })
-                                        }
-                                }
-                            }
-
-                            println("💾 Caching ${allFacilityIds.size} facilities for SubCounty $startId")
-                            FormatterClass().saveFacilityIdsForWard(
-                                context,
-                                startId,
-                                allFacilityIds
-                            )
-
-                            facilityIds.addAll(allFacilityIds)
-                        }
-                    }
 
 
-                    LocationLevel.COUNTY -> {
-                        val cachedFacilities =
-                            FormatterClass().getFacilityIdsForWard(context, startId)
 
 
-                        if (cachedFacilities != null && cachedFacilities.isNotEmpty()) {
-                            println("Filtered resources: ✅ Using cached facilities for County $startId — ${cachedFacilities.size} records found")
-                            facilityIds.addAll(cachedFacilities)
-                        } else {
-                            println("Filtered resources: 🔍 Cache miss for County $startId — running FHIR query")
 
-                            // Step 1: Get all sub-counties under this county
-                            val subCounties = fhirEngine.search<Location> {
-                                filter(Location.PARTOF, { value = "Location/$startId" })
-                                revInclude<Location>(Location.PARTOF)
-                            }
-                            println("Filtered resources: 📍 Found ${subCounties.size} sub-counties for County $startId")
-
-                            val allFacilityIds = mutableListOf<String>()
-
-                            // Step 2: Loop through each sub-county and get wards + facilities
-                            subCounties.forEach { subCounty ->
-                                val wards =
-                                    subCounty.revIncluded?.get(ResourceType.Location to Location.PARTOF.paramName)
-                                wards?.forEach { ward ->
-                                    val facilities = fhirEngine.search<Location> {
-                                        filter(
-                                            Location.PARTOF,
-                                            { value = "Location/${ward.logicalId}" })
-                                    }
-                                    allFacilityIds.addAll(facilities.map { it.resource.logicalId })
-                                }
-                            }
-
-                            println("Filtered resources: 💾 Caching ${allFacilityIds.size} facilities for County $startId")
-                            FormatterClass().saveFacilityIdsForWard(
-                                context,
-                                startId,
-                                allFacilityIds
-                            )
-                            facilityIds.addAll(allFacilityIds)
-                        }
-                    }
-
-                    LocationLevel.NATIONAL -> {
-                        // Get all counties first
-                        val counties = fhirEngine.search<Location> {
-                            // Optional: Add filter by type = "county" if available
-                        }
-
-                        val countyIds = counties.map { it.resource.logicalId }
-
-                        for (countyId in countyIds) {
-                            // Recursive call for each county
-                            getFacilitiesByLevel(countyId, LocationLevel.COUNTY) { ids ->
-                                facilityIds.addAll(ids)
-                            }
-                        }
-                    }
-                }
-
-                withContext(Dispatchers.Main) {
-                    onResult(facilityIds)
-                }
-
-            } catch (e: Exception) {
-                e.printStackTrace()
-                withContext(Dispatchers.Main) {
-                    onResult(emptyList())
-                }
-            }
-        }
-    }
-
-
-    fun getRespectiveFilteredResources(
-        context: Context, onResult: (LinkedList<String>) -> Unit
-    ) {
-        val formatter = FormatterClass()
-        val storedRole = formatter.getSharedPref("practitionerRole", context)
-        val userRole = UserRole.fromAny(storedRole ?: "")
-        println("Filtered resources:  Role $userRole")
-        when (userRole) {
-            UserRole.FACILITY_SURVEILLANCE_FOCAL_PERSON, UserRole.SUPERVISOR, UserRole.VACCINATOR -> {
-                val facilityId = formatter.getSharedPref("facility", context)
-                val urls = if (facilityId != null) {
-                    listOf(
-                        "Patient?_tag=Location/$facilityId&_sort=_lastUpdated",
-                        "QuestionnaireResponse?_tag=Location/$facilityId&_sort=_lastUpdated",
-                        "MeasureReport?_tag=Location/$facilityId&_sort=_lastUpdated",
-                        "Encounter?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
-                        "Observation?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
-                        "Specimen?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
-                    )
-                } else emptyList()
-
-                onResult(LinkedList(urls))
-            }
-
-            UserRole.SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
-                val subCounty = formatter.getSharedPref("subCounty", context)
-                if (subCounty != null) {
-                    getFacilitiesByLevel(subCounty, LocationLevel.SUB_COUNTY) { facilities ->
-                        val patientQueries = facilities.map { facilityId ->
-                            listOf(  "Patient?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
-                            "QuestionnaireResponse?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
-                            "MeasureReport?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
-                            "Encounter?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
-                            "Observation?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
-                            "Specimen?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
-                            ) }.flatten()
-                        val combinedResources = LinkedList(patientQueries)
-                        onResult(combinedResources)
-                    }
-                } else {
-                    onResult(LinkedList()) // subCounty was null
-                }
-            }
-
-            UserRole.COUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
-                val data = formatter.getSharedPref("county", context)
-                if (data != null) {
-                    println("Filtered resources:  County $data")
-                    getFacilitiesByLevel(data, LocationLevel.COUNTY) { facilities ->
-
-                        val patientQueries = facilities.map { facilityId ->
-                            listOf(
-                                "Patient?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
-                                "QuestionnaireResponse?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
-                                "MeasureReport?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
-                                "Encounter?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
-                                "Observation?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
-                                "Specimen?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
-                            )
-                        }.flatten()
-
-                        val combinedResources = LinkedList(patientQueries)
-                        onResult(combinedResources)
-                    }
-                } else {
-                    onResult(LinkedList()) // County was null
-                }
-            }
-
-            null -> {
-                onResult(LinkedList()) // unknown role
-            }
-
-            UserRole.ADMINISTRATOR -> {
-
-            }
-
-            UserRole.SUPERUSER -> {
-
-
-            }
-        }
-    }
 
 
     /**
@@ -412,6 +166,7 @@ class TimestampBasedDownloadWorkManagerImpl(
         if (downloadUrl.contains("&page_token")) {
             downloadUrl = url
         }
+        println("Filtered resources:  Timestamp  $downloadUrl")
         return downloadUrl
     }
 

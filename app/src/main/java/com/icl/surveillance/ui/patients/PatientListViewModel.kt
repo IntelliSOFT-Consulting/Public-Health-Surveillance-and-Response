@@ -843,7 +843,6 @@ class PatientListViewModel(
             }
 
             "mpox-register" -> {
-
                 val totalPatients = fhirEngine.count<Patient> {
                     // you can add filters here if needed
                 }
@@ -977,7 +976,7 @@ class PatientListViewModel(
 
                 }.mapIndexedNotNull { index, fhirPatient ->
                     // Only return the patient if one of the identifiers matches the system
-                    println("Fetching Records for $nameQuery at index $index")
+
                     val matchingIdentifier = when (nameQuery) {
                         "rcce" -> fhirPatient.resource.identifier.find {
                             it.system == "rcce-community-questionnaire" || it.system == "rcce-countysubcounty-interface"
@@ -991,12 +990,11 @@ class PatientListViewModel(
                         fhirPatient.resource.identifier.find { it.type.codingFirstRep.code == "EPID" }
 
 
-
                     if (matchingIdentifier != null) {
                         // Convert the FHIR Patient resource to your PatientItem model
                         var data = fhirPatient.resource.toPatientItem(index + 1)
                         val logicalId = matchingIdentifier.value
-                        println("Parent Encounter $logicalId and respective Patient ${data.resourceId}")
+
                         val encounterQuestionnaire = matchingIdentifier.system
                         val obs = fhirEngine.search<Observation> {
                             filter(
@@ -1045,7 +1043,7 @@ class PatientListViewModel(
 
 
                         val childEncounter = loadChildEncounter(data.resourceId, logicalId)
-                        println("Current Workflow :::: $nameQuery With Child $childEncounter ")
+
                         when (nameQuery) {
 
 
@@ -1071,16 +1069,34 @@ class PatientListViewModel(
                                         FormatterClass().extractStructuredAnswersOnlyFromItems(
                                             jsonObject
                                         )
+                                    val countyLinkIds = listOf(
+                                        "294367770999",
+                                        "294367770999_sub_county",
+                                        "294367770999_county"
+                                    ) // check in order
+                                    val subCountyLinkIds = listOf(
+                                        "819946803642",
+                                        "819946803642_sub_county",
+                                        "819946803642_county"
+                                    )
 
-                                    try {
-                                        county =
-                                            extractedAnswers.find { it.linkId == "294367770999" }?.answer
-                                        subCounty =
-                                            extractedAnswers.find { it.linkId == "819946803642" }?.answer
+                                    county = try {
+                                        countyLinkIds.firstNotNullOfOrNull { id ->
+                                            extractedAnswers.find { it.linkId == id }?.answer
+                                        }
                                     } catch (e: Exception) {
                                         e.printStackTrace()
+                                        ""
                                     }
+                                    subCounty = try {
+                                        subCountyLinkIds.firstNotNullOfOrNull { id ->
+                                            extractedAnswers.find { it.linkId == id }?.answer
+                                        }
 
+                                    } catch (e: Exception) {
+                                        e.printStackTrace()
+                                        ""
+                                    }
                                 }
 
                             }
@@ -1236,6 +1252,7 @@ class PatientListViewModel(
             }
         }
     }
+
 
     /**
      * [updatePatientListAndPatientCount] calls the search and count lambda and updates the live data

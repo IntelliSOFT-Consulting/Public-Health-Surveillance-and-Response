@@ -13,7 +13,7 @@ android {
         applicationId = "com.icl.surveillance"
 //        applicationId = "com.icl.nphi" // Live Instance
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 4
         versionName = "1.0"
 
@@ -98,5 +98,4 @@ dependencies {
     implementation(libs.library)
     implementation(libs.lottie)
 
-    implementation("net.zetetic:android-database-sqlcipher:4.5.4")
 }
