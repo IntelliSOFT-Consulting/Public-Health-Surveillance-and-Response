@@ -126,12 +126,13 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     setValue(responseType)
                 }
                 val facility = FormatterClass().getSharedPref("facility", context)
-
-                questionnaireResponse.addExtension(
-                    sourceExtension(
-                        "questionnaire", facility, context, extractedAnswers
+                viewModelScope.launch {
+                    questionnaireResponse.addExtension(
+                        sourceExtension(
+                            "questionnaire", context, extractedAnswers
+                        )
                     )
-                )
+                }
 
                 fhirEngine.create(questionnaireResponse)
             }
@@ -168,16 +169,17 @@ class AddClientViewModel(application: Application, private val state: SavedState
             val extractedAnswers =
                 FormatterClass().extractStructuredAnswersOnlyFromItems(jsonObject)
 
-
-            questionnaireResponse.addExtension(
-                sourceExtension(
-                    "questionnaire", facility, context, extractedAnswers
+            viewModelScope.launch {
+                questionnaireResponse.addExtension(
+                    sourceExtension(
+                        "questionnaire", context, extractedAnswers
+                    )
                 )
-            )
-            questionnaireResponse.meta = Meta().apply {
-                tag = listOf(
-                    sourceMetaTag("questionnaire", facility, context, extractedAnswers)
-                )
+                questionnaireResponse.meta = Meta().apply {
+                    tag = listOf(
+                        sourceMetaTag("questionnaire", facility, context, extractedAnswers)
+                    )
+                }
             }
 
             val idPart = FormatterClass().getSharedPref(
@@ -343,47 +345,47 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
             val encounterReference = Reference("Encounter/$encounterId")
             val measure = MeasureReport()
-
-            patient.addExtension(
-                sourceExtension("patient", facility, context, extractedAnswers)
-            )
-            patient.meta = Meta().apply {
-                tag = listOf(
-                    sourceMetaTag("patient", facility, context, extractedAnswers)
+            viewModelScope.launch {
+                patient.addExtension(
+                    sourceExtension("patient", context, extractedAnswers)
                 )
-            }
-            enc.addExtension(sourceExtension("encounter", facility, context, extractedAnswers))
-            enc.meta = Meta().apply {
-                tag = listOf(
-                    sourceMetaTag(
-                        resource = "encounter",
-                        facility = "$facility",
-                        context = context,
-                        extractedAnswers
+                patient.meta = Meta().apply {
+                    tag = listOf(
+                        sourceMetaTag("patient", facility, context, extractedAnswers)
+                    )
+                }
+                enc.addExtension(sourceExtension("encounter", context, extractedAnswers))
+                enc.meta = Meta().apply {
+                    tag = listOf(
+                        sourceMetaTag(
+                            resource = "encounter",
+                            facility = "$facility",
+                            context = context,
+                            extractedAnswers
+                        )
+                    )
+                }
+                measure.addExtension(
+                    sourceExtension(
+                        "measure", context, extractedAnswers
                     )
                 )
+                measure.meta = Meta().apply {
+                    tag = listOf(
+                        sourceMetaTag("measure", facility, context, extractedAnswers)
+                    )
+                }
+                questionnaireResponse.addExtension(
+                    sourceExtension(
+                        "questionnaire", context, extractedAnswers
+                    )
+                )
+                questionnaireResponse.meta = Meta().apply {
+                    tag = listOf(
+                        sourceMetaTag("questionnaire", facility, context, extractedAnswers)
+                    )
+                }
             }
-            measure.addExtension(
-                sourceExtension(
-                    "measure", facility, context, extractedAnswers
-                )
-            )
-            measure.meta = Meta().apply {
-                tag = listOf(
-                    sourceMetaTag("measure", facility, context, extractedAnswers)
-                )
-            }
-            questionnaireResponse.addExtension(
-                sourceExtension(
-                    "questionnaire", facility, context, extractedAnswers
-                )
-            )
-            questionnaireResponse.meta = Meta().apply {
-                tag = listOf(
-                    sourceMetaTag("questionnaire", facility, context, extractedAnswers)
-                )
-            }
-
             val practitionerId = formatter.getSharedPref("fhirPractitionerId", context)
             if (practitionerId != null) {
                 questionnaireResponse.author = Reference("Practitioner/$practitionerId")
@@ -1119,37 +1121,30 @@ class AddClientViewModel(application: Application, private val state: SavedState
         }
     }
 
-    private fun sourceExtension(
+    private suspend fun sourceExtension(
         resource: String,
-        facility: String?,
-        context: Context, extractedAnswers: List<QuestionnaireAnswer>,
+        context: Context,
+        extractedAnswers: List<QuestionnaireAnswer>
     ): Extension {
-        // Immediately create a synchronous Extension with fallback values
-        val extension = Extension().apply {
+        // Resolve facility info asynchronously
+        val info = resolveFacilityInfo(context, extractedAnswers)
+            ?: FacilityInfo(
+                name = "Unknown Facility",
+                code = "unknown"
+            )
+
+        // Build and return Extension with correct data
+        return Extension().apply {
             url = "http://example.org/fhir/StructureDefinition/$resource-managingLocation"
             setValue(
                 Reference().apply {
-                    reference = "Location/unknown"  // fallback code
-                    display = "Unknown Facility"    // fallback name
+                    reference = info.code
+                    display = info.name
                 }
             )
         }
-
-        // Launch coroutine to resolve real facility info and update the Extension later
-        viewModelScope.launch {
-            val info = resolveFacilityInfo(context, extractedAnswers)
-            info?.let {
-                extension.setValue(
-                    Reference().apply {
-                        reference = "Location/${it.code}"
-                        display = it.name
-                    }
-                )
-            }
-        }
-
-        return extension
     }
+
 
     suspend fun resolveFacilityInfo(
         context: Context,
@@ -1196,19 +1191,22 @@ class AddClientViewModel(application: Application, private val state: SavedState
         )
     }
 
-    private fun sourceMetaTag(
+    private suspend fun sourceMetaTag(
         resource: String,
         facility: String?,
         context: Context,
         extractedAnswers: List<QuestionnaireAnswer>,
 
         ): Coding {
-        // extract selected facility from questionnaire then get it's  id from engine library  by name
-
+        val info = resolveFacilityInfo(context, extractedAnswers)
+            ?: FacilityInfo(
+                name = "Unknown Facility",
+                code = "unknown"
+            )
         return Coding().apply {
             system = "http://example.org/fhir/StructureDefinition/$resource-managingLocation"
-            code = "Location/$facility"
-            display = FormatterClass().getSharedPref("facilityName", context)
+            code = info.code
+            display = info.name
         }
     }
 
@@ -1258,14 +1256,20 @@ class AddClientViewModel(application: Application, private val state: SavedState
             specimen.type = specimenType
             specimen.collection = collection
             val facility = FormatterClass().getSharedPref("facility", context)
-
-            specimen.meta = Meta().apply {
-                tag = listOf(
-                    sourceMetaTag("measure", facility, context, extractedAnswers)
+            viewModelScope.launch {
+                specimen.meta = Meta().apply {
+                    tag = listOf(
+                        sourceMetaTag("measure", facility, context, extractedAnswers)
+                    )
+                }
+                specimen.addExtension(
+                    sourceExtension(
+                        "specimen",
+                        context,
+                        extractedAnswers
+                    )
                 )
             }
-            specimen.addExtension(sourceExtension("specimen", facility, context, extractedAnswers))
-
             fhirEngine.create(specimen)
 
         } catch (e: Exception) {
@@ -1300,14 +1304,20 @@ class AddClientViewModel(application: Application, private val state: SavedState
             }
             obs.issued = Date()
             val facility = FormatterClass().getSharedPref("facility", context)
-
-            obs.meta = Meta().apply {
-                tag = listOf(
-                    sourceMetaTag("measure", facility, context, extractedAnswers)
+            viewModelScope.launch {
+                obs.meta = Meta().apply {
+                    tag = listOf(
+                        sourceMetaTag("measure", facility, context, extractedAnswers)
+                    )
+                }
+                obs.addExtension(
+                    sourceExtension(
+                        "observation",
+                        context,
+                        extractedAnswers
+                    )
                 )
             }
-            obs.addExtension(sourceExtension("observation", facility, context, extractedAnswers))
-
             fhirEngine.create(obs)
 
             println("Observation created: ${obs.id}")

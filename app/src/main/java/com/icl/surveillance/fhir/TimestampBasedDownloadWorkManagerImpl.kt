@@ -224,20 +224,20 @@ class TimestampBasedDownloadWorkManagerImpl(
                     LocationLevel.COUNTY -> {
                         val cachedFacilities =
                             FormatterClass().getFacilityIdsForWard(context, startId)
-                        val facilityIds = mutableListOf<String>()
+
 
                         if (cachedFacilities != null && cachedFacilities.isNotEmpty()) {
-                            println("✅ Using cached facilities for County $startId — ${cachedFacilities.size} records found")
+                            println("Filtered resources: ✅ Using cached facilities for County $startId — ${cachedFacilities.size} records found")
                             facilityIds.addAll(cachedFacilities)
                         } else {
-                            println("🔍 Cache miss for County $startId — running FHIR query")
+                            println("Filtered resources: 🔍 Cache miss for County $startId — running FHIR query")
 
                             // Step 1: Get all sub-counties under this county
                             val subCounties = fhirEngine.search<Location> {
                                 filter(Location.PARTOF, { value = "Location/$startId" })
                                 revInclude<Location>(Location.PARTOF)
                             }
-                            println("📍 Found ${subCounties.size} sub-counties for County $startId")
+                            println("Filtered resources: 📍 Found ${subCounties.size} sub-counties for County $startId")
 
                             val allFacilityIds = mutableListOf<String>()
 
@@ -255,7 +255,7 @@ class TimestampBasedDownloadWorkManagerImpl(
                                 }
                             }
 
-                            println("💾 Caching ${allFacilityIds.size} facilities for County $startId")
+                            println("Filtered resources: 💾 Caching ${allFacilityIds.size} facilities for County $startId")
                             FormatterClass().saveFacilityIdsForWard(
                                 context,
                                 startId,
@@ -302,7 +302,7 @@ class TimestampBasedDownloadWorkManagerImpl(
         val formatter = FormatterClass()
         val storedRole = formatter.getSharedPref("practitionerRole", context)
         val userRole = UserRole.fromAny(storedRole ?: "")
-
+        println("Filtered resources:  Role $userRole")
         when (userRole) {
             UserRole.FACILITY_SURVEILLANCE_FOCAL_PERSON, UserRole.SUPERVISOR, UserRole.VACCINATOR -> {
                 val facilityId = formatter.getSharedPref("facility", context)
@@ -325,13 +325,13 @@ class TimestampBasedDownloadWorkManagerImpl(
                 if (subCounty != null) {
                     getFacilitiesByLevel(subCounty, LocationLevel.SUB_COUNTY) { facilities ->
                         val patientQueries = facilities.map { facilityId ->
-                            "Patient?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
-                            "QuestionnaireResponse?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
-                            "MeasureReport?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
-                            "Encounter?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
-                            "Observation?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
+                            listOf(  "Patient?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
+                            "QuestionnaireResponse?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
+                            "MeasureReport?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
+                            "Encounter?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
+                            "Observation?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
                             "Specimen?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
-                        }
+                            ) }.flatten()
                         val combinedResources = LinkedList(patientQueries)
                         onResult(combinedResources)
                     }
@@ -341,17 +341,22 @@ class TimestampBasedDownloadWorkManagerImpl(
             }
 
             UserRole.COUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
-                val subCounty = formatter.getSharedPref("county", context)
-                if (subCounty != null) {
-                    getFacilitiesByLevel(subCounty, LocationLevel.COUNTY) { facilities ->
+                val data = formatter.getSharedPref("county", context)
+                if (data != null) {
+                    println("Filtered resources:  County $data")
+                    getFacilitiesByLevel(data, LocationLevel.COUNTY) { facilities ->
+
                         val patientQueries = facilities.map { facilityId ->
-                            "Patient?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
-                            "QuestionnaireResponse?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
-                            "MeasureReport?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
-                            "Encounter?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
-                            "Observation?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
-                            "Specimen?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500"
-                        }
+                            listOf(
+                                "Patient?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
+                                "QuestionnaireResponse?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
+                                "MeasureReport?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
+                                "Encounter?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
+                                "Observation?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
+                                "Specimen?_tag=Location/$facilityId&_sort=_lastUpdated&_count=500",
+                            )
+                        }.flatten()
+
                         val combinedResources = LinkedList(patientQueries)
                         onResult(combinedResources)
                     }
