@@ -831,10 +831,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ],
           "enableWhen": [
@@ -868,10 +864,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -1080,10 +1072,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -1106,10 +1094,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -1318,10 +1302,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -1344,10 +1324,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -1543,10 +1519,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ],
           "linkId": "neonatal-deaths-deaths-under-5",
@@ -1641,10 +1613,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -1667,10 +1635,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -1879,10 +1843,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -1892,10 +1852,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ],
           "linkId": "neonatal-tetanus-deaths-under-5",
@@ -2011,10 +1967,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -2037,10 +1989,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -2249,10 +2197,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -2275,10 +2219,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -2487,10 +2427,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -2513,10 +2449,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -2725,10 +2657,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -2751,10 +2679,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -2963,10 +2887,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -2989,10 +2909,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -3201,10 +3117,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -3227,10 +3139,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -3439,10 +3347,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -3465,10 +3369,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -3677,10 +3577,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -3703,10 +3599,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -3915,10 +3807,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -3941,10 +3829,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -4153,10 +4037,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -4179,10 +4059,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -4391,10 +4267,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -4417,10 +4289,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -4629,10 +4497,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -4655,10 +4519,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -4867,10 +4727,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -4893,10 +4749,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -4919,10 +4771,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -5109,10 +4957,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -5135,10 +4979,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -5347,10 +5187,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -5373,10 +5209,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -5399,10 +5231,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -5425,10 +5253,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -5593,10 +5417,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -5619,10 +5439,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -5645,10 +5461,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -5671,10 +5483,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -5839,10 +5647,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -5865,10 +5669,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -5891,10 +5691,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -5917,10 +5713,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -6085,10 +5877,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -6111,10 +5899,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -6137,10 +5921,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -6163,10 +5943,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -6331,10 +6107,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -6357,10 +6129,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -6383,10 +6151,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -6409,10 +6173,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -6564,10 +6324,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ],
           "linkId": "deaths-due-to-malaria-deaths-under-5",
@@ -6603,10 +6359,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -6714,10 +6466,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -6740,10 +6488,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -6766,10 +6510,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -6792,10 +6532,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -6976,10 +6712,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7002,10 +6734,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7028,10 +6756,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7054,10 +6778,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         }
@@ -7101,10 +6821,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7127,10 +6843,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7153,10 +6865,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7179,10 +6887,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7205,10 +6909,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7231,10 +6931,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7257,10 +6953,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7283,10 +6975,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7309,10 +6997,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7335,10 +7019,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7361,10 +7041,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7387,10 +7063,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7413,10 +7085,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7439,10 +7107,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7465,10 +7129,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7491,10 +7151,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7517,10 +7173,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7543,10 +7195,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7569,10 +7217,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7595,10 +7239,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7621,10 +7261,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7647,10 +7283,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7673,10 +7305,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7699,10 +7327,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7715,10 +7339,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7731,10 +7351,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7747,10 +7363,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7773,10 +7385,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         },
@@ -7799,10 +7407,6 @@
             {
               "url": "http://hl7.org/fhir/StructureDefinition/maxValue",
               "valueInteger": 999
-            },
-            {
-              "url": "http://hl7.org/fhir/StructureDefinition/minValue",
-              "valueInteger": 1
             }
           ]
         }

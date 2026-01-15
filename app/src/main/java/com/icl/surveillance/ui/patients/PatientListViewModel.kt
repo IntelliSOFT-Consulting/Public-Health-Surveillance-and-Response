@@ -746,98 +746,100 @@ class PatientListViewModel(
                 val questionnaireData: MutableList<PatientItem> = mutableListOf()
                 fhirEngine.search<MeasureReport> {
                     sort(MeasureReport.DATE, Order.DESCENDING)
-                }.mapIndexedNotNull { index, data ->
-                    val identifier = data.resource.identifier.find {
-                        it.system == "geo-location-details"
-                    }
-                    if (identifier != null) {
+                }
+                    .mapIndexedNotNull { index, data ->
+                        val identifier = data.resource.identifier.find {
+                            it.system == "geo-location-details"
+                        }
+                        if (identifier != null) {
 
 
-                        try {
-                            val patientId = data.resource.subject.reference.split("/").last()
-                            println("Related Patient: $patientId")
+                            try {
+                                val patientId = data.resource.subject.reference.split("/").last()
+                                println("Related Patient: $patientId")
 
-                            val searchResult = fhirEngine.search<Patient> {
-                                filter(Resource.RES_ID, { value = of(patientId) })
-                                revInclude<Observation>(Observation.SUBJECT)
-                            }
-                            if (searchResult.isNotEmpty()) {
-                                searchResult.first().let {
-                                    val encounterId = if (it.resource.hasIdentifier()) {
-                                        val enco =
-                                            it.resource.identifier.find { id -> id.system == "mpox-tally-sheet" }
-                                        if (enco != null) {
-                                            enco.value
-                                        } else ""
-                                    } else ""
-                                    println("Related Patient: Encounter ${it.resource.id}")
-                                    val observations =
-                                        it.revIncluded?.get(ResourceType.Observation to Observation.SUBJECT.paramName) as? List<Observation>
-                                            ?: emptyList()
-
-                                    // Create team_numberr
-                                    val teamNumber =
-                                        observations.firstOrNull { it.code.codingFirstRep.code == "team_no" }?.value?.asStringValue()
-                                            ?: ""
-                                    // supervisor name
-                                    val supervisorName =
-                                        observations.firstOrNull { it.code.codingFirstRep.code == "supervisor_name" }?.value?.asStringValue()
-                                            ?: ""
-                                    //County
-                                    val county =
-                                        observations.firstOrNull { it.code.codingFirstRep.code == "294367770999" }?.value?.asStringValue()
-                                            ?: ""
-                                    // SubCounty
-                                    val subCounty =
-                                        observations.firstOrNull { it.code.codingFirstRep.code == "819946803642" }?.value?.asStringValue()
-                                            ?: ""
-                                    // Campaign Day
-                                    val campaignDay =
-                                        observations.firstOrNull { it.code.codingFirstRep.code == "campaign_day" }?.value?.asStringValue()
-                                            ?: ""
-
-                                    val formatted =
-                                        observations.firstOrNull { it.code.codingFirstRep.code == "728034137219" }?.value?.asStringValue()
-                                            ?: ""
-
-                                    if (county.isNotEmpty()) {
-                                        val resource = PatientItem(
-                                            id = (index + 1).toString(),
-                                            resourceId = patientId,
-                                            encounterId = encounterId,
-                                            lastUpdated = "${data.resource.date}",
-                                            name = "",
-                                            gender = "",
-                                            phone = "",
-                                            city = "",
-                                            country = " $county",
-                                            isActive = true,
-                                            epid = "",
-                                            county = " $county",
-                                            subCounty = " $subCounty",
-                                            caseOnsetDate = " $formatted",
-                                            isSummary = isSummary,
-                                            campaignDate = " $campaignDay",
-                                            teamNumber = " $teamNumber",
-                                            supervisorName = " $supervisorName"
-                                        )
-
-                                        resource
-                                    } else {
-                                        null
-                                    }
+                                val searchResult = fhirEngine.search<Patient> {
+                                    filter(Resource.RES_ID, { value = of(patientId) })
+                                    revInclude<Observation>(Observation.SUBJECT)
                                 }
-                            } else {
+                                if (searchResult.isNotEmpty()) {
+                                    searchResult.first().let {
+                                        val encounterId = if (it.resource.hasIdentifier()) {
+                                            val enco =
+                                                it.resource.identifier.find { id -> id.system == "mpox-tally-sheet" }
+                                            if (enco != null) {
+                                                enco.value
+                                            } else ""
+                                        } else ""
+                                        println("Related Patient: Encounter ${it.resource.id}")
+                                        val observations =
+                                            it.revIncluded?.get(ResourceType.Observation to Observation.SUBJECT.paramName) as? List<Observation>
+                                                ?: emptyList()
+
+                                        // Create team_numberr
+                                        val teamNumber =
+                                            observations.firstOrNull { it.code.codingFirstRep.code == "team_no" }?.value?.asStringValue()
+                                                ?: ""
+                                        // supervisor name
+                                        val supervisorName =
+                                            observations.firstOrNull { it.code.codingFirstRep.code == "supervisor_name" }?.value?.asStringValue()
+                                                ?: ""
+                                        //County
+                                        val county =
+                                            observations.firstOrNull { it.code.codingFirstRep.code == "294367770999" }?.value?.asStringValue()
+                                                ?: ""
+                                        // SubCounty
+                                        val subCounty =
+                                            observations.firstOrNull { it.code.codingFirstRep.code == "819946803642" }?.value?.asStringValue()
+                                                ?: ""
+                                        // Campaign Day
+                                        val campaignDay =
+                                            observations.firstOrNull { it.code.codingFirstRep.code == "campaign_day" }?.value?.asStringValue()
+                                                ?: ""
+
+                                        val formatted =
+                                            observations.firstOrNull { it.code.codingFirstRep.code == "728034137219" }?.value?.asStringValue()
+                                                ?: ""
+
+                                        if (county.isNotEmpty()) {
+                                            val resource = PatientItem(
+                                                id = (index + 1).toString(),
+                                                resourceId = patientId,
+                                                encounterId = encounterId,
+                                                lastUpdated = "${data.resource.date}",
+                                                name = "",
+                                                gender = "",
+                                                phone = "",
+                                                city = "",
+                                                country = " $county",
+                                                isActive = true,
+                                                epid = "",
+                                                county = " $county",
+                                                subCounty = " $subCounty",
+                                                caseOnsetDate = " $formatted",
+                                                isSummary = isSummary,
+                                                campaignDate = " $campaignDay",
+                                                teamNumber = " $teamNumber",
+                                                supervisorName = " $supervisorName"
+                                            )
+
+                                            resource
+                                        } else {
+                                            null
+                                        }
+                                    }
+                                } else {
+                                    null
+                                }
+                            } catch (e: Exception) {
                                 null
                             }
-                        } catch (e: Exception) {
+
+                        } else {
                             null
                         }
+                    }.also { questionnaireData.addAll(it) }
 
-                    } else {
-                        null
-                    }
-                }.also { questionnaireData.addAll(it) }
 
                 return questionnaireData.sortedByDescending { it.lastUpdated }
             }
@@ -973,6 +975,7 @@ class PatientListViewModel(
 
                 return fhirEngine.search<Patient> {
                     sort(Patient.GIVEN, Order.ASCENDING)
+
 
                 }.mapIndexedNotNull { index, fhirPatient ->
                     // Only return the patient if one of the identifiers matches the system

@@ -30,14 +30,14 @@ class AppFhirSyncWorker(appContext: Context, workerParams: WorkerParameters) :
         val engine = FhirApplication.fhirEngine(applicationContext)
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
-        val facilityIds = getRespectiveFilteredResourcesSuspend(applicationContext, engine)
-        println("All Respective IDs expected $facilityIds")
+//        val facilityIds = getRespectiveFilteredResourcesSuspend(applicationContext, engine)
+//        println("All Respective IDs expected $facilityIds")
         val manager = TimestampBasedDownloadWorkManagerImpl(
             dataStore = FhirApplication.dataStore(applicationContext),
             context = applicationContext,
             fhirEngine = engine,
             scope = scope,
-            urls = facilityIds
+//            urls = facilityIds
         )
 
         return manager
@@ -47,9 +47,9 @@ class AppFhirSyncWorker(appContext: Context, workerParams: WorkerParameters) :
     private fun buildResourceUrlsForFacility(facilityId: String): List<String> {
         return listOf(
             "Patient?_tag=Location/$facilityId&_sort=_lastUpdated",
+            "Encounter?_tag=Location/$facilityId&_sort=_lastUpdated",
             "QuestionnaireResponse?_tag=Location/$facilityId&_sort=_lastUpdated",
             "MeasureReport?_tag=Location/$facilityId&_sort=_lastUpdated",
-            "Encounter?_tag=Location/$facilityId&_sort=_lastUpdated",
             "Observation?_tag=Location/$facilityId&_sort=_lastUpdated",
             "Specimen?_tag=Location/$facilityId&_sort=_lastUpdated"
         )
@@ -144,7 +144,6 @@ class AppFhirSyncWorker(appContext: Context, workerParams: WorkerParameters) :
                             )
                         }
                     }
-
                     FormatterClass().saveFacilityIdsForWard(
                         applicationContext,
                         startId,
@@ -154,8 +153,6 @@ class AppFhirSyncWorker(appContext: Context, workerParams: WorkerParameters) :
                     facilityIds.addAll(allFacilityIds)
                 }
             }
-
-
             LocationLevel.NATIONAL -> {
                 val counties = fhirEngine.search<Location> { }
                 val countyIds = counties.map { it.resource.logicalId }
@@ -174,7 +171,7 @@ class AppFhirSyncWorker(appContext: Context, workerParams: WorkerParameters) :
         val storedRole = formatter.getSharedPref("practitionerRole", context)
         val userRole = UserRole.fromAny(storedRole ?: "")
         val urls = mutableListOf<String>()
-        urls.add("Practitioner")
+        
 
         when (userRole) {
             UserRole.FACILITY_SURVEILLANCE_FOCAL_PERSON,

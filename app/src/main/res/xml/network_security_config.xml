@@ -3,5 +3,6 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">intellisoftkenya.com</domain>
         <domain includeSubdomains="true">nphl.go.ke</domain>
+        <domain includeSubdomains="true">dsrfhir.intellisoftkenya.com</domain>
     </domain-config>
 </network-security-config>

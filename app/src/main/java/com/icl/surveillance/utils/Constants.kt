@@ -8,11 +8,9 @@ import com.icl.surveillance.R
 object Constants {
 
     const val BASE_URL = "https://dsrfhir.intellisoftkenya.com/hapi/fhir/"
+//    const val BASE_URL = "https://auth.nphiis.nphl.go.ke/fhir/"
     const val ALERTS_BASE_URL = "https://dsrfhir.intellisoftkenya.com/api/"
 
-//    const val BASE_URL = "http://45.79.161.190:8085/fhir/"
-
-//    const val BASE_URL = "https://auth.nphiis.nphl.go.ke/fhir/"
 
     //MOH 505
     const val COUNTY = "a4-county"
@@ -125,6 +123,7 @@ object Constants {
         "aefi_yes_no"               // Reported AEFI?
 
     )
+
 
     val ALL_MPOX_LINK_IDS = FACILITY_DETAILS + MPOX_GUIDES
 

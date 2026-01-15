@@ -39,9 +39,17 @@ class TimestampBasedDownloadWorkManagerImpl(
     val context: Context,
     val fhirEngine: FhirEngine,
     val scope: CoroutineScope,
-    var urls: LinkedList<String> = LinkedList()
+    var urlsold: LinkedList<String> = LinkedList()
 ) : DownloadWorkManager {
     private val resourceTypeList = ResourceType.values().map { it.name }
+    private val urls = LinkedList(listOf(
+        "Patient?_sort=_lastUpdated",
+        "Encounter?_sort=_lastUpdated",
+        "QuestionnaireResponse?_sort=_lastUpdated",
+        "MeasureReport?_sort=_lastUpdated",
+        "Observation?_sort=_lastUpdated",
+        "Specimen?_sort=_lastUpdated"
+    ))
 
     override suspend fun getNextRequest(): DownloadRequest? {
 
@@ -127,13 +135,6 @@ class TimestampBasedDownloadWorkManagerImpl(
             )
         }
     }
-
-
-
-
-
-
-
 
     /**
      * Affixes the last updated timestamp to the request URL.

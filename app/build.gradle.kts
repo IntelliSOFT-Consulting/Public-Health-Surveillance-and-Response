@@ -18,16 +18,20 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-//        ndk {
-//            abiFilters += setOf("arm64-v8a", "x86_64")
-//        }
+        @Suppress("UnstableApiUsage")
         externalNativeBuild {
-            // For ndk-build, instead use the ndkBuild block.
             cmake {
-                // Passes optional arguments to CMake.
-                arguments += listOf("-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON")
+                arguments.add("-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON")
             }
         }
+//        externalNativeBuild {
+//            cmake {
+//                // Automatically apply 16 KB alignment if NDK < r28
+//                arguments += listOf(
+//                    "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
+//                )
+//            }
+//        }
     }
     lint {
         // Continue build even if there are errors
@@ -53,7 +57,8 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
         isCoreLibraryDesugaringEnabled = true
     }
-    kotlinOptions { jvmTarget = "11" }
+//    kotlinOptions { jvmTarget = "11" }
+
     buildFeatures { viewBinding = true }
     packagingOptions {
         resources.excludes.addAll(listOf("META-INF/ASL-2.0.txt", "META-INF/LGPL-3.0.txt"))
@@ -62,7 +67,13 @@ android {
         }
     }
 }
-
+kotlin {
+    jvmToolchain(11)
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        freeCompilerArgs.addAll(listOf("-Xjvm-default=all"))
+    }
+}
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -97,5 +108,5 @@ dependencies {
     implementation(libs.play.services.location)
     implementation(libs.library)
     implementation(libs.lottie)
-
+//    implementation(libs.sqlcipher)
 }

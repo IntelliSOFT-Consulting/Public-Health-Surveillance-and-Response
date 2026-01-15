@@ -10,14 +10,17 @@ import androidx.lifecycle.viewModelScope
 import ca.uhn.fhir.context.FhirContext
 import ca.uhn.fhir.context.FhirVersionEnum
 import com.google.android.fhir.FhirEngine
+import com.google.android.fhir.datacapture.extensions.logicalId
 import com.google.android.fhir.datacapture.validation.Invalid
 import com.google.android.fhir.datacapture.validation.QuestionnaireResponseValidator
 import com.google.android.fhir.search.StringFilterModifier
+import com.google.android.fhir.search.revInclude
 import com.google.android.fhir.search.search
 import com.ibm.icu.text.SimpleDateFormat
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.models.FacilityInfo
+import com.icl.surveillance.models.LocationLevel
 import com.icl.surveillance.models.QuestionnaireAnswer
 import com.icl.surveillance.models.SpecimenConfig
 import com.icl.surveillance.models.UserRole
@@ -31,12 +34,14 @@ import java.util.Date
 import java.util.UUID
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.hl7.fhir.r4.model.Address
 import org.hl7.fhir.r4.model.CodeableConcept
 import org.hl7.fhir.r4.model.Coding
 import org.hl7.fhir.r4.model.ContactPoint
 import org.hl7.fhir.r4.model.DateTimeType
+import org.hl7.fhir.r4.model.Encounter
 import org.hl7.fhir.r4.model.Enumerations
 import org.hl7.fhir.r4.model.Extension
 import org.hl7.fhir.r4.model.HumanName
@@ -50,10 +55,11 @@ import org.hl7.fhir.r4.model.Patient
 import org.hl7.fhir.r4.model.Questionnaire
 import org.hl7.fhir.r4.model.QuestionnaireResponse
 import org.hl7.fhir.r4.model.Reference
-import org.hl7.fhir.r4.model.Resource
+import org.hl7.fhir.r4.model.ResourceType
 import org.hl7.fhir.r4.model.Specimen
 import org.json.JSONObject
 import java.util.Calendar
+import java.util.LinkedList
 import java.util.Locale
 
 class AddClientViewModel(application: Application, private val state: SavedStateHandle) :
@@ -76,6 +82,269 @@ class AddClientViewModel(application: Application, private val state: SavedState
      *
      * @param questionnaireResponse patient registration questionnaire response
      */
+    private suspend fun getFacilitiesByLevelSuspend(
+        applicationContext: Context,
+        fhirEngine: FhirEngine,
+        startId: String,
+        level: LocationLevel
+    ): List<String> = withContext(Dispatchers.IO) {
+        val facilityIds = mutableListOf<String>()
+        val locationIdsToProcess = mutableListOf(startId)
+
+        when (level) {
+            LocationLevel.FACILITY -> facilityIds.add(startId)
+
+            LocationLevel.WARD -> {
+                for (wardId in locationIdsToProcess) {
+                    val cachedFacilityIds =
+                        FormatterClass().getFacilityIds(applicationContext, wardId)
+                    if (!cachedFacilityIds.isNullOrEmpty()) {
+                        facilityIds.addAll(cachedFacilityIds)
+                        continue
+                    }
+
+                    val facilities = fhirEngine.search<Location> {
+                        filter(Location.PARTOF, { value = "Location/$wardId" })
+                    }
+                    val fetchedIds = facilities.map { it.resource.logicalId }
+                    FormatterClass().saveFacilityIds(applicationContext, wardId, fetchedIds)
+                    facilityIds.addAll(fetchedIds)
+                }
+            }
+
+            LocationLevel.SUB_COUNTY -> {
+                val cachedFacilities =
+                    FormatterClass().getFacilityIdsForWard(applicationContext, startId)
+                if (!cachedFacilities.isNullOrEmpty()) {
+                    facilityIds.addAll(cachedFacilities)
+                } else {
+                    val wards = fhirEngine.search<Location> {
+                        filter(Location.PARTOF, { value = "Location/$startId" })
+                        revInclude<Location>(Location.PARTOF)
+                    }
+
+                    val allFacilityIds = wards.flatMap { ward ->
+                        ward.revIncluded?.get(ResourceType.Location to Location.PARTOF.paramName)
+                            ?.map { it.logicalId } ?: emptyList()
+                    }
+
+                    FormatterClass().saveFacilityIdsForWard(
+                        applicationContext,
+                        startId,
+                        allFacilityIds
+                    )
+                    facilityIds.addAll(allFacilityIds)
+                }
+            }
+
+            LocationLevel.COUNTY -> {
+                val cachedFacilities =
+                    FormatterClass().getFacilityIdsForWard(applicationContext, startId)
+                if (!cachedFacilities.isNullOrEmpty()) {
+                    facilityIds.addAll(cachedFacilities)
+                } else {
+
+                    // 1. County → SubCounties
+                    val subCounties = fhirEngine.search<Location> {
+                        filter(Location.PARTOF, { value = "Location/$startId" })
+                    }
+
+                    val allFacilityIds = mutableListOf<String>()
+
+                    // 2. SubCounty → Wards
+                    for (subCounty in subCounties) {
+                        val wards = fhirEngine.search<Location> {
+                            filter(
+                                Location.PARTOF,
+                                { value = "Location/${subCounty.resource.logicalId}" })
+                        }
+
+                        // 3. Ward → Facilities
+                        for (ward in wards) {
+                            val facilities = fhirEngine.search<Location> {
+                                filter(
+                                    Location.PARTOF,
+                                    { value = "Location/${ward.resource.logicalId}" })
+                            }
+
+                            allFacilityIds.addAll(
+                                facilities.map { it.resource.logicalId }
+                            )
+                        }
+                    }
+                    FormatterClass().saveFacilityIdsForWard(
+                        applicationContext,
+                        startId,
+                        allFacilityIds
+                    )
+
+                    facilityIds.addAll(allFacilityIds)
+                }
+            }
+
+            LocationLevel.NATIONAL -> {
+                val counties = fhirEngine.search<Location> { }
+                val countyIds = counties.map { it.resource.logicalId }
+
+            }
+        }
+
+        facilityIds
+    }
+
+    fun generateAreaOfJurisdiction(
+        context: Context,
+        engine: FhirEngine
+    ): LinkedList<String> {
+        val formatter = FormatterClass()
+        val storedRole = formatter.getSharedPref("practitionerRole", context)
+        val userRole = UserRole.fromAny(storedRole ?: "")
+        val urls = mutableListOf<String>()
+
+
+        when (userRole) {
+            UserRole.FACILITY_SURVEILLANCE_FOCAL_PERSON,
+            UserRole.SUPERVISOR,
+            UserRole.VACCINATOR -> {
+                val facilityId = formatter.getSharedPref("facility", context)
+                if (!facilityId.isNullOrEmpty()) {
+                    urls.add(facilityId)
+                }
+            }
+
+            UserRole.SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
+                val subCounty = formatter.getSharedPref("subCounty", context)
+                if (!subCounty.isNullOrEmpty()) {
+                    val facilities =
+                        runBlocking {
+                            getFacilitiesByLevelSuspend(
+                                context,
+                                engine,
+                                subCounty,
+                                LocationLevel.SUB_COUNTY
+                            )
+                        }
+                    urls.addAll(facilities)
+                }
+            }
+
+            UserRole.COUNTY_DISEASE_SURVEILLANCE_OFFICER -> {
+                val county = formatter.getSharedPref("county", context)
+                if (!county.isNullOrEmpty()) {
+                    val facilities = runBlocking {
+                        getFacilitiesByLevelSuspend(
+                            context,
+                            engine,
+                            county,
+                            LocationLevel.COUNTY
+                        )
+                    }
+                    urls.addAll(facilities)
+                }
+            }
+
+            else -> {}
+        }
+
+        return LinkedList(urls)
+    }
+
+    suspend fun retrieveCaseEncounters(reasonCode: String): List<Encounter> {
+        return fhirEngine
+            .search<Encounter> {
+            }
+            .map { it.resource }
+            .filter { encounter ->
+                encounter.reasonCode.any { codeableConcept ->
+                    codeableConcept.coding.any { coding ->
+                        coding.code == reasonCode
+                    }
+                }
+            }
+    }
+
+    suspend fun retrieveResponses(encounterId: String): List<QuestionnaireResponse> {
+        return fhirEngine
+            .search<QuestionnaireResponse> {
+                filter(QuestionnaireResponse.ENCOUNTER, { value = "Encounter/$encounterId" })
+            }
+            .map { it.resource }
+
+    }
+
+    suspend fun updateObservationsTag(
+        encounter: Encounter,
+        res: QuestionnaireResponse,
+        facility: String,
+        encounterId: String
+    ) {
+        val observations = fhirEngine
+            .search<Observation> {
+                filter(Observation.ENCOUNTER, { value = "Encounter/$encounterId" })
+            }
+            .map { it.resource }
+            .filter { obs ->
+                obs.meta?.tag?.none { coding ->
+                    coding.code?.startsWith("Location/") == true
+                } ?: true // true if meta or tag is null
+            }
+
+        val noEncounterTag = encounter.meta?.tag?.none { coding ->
+            coding.code?.startsWith("Location/") == true
+        }
+        val noResponseTag = res.meta?.tag?.none { coding ->
+            coding.code?.startsWith("Location/") == true
+        }
+        if (noEncounterTag == true) {
+            val newEncounter = encounter.copy()
+            newEncounter.id = encounter.id
+            newEncounter.meta = Meta().apply {
+                tag = listOf(
+                    Coding().apply {
+                        system =
+                            "http://example.org/fhir/StructureDefinition/encounter-managingLocation"
+                        code = facility
+                        display = facility
+                    }
+                )
+            }
+            fhirEngine.update(newEncounter)
+        }
+        if (noResponseTag == true) {
+            val newResponse = res.copy()
+            newResponse.id = res.id
+            newResponse.meta = Meta().apply {
+                tag = listOf(
+                    Coding().apply {
+                        system =
+                            "http://example.org/fhir/StructureDefinition/encounter-managingLocation"
+                        code = facility
+                        display = facility
+                    }
+                )
+            }
+            fhirEngine.update(newResponse)
+        }
+        observations.forEach { obs ->
+            val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
+            val responseString =
+                jsonParser.encodeResourceToString(obs)
+
+            val newObs = obs.copy()
+            newObs.id = obs.id
+            newObs.meta = Meta().apply {
+                tag = listOf(
+                    Coding().apply {
+                        system =
+                            "http://example.org/fhir/StructureDefinition/observation-managingLocation"
+                        code = facility
+                        display = facility
+                    }
+                )
+            }
+            fhirEngine.update(newObs)
+        }
+    }
 
     fun saveUserResponse(
         questionnaireResponse: QuestionnaireResponse,
@@ -1167,7 +1436,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
             UserRole.FACILITY_SURVEILLANCE_FOCAL_PERSON,
             UserRole.SUPERVISOR,
             UserRole.VACCINATOR ->
-                819946803677
+                "819946803677"
 
             else ->
                 "819946803677"
@@ -1307,7 +1576,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
             viewModelScope.launch {
                 obs.meta = Meta().apply {
                     tag = listOf(
-                        sourceMetaTag("measure", facility, context, extractedAnswers)
+                        sourceMetaTag("observation", facility, context, extractedAnswers)
                     )
                 }
                 obs.addExtension(

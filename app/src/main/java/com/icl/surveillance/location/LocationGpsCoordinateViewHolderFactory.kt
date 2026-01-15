@@ -1,6 +1,7 @@
 package com.icl.surveillance.location
 
 import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import com.google.android.fhir.datacapture.extensions.getRequiredOrOptionalText
 import com.google.android.fhir.datacapture.extensions.getValidationErrorMessage
@@ -9,6 +10,9 @@ import com.google.android.fhir.datacapture.extensions.tryUnwrapContext
 import com.google.android.fhir.datacapture.validation.ValidationResult
 import com.google.android.fhir.datacapture.views.HeaderView
 import com.google.android.fhir.datacapture.views.QuestionnaireViewItem
+import com.google.android.fhir.datacapture.views.factories.QuestionnaireItemAndroidViewHolderDelegate
+import com.google.android.fhir.datacapture.views.factories.QuestionnaireItemAndroidViewHolderFactory
+import com.google.android.fhir.datacapture.views.factories.QuestionnaireItemViewHolder
 import com.google.android.fhir.datacapture.views.factories.QuestionnaireItemViewHolderDelegate
 import com.google.android.fhir.datacapture.views.factories.QuestionnaireItemViewHolderFactory
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -22,11 +26,11 @@ import org.hl7.fhir.r4.model.StringType
 
 
 object LocationGpsCoordinateViewHolderFactory :
-    QuestionnaireItemViewHolderFactory(
+    QuestionnaireItemAndroidViewHolderFactory(
         R.layout.location_gps_coordinate_view,
     ) {
-    override fun getQuestionnaireItemViewHolderDelegate(): QuestionnaireItemViewHolderDelegate =
-        object : QuestionnaireItemViewHolderDelegate {
+    override fun getQuestionnaireItemViewHolderDelegate() =
+        object : QuestionnaireItemAndroidViewHolderDelegate {
             override lateinit var questionnaireViewItem: QuestionnaireViewItem
 
             private lateinit var header: HeaderView

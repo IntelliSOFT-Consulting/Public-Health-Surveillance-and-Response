@@ -26,6 +26,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.fhir.FhirEngine
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -43,9 +44,12 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.messaging.FirebaseMessaging
 import com.icl.surveillance.auth.LoginActivity
 import com.icl.surveillance.fhir.DemoDataStore
+import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.network.RetrofitCallsAuthentication
+import com.icl.surveillance.viewmodels.AddClientViewModel
 import com.icl.surveillance.viewmodels.PeriodicSyncViewModel
 import kotlinx.coroutines.launch
+import org.hl7.fhir.r4.model.QuestionnaireResponse
 import org.hl7.fhir.r4.model.ResourceType
 import kotlin.getValue
 import kotlin.jvm.java
@@ -90,10 +94,14 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private val addClientViewModel: AddClientViewModel by viewModels()
+    private lateinit var fhirEngine: FhirEngine
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        fhirEngine = FhirApplication.fhirEngine(this@MainActivity)
         val rootView: View = findViewById(R.id.container) // your root view ID
         ViewCompat.setOnApplyWindowInsetsListener(rootView) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -122,8 +130,7 @@ class MainActivity : AppCompatActivity() {
             retrofitCallsAuthentication.updateOrCreateToken(this, token)
         }
 
-
-
+        updateSourceFacility()
         appUpdateManager = AppUpdateManagerFactory.create(this)
         checkForAppUpdate()
 
@@ -143,6 +150,7 @@ class MainActivity : AppCompatActivity() {
             )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
         navView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
@@ -167,10 +175,105 @@ class MainActivity : AppCompatActivity() {
             }
         }
         checkLocationPermission()
+        generateAreaOfJurisdiction()
+    }
+
+    private fun generateAreaOfJurisdiction() {
+        val units = addClientViewModel.generateAreaOfJurisdiction(this@MainActivity, fhirEngine)
+        units.forEach {
+            println("Will be displayed $it")
+        }
+        FormatterClass().saveFacilityIdsForWard(this@MainActivity, "units", units)
+    }
+
+    private fun updateSourceFacility() {
+        lifecycleScope.launch {
+            val encounters = addClientViewModel.retrieveCaseEncounters("case-information")
+            println("Total Encounter ${encounters.size}")
+            encounters.forEach { encounter ->
+                val responses = addClientViewModel.retrieveResponses(encounter.idPart)
+                responses.forEach { res ->
+                    val flattened = res.flattenAnswers()
+
+                    val facilityIDs = listOf(
+                        "819946803677_county",
+                        "819946803677_sub_county",
+                        "819946803677"
+                    )
+
+                    val facilityInfo = try {
+                        facilityIDs.firstNotNullOfOrNull { id ->
+                            flattened[id]
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        ""
+                    }
+                    println("Total Encounter Source Facility $facilityInfo")
+                    if (facilityInfo != null) {
+                        addClientViewModel.updateObservationsTag(
+                            encounter,
+                            res,
+                            facilityInfo,
+                            encounter.idPart
+                        )
+                    }
+                }
+            }
+
+        }
+    }
+
+    fun QuestionnaireResponse.flattenAnswers(): Map<String, String> {
+        val result = mutableMapOf<String, String>()
+
+        fun traverse(items: List<QuestionnaireResponse.QuestionnaireResponseItemComponent>) {
+            items.forEach { item ->
+                item.answer.forEach { answer ->
+                    extractAnswerValue(answer)?.let { value ->
+                        result[item.linkId] = value
+                    }
+                }
+
+                if (item.item.isNotEmpty()) {
+                    traverse(item.item)
+                }
+            }
+        }
+
+        traverse(this.item)
+        return result
+    }
+
+    fun extractAnswerValue(
+        answer: QuestionnaireResponse.QuestionnaireResponseItemAnswerComponent
+    ): String? {
+        return when {
+            answer.hasValueStringType() ->
+                answer.valueStringType.value
+
+            answer.hasValueBooleanType() ->
+                answer.valueBooleanType.booleanValue().toString()
+
+            answer.hasValueIntegerType() ->
+                answer.valueIntegerType.value.toString()
+
+            answer.hasValueDecimalType() ->
+                answer.valueDecimalType.value.toString()
+
+            answer.hasValueCoding() ->
+                answer.valueCoding.code ?: answer.valueCoding.display
+
+            answer.hasValueReference() ->
+                answer.valueReference.reference
+                    ?: answer.valueReference.display
+
+            else -> null
+        }
     }
 
     private fun getUserProfile() {
-        retrofitCallsAuthentication.getUserProfile(viewModel,this)
+        retrofitCallsAuthentication.getUserProfile(viewModel, this)
     }
 
     private fun checkLocationPermission() {

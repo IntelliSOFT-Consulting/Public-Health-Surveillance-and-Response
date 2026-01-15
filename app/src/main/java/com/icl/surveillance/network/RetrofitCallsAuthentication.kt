@@ -263,7 +263,7 @@ class RetrofitCallsAuthentication {
                             apiInterface.errorBody()?.let {
                                 //                  val errorBody = JSONObject(it.string())
                                 messageToast =
-                                    "Invalid login credentials. Please try again." // errorBody.getString("error")
+                                    "Invalid login credentials. Please try again. ${it.string()}" // errorBody.getString("error")
                             }
                         }
                     } catch (e: Exception) {
@@ -272,7 +272,7 @@ class RetrofitCallsAuthentication {
                         Log.e("******", e.toString())
                         Log.e("******", "")
 
-                        messageToast = "Cannot login user.."
+                        messageToast = "Cannot login user.. ${e.message}"
                     }
                 }
                 .join()

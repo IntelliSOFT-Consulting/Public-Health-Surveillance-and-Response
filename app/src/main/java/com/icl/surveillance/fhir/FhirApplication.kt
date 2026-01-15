@@ -28,6 +28,7 @@ import com.icl.surveillance.utils.ContribQuestionnaireItemViewHolderFactoryMatch
 import com.icl.surveillance.utils.FormatterClass
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.catch
@@ -93,6 +94,7 @@ class FhirApplication : Application(), DataCaptureConfig.Provider, Configuration
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun setupPeriodicSync() {
         appScope.launch {
             try {

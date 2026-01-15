@@ -1,10 +1,15 @@
 package com.icl.surveillance.location
 
 import android.view.View
+import android.view.ViewGroup
 import com.google.android.fhir.datacapture.extensions.itemControlCode
 import com.google.android.fhir.datacapture.extensions.tryUnwrapContext
 import com.google.android.fhir.datacapture.views.GroupHeaderView
+import com.google.android.fhir.datacapture.views.HeaderView
 import com.google.android.fhir.datacapture.views.QuestionnaireViewItem
+import com.google.android.fhir.datacapture.views.factories.QuestionnaireItemAndroidViewHolderDelegate
+import com.google.android.fhir.datacapture.views.factories.QuestionnaireItemAndroidViewHolderFactory
+import com.google.android.fhir.datacapture.views.factories.QuestionnaireItemViewHolder
 import com.google.android.fhir.datacapture.views.factories.QuestionnaireItemViewHolderDelegate
 import com.google.android.fhir.datacapture.views.factories.QuestionnaireItemViewHolderFactory
 import com.google.android.material.button.MaterialButton
@@ -12,10 +17,10 @@ import com.icl.surveillance.R
 import org.hl7.fhir.r4.model.Questionnaire
 
 object LocationWidgetViewHolderFactory :
-    QuestionnaireItemViewHolderFactory(R.layout.location_widget_view) {
-    override fun getQuestionnaireItemViewHolderDelegate(): QuestionnaireItemViewHolderDelegate =
-        object : QuestionnaireItemViewHolderDelegate {
-            private lateinit var headerView: GroupHeaderView
+    QuestionnaireItemAndroidViewHolderFactory(R.layout.location_widget_view) {
+    override fun getQuestionnaireItemViewHolderDelegate() =
+        object : QuestionnaireItemAndroidViewHolderDelegate {
+            private lateinit var headerView: HeaderView
             private lateinit var locationWidgetButton: MaterialButton
 
             override lateinit var questionnaireViewItem: QuestionnaireViewItem

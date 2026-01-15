@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NPHIIS Training</string>
+    <string name="app_name">NPHIIS </string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Cases List</string>
     <string name="title_notifications">Profile</string>
@@ -25,7 +25,7 @@
     <string name="welcome_back">Welcome Back</string>
     <string name="last_sync_timestamp">Last sync time: %1$s</string>
     <string name="current_status">Current sync status: %1$s</string>
-        <string name="base_url">https://dsrkeycloak.intellisoftkenya.com/auth/</string>
+    <string name="base_url">https://dsrkeycloak.intellisoftkenya.com/auth/</string>
 <!--    <string name="base_url">https://auth.nphiis.nphl.go.ke/</string>-->
     <string name="cancel_questionnaire_message">Are you sure you want to cancel?</string>
     <string name="lab_results_not_captured">Lab results not captured</string>

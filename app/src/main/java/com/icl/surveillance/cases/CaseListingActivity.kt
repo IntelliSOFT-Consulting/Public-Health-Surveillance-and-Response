@@ -268,7 +268,7 @@ class CaseListingActivity : AppCompatActivity() {
             R.id.action_refresh -> {
                 SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("Are you sure?")
-                    .setContentText("Are you sure you wish to upload your local data?")
+                    .setContentText("Are you sure you wish to upload your  data?")
                     .setConfirmText("Yes,Upload!")
                     .setConfirmClickListener { sDialog ->
                         lifecycleScope.launch {
