@@ -180,16 +180,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun generateAreaOfJurisdiction() {
         val units = addClientViewModel.generateAreaOfJurisdiction(this@MainActivity, fhirEngine)
-        units.forEach {
-            println("Will be displayed $it")
-        }
+
         FormatterClass().saveFacilityIdsForWard(this@MainActivity, "units", units)
     }
 
     private fun updateSourceFacility() {
         lifecycleScope.launch {
             val encounters = addClientViewModel.retrieveCaseEncounters("case-information")
-            println("Total Encounter ${encounters.size}")
+
             encounters.forEach { encounter ->
                 val responses = addClientViewModel.retrieveResponses(encounter.idPart)
                 responses.forEach { res ->
@@ -209,7 +207,7 @@ class MainActivity : AppCompatActivity() {
                         e.printStackTrace()
                         ""
                     }
-                    println("Total Encounter Source Facility $facilityInfo")
+
                     if (facilityInfo != null) {
                         addClientViewModel.updateObservationsTag(
                             encounter,

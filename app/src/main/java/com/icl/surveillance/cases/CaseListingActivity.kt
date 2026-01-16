@@ -65,11 +65,14 @@ class CaseListingActivity : AppCompatActivity() {
     }
 
     fun loadData() {
+
+        val units = FormatterClass().getFacilityIdsForWard(this@CaseListingActivity, "units")
         val titleName = FormatterClass().getSharedPref("listingTitle", this)
         val currentCase = FormatterClass().getSharedPref("currentCase", this)
         val recyclerView: RecyclerView = binding.patientListContainer.patientList
         val adapter = PatientItemRecyclerViewAdapter(this::onPatientItemClicked, "$titleName", this)
         val adapterRumor = PatientItemRecyclerViewAdapterRumor(this::onRumorItemClicked)
+
 
         if (currentCase != null) {
             val slug = currentCase.toSlug()
@@ -104,12 +107,12 @@ class CaseListingActivity : AppCompatActivity() {
                     )
                     recyclerView.adapter = adapterRegister
                     recyclerView.layoutManager = LinearLayoutManager(this@CaseListingActivity)
-                    patientListViewModel.loadMpoxPatientList(slug)
+                    patientListViewModel.loadMpoxPatientList(slug, units)
 
 
                     lifecycleScope.launch {
                         patientListViewModel.patients.collect { newList ->
-                            adapterRegister.addPatients(newList)  
+                            adapterRegister.addPatients(newList)
                             if (newList.isNotEmpty()) {
                                 binding.apply {
                                     count.text = "Showing ${newList.size} Results"
@@ -128,17 +131,17 @@ class CaseListingActivity : AppCompatActivity() {
                             val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
 
                             if (visibleItemCount + firstVisibleItem >= totalItemCount - 5) {
-                                patientListViewModel.loadMpoxPatientList(slug)
+                                patientListViewModel.loadMpoxPatientList(slug, units)
                             }
                         }
                     })
                 }
 
                 else -> {
-                    patientListViewModel.handleCurrentCaseListing(slug)
+                    patientListViewModel.handleCurrentCaseListing(slug,units)
                     recyclerView.adapter = adapter
                     patientListViewModel.liveSearchedCases.observe(this) {
-                        binding.apply { 
+                        binding.apply {
                             patientListContainer.pbProgress.visibility = View.GONE
                         }
 
@@ -148,7 +151,7 @@ class CaseListingActivity : AppCompatActivity() {
                             }
                         } else {
                             binding.apply { patientListContainer.caseCount.visibility = View.GONE }
-                        } 
+                        }
                         adapter.setData(it)
 
                         binding.apply {

@@ -92,7 +92,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
         val locationIdsToProcess = mutableListOf(startId)
 
         when (level) {
-            LocationLevel.FACILITY -> facilityIds.add(startId)
+            LocationLevel.FACILITY -> facilityIds.add("Location/$startId")
 
             LocationLevel.WARD -> {
                 for (wardId in locationIdsToProcess) {
@@ -115,9 +115,9 @@ class AddClientViewModel(application: Application, private val state: SavedState
             LocationLevel.SUB_COUNTY -> {
                 val cachedFacilities =
                     FormatterClass().getFacilityIdsForWard(applicationContext, startId)
-                if (!cachedFacilities.isNullOrEmpty()) {
-                    facilityIds.addAll(cachedFacilities)
-                } else {
+//                if (!cachedFacilities.isNullOrEmpty()) {
+//                    facilityIds.addAll(cachedFacilities)
+//                } else {
                     val wards = fhirEngine.search<Location> {
                         filter(Location.PARTOF, { value = "Location/$startId" })
                         revInclude<Location>(Location.PARTOF)
@@ -125,7 +125,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
 
                     val allFacilityIds = wards.flatMap { ward ->
                         ward.revIncluded?.get(ResourceType.Location to Location.PARTOF.paramName)
-                            ?.map { it.logicalId } ?: emptyList()
+                            ?.map {"Location/${it.logicalId}"} ?: emptyList()
                     }
 
                     FormatterClass().saveFacilityIdsForWard(
@@ -134,15 +134,15 @@ class AddClientViewModel(application: Application, private val state: SavedState
                         allFacilityIds
                     )
                     facilityIds.addAll(allFacilityIds)
-                }
+//                }
             }
 
             LocationLevel.COUNTY -> {
                 val cachedFacilities =
                     FormatterClass().getFacilityIdsForWard(applicationContext, startId)
-                if (!cachedFacilities.isNullOrEmpty()) {
-                    facilityIds.addAll(cachedFacilities)
-                } else {
+//                if (!cachedFacilities.isNullOrEmpty()) {
+//                    facilityIds.addAll(cachedFacilities)
+//                } else {
 
                     // 1. County → SubCounties
                     val subCounties = fhirEngine.search<Location> {
@@ -168,7 +168,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                             }
 
                             allFacilityIds.addAll(
-                                facilities.map { it.resource.logicalId }
+                                facilities.map { "Location/${it.resource.logicalId}" }
                             )
                         }
                     }
@@ -179,7 +179,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
                     )
 
                     facilityIds.addAll(allFacilityIds)
-                }
+//                }
             }
 
             LocationLevel.NATIONAL -> {
@@ -208,7 +208,7 @@ class AddClientViewModel(application: Application, private val state: SavedState
             UserRole.VACCINATOR -> {
                 val facilityId = formatter.getSharedPref("facility", context)
                 if (!facilityId.isNullOrEmpty()) {
-                    urls.add(facilityId)
+                    urls.add("Location/$facilityId")
                 }
             }
 

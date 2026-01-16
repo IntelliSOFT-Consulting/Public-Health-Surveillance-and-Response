@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <com.google.android.fhir.datacapture.views.GroupHeaderView
+    <com.google.android.fhir.datacapture.views.HeaderView
         android:id="@+id/header"
         style="?attr/questionnaireGroupTypeHeaderStyle"
         android:layout_width="match_parent"

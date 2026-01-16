@@ -46,6 +46,7 @@ class FormatterClass {
             .putBoolean(KEY_SYNC_DONE, true)
             .apply()
     }
+
     fun saveFacilityIdsForWard(context: Context, locationId: String, facilityIds: List<String>) {
         val prefs = context.getSharedPreferences(PREFNAME, Context.MODE_PRIVATE)
         val existingJson = prefs.getString(KEYLOCATIONFACILITYMAP, "{}")
@@ -55,7 +56,7 @@ class FormatterClass {
         prefs.edit().putString(KEYLOCATIONFACILITYMAP, jsonObject.toString()).apply()
     }
 
-    fun getFacilityIdsForWard(context: Context, locationId: String): List<String>? {
+    fun getFacilityIdsForWard(context: Context, locationId: String): List<String> {
         val prefs = context.getSharedPreferences(PREFNAME, Context.MODE_PRIVATE)
         val existingJson = prefs.getString(KEYLOCATIONFACILITYMAP, "{}")
         val jsonObject = JSONObject(existingJson ?: "{}")
@@ -63,7 +64,7 @@ class FormatterClass {
         return if (jsonObject.has(locationId)) {
             val jsonArray = jsonObject.getJSONArray(locationId)
             List(jsonArray.length()) { jsonArray.getString(it) }
-        } else null
+        } else emptyList()
     }
 
     private fun prefs(context: Context): SharedPreferences =
@@ -75,6 +76,7 @@ class FormatterClass {
             .putString("$KEYPREFIX$wardId", json)
             .apply()
     }
+
     fun extractStructuredAnswersOnlyFromItems(json: JSONObject): List<QuestionnaireAnswer> {
         val results = mutableListOf<QuestionnaireAnswer>()
 
@@ -290,12 +292,14 @@ class FormatterClass {
         // Step 2: Parse back into Date
         return formatter.parse(formattedString)!!
     }
+
     fun formatToMMddyyyy(date: Date): Date {
         val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.US)
 
         val formatted = formatter.format(date)        // String
         return formatter.parse(formatted)!!           // back to Date
     }
+
     fun getTimeOfDay(): String {
 
         val currentTime = LocalTime.now()

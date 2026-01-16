@@ -579,6 +579,7 @@ class CaseSelectionFragment : Fragment() {
                 }
             }
         }
+        val units = FormatterClass().getFacilityIdsForWard(requireContext(), "units")
 
         val caseType = when (title?.trim()) {
             "Measles" -> "measles-case-information"
@@ -598,8 +599,7 @@ class CaseSelectionFragment : Fragment() {
 
                 when (it) {
                     "mpox-register" -> {
-                        patientListViewModel.simulateScrollUntilEnd(it) { allPatients ->
-                            println("Loaded total patients: ${allPatients.size}")
+                        patientListViewModel.simulateScrollUntilEnd(it,units) { allPatients ->
 
                             caseOptions[1] = caseOptions[1].copy(count = allPatients.size)
                             recyclerView.adapter?.notifyDataSetChanged()
@@ -607,7 +607,7 @@ class CaseSelectionFragment : Fragment() {
                     }
 
                     else -> {
-                        patientListViewModel.handleCurrentCaseListing(it)
+                        patientListViewModel.handleCurrentCaseListing(it, units)
 
                         patientListViewModel.liveSearchedCases.observe(viewLifecycleOwner) { cases ->
                             caseOptions[1] = caseOptions[1].copy(count = cases.size)

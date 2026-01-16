@@ -167,7 +167,6 @@ class TimestampBasedDownloadWorkManagerImpl(
         if (downloadUrl.contains("&page_token")) {
             downloadUrl = url
         }
-        println("Filtered resources:  Timestamp  $downloadUrl")
         return downloadUrl
     }
 

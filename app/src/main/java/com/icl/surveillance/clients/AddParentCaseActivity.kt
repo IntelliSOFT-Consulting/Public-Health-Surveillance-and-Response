@@ -21,13 +21,19 @@ import androidx.lifecycle.lifecycleScope
 import ca.uhn.fhir.context.FhirContext
 import ca.uhn.fhir.context.FhirVersionEnum
 import com.fasterxml.jackson.databind.type.ReferenceType
+import com.google.android.fhir.FhirEngine
 import com.google.android.fhir.datacapture.QuestionnaireFragment
 import com.google.android.fhir.datacapture.mapping.ResourceMapper
+import com.google.android.fhir.search.StringFilterModifier
+import com.google.android.fhir.search.search
 import com.google.android.material.button.MaterialButton
 import com.icl.surveillance.R
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FRAGMENT_TAG
 import com.icl.surveillance.databinding.ActivityAddParentCaseBinding
+import com.icl.surveillance.fhir.FhirApplication
+import com.icl.surveillance.models.FacilityInfo
+import com.icl.surveillance.models.QuestionnaireAnswer
 import com.icl.surveillance.models.UserRole
 import com.icl.surveillance.utils.ContribQuestionnaireItemViewHolderFactoryMatchersProviderFactory
 import com.icl.surveillance.utils.FormatterClass
@@ -38,11 +44,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.hl7.fhir.r4.model.DateType
+import org.hl7.fhir.r4.model.Location
 import org.hl7.fhir.r4.model.Patient
 import org.hl7.fhir.r4.model.Questionnaire
 import org.hl7.fhir.r4.model.QuestionnaireResponse
 import org.hl7.fhir.r4.model.Reference
 import org.hl7.fhir.r4.model.StringType
+import org.json.JSONObject
 
 class AddParentCaseActivity : AppCompatActivity() {
     private val LOCATION_PERMISSION_REQUEST_CODE = 100
@@ -54,12 +62,14 @@ class AddParentCaseActivity : AppCompatActivity() {
         return assets.open(fileName).bufferedReader().use { it.readText() }
     }
 
+    private lateinit var fhirEngine: FhirEngine
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityAddParentCaseBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
+        fhirEngine = FhirApplication.fhirEngine(this@AddParentCaseActivity)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val titleName = FormatterClass().getSharedPref("AddParentTitle", this@AddParentCaseActivity)
         supportActionBar.apply { title = titleName }
@@ -204,15 +214,71 @@ class AddParentCaseActivity : AppCompatActivity() {
             }
 
             else -> {
-                viewModel.savePatientData(
-                    questionnaireResponse,
-                    this@AddParentCaseActivity
-                )
+//                val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
+//                val questionnaireResponseString =
+//                    jsonParser.encodeResourceToString(questionnaireResponse)
+//                val jsonObject = JSONObject(questionnaireResponseString)
+//                val extractedAnswers =
+//                    FormatterClass().extractStructuredAnswersOnlyFromItems(jsonObject)
+//
+//                // Extract Facility Information
+//                lifecycleScope.launch {
+//                    val info = resolveFacilityInfo(this@AddParentCaseActivity, extractedAnswers)
+//                    println("Data Here ${info?.code} ${info?.name}")
+                    viewModel.savePatientData(
+                        questionnaireResponse,
+                        this@AddParentCaseActivity
+                    )
+//                }
             }
         }
 
     }
 
+    suspend fun resolveFacilityInfo(
+        context: Context,
+        extractedAnswers: List<QuestionnaireAnswer>,
+
+        ): FacilityInfo? {
+
+        val formatter = FormatterClass()
+        val storedRole = formatter.getSharedPref("practitionerRole", context)
+        val userRole = UserRole.fromAny(storedRole ?: "")
+
+        val facilityLink = when (userRole) {
+            UserRole.COUNTY_DISEASE_SURVEILLANCE_OFFICER ->
+                "819946803677_county"
+
+            UserRole.SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER ->
+                "819946803677_sub_county"
+
+            UserRole.ADMINISTRATOR,
+            UserRole.FACILITY_SURVEILLANCE_FOCAL_PERSON,
+            UserRole.SUPERVISOR,
+            UserRole.VACCINATOR ->
+                "819946803677"
+
+            else ->
+                "819946803677"
+        }
+
+        val facilityEntry = extractedAnswers.find { it.linkId == facilityLink }
+            ?: return null
+
+        val results = fhirEngine.search<Location> {
+            filter(Location.NAME, {
+                modifier = StringFilterModifier.CONTAINS
+                value = facilityEntry.answer
+            })
+        }
+
+        if (results.isEmpty()) return null
+
+        return FacilityInfo(
+            name = facilityEntry.answer,
+            code = results.first().resource.idPart
+        )
+    }
 
     override fun onBackPressed() {
         val dialog = AlertDialog.Builder(this)
