@@ -1086,7 +1086,7 @@ class PatientListViewModel(
 
 
                             "moh-505-reporting-form" -> {
-                                println("Current Workflow :::: Started 505")
+
                                 val res = fhirEngine.search<QuestionnaireResponse> {
                                     filter(
                                         QuestionnaireResponse.SUBJECT,
@@ -1097,7 +1097,7 @@ class PatientListViewModel(
                                     val response = res.first().resource
                                     val data = FhirContext.forR4Cached().newJsonParser()
                                         .encodeResourceToString(response)
-                                    println(" Current Workflow :::: Starter Response:::: $data")
+
                                     val jsonParser =
                                         FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
                                     val questionnaireResponseString =
@@ -1110,12 +1110,14 @@ class PatientListViewModel(
                                     val countyLinkIds = listOf(
                                         "294367770999",
                                         "294367770999_sub_county",
-                                        "294367770999_county"
+                                        "294367770999_county",
+                                        "294367770999_national"
                                     ) // check in order
                                     val subCountyLinkIds = listOf(
                                         "819946803642",
                                         "819946803642_sub_county",
-                                        "819946803642_county"
+                                        "819946803642_county",
+                                        "819946803642_national"
                                     )
 
                                     county = try {
