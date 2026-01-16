@@ -20,8 +20,8 @@ import com.google.android.fhir.search.StringFilterModifier
 import com.google.android.fhir.search.count
 import com.google.android.fhir.search.revInclude
 import com.google.android.fhir.search.search
+import com.icl.surveillance.models.UserRole
 import com.icl.surveillance.network.RetrofitCallsAuthentication
-import com.icl.surveillance.utils.Constants.MEASURE_TAG
 import com.icl.surveillance.utils.Constants.PATIENT_TAG
 import com.icl.surveillance.utils.Constants.RESPONSE_TAG
 import com.icl.surveillance.utils.FormatterClass
@@ -344,12 +344,12 @@ class PatientListViewModel(
 
     fun simulateScrollUntilEnd(
         slug: String,
-        units: List<String>,
-        onFinished: (List<PatientItem>) -> Unit
+        units: List<String>, userRole: UserRole?,
+        onFinished: (List<PatientItem>) -> Unit,
     ) {
         viewModelScope.launch {
             while (hasMore) {
-                loadMpoxPatientList(slug, units)
+                loadMpoxPatientList(slug, units, userRole)
                 delay(300L) // optional pause to mimic scrolling
             }
             // When done, send back the full list
@@ -357,14 +357,12 @@ class PatientListViewModel(
         }
     }
 
-    fun loadMpoxPatientList(nameQuery: String, units: List<String>) {
+    fun loadMpoxPatientList(nameQuery: String, units: List<String>, userRole: UserRole?) {
         val isSummary = nameQuery.contains("mpox")
         if (!hasMore || isLoading) return
         isLoading = true
         page++
-        units.forEach {k->
-//            println("Will be displayed Mpox Case $k")
-        }
+
         viewModelScope.launch(Dispatchers.IO) {
             val results = fhirEngine.search<Patient> {
                 sort(Patient.GIVEN, Order.ASCENDING)
@@ -383,8 +381,9 @@ class PatientListViewModel(
                         it.system == nameQuery
                     }
 
-                    val tag = p.meta.tag.find { it.system.contains(PATIENT_TAG) }?.code
-//                    println("Will be displayed Mpox $tag")
+                    val tag =
+                        wrapper.resource.meta.tag.find { it.system.endsWith("/patient-managingLocation") }?.code
+
                     if (matchingIdentifier != null) {
 
                         val obs =
@@ -460,7 +459,19 @@ class PatientListViewModel(
                     } else {
                         null
                     }
-                }.filter { it.sourceTag in units }
+                }.filter {
+                    when (userRole) {
+                        UserRole.ADMINISTRATOR -> {
+                            true
+                        }
+
+                        else -> {
+                            it.sourceTag in units
+                        }
+                    }
+
+
+                }
 
                 _patients.update { it + mapped }
             }
@@ -477,16 +488,16 @@ class PatientListViewModel(
         updatePatientListAndPatientCount({ getSearchResults(nameQuery) }, { count(nameQuery) })
     }
 
-    fun handleCurrentCaseListing(category: String, units: List<String>) {
+    fun handleCurrentCaseListing(category: String, units: List<String>, userRole: UserRole?) {
         viewModelScope.launch {
-            liveSearchedCases.value = retrieveCasesByDisease(category, units)
+            liveSearchedCases.value = retrieveCasesByDisease(category, units, userRole)
 
         }
     }
 
-    fun handleCurrentRumorCaseListing(category: String) {
+    fun handleCurrentRumorCaseListing(category: String, units: List<String>, userRole: UserRole?) {
         viewModelScope.launch {
-            liveRumorCases.value = retrieveRumorCasesByDisease(category)
+            liveRumorCases.value = retrieveRumorCasesByDisease(category, units, userRole)
 //            patientCount.value = count()
         }
     }
@@ -755,10 +766,10 @@ class PatientListViewModel(
     private suspend fun retrieveCasesByDisease(
         nameQuery: String,
         units: List<String>,
+        userRole: UserRole?,
     ): List<PatientItem> {
         val isSummary = nameQuery.contains("mpox")
 
-        println("Current Workflow :::: $nameQuery")
         when (nameQuery) {
             "mpox-tally-sheet" -> {
                 val questionnaireData: MutableList<PatientItem> = mutableListOf()
@@ -766,7 +777,8 @@ class PatientListViewModel(
                     sort(MeasureReport.DATE, Order.DESCENDING)
                 }
                     .mapIndexedNotNull { index, data ->
-                        val tag = data.resource.meta.tag.find { it.system.endsWith("/measure-managingLocation") }?.code
+                        val tag =
+                            data.resource.meta.tag.find { it.system.endsWith("/measure-managingLocation") }?.code
 
                         val identifier = data.resource.identifier.find {
                             it.system == "geo-location-details"
@@ -872,7 +884,8 @@ class PatientListViewModel(
                     sort(Patient.GIVEN, Order.ASCENDING)
                     revInclude<Observation>(Observation.SUBJECT)
                 }.mapIndexedNotNull { index, fhirPatient ->
-                    val tag = fhirPatient.resource.meta.tag.find { it.system.endsWith("/patient-managingLocation") }?.code
+                    val tag =
+                        fhirPatient.resource.meta.tag.find { it.system.endsWith("/patient-managingLocation") }?.code
 
                     val matchingIdentifier = fhirPatient.resource.identifier.find {
                         it.system == nameQuery
@@ -922,7 +935,8 @@ class PatientListViewModel(
                 }
                     .mapIndexedNotNull { index, fhirPatient ->
 
-                        val tag = fhirPatient.resource.meta.tag.find { it.system.endsWith("/questionnaire-managingLocation") }?.code
+                        val tag =
+                            fhirPatient.resource.meta.tag.find { it.system.endsWith("/questionnaire-managingLocation") }?.code
 
                         if (fhirPatient.resource.hasIdentifier()) {
                             val county =
@@ -1006,9 +1020,9 @@ class PatientListViewModel(
 
                 }.mapIndexedNotNull { index, fhirPatient ->
 
-                    val tag = fhirPatient.resource.meta.tag.find { it.system.endsWith("/patient-managingLocation") }?.code
+                    val tag =
+                        fhirPatient.resource.meta.tag.find { it.system.endsWith("/patient-managingLocation") }?.code
 
-                    println("Tag Found $tag")
                     val matchingIdentifier = when (nameQuery) {
                         "rcce" -> fhirPatient.resource.identifier.find {
                             it.system == "rcce-community-questionnaire" || it.system == "rcce-countysubcounty-interface"
@@ -1282,7 +1296,19 @@ class PatientListViewModel(
                         null // Not a match — exclude
                     }
                 }
-//                    .filter { it.sourceTag in units }
+                    .filter {
+                        when (userRole) {
+                            UserRole.ADMINISTRATOR -> {
+                                true
+                            }
+
+                            else -> {
+                                it.sourceTag in units
+                            }
+                        }
+
+
+                    }
                     .sortedByDescending { it.lastUpdated }
             }
         }
@@ -1431,6 +1457,8 @@ class PatientListViewModel(
 
     private suspend fun retrieveRumorCasesByDisease(
         nameQuery: String,
+        units: List<String>,
+        userRole: UserRole?,
     ): List<RumorItem> {
         return fhirEngine.search<Patient> {
             sort(Patient.GIVEN, Order.ASCENDING)
@@ -1443,6 +1471,8 @@ class PatientListViewModel(
             if (matchingIdentifier != null) {
                 // Convert the FHIR Patient resource to your PatientItem model
                 var data = fhirPatient.resource.toPatientItem(index + 1)
+                val tag =
+                    fhirPatient.resource.meta.tag.find { it.system.endsWith("/patient-managingLocation") }?.code
 
                 val logicalId = matchingIdentifier.value
                 val obs = fhirEngine.search<Observation> {
@@ -1483,9 +1513,9 @@ class PatientListViewModel(
                         ?: "",
                     county = obs.firstOrNull { it.resource.code.codingFirstRep.code == "a4-county" }?.resource?.value?.asStringValue()
                         ?: "",
-                    lastUpdated = data.lastUpdated
+                    lastUpdated = data.lastUpdated,
+                    sourceTag = "$tag"
                 )
-
 
                 response
             } else {
@@ -1493,7 +1523,18 @@ class PatientListViewModel(
                 null
             }
 
-        }.sortedByDescending { it.lastUpdated }
+        }.filter {
+            when (userRole) {
+                UserRole.ADMINISTRATOR -> {
+                    true
+                }
+
+                else -> {
+                    it.sourceTag in units
+                }
+            }
+        }
+            .sortedByDescending { it.lastUpdated }
     }
 
     fun getAnswerValueAsString(
@@ -1929,7 +1970,8 @@ class PatientListViewModel(
         val village: String,
         val subCounty: String,
         val county: String,
-        val lastUpdated: String
+        val lastUpdated: String,
+        val sourceTag: String
     )
 
     /** The Patient's details for display purposes. */

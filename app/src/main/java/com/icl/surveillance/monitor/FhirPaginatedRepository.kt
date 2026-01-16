@@ -25,7 +25,6 @@ class FhirPaginatedRepository(private val fhirEngine: FhirEngine) {
             when (resourceType) {
                 "Patient" -> {
                     fhirEngine.search<Patient> {
-
                         count = pageSize
                         from = page * pageSize
                     }.map { it.resource }

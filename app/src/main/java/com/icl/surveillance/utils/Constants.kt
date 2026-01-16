@@ -6,11 +6,14 @@ import android.content.SharedPreferences
 import com.icl.surveillance.R
 
 object Constants {
-
     const val BASE_URL = "https://dsrfhir.intellisoftkenya.com/hapi/fhir/"
 
-    //    const val BASE_URL = "https://auth.nphiis.nphl.go.ke/fhir/"
+    //    const val BASE_AUTH_URL = "https://dsrkeycloak.intellisoftkenya.com/auth/"
     const val ALERTS_BASE_URL = "https://dsrfhir.intellisoftkenya.com/api/"
+
+    //    const val BASE_URL = "https://auth.nphiis.nphl.go.ke/fhir/"
+    const val BASE_AUTH_URL = "https://auth.nphiis.nphl.go.ke/"
+//    const val ALERTS_BASE_URL = "https://dsrfhir.intellisoftkenya.com/api/"
 
 
     //MOH 505
@@ -75,12 +78,13 @@ object Constants {
     val DEFAULT_EXCLUDES = listOf(
         "user_role", "user_facility", "user_ward", "user_sub_county", "user_county"
     )
-    val VACCINATOR_EXCLUDES = listOf(
-        "294367770999",
-        "819946803642",
-        "819943434",
-        "819946803677",
-        "438862163919"
+
+    val ADMINISTRATOR_EXCLUDES = listOf(
+        "294367770999_national",
+        "819946803642_national",
+        "819943434_national",
+        "819946803677_national",
+        "438862163919_national"
     )
     val COUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES = listOf(
         "294367770999_county",
@@ -96,13 +100,24 @@ object Constants {
         "819946803677_sub_county",
         "438862163919_sub_county"
     )
+
+    val VACCINATOR_EXCLUDES = listOf(
+        "294367770999",
+        "819946803642",
+        "819943434",
+        "819946803677",
+        "438862163919"
+    )
     val VALID_VACCINATOR_EXCLUDES =
-        COUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES + SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES
+        ADMINISTRATOR_EXCLUDES + COUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES + SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES
 
     val VALID_COUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES =
-        SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES + VACCINATOR_EXCLUDES
+        ADMINISTRATOR_EXCLUDES + SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES + VACCINATOR_EXCLUDES
     val VALID_SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES =
-        COUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES + VACCINATOR_EXCLUDES
+        ADMINISTRATOR_EXCLUDES + COUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES + VACCINATOR_EXCLUDES
+
+    val VALID_ADMINISTRATOR_EXCLUDES =
+        COUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES + VACCINATOR_EXCLUDES + SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES
     val MPOX_GUIDES = listOf(
         "294367770999",  // County
         "819946803642",  // Subcounty

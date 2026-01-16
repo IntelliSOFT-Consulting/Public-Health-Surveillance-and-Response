@@ -214,70 +214,13 @@ class AddParentCaseActivity : AppCompatActivity() {
             }
 
             else -> {
-//                val jsonParser = FhirContext.forCached(FhirVersionEnum.R4).newJsonParser()
-//                val questionnaireResponseString =
-//                    jsonParser.encodeResourceToString(questionnaireResponse)
-//                val jsonObject = JSONObject(questionnaireResponseString)
-//                val extractedAnswers =
-//                    FormatterClass().extractStructuredAnswersOnlyFromItems(jsonObject)
-//
-//                // Extract Facility Information
-//                lifecycleScope.launch {
-//                    val info = resolveFacilityInfo(this@AddParentCaseActivity, extractedAnswers)
-//                    println("Data Here ${info?.code} ${info?.name}")
                     viewModel.savePatientData(
                         questionnaireResponse,
                         this@AddParentCaseActivity
                     )
-//                }
             }
         }
 
-    }
-
-    suspend fun resolveFacilityInfo(
-        context: Context,
-        extractedAnswers: List<QuestionnaireAnswer>,
-
-        ): FacilityInfo? {
-
-        val formatter = FormatterClass()
-        val storedRole = formatter.getSharedPref("practitionerRole", context)
-        val userRole = UserRole.fromAny(storedRole ?: "")
-
-        val facilityLink = when (userRole) {
-            UserRole.COUNTY_DISEASE_SURVEILLANCE_OFFICER ->
-                "819946803677_county"
-
-            UserRole.SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER ->
-                "819946803677_sub_county"
-
-            UserRole.ADMINISTRATOR,
-            UserRole.FACILITY_SURVEILLANCE_FOCAL_PERSON,
-            UserRole.SUPERVISOR,
-            UserRole.VACCINATOR ->
-                "819946803677"
-
-            else ->
-                "819946803677"
-        }
-
-        val facilityEntry = extractedAnswers.find { it.linkId == facilityLink }
-            ?: return null
-
-        val results = fhirEngine.search<Location> {
-            filter(Location.NAME, {
-                modifier = StringFilterModifier.CONTAINS
-                value = facilityEntry.answer
-            })
-        }
-
-        if (results.isEmpty()) return null
-
-        return FacilityInfo(
-            name = facilityEntry.answer,
-            code = results.first().resource.idPart
-        )
     }
 
     override fun onBackPressed() {

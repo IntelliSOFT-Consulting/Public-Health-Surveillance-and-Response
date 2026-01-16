@@ -71,9 +71,6 @@ data class AnswerCoding(
     val display: String?
 )
 
-enum class UrlData(var message: Int) {
-    BASE_URL(R.string.base_url),
-}
 
 data class FCMToken(
     val token: String

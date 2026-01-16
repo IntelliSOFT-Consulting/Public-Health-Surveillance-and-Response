@@ -594,20 +594,21 @@ class CaseSelectionFragment : Fragment() {
             "Mpox Register" -> "mpox-register"
             else -> null
         }
+        val storedRole = FormatterClass().getSharedPref("practitionerRole", requireContext())
+        val userRole = UserRole.fromAny(storedRole ?: "")
+
         caseType?.let {
             try {
-
                 when (it) {
                     "mpox-register" -> {
-                        patientListViewModel.simulateScrollUntilEnd(it,units) { allPatients ->
+                        patientListViewModel.simulateScrollUntilEnd(it,units, userRole ) { allPatients ->
 
                             caseOptions[1] = caseOptions[1].copy(count = allPatients.size)
                             recyclerView.adapter?.notifyDataSetChanged()
                         }
                     }
-
                     else -> {
-                        patientListViewModel.handleCurrentCaseListing(it, units)
+                        patientListViewModel.handleCurrentCaseListing(it, units, userRole)
 
                         patientListViewModel.liveSearchedCases.observe(viewLifecycleOwner) { cases ->
                             caseOptions[1] = caseOptions[1].copy(count = cases.size)

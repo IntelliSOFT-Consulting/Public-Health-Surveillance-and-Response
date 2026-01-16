@@ -18,6 +18,7 @@ import com.icl.surveillance.utils.Constants.COUNTY_DISEASE_SURVEILLANCE_OFFICER_
 import com.icl.surveillance.utils.Constants.DEFAULT_EXCLUDES
 import com.icl.surveillance.utils.Constants.SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES
 import com.icl.surveillance.utils.Constants.VACCINATOR_EXCLUDES
+import com.icl.surveillance.utils.Constants.VALID_ADMINISTRATOR_EXCLUDES
 import com.icl.surveillance.utils.Constants.VALID_COUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES
 import com.icl.surveillance.utils.Constants.VALID_SUBCOUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES
 import com.icl.surveillance.utils.Constants.VALID_VACCINATOR_EXCLUDES
@@ -81,7 +82,6 @@ class GroupFragment : Fragment() {
                         item.parentLink, item.parentResponse, group.items
                     )
                 }
-                println("Showing  --- **** Role $role -> ${item.linkId} -> ${item.text} -> value ${item.value} status ${item.enable} ")
 
                 if (role != null) {
                     when (role.value) {
@@ -101,6 +101,12 @@ class GroupFragment : Fragment() {
 
                         "COUNTY_DISEASE_SURVEILLANCE_OFFICER" -> {
                             if (VALID_COUNTY_DISEASE_SURVEILLANCE_OFFICER_EXCLUDES.contains(item.linkId)) {
+                                item.value = ""
+                                item.text = ""
+                            }
+                        }
+                        "ADMINISTRATOR" -> {
+                            if (VALID_ADMINISTRATOR_EXCLUDES.contains(item.linkId)) {
                                 item.value = ""
                                 item.text = ""
                             }

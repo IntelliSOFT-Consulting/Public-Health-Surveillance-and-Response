@@ -24,6 +24,7 @@ import com.icl.surveillance.adapters.PatientItemRecyclerViewAdapterRumor
 import com.icl.surveillance.databinding.ActivityCaseListingBinding
 import com.icl.surveillance.fhir.FhirApplication
 import com.icl.surveillance.fhir.MpoxSyncWorker
+import com.icl.surveillance.models.UserRole
 import com.icl.surveillance.ui.patients.FullCaseDetailsActivity
 import com.icl.surveillance.ui.patients.PatientListViewModel
 import com.icl.surveillance.ui.patients.SummarizedActivity
@@ -73,12 +74,15 @@ class CaseListingActivity : AppCompatActivity() {
         val adapter = PatientItemRecyclerViewAdapter(this::onPatientItemClicked, "$titleName", this)
         val adapterRumor = PatientItemRecyclerViewAdapterRumor(this::onRumorItemClicked)
 
+        val formatter = FormatterClass()
+        val storedRole = formatter.getSharedPref("practitionerRole", this)
+        val userRole = UserRole.fromAny(storedRole ?: "")
 
         if (currentCase != null) {
             val slug = currentCase.toSlug()
             when (slug) {
                 "social-listening-and-rumor-tracking-tool" -> {
-                    patientListViewModel.handleCurrentRumorCaseListing(slug)
+                    patientListViewModel.handleCurrentRumorCaseListing(slug,units,userRole)
                     recyclerView.adapter = adapterRumor
                     patientListViewModel.liveRumorCases.observe(this) {
                         binding.apply {
@@ -107,7 +111,7 @@ class CaseListingActivity : AppCompatActivity() {
                     )
                     recyclerView.adapter = adapterRegister
                     recyclerView.layoutManager = LinearLayoutManager(this@CaseListingActivity)
-                    patientListViewModel.loadMpoxPatientList(slug, units)
+                    patientListViewModel.loadMpoxPatientList(slug, units,userRole)
 
 
                     lifecycleScope.launch {
@@ -131,14 +135,14 @@ class CaseListingActivity : AppCompatActivity() {
                             val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
 
                             if (visibleItemCount + firstVisibleItem >= totalItemCount - 5) {
-                                patientListViewModel.loadMpoxPatientList(slug, units)
+                                patientListViewModel.loadMpoxPatientList(slug, units, userRole)
                             }
                         }
                     })
                 }
 
                 else -> {
-                    patientListViewModel.handleCurrentCaseListing(slug,units)
+                    patientListViewModel.handleCurrentCaseListing(slug,units,userRole)
                     recyclerView.adapter = adapter
                     patientListViewModel.liveSearchedCases.observe(this) {
                         binding.apply {

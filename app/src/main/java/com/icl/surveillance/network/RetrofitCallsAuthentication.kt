@@ -14,9 +14,9 @@ import com.icl.surveillance.models.DbResponseError
 import com.icl.surveillance.models.DbSetPasswordReq
 import com.icl.surveillance.models.DbSignIn
 import com.icl.surveillance.models.FCMToken
-import com.icl.surveillance.models.UrlData
 import com.icl.surveillance.models.User
 import com.icl.surveillance.utils.Constants.ALERTS_BASE_URL
+import com.icl.surveillance.utils.Constants.BASE_AUTH_URL
 import com.icl.surveillance.utils.Constants.BASE_URL
 import com.icl.surveillance.utils.FormatterClass
 import com.icl.surveillance.viewmodels.SyncFragmentViewModel
@@ -205,9 +205,9 @@ class RetrofitCallsAuthentication {
             CoroutineScope(Dispatchers.IO + job)
                 .launch {
                     val formatter = FormatterClass()
-                    val baseUrl = context.getString(UrlData.BASE_URL.message)
+
                     val apiService =
-                        RetrofitBuilder.getRetrofit(baseUrl).create(Interface::class.java)
+                        RetrofitBuilder.getRetrofit(BASE_AUTH_URL).create(Interface::class.java)
                     try {
 
                         val apiInterface = apiService.signInUser(dbSignIn)
@@ -339,8 +339,7 @@ class RetrofitCallsAuthentication {
 
         CoroutineScope(Dispatchers.IO).launch {
             val formatter = FormatterClass()
-            val baseUrl = context.getString(UrlData.BASE_URL.message)
-            val apiService = RetrofitBuilder.getRetrofit(baseUrl).create(Interface::class.java)
+           val apiService = RetrofitBuilder.getRetrofit(BASE_AUTH_URL).create(Interface::class.java)
             try {
                 val token = formatter.getSharedPref("access_token", context)
                 if (token != null) {
@@ -412,8 +411,8 @@ class RetrofitCallsAuthentication {
         var messageCode = 400
 
         val formatter = FormatterClass()
-        val baseUrl = context.getString(UrlData.BASE_URL.message)
-        val apiService = RetrofitBuilder.getRetrofit(baseUrl).create(Interface::class.java)
+
+        val apiService = RetrofitBuilder.getRetrofit(BASE_AUTH_URL).create(Interface::class.java)
         try {
             val idNumber = dbResetPasswordData.idNumber
             val email = dbResetPasswordData.email
@@ -470,8 +469,8 @@ class RetrofitCallsAuthentication {
         var messageCode = 400
 
         val formatter = FormatterClass()
-        val baseUrl = context.getString(UrlData.BASE_URL.message)
-        val apiService = RetrofitBuilder.getRetrofit(baseUrl).create(Interface::class.java)
+
+        val apiService = RetrofitBuilder.getRetrofit(BASE_AUTH_URL).create(Interface::class.java)
         try {
 
             val apiInterface = apiService.setNewPassword(dbSetPasswordReq)

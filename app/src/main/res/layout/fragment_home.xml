@@ -22,9 +22,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserratbold"
-
             android:textColor="@android:color/white"
-            android:textSize="24sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <!-- Username Text -->
@@ -35,9 +34,8 @@
             android:layout_below="@id/greetingText"
             android:layout_marginTop="4dp"
             android:fontFamily="@font/montserratregular"
-
             android:textColor="@android:color/white"
-            android:textSize="16sp" />
+            android:textSize="13sp" />
 
         <!-- Notification Icon with Badge -->
         <FrameLayout
