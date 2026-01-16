@@ -23,10 +23,6 @@ object Constants {
     const val HEALTH_FACILITY = "819946803677"
     const val FACILITY_TYPE = "438862163919"
     const val WEEK_ENDING_DATE = "728034137219"
-    const val PATIENT_TAG = "http://example.org/fhir/StructureDefinition/patient-managingLocation"
-    const val RESPONSE_TAG =
-        "http://example.org/fhir/StructureDefinition/questionnaire-managingLocation"
-    const val MEASURE_TAG = "http://example.org/fhir/StructureDefinition/measure-managingLocation"
     val FACILITY_DETAILS =
         listOf(COUNTY, SUB_COUNTY, WARD, HEALTH_FACILITY, FACILITY_TYPE, WEEK_ENDING_DATE)
 

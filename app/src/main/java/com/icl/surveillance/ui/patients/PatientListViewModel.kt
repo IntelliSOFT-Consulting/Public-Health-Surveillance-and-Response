@@ -22,8 +22,6 @@ import com.google.android.fhir.search.revInclude
 import com.google.android.fhir.search.search
 import com.icl.surveillance.models.UserRole
 import com.icl.surveillance.network.RetrofitCallsAuthentication
-import com.icl.surveillance.utils.Constants.PATIENT_TAG
-import com.icl.surveillance.utils.Constants.RESPONSE_TAG
 import com.icl.surveillance.utils.FormatterClass
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -498,18 +496,10 @@ class PatientListViewModel(
     fun handleCurrentRumorCaseListing(category: String, units: List<String>, userRole: UserRole?) {
         viewModelScope.launch {
             liveRumorCases.value = retrieveRumorCasesByDisease(category, units, userRole)
-//            patientCount.value = count()
+
         }
     }
 
-    private suspend fun retrieveCasesByDiseaseNew(nameQuery: String): List<PatientItem> {
-        val isSummary = nameQuery.contains("mpox")
-
-        return when (nameQuery) {
-            "mpox-supervisor-checklist" -> loadSupervisorChecklistCases(isSummary)
-            else -> loadPatientCases(nameQuery, isSummary)
-        }
-    }
 
     private suspend fun loadSupervisorChecklistCases(isSummary: Boolean): List<PatientItem> {
         val responses = fhirEngine.search<QuestionnaireResponse> {
@@ -541,7 +531,9 @@ class PatientListViewModel(
     private fun mapToSupervisorChecklistItem(
         index: Int, response: QuestionnaireResponse, isSummary: Boolean
     ): PatientItem {
-        val tag = response.meta.tag.find { it.system.contains(RESPONSE_TAG) }?.code
+        val tag =
+            response.meta.tag.find { it.system.endsWith("/questionnaire-managingLocation") }?.code
+
         val county = getAnswerValueAsString(response.item, "294367770999")
         val subCounty = getAnswerValueAsString(response.item, "819946803642")
         var caseOnsetDate = getAnswerValueAsString(response.item, "728034137219")
@@ -2353,8 +2345,9 @@ internal fun Patient.toPatientItem(
     position: Int,
 ): PatientListViewModel.PatientItem {
     // Show nothing if no values available for gender and date of birth.
+
     val tag =
-        if (hasMeta()) if (meta.hasTag()) meta.tag.find { it.system.contains(PATIENT_TAG) }?.code else "" else ""
+        if (hasMeta()) if (meta.hasTag()) meta.tag.find { it.system.endsWith("/patient-managingLocation") }?.code else "" else ""
     val patientId = if (hasIdElement()) idElement.idPart else ""
     val name = if (hasName()) name[0].nameAsSingleString else ""
     val gender = if (hasGenderElement()) genderElement.valueAsString else ""
