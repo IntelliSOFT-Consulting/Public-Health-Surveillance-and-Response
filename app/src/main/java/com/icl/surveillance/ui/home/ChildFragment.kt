@@ -144,7 +144,7 @@ class ChildFragment : Fragment() {
         findNavController().navigate(R.id.action_childFragment_to_singleCaseFragment, bundle)
       }
 
-      111 -> {
+      1 -> {
         val bundle = Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "moh505.json") }
 
         FormatterClass().saveSharedPref("childTitle", title, requireContext())
