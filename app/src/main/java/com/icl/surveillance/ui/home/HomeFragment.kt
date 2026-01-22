@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.icl.surveillance.R
 import com.icl.surveillance.adapters.HomeRecyclerViewAdapter
 import com.icl.surveillance.clients.AddClientFragment.Companion.QUESTIONNAIRE_FILE_PATH_KEY
@@ -114,18 +116,27 @@ class HomeFragment : Fragment() {
             }
 
             4 -> {
-                Toast.makeText(requireContext(), "Coming soon!!", Toast.LENGTH_SHORT).show()
+               showComingSoon()
             }
 
             else -> {
-                Toast.makeText(requireContext(), "Coming soon!!", Toast.LENGTH_SHORT).show()
+                showComingSoon()
             }
 
 
         }
 
     }
+fun showComingSoon(){
+     val dialog = BottomSheetDialog(requireContext())
+        val view = layoutInflater.inflate(R.layout.dialog_bottom_sheet, null)
 
+        dialog.setContentView(view)
+        dialog.setCancelable(true)
+
+        view.findViewById<Button>(R.id.btnCancel).setOnClickListener { dialog.dismiss() }
+        dialog.show()
+}
     private fun handleClick(stage: String, title: String) {
         val bundle =
             Bundle().apply { putString(QUESTIONNAIRE_FILE_PATH_KEY, "add-vl.json") }

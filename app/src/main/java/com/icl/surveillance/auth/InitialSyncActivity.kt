@@ -135,8 +135,7 @@ class InitialSyncActivity : AppCompatActivity() {
                             totalFailed.addAndGet(deltaFailed)
 
                             val message = buildString {
-                                if (totalProcessed.get() > 0) append("Processed ${totalProcessed.get()} ")
-                                if (totalSkipped.get() > 0) append(", skipped ${totalSkipped.get()}")
+                                if (totalProcessed.get() > 0) append("Processed ${totalProcessed.get()} ") 
                                 if (totalFailed.get() > 0) append(", failed ${totalFailed.get()}")
                             }
                             CoroutineScope(Dispatchers.Main).launch {

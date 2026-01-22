@@ -10,8 +10,8 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.icl.surveillance"
-//        applicationId = "com.icl.nphi" // Live Instance
+//        applicationId = "com.icl.surveillance"
+        applicationId = "com.icl.nphi" // Live Instance
         minSdk = 26
         targetSdk = 36
         versionCode = 4
@@ -24,23 +24,9 @@ android {
                 arguments.add("-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON")
             }
         }
-//        externalNativeBuild {
-//            cmake {
-//                // Automatically apply 16 KB alignment if NDK < r28
-//                arguments += listOf(
-//                    "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
-//                )
-//            }
-//        }
     }
     lint {
-        // Continue build even if there are errors
         abortOnError = false
-
-        // Optionally disable only this specific WorkManager lint check
-//        disable = listOf("Invalid","RemoveWorkManagerInitializer")
-
-        // Optionally generate a lint baseline for tracking future issues
         baseline = file("lint-baseline.xml")
     }
     buildTypes {
@@ -57,9 +43,11 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
         isCoreLibraryDesugaringEnabled = true
     }
-//    kotlinOptions { jvmTarget = "11" }
 
-    buildFeatures { viewBinding = true }
+    buildFeatures {
+        buildConfig = true
+        viewBinding = true
+    }
     packagingOptions {
         resources.excludes.addAll(listOf("META-INF/ASL-2.0.txt", "META-INF/LGPL-3.0.txt"))
         jniLibs {

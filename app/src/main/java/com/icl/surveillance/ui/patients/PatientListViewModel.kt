@@ -1006,7 +1006,7 @@ class PatientListViewModel(
             }
 
             else -> {
-
+//                val result = fhirEngine.search("Patient?gender=female")
                 return fhirEngine.search<Patient> {
                     sort(Patient.GIVEN, Order.ASCENDING)
 

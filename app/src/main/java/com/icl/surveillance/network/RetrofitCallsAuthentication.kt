@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.icl.surveillance.auth.InitialSyncActivity
@@ -153,7 +154,7 @@ class RetrofitCallsAuthentication {
             CoroutineScope(Dispatchers.IO + job)
                 .launch {
                     val formatter = FormatterClass()
-                   val apiService =
+                    val apiService =
                         RetrofitBuilder.getRetrofit(ALERTS_BASE_URL).create(Interface::class.java)
                     try {
                         val token = formatter.getSharedPref("access_token", context)
@@ -243,7 +244,7 @@ class RetrofitCallsAuthentication {
                                     )
                                     formatter.saveSharedPref("isLoggedIn", "true", context)
                                     getUserDetails(viewModel, context)
-                                    messageToast = "Login successful.."
+                                    messageToast = "Login successful."
 
                                     val intent = Intent(context, InitialSyncActivity::class.java)
                                     intent.addFlags(
@@ -263,22 +264,30 @@ class RetrofitCallsAuthentication {
                             apiInterface.errorBody()?.let {
                                 //                  val errorBody = JSONObject(it.string())
                                 messageToast =
-                                    "Invalid login credentials. Please try again. ${it.string()}" // errorBody.getString("error")
+                                    "Invalid login credentials. Please try again." // errorBody.getString("error")
                             }
                         }
                     } catch (e: Exception) {
 
-                        Log.e("******", "")
-                        Log.e("******", e.toString())
-                        Log.e("******", "")
-
-                        messageToast = "Cannot login user.. ${e.message}"
+                        messageToast = "Can't log in user, please check your internet"
                     }
                 }
                 .join()
             CoroutineScope(Dispatchers.Main).launch {
                 progressDialog.dismiss()
-                Toast.makeText(context, messageToast, Toast.LENGTH_LONG).show()
+
+                if (messageToast != "Login successful.") {
+                    AlertDialog.Builder(context)
+                        .setTitle("Login Status")
+                        .setMessage(messageToast)
+                        .setCancelable(true)
+                        .setPositiveButton("OK") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .show()
+                } else {
+                    Toast.makeText(context, messageToast, Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
@@ -339,7 +348,8 @@ class RetrofitCallsAuthentication {
 
         CoroutineScope(Dispatchers.IO).launch {
             val formatter = FormatterClass()
-           val apiService = RetrofitBuilder.getRetrofit(BASE_AUTH_URL).create(Interface::class.java)
+            val apiService =
+                RetrofitBuilder.getRetrofit(BASE_AUTH_URL).create(Interface::class.java)
             try {
                 val token = formatter.getSharedPref("access_token", context)
                 if (token != null) {

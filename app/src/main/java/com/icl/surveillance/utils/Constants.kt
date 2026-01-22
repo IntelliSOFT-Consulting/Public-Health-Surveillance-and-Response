@@ -6,14 +6,14 @@ import android.content.SharedPreferences
 import com.icl.surveillance.R
 
 object Constants {
-    const val BASE_URL = "https://dsrfhir.intellisoftkenya.com/hapi/fhir/"
+//    const val BASE_URL = "https://dsrfhir.intellisoftkenya.com/hapi/fhir/"
 
-    //    const val BASE_AUTH_URL = "https://dsrkeycloak.intellisoftkenya.com/auth/"
-    const val ALERTS_BASE_URL = "https://dsrfhir.intellisoftkenya.com/api/"
-
-    //    const val BASE_URL = "https://auth.nphiis.nphl.go.ke/fhir/"
-    const val BASE_AUTH_URL = "https://auth.nphiis.nphl.go.ke/"
+//    const val BASE_AUTH_URL = "https://dsrkeycloak.intellisoftkenya.com/auth/"
 //    const val ALERTS_BASE_URL = "https://dsrfhir.intellisoftkenya.com/api/"
+
+    const val BASE_URL = "https://auth.nphiis.nphl.go.ke/fhir/"
+    const val BASE_AUTH_URL = "https://auth.nphiis.nphl.go.ke/"
+    const val ALERTS_BASE_URL = BASE_AUTH_URL// "https://dsrfhir.intellisoftkenya.com/api/"
 
 
     //MOH 505
@@ -150,16 +150,14 @@ object Constants {
     private const val KEY_NEXT_URL = "next_url"
     private const val KEY_DOWNLOAD_COMPLETE = "download_complete"
 
-    const val TEST_TOKEN =
-        "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJxbTVfeFpQWFVHV1I0YTdwbkpLZ1VORVRNbERMMlpHeXhUSndNSEx5UkhjIn0.eyJleHAiOjE3NzYwNTkxMTMsImlhdCI6MTc2MDUwNzExMywianRpIjoiYmQ5YTdiOGItOWFlNS00ZmJkLWFiY2YtODY4MTFmNzhlYjJhIiwiaXNzIjoiaHR0cDovL2tleWNsb2FrOjgwODAvcmVhbG1zL21hc3RlciIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiIwZGMzM2ExYi1iNmJjLTRjZTgtYjU5MS1iYTU4ZDZmYTFhZTYiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJjaGFuam8tY2xpZW50LWFwaXMiLCJzaWQiOiIxZmNlOTRlNi1lYjRjLTRkMjItYThmNS00ZjhmZTIxYTIxMDMiLCJhY3IiOiIxIiwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtbWFzdGVyIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgb3JnYW5pemF0aW9uIHByb2ZpbGUgb3BlbmlkIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiS2lwcm90aWNoIEphcGhldGgiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI0MTQxNDEiLCJnaXZlbl9uYW1lIjoiS2lwcm90aWNoIiwiZmFtaWx5X25hbWUiOiJKYXBoZXRoIiwiZW1haWwiOiJqa2lwcm90aWMuaEBpbnRlbGxpc29mdGtlbnlhLmNvbSJ9.ZrQm4Pzd-AtjbbMkWj6DR_cK2CZTtQ2f1mE58AavL9FoReCAUKX2ze1TsqRe93NbtWfOUSwUee7ks-SlD9JaxmsEuVcY6YI5uA4rFw_CJ4zu9NB6oCCOzf1ZEQRkgeqHFKw1KF2ciDvnJaQwsDJjW8Hd6MAHzX8GI4iFBp7h_LT1zL_oCb6jMzPOfatOi5RAGisdy3bUFHzRL5IUZlOwqjMA4QxGHeSeAV-Hbegrjtfx-ufUdiITLVU4DYXYwReKth_D9iitFh8ul5kx8CZH8sUPbD5d2iqbw6HMH6_-Rb_sjj3mnJTjrct98UCOHIUrAmM4UOmNxgD9xYc0ZA4puw"
-
+    const val TEST_TOKEN ="eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJxbTVfeFpQWFVHV1I0YTdwbkpLZ1VORVRNbERMMlpHeXhUSndNSEx5UkhjIn0.eyJleHAiOjE3ODQ0NjI4MzgsImlhdCI6MTc2ODkxMDgzOCwianRpIjoiZjVlYWQwNTMtZjk4NC00YjZjLWJkYjktMGY5NjIzYjZhMzdjIiwiaXNzIjoiaHR0cHM6Ly9hcGkubnBoaWlzLmhlYWx0aC5nby5rZS9yZWFsbXMvbWFzdGVyIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImNkNDA4MTFhLWIxNzQtNDVkMC1hZDYzLTZmZjU2ZWQyNDlkZiIsInR5cCI6IkJlYXJlciIsImF6cCI6ImNoYW5qby1jbGllbnQtYXBpcyIsInNpZCI6ImFmMWMyOWM3LTdhNjMtNDIzZC04NTM0LTIyNjk2ZmQ2MjEwYiIsImFjciI6IjEiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1tYXN0ZXIiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBvcmdhbml6YXRpb24gcHJvZmlsZSBvcGVuaWQiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJLaXByb3RpY2ggSmFwaGV0aCIsInByZWZlcnJlZF91c2VybmFtZSI6IjMyNjQ1MTY3IiwiZ2l2ZW5fbmFtZSI6IktpcHJvdGljaCIsImZhbWlseV9uYW1lIjoiSmFwaGV0aCIsImVtYWlsIjoiamtpcHJvdGljaEBpbnRlbGxpc29mdGtlbnlhLmNvbSJ9.aSLmzqE_lp2YINGv2iA1gImoZ-CXnfuhLqpT1Lyp7FF9T_7U3FPXKV_lXHCzluMqJRBtlD5SVChJC4CilbPCqbcYUohLPB7wrncl2upSySFaWSttETOB1qdaWo5xd_riHEdyfppmfENg7QCqn9nIC2GthDjrU31Fb-js0sx6_ihu4uVrgSAri-2TxPq5BIXc3entX99tBlydDfc_K1i_nVxF5qsKjzc43GB82jpPMZ2dssgC0IXMaYzr67_lLE_pqzqVsYIOHrLUlv9F27AY3znsXKYKdrkj6KIZhmC82u2jBCcjaLWf7QtnPHB_tsj89QJvqvF_DI9yjJX5IfQLrA"
     fun saveNextUrl(context: Context, url: String) {
-        val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        val prefs = context.getSharedPreferences(PREF_NAME, MODE_PRIVATE)
         prefs.edit().putString(KEY_NEXT_URL, url).apply()
     }
 
     fun getNextUrl(context: Context): String? {
-        val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        val prefs = context.getSharedPreferences(PREF_NAME, MODE_PRIVATE)
         return prefs.getString(KEY_NEXT_URL, null)
     }
 
@@ -167,7 +165,6 @@ object Constants {
         val prefs = context.getSharedPreferences(PREF_NAME, MODE_PRIVATE)
         prefs.edit().remove(KEY_NEXT_URL).apply()
     }
-
     fun markActionComplete(context: Context, action: Boolean) {
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences(context.getString(R.string.app_name), MODE_PRIVATE)
